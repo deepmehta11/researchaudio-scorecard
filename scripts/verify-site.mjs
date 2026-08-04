@@ -101,7 +101,8 @@ assert.match(indexNowScript, /--check/);
 assert.match(indexNowWorkflow, /node scripts\/verify-site\.mjs/);
 assert.match(indexNowWorkflow, /node scripts\/submit-indexnow\.mjs/);
 assert.match(indexNowWorkflow, /Wait for this exact Pages deployment/);
-assert.match(indexNowWorkflow, /commit.*GITHUB_SHA/);
+assert.match(indexNowWorkflow, /head_sha=\$\{GITHUB_SHA\}/);
+assert.match(indexNowWorkflow, /pages build and deployment/);
 assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 
 console.log("Evidence Lab verified: 3 tools, 4 crawlable pages, direct attributed subscribe CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
