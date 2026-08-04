@@ -8,6 +8,7 @@ import { calculateAgentRoi, classifyAgentRoi } from "../ai-agent-roi-calculator/
 import { calculateLlmApiCost } from "../llm-api-cost-calculator/calculator.js";
 import { calculatePromptCacheSavings } from "../prompt-caching-calculator/calculator.js";
 import { buildCodexConfig, normalizeFallbackFiles, normalizeMaxBytes } from "../codex-config-generator/generator.js";
+import { calculateVoiceLatency, classifyVoiceLatency } from "../voice-ai-latency-calculator/calculator.js";
 import { buildAttributedShareUrl, parseSharedChecklist, parseSharedNumbers } from "../share-state.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -15,7 +16,7 @@ const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const brandedToolsOrigin = "https://tools.researchaudio.io";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, starterHtml, starterJs, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, starterHtml, starterJs, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -31,6 +32,8 @@ const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llm
   readFile(path.join(root, "prompt-caching-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "codex-config-generator/index.html"), "utf8"),
   readFile(path.join(root, "codex-config-generator/generator.js"), "utf8"),
+  readFile(path.join(root, "voice-ai-latency-calculator/index.html"), "utf8"),
+  readFile(path.join(root, "voice-ai-latency-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "evidence-starter-kit/index.html"), "utf8"),
   readFile(path.join(root, "evidence-starter-kit/starter.js"), "utf8"),
   readFile(path.join(root, "sitemap.xml"), "utf8"),
@@ -54,6 +57,7 @@ assert.match(html, /ai-cost-calculator/);
 assert.match(html, /agent-loop-diagnostic/);
 assert.match(html, /prompt-caching-calculator/);
 assert.match(html, /codex-config-generator/);
+assert.match(html, /voice-ai-latency-calculator/);
 assert.doesNotMatch(html, /TODO|PLACEHOLDER|example\.com/);
 
 assert.match(css, /@media \(max-width: 620px\)/);
@@ -75,6 +79,7 @@ for (const [name, page, pathname] of [
   ["LLM API cost calculator", llmCostHtml, "/llm-api-cost-calculator/"],
   ["prompt caching calculator", promptCacheHtml, "/prompt-caching-calculator/"],
   ["Codex config generator", codexConfigHtml, "/codex-config-generator/"],
+  ["voice AI latency calculator", voiceLatencyHtml, "/voice-ai-latency-calculator/"],
   ["starter kit", starterHtml, "/evidence-starter-kit/"],
 ]) {
   const canonical = page.match(/<link rel="canonical" href="([^"]+)"/);
@@ -92,6 +97,7 @@ for (const [name, page] of [
   ["LLM API cost calculator", llmCostHtml],
   ["prompt caching calculator", promptCacheHtml],
   ["Codex config generator", codexConfigHtml],
+  ["voice AI latency calculator", voiceLatencyHtml],
 ]) {
   assert.match(page, /https:\/\/researchaudio\.io\/subscribe\?utm_source=/, `${name} direct subscribe CTA missing`);
   assert.match(page, /utm_campaign=ai_evidence_lab/, `${name} acquisition campaign missing`);
@@ -107,6 +113,7 @@ for (const [name, page, title] of [
   ["LLM API cost calculator", llmCostHtml, "LLM API Cost Calculator (Input &amp; Output Tokens)"],
   ["prompt caching calculator", promptCacheHtml, "Prompt Caching Cost Calculator &amp; Break-Even Hit Rate"],
   ["Codex config generator", codexConfigHtml, "Codex CLI config.toml Generator"],
+  ["voice AI latency calculator", voiceLatencyHtml, "Voice AI Latency Calculator (Fast &amp; Slow Models)"],
 ]) {
   assert.match(page, new RegExp(`<title>${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} \\| ResearchAudio<\\/title>`), `${name} title missing`);
   assert.match(page, /rel="canonical"/, `${name} canonical missing`);
@@ -150,6 +157,12 @@ for (const [name, page, questions] of [
     "What does project_doc_max_bytes do?",
     "Does a fallback file replace AGENTS.md?",
     "Where should Codex config.toml go?",
+  ]],
+  ["voice AI latency calculator", voiceLatencyHtml, [
+    "How do you calculate voice AI response latency?",
+    "What is a good latency for a voice AI agent?",
+    "Why do voice AI systems use fast and slow models in parallel?",
+    "What usually causes voice AI latency?",
   ]],
 ]) {
   assert.doesNotThrow(() => parseStructuredData(page), `${name} structured data must be valid JSON`);
@@ -320,6 +333,49 @@ assert.match(codexConfigJs, /utm_source", "codex_config_share"/);
 assert.match(codexConfigJs, /utm_campaign", "ai_evidence_lab"/);
 assert.match(codexConfigHtml, /AGENTS\.override\.md/);
 
+const defaultVoiceLatency = calculateVoiceLatency({
+  endpointMs: 280,
+  transcriptionMs: 220,
+  contextMs: 120,
+  fastModelMs: 180,
+  slowModelMs: 650,
+  ttsMs: 160,
+  playoutMs: 60,
+});
+assert.equal(defaultVoiceLatency.transcriptReadyMs, 500);
+assert.equal(defaultVoiceLatency.slowBranchMs, 770);
+assert.equal(defaultVoiceLatency.firstBranch, "fast");
+assert.equal(defaultVoiceLatency.firstBranchMs, 180);
+assert.equal(defaultVoiceLatency.parallelFirstAudioMs, 900);
+assert.equal(defaultVoiceLatency.sequentialFirstAudioMs, 1490);
+assert.equal(defaultVoiceLatency.deepReasoningReadyMs, 1270);
+assert.equal(defaultVoiceLatency.handoffGapMs, 590);
+assert.equal(defaultVoiceLatency.parallelSavingsMs, 590);
+assert.ok(Math.abs(defaultVoiceLatency.preModelShare - (500 / 900)) < 0.000001);
+assert.equal(classifyVoiceLatency(defaultVoiceLatency.parallelFirstAudioMs).status, "CONVERSATIONAL");
+const slowBranchWins = calculateVoiceLatency({
+  endpointMs: 100,
+  transcriptionMs: 100,
+  contextMs: 50,
+  fastModelMs: 1000,
+  slowModelMs: 100,
+  ttsMs: 100,
+  playoutMs: 50,
+});
+assert.equal(slowBranchWins.firstBranch, "slow");
+assert.equal(slowBranchWins.parallelFirstAudioMs, 500);
+assert.equal(slowBranchWins.sequentialFirstAudioMs, 500);
+assert.equal(slowBranchWins.parallelSavingsMs, 0);
+assert.equal(classifyVoiceLatency(600).status, "FAST");
+assert.equal(classifyVoiceLatency(601).status, "CONVERSATIONAL");
+assert.equal(classifyVoiceLatency(1001).status, "NOTICEABLE");
+assert.equal(classifyVoiceLatency(1501).status, "SLOW");
+assert.match(voiceLatencyJs, /source: "voice_latency_share"/);
+assert.match(voiceLatencyJs, /content: "shared_latency_budget"/);
+assert.match(voiceLatencyHtml, /href="https:\/\/researchaudio\.io\/p\/voice-ai-latency-budget-guide\?utm_source=voice_ai_latency&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=guide_link"/);
+assert.match(toolsHtml, /voice-ai-latency-calculator/);
+assert.match(labCss, /\.latency-tape/);
+
 assert.match(starterHtml, /<title>AI Evidence Starter Kit: 4 Free Evaluation Tools \| ResearchAudio<\/title>/);
 assert.match(starterHtml, /rel="canonical"/);
 
@@ -366,9 +422,9 @@ assert.match(starterJs, /utm_campaign", "ai_evidence_lab"/);
 assert.match(starterJs, /utm_medium"\) === "onboarding"/);
 assert.doesNotMatch(starterHtml, /TODO|PLACEHOLDER|example\.com/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 9, "sitemap should contain all nine crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 10, "sitemap should contain all ten crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 9, "sitemap should publish nine URL locations");
+assert.equal(sitemapUrls.length, 10, "sitemap should publish ten URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -378,6 +434,7 @@ assert.match(llms, /AI Agent ROI Calculator/);
 assert.match(llms, /LLM API Cost Calculator/);
 assert.match(llms, /Prompt Caching Cost Calculator/);
 assert.match(llms, /Codex CLI config\.toml Generator/);
+assert.match(llms, /Voice AI Latency Calculator/);
 assert.match(llms, /AI Evidence Starter Kit/);
 assert.deepEqual([...socialCard.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], "social card should be a PNG");
 assert.equal(publishedKey.trim(), indexNowKey, "public IndexNow key must match the submission script");
@@ -393,4 +450,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 7 tools, 1 activation kit, 9 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 8 tools, 1 activation kit, 10 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

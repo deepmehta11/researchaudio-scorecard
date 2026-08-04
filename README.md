@@ -1,6 +1,6 @@
 # ResearchAudio Evidence Lab
 
-An evergreen acquisition ecosystem for ResearchAudio. Seven browser-local tools turn AI launch claims, token budgets, cache economics, workflow economics, agent reliability, automation business cases, and Codex configuration into concrete inspections before inviting visitors into the daily briefing.
+An evergreen acquisition ecosystem for ResearchAudio. Eight browser-local tools turn AI launch claims, token budgets, voice latency, cache economics, workflow economics, agent reliability, automation business cases, and Codex configuration into concrete inspections before inviting visitors into the daily briefing.
 
 Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain connected to the Beehiiv publication at `https://researchaudio.io/`.
 
@@ -13,6 +13,7 @@ Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain con
 - `/llm-api-cost-calculator/` — monthly LLM API budget after input/output tokens, caching, retries, and attached usage costs.
 - `/prompt-caching-calculator/` — cache-read and cache-write economics with a break-even hit-rate calculation.
 - `/codex-config-generator/` — copy-ready Codex CLI project document fallbacks and instruction byte limits.
+- `/voice-ai-latency-calculator/` — first-audio latency across endpointing, transcription, parallel fast and slow model branches, TTS, and playout.
 - `/evidence-starter-kit/` — post-signup activation, four-tool progress, referral reward explanation, and attributed sharing.
 - `/tools/` — crawlable, interlinked Evidence Lab hub.
 
@@ -42,7 +43,7 @@ Then open `http://127.0.0.1:4173`.
 ## Distribution loop
 
 1. Deploy on `main`; the workflow verifies the site and notifies IndexNow of every sitemap URL.
-2. Match the instrument to the briefing: launch proof, operating cost, agent reliability, or automation ROI.
+2. Match the instrument to the briefing: launch proof, operating cost, agent reliability, voice latency, or automation ROI.
 3. Link it near the first decision table in every relevant ResearchAudio web post.
 4. Publish one result card per issue on LinkedIn, X, Reddit, and relevant engineering communities.
 5. Redirect new Evidence Lab subscribers into the starter kit, then use its attributed share action and three-referral reward to compound distribution.

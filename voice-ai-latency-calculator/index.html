@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Voice AI Latency Calculator (Fast &amp; Slow Models) | ResearchAudio</title>
+    <meta name="description" content="Estimate voice AI response latency across endpoint detection, transcription, parallel fast and slow model branches, text-to-speech, and audio playout." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <link rel="canonical" href="https://tools.researchaudio.io/voice-ai-latency-calculator/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How long until the voice agent speaks?" />
+    <meta property="og:description" content="Map every millisecond in a parallel fast and slow model voice pipeline." />
+    <meta property="og:url" content="https://tools.researchaudio.io/voice-ai-latency-calculator/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Voice AI Latency Calculator",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "url": "https://tools.researchaudio.io/voice-ai-latency-calculator/",
+        "description": "Estimate first-audio latency across endpoint detection, transcription, parallel fast and slow model branches, text-to-speech, and audio playout.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do you calculate voice AI response latency?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Add end-of-turn detection, transcription, the first model branch to produce text, text-to-speech, and audio playout. When fast and slow model branches run in parallel, use whichever branch produces useful text first."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is a good latency for a voice AI agent?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "There is no universal threshold. As a planning band, first audio below one second can feel conversational when turn detection is stable and the opening words are useful. Validate the estimate with production traces and interruption tests."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why do voice AI systems use fast and slow models in parallel?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A fast branch can begin a safe response while a slower branch gathers context and completes deeper reasoning. The architecture trades coordination complexity for a shorter time to first audio."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What usually causes voice AI latency?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Common contributors include end-of-turn detection, transcript finalization, context retrieval, model startup and generation, text-to-speech, network transport, and client audio buffering."
+            }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#calculator">Skip to the calculator</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=voice_ai_latency&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=voice_ai_latency&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=voice_ai_latency&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=voice_ai_latency&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Instrument 08 / conversational latency</p>
+          <h1 id="hero-title">How long until the agent speaks?</h1>
+          <p class="hero-deck">Budget endpoint detection, transcript finalization, parallel fast and slow model branches, text-to-speech, and playout. Find the stage delaying the first audible response.</p>
+        </div>
+        <aside class="lab-index" aria-label="Estimated time to first audio">
+          <span>First audio estimate</span>
+          <strong id="hero-latency">900</strong>
+          <p>milliseconds in the example pipeline. Change any stage below to redraw the latency tape.</p>
+        </aside>
+      </section>
+
+      <section class="instrument-shell" id="calculator" aria-labelledby="calculator-title">
+        <div class="instrument-intro">
+          <div>
+            <p class="eyebrow">Enter one measured pipeline</p>
+            <h2 id="calculator-title">Account for the silence before the model.</h2>
+          </div>
+          <p>Use trace medians or percentiles from one production path. The planning bands help compare architectures; they are not universal performance benchmarks.</p>
+        </div>
+
+        <div class="calculator-layout">
+          <form class="input-panel" id="latency-form">
+            <label class="input-card" for="endpoint-ms">
+              <span class="field-copy"><strong>End-of-turn detection</strong><small>Silence, semantic, or hybrid endpointing before the utterance is released.</small></span>
+              <span class="number-field suffix"><span>ms</span><input id="endpoint-ms" name="endpointMs" type="number" min="0" max="30000" step="10" value="280" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="transcription-ms">
+              <span class="field-copy"><strong>Transcript finalization</strong><small>Speech recognition work after endpointing until the final text is usable.</small></span>
+              <span class="number-field suffix"><span>ms</span><input id="transcription-ms" name="transcriptionMs" type="number" min="0" max="30000" step="10" value="220" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="context-ms">
+              <span class="field-copy"><strong>Context and tool preparation</strong><small>Retrieval, memory, policy, and tool context needed by the slow branch.</small></span>
+              <span class="number-field suffix"><span>ms</span><input id="context-ms" name="contextMs" type="number" min="0" max="30000" step="10" value="120" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="fast-model-ms">
+              <span class="field-copy"><strong>Fast model to first text</strong><small>Time for the low-latency branch to produce a safe opening response.</small></span>
+              <span class="number-field suffix"><span>ms</span><input id="fast-model-ms" name="fastModelMs" type="number" min="0" max="30000" step="10" value="180" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="slow-model-ms">
+              <span class="field-copy"><strong>Slow model to first text</strong><small>Time for the deeper branch after its context is ready.</small></span>
+              <span class="number-field suffix"><span>ms</span><input id="slow-model-ms" name="slowModelMs" type="number" min="0" max="30000" step="10" value="650" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="tts-ms">
+              <span class="field-copy"><strong>Text-to-speech startup</strong><small>Time from accepted response text to the first synthesized audio chunk.</small></span>
+              <span class="number-field suffix"><span>ms</span><input id="tts-ms" name="ttsMs" type="number" min="0" max="30000" step="10" value="160" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="playout-ms">
+              <span class="field-copy"><strong>Transport and playout buffer</strong><small>Network delivery plus client buffering before the user hears audio.</small></span>
+              <span class="number-field suffix"><span>ms</span><input id="playout-ms" name="playoutMs" type="number" min="0" max="30000" step="10" value="60" inputmode="numeric" /></span>
+            </label>
+          </form>
+
+          <aside class="result-console" aria-live="polite" aria-labelledby="latency-result-label">
+            <div class="tool-status"><span>Latency model</span><b id="latency-status">CONVERSATIONAL</b></div>
+            <p class="primary-result"><span id="first-audio">900 ms</span></p>
+            <p class="result-label" id="latency-result-label">Parallel time to first audio</p>
+            <div class="result-grid">
+              <div><span>Sequential path</span><strong id="sequential-audio">1,490 ms</strong></div>
+              <div><span>Parallel savings</span><strong id="parallel-savings">590 ms</strong></div>
+              <div><span>Deep branch ready</span><strong id="deep-ready">1,270 ms</strong></div>
+              <div><span>First text branch</span><strong id="first-branch">Fast model</strong></div>
+              <div><span>Branch handoff gap</span><strong id="handoff-gap">590 ms</strong></div>
+              <div><span>Latency before model</span><strong id="pre-model-share">56%</strong></div>
+            </div>
+            <p class="result-note"><strong id="latency-title">Conversational planning band</strong><br /><span id="latency-note">The pipeline can feel responsive if turn detection is stable and the first spoken words are useful.</span></p>
+            <button class="action-button" id="share-latency" type="button">Share this exact latency budget</button>
+            <button class="secondary-button" id="reset-latency" type="button">Restore example</button>
+            <p class="share-status" id="share-status" role="status"></p>
+            <div class="result-join">
+              <span>Daily evidence brief · 52,000+ readers</span>
+              <a href="https://researchaudio.io/subscribe?utm_source=voice_ai_latency&amp;utm_medium=tool_result&amp;utm_campaign=ai_evidence_lab&amp;utm_content=result_join">Get the next architecture teardown →</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="latency-stage-section" aria-labelledby="latency-tape-title">
+        <div class="latency-stage-heading">
+          <div>
+            <p class="eyebrow">Live architecture tape</p>
+            <h2 id="latency-tape-title">See where the silence accumulates.</h2>
+          </div>
+          <p id="tape-summary" aria-live="polite">Parallel first audio: 900 ms. Sequential slow-model path: 1,490 ms. Parallel architecture saves 590 ms in this estimate.</p>
+        </div>
+        <div class="latency-tape-stack">
+          <article class="latency-tape-card">
+            <div class="latency-tape-label"><strong>Parallel response path</strong><span>First useful branch wins</span></div>
+            <div class="latency-tape" id="parallel-tape" aria-label="Parallel voice response latency stages">
+              <span class="latency-segment" data-stage="endpoint" style="--stage-ms: 280"><span>Endpoint</span><b>280 ms</b></span>
+              <span class="latency-segment" data-stage="transcript" style="--stage-ms: 220"><span>Transcript</span><b>220 ms</b></span>
+              <span class="latency-segment" data-stage="branch" style="--stage-ms: 180"><span>First branch</span><b>180 ms</b></span>
+              <span class="latency-segment" data-stage="tts" style="--stage-ms: 160"><span>TTS</span><b>160 ms</b></span>
+              <span class="latency-segment" data-stage="playout" style="--stage-ms: 60"><span>Play</span><b>60 ms</b></span>
+            </div>
+            <p class="latency-scroll-hint">Swipe the tape to inspect the full path →</p>
+          </article>
+          <article class="latency-tape-card is-sequential">
+            <div class="latency-tape-label"><strong>Sequential slow-model path</strong><span>Context and deep model before speech</span></div>
+            <div class="latency-tape" id="sequential-tape" aria-label="Sequential voice response latency stages">
+              <span class="latency-segment" data-stage="endpoint" style="--stage-ms: 280"><span>Endpoint</span><b>280 ms</b></span>
+              <span class="latency-segment" data-stage="transcript" style="--stage-ms: 220"><span>Transcript</span><b>220 ms</b></span>
+              <span class="latency-segment" data-stage="context" style="--stage-ms: 120"><span>Context</span><b>120 ms</b></span>
+              <span class="latency-segment" data-stage="slow" style="--stage-ms: 650"><span>Slow model</span><b>650 ms</b></span>
+              <span class="latency-segment" data-stage="tts" style="--stage-ms: 160"><span>TTS</span><b>160 ms</b></span>
+              <span class="latency-segment" data-stage="playout" style="--stage-ms: 60"><span>Play</span><b>60 ms</b></span>
+            </div>
+            <p class="latency-scroll-hint">Swipe the tape to inspect the full path →</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="Voice latency interpretation">
+        <p class="eyebrow">Read the tape</p>
+        <p><strong>Silence starts before inference.</strong><br />Endpointing and transcript finalization may dominate the budget.</p>
+        <p><strong>Parallelism buys first audio.</strong><br />It does not make deep reasoning finish sooner.</p>
+        <p><strong>Trace one percentile.</strong><br />Do not mix median model time with tail-latency speech stages.</p>
+      </section>
+
+      <section class="method-section" aria-labelledby="method-title">
+        <div>
+          <p class="eyebrow">Transparent method</p>
+          <h2 id="method-title">A planning model, not a production trace.</h2>
+        </div>
+        <div class="method-copy">
+          <p><strong>Parallel estimate.</strong> End-of-turn detection and transcript finalization happen first. Then a fast response branch races context preparation plus the slow model. The first useful text continues through TTS and playout.</p>
+          <p><strong>Sequential baseline.</strong> The baseline waits for context preparation and the slow model before it starts TTS. The difference isolates the time-to-first-audio benefit of the parallel branch.</p>
+          <p><strong>What is excluded.</strong> The estimate assumes stable stage timings. It does not model packet loss, jitter, barge-in recovery, speculative text cancellation, semantic quality, or an unsafe fast response.</p>
+          <p><strong>How to use it.</strong> Enter values from the same trace percentile, compare architectures, then verify the winning design with end-to-end production instrumentation and real conversation tests.</p>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="voice-guide-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Architecture guide</p>
+          <h2 id="voice-guide-title">Build a voice AI latency budget that survives production.</h2>
+          <p>Map the full path from the user finishing a turn to the first audible response, then decide whether a parallel fast and slow model architecture earns its coordination cost.</p>
+          <a class="guide-link" href="https://researchaudio.io/p/voice-ai-latency-budget-guide?utm_source=voice_ai_latency&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=guide_link">Read the voice AI latency budget guide →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item">
+            <h3>How do you calculate voice AI response latency?</h3>
+            <p>Add end-of-turn detection, transcript finalization, the first model branch to produce useful text, TTS startup, and audio playout. In a parallel design, the fast model races context preparation plus the slow model.</p>
+          </article>
+          <article class="faq-item">
+            <h3>What is a good latency for a voice AI agent?</h3>
+            <p>There is no universal cutoff. As a planning band, first audio below one second can feel conversational when turn detection is stable and the opening words are useful. Validate with production traces and interruption tests.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Why do voice AI systems use fast and slow models in parallel?</h3>
+            <p>A fast branch can start a safe response while a slower branch gathers context and finishes deeper reasoning. The benefit is shorter time to first audio; the costs are coordination, handoff, and cancellation logic.</p>
+          </article>
+          <article class="faq-item">
+            <h3>What usually causes voice AI latency?</h3>
+            <p>End-of-turn detection, transcript finalization, retrieval, model startup and generation, TTS, transport, and client buffering all contribute. Measure each stage before blaming the model.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Architecture without hand-waving</p>
+          <h2 id="subscribe-title">Get the constraint behind the AI demo.</h2>
+          <p>ResearchAudio turns AI systems into sourced, practical architecture decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links"><a href="../tools/">All tools</a><a href="../ai-cost-calculator/">AI cost calculator</a></div>
+    </footer>
+    <script type="module" src="calculator.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>

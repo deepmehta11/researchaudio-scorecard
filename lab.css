@@ -252,6 +252,10 @@ h2 {
   background: #ffe7ad;
 }
 
+.tool-card:nth-child(8) {
+  background: #c6e3dd;
+}
+
 .tool-card:hover {
   box-shadow: 3px 3px 0 var(--ink);
   transform: translate(5px, 5px);
@@ -689,6 +693,120 @@ h2 {
   color: var(--muted);
 }
 
+.latency-stage-section {
+  padding: 96px 0;
+  border-top: 2px solid var(--ink);
+}
+
+.latency-stage-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.55fr);
+  gap: 42px 80px;
+  align-items: end;
+  margin-bottom: 42px;
+}
+
+.latency-stage-heading > p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.latency-tape-stack {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+}
+
+.latency-tape-card {
+  min-width: 0;
+  padding: 22px;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  box-shadow: 7px 7px 0 var(--ink);
+}
+
+.latency-tape-card.is-sequential {
+  background: var(--blue-soft);
+}
+
+.latency-tape-label {
+  display: flex;
+  gap: 18px;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.latency-tape-label strong {
+  font-size: 1.05rem;
+}
+
+.latency-tape-label span {
+  color: var(--muted);
+  font: 600 0.68rem/1.3 var(--mono);
+  text-transform: uppercase;
+}
+
+.latency-tape {
+  display: flex;
+  min-width: 0;
+  overflow-x: auto;
+  border: 2px solid var(--ink);
+  scrollbar-color: var(--ink) var(--paper);
+}
+
+.latency-segment {
+  display: grid;
+  flex: max(1, var(--stage-ms)) 0 76px;
+  min-width: 76px;
+  min-height: 96px;
+  align-content: space-between;
+  padding: 12px;
+  color: var(--ink);
+  background: var(--yellow);
+  border-right: 1px solid var(--ink);
+}
+
+.latency-segment:last-child {
+  border-right: 0;
+}
+
+.latency-segment[data-stage="transcript"] {
+  background: #c6e3dd;
+}
+
+.latency-segment[data-stage="branch"],
+.latency-segment[data-stage="slow"] {
+  color: var(--white);
+  background: var(--blue);
+}
+
+.latency-segment[data-stage="context"] {
+  background: #eadfff;
+}
+
+.latency-segment[data-stage="tts"] {
+  background: #ffd8c2;
+}
+
+.latency-segment[data-stage="playout"] {
+  background: var(--surface);
+}
+
+.latency-segment span {
+  font: 600 0.65rem/1.2 var(--mono);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.latency-segment b {
+  font: 600 0.78rem/1.2 var(--mono);
+}
+
+.latency-scroll-hint {
+  display: none;
+}
+
 .guide-section {
   display: grid;
   grid-template-columns: minmax(0, 0.72fr) minmax(420px, 1fr);
@@ -1000,6 +1118,7 @@ h2 {
   .diagnostic-layout,
   .scenario-section,
   .method-section,
+  .latency-stage-heading,
   .guide-section,
   .starter-heading,
   .activation-strip,
@@ -1078,6 +1197,7 @@ h2 {
   .instrument-shell,
   .scenario-section,
   .method-section,
+  .latency-stage-section,
   .guide-section,
   .starter-section,
   .activation-strip,
@@ -1105,6 +1225,23 @@ h2 {
   .faq-item {
     grid-template-columns: 1fr;
     gap: 10px;
+  }
+
+  .latency-tape-label {
+    display: grid;
+    gap: 4px;
+  }
+
+  .latency-tape-card {
+    padding: 16px;
+  }
+
+  .latency-scroll-hint {
+    display: block;
+    margin: 10px 0 0;
+    color: var(--muted);
+    font: 600 0.65rem/1.3 var(--mono);
+    text-transform: uppercase;
   }
 
   .scenario-card {
