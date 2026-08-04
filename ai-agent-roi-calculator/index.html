@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Agent ROI Calculator with Failure & Review | ResearchAudio</title>
+    <meta name="description" content="Stress-test AI agent ROI after failed automations, human review, recurring costs, and implementation payback—not just theoretical hours saved." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <link rel="canonical" href="https://deepmehta11.github.io/researchaudio-scorecard/ai-agent-roi-calculator/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Does the AI agent ROI survive failure and review?" />
+    <meta property="og:description" content="A free AI agent ROI stress test from ResearchAudio." />
+    <meta property="og:url" content="https://deepmehta11.github.io/researchaudio-scorecard/ai-agent-roi-calculator/" />
+    <meta property="og:image" content="https://deepmehta11.github.io/researchaudio-scorecard/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://deepmehta11.github.io/researchaudio-scorecard/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "AI Agent ROI Calculator with Failure and Review",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Any",
+        "url": "https://deepmehta11.github.io/researchaudio-scorecard/ai-agent-roi-calculator/",
+        "description": "A free AI agent ROI stress test that includes failed automation, human review, recurring cost, and implementation payback.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#roi-calculator">Skip to the ROI calculator</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=ai_agent_roi&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=ai_agent_roi&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=ai_agent_roi&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=ai_agent_roi&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Instrument 04 / business case</p>
+          <h1 id="hero-title">The ROI is imaginary until failure and review are priced.</h1>
+          <p class="hero-deck">Model coverage, failed automations, human review, recurring cost, and implementation payback before an AI agent reaches a budget meeting.</p>
+        </div>
+        <aside class="lab-index" aria-label="ROI model scope">
+          <span>Hidden assumptions</span>
+          <strong>05</strong>
+          <p>Coverage, success, review, recurring cost, and implementation cost all sit between theoretical hours saved and a defensible return.</p>
+        </aside>
+      </section>
+
+      <section class="instrument-shell" id="roi-calculator" aria-labelledby="calculator-title">
+        <div class="instrument-intro">
+          <div>
+            <p class="eyebrow">Stress-test one workflow</p>
+            <h2 id="calculator-title">Price the work that comes back to humans.</h2>
+          </div>
+          <p>Use production observations or a conservative pilot estimate. Coverage is not success, and successful automation is not review-free.</p>
+        </div>
+
+        <div class="calculator-layout">
+          <form class="input-panel" id="roi-form">
+            <label class="input-card" for="tasks-per-month">
+              <span class="field-copy"><strong>Tasks per month</strong><small>The workflow volume available to humans or the agent.</small></span>
+              <span class="number-field suffix"><span>tasks</span><input id="tasks-per-month" name="tasksPerMonth" type="number" min="0" max="100000000" step="1" value="2000" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="minutes-per-task">
+              <span class="field-copy"><strong>Human minutes per task today</strong><small>Use observed handling time, including normal corrections.</small></span>
+              <span class="number-field suffix"><span>min</span><input id="minutes-per-task" name="minutesPerTask" type="number" min="0" max="100000" step="0.1" value="8" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="hourly-cost">
+              <span class="field-copy"><strong>Loaded hourly cost</strong><small>Salary, benefits, management, and operating overhead.</small></span>
+              <span class="number-field"><span>$</span><input id="hourly-cost" name="hourlyCost" type="number" min="0" max="100000" step="1" value="65" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="automation-coverage">
+              <span class="field-copy"><strong>Automation coverage</strong><small>The share of tasks the agent will actually attempt.</small></span>
+              <span class="number-field suffix"><span>%</span><input id="automation-coverage" name="automationCoverage" type="number" min="0" max="100" step="0.1" value="60" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="success-rate">
+              <span class="field-copy"><strong>Success rate inside coverage</strong><small>The attempted tasks that pass the real acceptance test.</small></span>
+              <span class="number-field suffix"><span>%</span><input id="success-rate" name="successRate" type="number" min="0" max="100" step="0.1" value="85" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="review-minutes">
+              <span class="field-copy"><strong>Human review per attempted task</strong><small>Include checking, correction, approval, and exception routing.</small></span>
+              <span class="number-field suffix"><span>min</span><input id="review-minutes" name="reviewMinutes" type="number" min="0" max="100000" step="0.1" value="1.5" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="run-cost">
+              <span class="field-copy"><strong>AI run cost per attempted task</strong><small>Model, retrieval, tool, and other usage-based costs.</small></span>
+              <span class="number-field"><span>$</span><input id="run-cost" name="runCost" type="number" min="0" max="1000000" step="0.01" value="0.12" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="recurring-cost">
+              <span class="field-copy"><strong>Other recurring monthly cost</strong><small>Platform, monitoring, maintenance, and support.</small></span>
+              <span class="number-field"><span>$</span><input id="recurring-cost" name="recurringCost" type="number" min="0" max="100000000" step="1" value="1500" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="implementation-cost">
+              <span class="field-copy"><strong>One-time implementation cost</strong><small>Integration, evaluation, security, rollout, and change management.</small></span>
+              <span class="number-field"><span>$</span><input id="implementation-cost" name="implementationCost" type="number" min="0" max="100000000" step="100" value="25000" inputmode="decimal" /></span>
+            </label>
+          </form>
+
+          <aside class="result-console" aria-live="polite" aria-labelledby="roi-title">
+            <div class="tool-status"><span>Business case</span><b id="roi-status">READY</b></div>
+            <p class="primary-result"><span id="monthly-savings">$0</span><small>/ month</small></p>
+            <p class="result-label">Net savings after failure, review, and recurring cost</p>
+            <div class="result-grid">
+              <div><span>Year-one ROI</span><strong id="annual-roi">0%</strong></div>
+              <div><span>Implementation payback</span><strong id="payback">—</strong></div>
+              <div><span>Tasks resolved / month</span><strong id="successful-tasks">0</strong></div>
+              <div><span>Monthly cost after AI</span><strong id="cost-after">$0</strong></div>
+              <div><span>Break-even success rate</span><strong id="break-even-success">—</strong></div>
+              <div><span>Decision</span><strong id="roi-title">Waiting</strong></div>
+            </div>
+            <p class="result-note" id="roi-note">Enter one workflow to test whether the economics survive contact with operations.</p>
+            <button class="action-button" id="share-roi" type="button">Share this stress test</button>
+            <button class="secondary-button" id="reset-roi" type="button">Restore example</button>
+            <p class="share-status" id="share-status" role="status"></p>
+            <div class="result-join">
+              <span>Daily evidence brief · 52,000+ readers</span>
+              <a href="https://researchaudio.io/subscribe?utm_source=ai_agent_roi&amp;utm_medium=tool_result&amp;utm_campaign=ai_evidence_lab&amp;utm_content=result_join">Get the next teardown →</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="scenario-section" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">Sensitivity check</p>
+          <h2 id="scenario-title">The base case is one story, not the truth.</h2>
+          <p>Conservative reduces coverage and success while increasing review and cost. Upside improves them modestly. A decision should survive more than one row.</p>
+        </div>
+        <div class="scenario-grid">
+          <article class="scenario-card">
+            <span>Conservative</span><strong id="conservative-savings">$0</strong><small id="conservative-payback">—</small>
+          </article>
+          <article class="scenario-card is-base">
+            <span>Base</span><strong id="base-savings">$0</strong><small id="base-payback">—</small>
+          </article>
+          <article class="scenario-card">
+            <span>Upside</span><strong id="upside-savings">$0</strong><small id="upside-payback">—</small>
+          </article>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="ROI interpretation">
+        <p class="eyebrow">Model boundaries</p>
+        <p><strong>Coverage is not success.</strong><br />Only completed tasks remove the original labor.</p>
+        <p><strong>Review is real labor.</strong><br />Every attempted task may create checking and exception work.</p>
+        <p><strong>Payback is not certainty.</strong><br />Validate the inputs in a bounded pilot before approving scale.</p>
+      </section>
+
+      <section class="method-section" aria-labelledby="method-title">
+        <div>
+          <p class="eyebrow">Transparent method</p>
+          <h2 id="method-title">What this AI agent ROI calculator actually computes.</h2>
+        </div>
+        <div class="method-copy">
+          <p><strong>Baseline labor</strong> is task volume multiplied by current handling time and loaded hourly cost.</p>
+          <p><strong>Cost after AI</strong> keeps every uncovered or failed task in the human queue, adds review labor to every attempted automation, then adds usage-based and recurring costs.</p>
+          <p><strong>Monthly savings</strong> is baseline labor minus cost after AI. Payback divides one-time implementation cost by positive monthly savings. Year-one ROI subtracts implementation cost from twelve months of savings.</p>
+          <p>This is a planning model, not a forecast or guarantee. It excludes revenue lift, quality changes, taxes, financing, and risk-adjusted discounting. Replace every example input with pilot evidence.</p>
+        </div>
+      </section>
+
+      <section class="subscribe-block" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">One teardown at a time</p>
+          <h2 id="subscribe-title">Get the cost and limitation behind the next agent claim.</h2>
+          <p>ResearchAudio turns AI launches into sourced, practical adoption decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../tools/">All tools</a>
+        <a href="../ai-cost-calculator/">Cost per successful task</a>
+        <a href="https://researchaudio.io/?utm_source=ai_agent_roi&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script type="module" src="calculator.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>

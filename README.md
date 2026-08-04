@@ -1,12 +1,13 @@
 # ResearchAudio Evidence Lab
 
-An evergreen acquisition ecosystem for ResearchAudio. Three browser-local tools turn AI launch claims, workflow economics, and agent reliability into concrete inspections before inviting visitors into the newsletter.
+An evergreen acquisition ecosystem for ResearchAudio. Four browser-local tools turn AI launch claims, workflow economics, agent reliability, and automation business cases into concrete inspections before inviting visitors into the newsletter.
 
 ## Live instruments
 
 - `/` — AI Launch Evidence Scorecard: seven gates for decision-ready launch evidence.
 - `/ai-cost-calculator/` — retry-adjusted cost per successful AI task.
 - `/agent-loop-diagnostic/` — ten production guardrails for agent loops.
+- `/ai-agent-roi-calculator/` — AI agent ROI after failure, human review, recurring cost, and implementation payback.
 - `/tools/` — crawlable, interlinked Evidence Lab hub.
 
 Every instrument uses the dedicated Beehiiv acquisition form and keeps user inputs in the browser.
@@ -33,7 +34,7 @@ Then open `http://127.0.0.1:4173`.
 ## Distribution loop
 
 1. Deploy on `main`; the workflow verifies the site and notifies IndexNow of every sitemap URL.
-2. Match the instrument to the briefing: launch proof, operating cost, or agent reliability.
+2. Match the instrument to the briefing: launch proof, operating cost, agent reliability, or automation ROI.
 3. Link it near the first decision table in every relevant ResearchAudio web post.
 4. Publish one result card per issue on LinkedIn, X, Reddit, and relevant engineering communities.
 5. Use built-in share actions; each carries tool-specific referral attribution.

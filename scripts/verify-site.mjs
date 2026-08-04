@@ -4,10 +4,11 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { calculateCost } from "../ai-cost-calculator/calculator.js";
 import { classifyLoop, controls } from "../agent-loop-diagnostic/diagnostic.js";
+import { calculateAgentRoi, classifyAgentRoi } from "../ai-agent-roi-calculator/calculator.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
-const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -15,6 +16,8 @@ const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, sitemap, robots, ll
   readFile(path.join(root, "tools/index.html"), "utf8"),
   readFile(path.join(root, "ai-cost-calculator/index.html"), "utf8"),
   readFile(path.join(root, "agent-loop-diagnostic/index.html"), "utf8"),
+  readFile(path.join(root, "ai-agent-roi-calculator/index.html"), "utf8"),
+  readFile(path.join(root, "ai-agent-roi-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "sitemap.xml"), "utf8"),
   readFile(path.join(root, "robots.txt"), "utf8"),
   readFile(path.join(root, "llms.txt"), "utf8"),
@@ -50,6 +53,7 @@ for (const [name, page] of [
   ["hub", toolsHtml],
   ["cost calculator", costHtml],
   ["loop diagnostic", loopHtml],
+  ["agent ROI calculator", roiHtml],
 ]) {
   assert.match(page, /https:\/\/researchaudio\.io\/subscribe\?utm_source=/, `${name} direct subscribe CTA missing`);
   assert.match(page, /utm_campaign=ai_evidence_lab/, `${name} acquisition campaign missing`);
@@ -61,6 +65,7 @@ for (const [name, page, title] of [
   ["hub", toolsHtml, "Free AI Evaluation Tools for Builders"],
   ["cost calculator", costHtml, "AI Cost per Successful Task Calculator"],
   ["loop diagnostic", loopHtml, "AI Agent Loop Diagnostic Checklist"],
+  ["agent ROI calculator", roiHtml, "AI Agent ROI Calculator with Failure & Review"],
 ]) {
   assert.match(page, new RegExp(`<title>${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} \\| ResearchAudio<\\/title>`), `${name} title missing`);
   assert.match(page, /rel="canonical"/, `${name} canonical missing`);
@@ -89,10 +94,41 @@ assert.equal(classifyLoop(0).status, "BLIND");
 assert.equal(classifyLoop(7).status, "EXPOSED");
 assert.equal(classifyLoop(10).status, "CONTROLLED");
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 4, "sitemap should contain all four crawlable pages");
+const defaultRoi = calculateAgentRoi({
+  tasksPerMonth: 2000,
+  minutesPerTask: 8,
+  hourlyCost: 65,
+  automationCoverage: 60,
+  successRate: 85,
+  reviewMinutes: 1.5,
+  runCost: 0.12,
+  recurringCost: 1500,
+  implementationCost: 25000,
+});
+assert.equal(defaultRoi.successfulTasks, 1020);
+assert.ok(Math.abs(defaultRoi.monthlySavings - 5246) < 0.01);
+assert.ok(Math.abs(defaultRoi.paybackMonths - (25000 / 5246)) < 0.0001);
+assert.equal(classifyAgentRoi(defaultRoi).status, "PILOT");
+const holdRoi = calculateAgentRoi({
+  tasksPerMonth: 100,
+  minutesPerTask: 1,
+  hourlyCost: 20,
+  automationCoverage: 50,
+  successRate: 50,
+  reviewMinutes: 5,
+  runCost: 2,
+  recurringCost: 1000,
+  implementationCost: 10000,
+});
+assert.equal(classifyAgentRoi(holdRoi).status, "HOLD");
+assert.match(roiJs, /utm_source", "agent_roi_share"/);
+assert.match(roiJs, /utm_campaign", "ai_evidence_lab"/);
+
+assert.equal((sitemap.match(/<url>/g) || []).length, 5, "sitemap should contain all five crawlable pages");
 assert.match(robots, /Sitemap: https:\/\/deepmehta11\.github\.io\/researchaudio-scorecard\/sitemap\.xml/);
 assert.match(llms, /AI Cost per Successful Task Calculator/);
 assert.match(llms, /AI Agent Loop Diagnostic/);
+assert.match(llms, /AI Agent ROI Calculator/);
 assert.deepEqual([...socialCard.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], "social card should be a PNG");
 assert.equal(publishedKey.trim(), indexNowKey, "public IndexNow key must match the submission script");
 assert.match(indexNowScript, /https:\/\/api\.indexnow\.org\/indexnow/);
@@ -105,4 +141,4 @@ assert.match(indexNowWorkflow, /head_sha=\$\{GITHUB_SHA\}/);
 assert.match(indexNowWorkflow, /pages build and deployment/);
 assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 
-console.log("Evidence Lab verified: 3 tools, 4 crawlable pages, direct attributed subscribe CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 4 tools, 5 crawlable pages, direct attributed subscribe CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

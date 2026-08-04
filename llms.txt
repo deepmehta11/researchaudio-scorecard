@@ -10,6 +10,8 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Calculates AI workflow cost after retries, failure probability, and human review.
 - AI Agent Loop Diagnostic: https://deepmehta11.github.io/researchaudio-scorecard/agent-loop-diagnostic/
   Ten checks for termination, validation, recovery, tracing, budgets, and human escalation.
+- AI Agent ROI Calculator: https://deepmehta11.github.io/researchaudio-scorecard/ai-agent-roi-calculator/
+  Stress-tests automation ROI after failed tasks, human review, usage cost, recurring cost, and implementation payback.
 
 ## Publisher
 
