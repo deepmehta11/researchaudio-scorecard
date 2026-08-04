@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Prompt Caching Cost Calculator &amp; Break-Even Hit Rate | ResearchAudio</title>
+    <meta name="description" content="Calculate prompt caching savings, cache-read and cache-write spend, and the break-even hit rate using your current LLM provider prices and workload." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <link rel="canonical" href="https://deepmehta11.github.io/researchaudio-scorecard/prompt-caching-calculator/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="When does prompt caching actually save money?" />
+    <meta property="og:description" content="Model cache hits, cache writes, monthly savings, and the break-even hit rate with one free calculator." />
+    <meta property="og:url" content="https://deepmehta11.github.io/researchaudio-scorecard/prompt-caching-calculator/" />
+    <meta property="og:image" content="https://deepmehta11.github.io/researchaudio-scorecard/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://deepmehta11.github.io/researchaudio-scorecard/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Prompt Caching Cost Calculator",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Any",
+        "url": "https://deepmehta11.github.io/researchaudio-scorecard/prompt-caching-calculator/",
+        "description": "A free calculator for estimating prompt caching savings, cache-read and cache-write spend, and the break-even cache hit rate.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do you calculate prompt caching savings?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Price cache-hit reusable input tokens at the cache-read rate and cache-miss reusable input tokens at the cache-write rate. Subtract that total from the cost of pricing every reusable input token at the normal uncached rate."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is a good prompt cache hit rate?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A useful hit rate is one above the workload's break-even threshold. The threshold depends on uncached, cache-read, and cache-write prices, so there is no universal percentage."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "When can prompt caching cost more?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Prompt caching can cost more when cache writes carry a premium and the hit rate is too low to recover that premium through cheaper cache reads. Short cache lifetimes and frequently changing prefixes can lower the hit rate."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which input tokens belong in a cache calculation?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Include only the stable, reusable input prefix expected to qualify under the provider's cache rules. Exclude changing user content, ineligible tokens, and output tokens."
+            }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#prompt-cache-calculator">Skip to the prompt caching calculator</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=prompt_caching_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=prompt_caching_calculator&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=prompt_caching_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=prompt_caching_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Instrument 06 / cache economics</p>
+          <h1 id="hero-title">Know whether prompt caching saves money—or adds another bill.</h1>
+          <p class="hero-deck">Turn request volume, reusable tokens, current cache prices, and hit rate into monthly savings and one inspectable break-even threshold.</p>
+        </div>
+        <aside class="lab-index" aria-label="Prompt cache model scope">
+          <span>Budget inputs</span>
+          <strong>06</strong>
+          <p>Vendor-neutral by design. Enter the current uncached, cache-read, and cache-write prices for the provider you are evaluating.</p>
+        </aside>
+      </section>
+
+      <section class="instrument-shell" id="prompt-cache-calculator" aria-labelledby="calculator-title">
+        <div class="instrument-intro">
+          <div>
+            <p class="eyebrow">Model one month</p>
+            <h2 id="calculator-title">Find the hit rate that pays for cache writes.</h2>
+          </div>
+          <p>Nothing is submitted or stored. Every calculation runs in this browser, using the workload and current prices you provide.</p>
+        </div>
+
+        <div class="calculator-layout">
+          <form class="input-panel" id="prompt-cache-form">
+            <label class="input-card" for="requests-per-month">
+              <span class="field-copy"><strong>Requests per month</strong><small>Expected calls that contain the reusable prompt prefix.</small></span>
+              <span class="number-field suffix"><span>calls</span><input id="requests-per-month" name="requestsPerMonth" type="number" min="0" max="10000000000" step="1" value="100000" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="reusable-input-tokens">
+              <span class="field-copy"><strong>Reusable input tokens per request</strong><small>Only the stable prefix expected to qualify for caching.</small></span>
+              <span class="number-field suffix"><span>tok</span><input id="reusable-input-tokens" name="reusableInputTokens" type="number" min="0" max="100000000" step="1" value="8000" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="uncached-price">
+              <span class="field-copy"><strong>Uncached input price per 1M</strong><small>The normal input rate used as the comparison baseline.</small></span>
+              <span class="number-field"><span>$</span><input id="uncached-price" name="uncachedPricePerMillion" type="number" min="0" max="1000000" step="0.01" value="3" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="cache-read-price">
+              <span class="field-copy"><strong>Cache-read price per 1M</strong><small>The price applied when the reusable prefix produces a hit.</small></span>
+              <span class="number-field"><span>$</span><input id="cache-read-price" name="cacheReadPricePerMillion" type="number" min="0" max="1000000" step="0.01" value="0.3" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="cache-write-price">
+              <span class="field-copy"><strong>Cache-write price per 1M</strong><small>The price applied when the reusable prefix misses and is written.</small></span>
+              <span class="number-field"><span>$</span><input id="cache-write-price" name="cacheWritePricePerMillion" type="number" min="0" max="1000000" step="0.01" value="3.75" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="cache-hit-rate">
+              <span class="field-copy"><strong>Cache hit rate</strong><small>Use an observed production rate when one is available.</small></span>
+              <span class="number-field suffix"><span>%</span><input id="cache-hit-rate" name="cacheHitRate" type="number" min="0" max="100" step="0.1" value="80" inputmode="decimal" /></span>
+            </label>
+          </form>
+
+          <aside class="result-console" aria-live="polite" aria-labelledby="result-title">
+            <div class="tool-status"><span>Monthly difference</span><b id="prompt-cache-status">HIGH LEVERAGE</b></div>
+            <p class="primary-result"><span id="monthly-cache-savings">$0</span><small>/ month</small></p>
+            <p class="result-label" id="result-title">Savings versus pricing every reusable input token uncached</p>
+            <div class="result-grid">
+              <div><span>With caching</span><strong id="cached-input-cost">$0</strong></div>
+              <div><span>Without caching</span><strong id="uncached-input-cost">$0</strong></div>
+              <div><span>Savings rate</span><strong id="cache-savings-rate">0%</strong></div>
+              <div><span>Break-even hit rate</span><strong id="break-even-hit-rate">0%</strong></div>
+              <div><span>Cache-read spend</span><strong id="cache-read-spend">$0</strong></div>
+              <div><span>Cache-write spend</span><strong id="cache-write-spend">$0</strong></div>
+              <div><span>Request split</span><strong id="cache-request-split">0 hit / 0 miss</strong></div>
+              <div><span>Scope</span><strong>Reusable input</strong></div>
+            </div>
+            <p class="result-note" id="prompt-cache-note">Enter one workload to model prompt-cache economics.</p>
+            <button class="action-button" id="share-prompt-cache" type="button">Share this estimate</button>
+            <button class="secondary-button" id="reset-prompt-cache" type="button">Restore example</button>
+            <p class="share-status" id="share-status" role="status"></p>
+            <div class="result-join">
+              <span>Daily evidence brief · 52,000+ readers</span>
+              <a href="https://researchaudio.io/subscribe?utm_source=prompt_caching_calculator&amp;utm_medium=tool_result&amp;utm_campaign=ai_evidence_lab&amp;utm_content=result_join">Get Free Access →</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="Prompt caching interpretation">
+        <p class="eyebrow">Cache boundaries</p>
+        <p><strong>Price misses.</strong><br />A cache write can cost more than ordinary uncached input.</p>
+        <p><strong>Measure hits.</strong><br />The observed hit rate decides whether cheaper reads recover that premium.</p>
+        <p><strong>Count stable input.</strong><br />Changing content and output tokens do not belong in this model.</p>
+      </section>
+
+      <section class="method-section" aria-labelledby="method-title">
+        <div>
+          <p class="eyebrow">Transparent method</p>
+          <h2 id="method-title">What this prompt caching calculator computes.</h2>
+        </div>
+        <div class="method-copy">
+          <p><strong>Uncached baseline</strong> multiplies requests by reusable input tokens and the normal uncached price. It asks what the same stable prefix would cost without caching.</p>
+          <p><strong>Cache-read spend</strong> prices the hit share at the cache-read rate. <strong>Cache-write spend</strong> prices the miss share at the cache-write rate.</p>
+          <p><strong>Monthly savings</strong> subtracts read and write spend from the uncached baseline. A negative result means the cache-write premium is larger than the cache-read savings at the stated hit rate.</p>
+          <p><strong>Break-even hit rate</strong> solves for the hit share where cached and uncached input cost the same. Output tokens are excluded because prompt caching changes reusable input economics, not generated-token pricing.</p>
+          <p>This is a planning estimate, not a provider quote. Verify current prices, cache eligibility, minimum token requirements, cache lifetime, write behavior, invalidation rules, and any storage charges in the provider's current documentation.</p>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="cache-guide-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Prompt cache guide</p>
+          <h2 id="cache-guide-title">Four questions before treating cached tokens as savings.</h2>
+          <p>A cheap cache-read price is only half the model. The write rate, prefix stability, eligibility rules, and real hit rate decide what reaches the invoice.</p>
+          <a class="guide-link" href="https://researchaudio.io/p/ai-evidence-lab?utm_source=prompt_caching_calculator&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=guide_link">Read the full AI evaluation guide →</a>
+          <a class="guide-link" href="../llm-api-cost-calculator/?utm_source=prompt_caching_calculator&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=llm_budget">Need the full input, output, and retry budget? →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item">
+            <h3>How do you calculate prompt caching savings?</h3>
+            <p>Price cache-hit reusable input tokens at the cache-read rate and cache-miss reusable input tokens at the cache-write rate. Subtract that total from the cost of pricing every reusable input token at the normal uncached rate.</p>
+          </article>
+          <article class="faq-item">
+            <h3>What is a good prompt cache hit rate?</h3>
+            <p>A useful hit rate is one above this workload's break-even threshold. The threshold depends on all three input prices, so there is no universal percentage that makes caching economical.</p>
+          </article>
+          <article class="faq-item">
+            <h3>When can prompt caching cost more?</h3>
+            <p>Caching can cost more when writes carry a premium and the hit rate is too low to recover it through cheaper reads. Short cache lifetimes and frequently changing prefixes can turn expected hits into writes.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Which input tokens belong in a cache calculation?</h3>
+            <p>Include only the stable, reusable input prefix expected to qualify under current provider rules. Exclude changing user content, ineligible tokens, and output tokens.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">One teardown at a time</p>
+          <h2 id="subscribe-title">Get the cost and limitation behind the next model claim.</h2>
+          <p>ResearchAudio turns AI releases into sourced, practical adoption decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../tools/">All tools</a>
+        <a href="../llm-api-cost-calculator/">Full LLM API budget</a>
+        <a href="https://researchaudio.io/?utm_source=prompt_caching_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script type="module" src="calculator.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>

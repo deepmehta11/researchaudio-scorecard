@@ -6,11 +6,12 @@ import { calculateCost } from "../ai-cost-calculator/calculator.js";
 import { classifyLoop, controls } from "../agent-loop-diagnostic/diagnostic.js";
 import { calculateAgentRoi, classifyAgentRoi } from "../ai-agent-roi-calculator/calculator.js";
 import { calculateLlmApiCost } from "../llm-api-cost-calculator/calculator.js";
+import { calculatePromptCacheSavings } from "../prompt-caching-calculator/calculator.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, starterHtml, starterJs, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, promptCacheHtml, promptCacheJs, starterHtml, starterJs, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -22,6 +23,8 @@ const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llm
   readFile(path.join(root, "ai-agent-roi-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "llm-api-cost-calculator/index.html"), "utf8"),
   readFile(path.join(root, "llm-api-cost-calculator/calculator.js"), "utf8"),
+  readFile(path.join(root, "prompt-caching-calculator/index.html"), "utf8"),
+  readFile(path.join(root, "prompt-caching-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "evidence-starter-kit/index.html"), "utf8"),
   readFile(path.join(root, "evidence-starter-kit/starter.js"), "utf8"),
   readFile(path.join(root, "sitemap.xml"), "utf8"),
@@ -43,6 +46,7 @@ assert.match(html, /application\/ld\+json/);
 assert.match(html, /social-card\.png/);
 assert.match(html, /ai-cost-calculator/);
 assert.match(html, /agent-loop-diagnostic/);
+assert.match(html, /prompt-caching-calculator/);
 assert.doesNotMatch(html, /TODO|PLACEHOLDER|example\.com/);
 
 assert.match(css, /@media \(max-width: 620px\)/);
@@ -61,6 +65,7 @@ for (const [name, page] of [
   ["loop diagnostic", loopHtml],
   ["agent ROI calculator", roiHtml],
   ["LLM API cost calculator", llmCostHtml],
+  ["prompt caching calculator", promptCacheHtml],
 ]) {
   assert.match(page, /https:\/\/researchaudio\.io\/subscribe\?utm_source=/, `${name} direct subscribe CTA missing`);
   assert.match(page, /utm_campaign=ai_evidence_lab/, `${name} acquisition campaign missing`);
@@ -74,6 +79,7 @@ for (const [name, page, title] of [
   ["loop diagnostic", loopHtml, "AI Agent Loop Diagnostic Checklist"],
   ["agent ROI calculator", roiHtml, "AI Agent ROI Calculator with Failure & Review"],
   ["LLM API cost calculator", llmCostHtml, "LLM API Cost Calculator (Input &amp; Output Tokens)"],
+  ["prompt caching calculator", promptCacheHtml, "Prompt Caching Cost Calculator &amp; Break-Even Hit Rate"],
 ]) {
   assert.match(page, new RegExp(`<title>${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} \\| ResearchAudio<\\/title>`), `${name} title missing`);
   assert.match(page, /rel="canonical"/, `${name} canonical missing`);
@@ -105,6 +111,12 @@ for (const [name, page, questions] of [
     "Why are input and output tokens priced separately?",
     "How does prompt caching affect LLM cost?",
     "How do retries affect token cost?",
+  ]],
+  ["prompt caching calculator", promptCacheHtml, [
+    "How do you calculate prompt caching savings?",
+    "What is a good prompt cache hit rate?",
+    "When can prompt caching cost more?",
+    "Which input tokens belong in a cache calculation?",
   ]],
 ]) {
   assert.doesNotThrow(() => parseStructuredData(page), `${name} structured data must be valid JSON`);
@@ -213,6 +225,46 @@ assert.equal(retryHeavyLlmCost.retryMultiplier, 3);
 assert.equal(retryHeavyLlmCost.totalCost, 3);
 assert.match(llmCostJs, /utm_source", "llm_cost_share"/);
 assert.match(llmCostJs, /utm_campaign", "ai_evidence_lab"/);
+assert.match(llmCostHtml, /prompt-caching-calculator/);
+
+const defaultPromptCache = calculatePromptCacheSavings({
+  requestsPerMonth: 100000,
+  reusableInputTokens: 8000,
+  uncachedPricePerMillion: 3,
+  cacheReadPricePerMillion: 0.3,
+  cacheWritePricePerMillion: 3.75,
+  cacheHitRate: 80,
+});
+assert.equal(defaultPromptCache.uncachedCost, 2400);
+assert.ok(Math.abs(defaultPromptCache.cacheReadCost - 192) < 0.0001);
+assert.ok(Math.abs(defaultPromptCache.cacheWriteCost - 600) < 0.0001);
+assert.ok(Math.abs(defaultPromptCache.cachedCost - 792) < 0.0001);
+assert.ok(Math.abs(defaultPromptCache.savings - 1608) < 0.0001);
+assert.ok(Math.abs(defaultPromptCache.savingsRate - 0.67) < 0.0001);
+assert.ok(Math.abs(defaultPromptCache.breakEvenHitRate - 0.2173913043) < 0.0000001);
+assert.ok(Math.abs(defaultPromptCache.costPerRequest - 0.00792) < 0.0000001);
+const allMissPromptCache = calculatePromptCacheSavings({
+  requestsPerMonth: 100,
+  reusableInputTokens: 1000,
+  uncachedPricePerMillion: 3,
+  cacheReadPricePerMillion: 0.3,
+  cacheWritePricePerMillion: 3.75,
+  cacheHitRate: 0,
+});
+assert.ok(Math.abs(allMissPromptCache.uncachedCost - 0.3) < 0.0001);
+assert.ok(Math.abs(allMissPromptCache.cachedCost - 0.375) < 0.0001);
+assert.ok(Math.abs(allMissPromptCache.savings - (-0.075)) < 0.0001);
+const unreachablePromptCache = calculatePromptCacheSavings({
+  requestsPerMonth: 100,
+  reusableInputTokens: 1000,
+  uncachedPricePerMillion: 3,
+  cacheReadPricePerMillion: 4,
+  cacheWritePricePerMillion: 5,
+  cacheHitRate: 100,
+});
+assert.equal(unreachablePromptCache.breakEvenHitRate, null);
+assert.match(promptCacheJs, /utm_source", "prompt_cache_share"/);
+assert.match(promptCacheJs, /utm_campaign", "ai_evidence_lab"/);
 
 assert.match(starterHtml, /<title>AI Evidence Starter Kit: 4 Free Evaluation Tools \| ResearchAudio<\/title>/);
 assert.match(starterHtml, /rel="canonical"/);
@@ -229,12 +281,13 @@ assert.match(starterJs, /utm_campaign", "ai_evidence_lab"/);
 assert.match(starterJs, /utm_medium"\) === "onboarding"/);
 assert.doesNotMatch(starterHtml, /TODO|PLACEHOLDER|example\.com/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 7, "sitemap should contain all seven crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 8, "sitemap should contain all eight crawlable pages");
 assert.match(robots, /Sitemap: https:\/\/deepmehta11\.github\.io\/researchaudio-scorecard\/sitemap\.xml/);
 assert.match(llms, /AI Cost per Successful Task Calculator/);
 assert.match(llms, /AI Agent Loop Diagnostic/);
 assert.match(llms, /AI Agent ROI Calculator/);
 assert.match(llms, /LLM API Cost Calculator/);
+assert.match(llms, /Prompt Caching Cost Calculator/);
 assert.match(llms, /AI Evidence Starter Kit/);
 assert.deepEqual([...socialCard.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], "social card should be a PNG");
 assert.equal(publishedKey.trim(), indexNowKey, "public IndexNow key must match the submission script");
@@ -248,4 +301,4 @@ assert.match(indexNowWorkflow, /head_sha=\$\{GITHUB_SHA\}/);
 assert.match(indexNowWorkflow, /pages build and deployment/);
 assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 
-console.log("Evidence Lab verified: 5 tools, 1 activation kit, 7 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 6 tools, 1 activation kit, 8 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

@@ -241,9 +241,11 @@ h2 {
 }
 
 .tool-card:nth-child(5) {
-  grid-column: 1 / -1;
-  min-height: 300px;
   background: #d8f1df;
+}
+
+.tool-card:nth-child(6) {
+  background: #eadfff;
 }
 
 .tool-card:hover {
