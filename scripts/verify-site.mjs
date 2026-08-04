@@ -162,6 +162,9 @@ for (const [name, page, questions] of [
   }
 }
 
+assert.match(roiHtml, /href="https:\/\/researchaudio\.io\/p\/ai-agent-roi-calculator-guide\?utm_source=ai_agent_roi&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=guide_link"/, "agent ROI calculator should link to its dedicated guide");
+assert.match(costHtml, /href="https:\/\/researchaudio\.io\/p\/ai-cost-per-successful-task-guide\?utm_source=ai_cost_calculator&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=guide_link"/, "cost calculator should link to its dedicated guide");
+
 assert.match(labCss, /@media \(max-width: 620px\)/);
 assert.match(labCss, /prefers-reduced-motion/);
 assert.match(labCss, /focus-visible/);
