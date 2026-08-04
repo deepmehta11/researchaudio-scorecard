@@ -8,6 +8,7 @@ import { calculateAgentRoi, classifyAgentRoi } from "../ai-agent-roi-calculator/
 import { calculateLlmApiCost } from "../llm-api-cost-calculator/calculator.js";
 import { calculatePromptCacheSavings } from "../prompt-caching-calculator/calculator.js";
 import { buildCodexConfig, normalizeFallbackFiles, normalizeMaxBytes } from "../codex-config-generator/generator.js";
+import { buildAttributedShareUrl, parseSharedChecklist, parseSharedNumbers } from "../share-state.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
@@ -59,7 +60,8 @@ assert.match(css, /focus-visible/);
 
 assert.match(js, /const STORAGE_KEY/);
 assert.match(js, /navigator\.share/);
-assert.match(js, /utm_source", "scorecard_share"/);
+assert.match(js, /source: "scorecard_share"/);
+assert.match(js, /content: `shared_score_\$\{score\}`/);
 assert.match(js, /min: 7,[\s\S]*title: "Evidence-complete"/);
 
 for (const [name, page] of [
@@ -189,8 +191,8 @@ const holdRoi = calculateAgentRoi({
   implementationCost: 10000,
 });
 assert.equal(classifyAgentRoi(holdRoi).status, "HOLD");
-assert.match(roiJs, /utm_source", "agent_roi_share"/);
-assert.match(roiJs, /utm_campaign", "ai_evidence_lab"/);
+assert.match(roiJs, /source: "agent_roi_share"/);
+assert.match(roiJs, /content: "shared_roi_result"/);
 
 const defaultLlmCost = calculateLlmApiCost({
   requestsPerMonth: 100000,
@@ -236,8 +238,8 @@ const retryHeavyLlmCost = calculateLlmApiCost({
 });
 assert.equal(retryHeavyLlmCost.retryMultiplier, 3);
 assert.equal(retryHeavyLlmCost.totalCost, 3);
-assert.match(llmCostJs, /utm_source", "llm_cost_share"/);
-assert.match(llmCostJs, /utm_campaign", "ai_evidence_lab"/);
+assert.match(llmCostJs, /source: "llm_cost_share"/);
+assert.match(llmCostJs, /content: "shared_llm_cost_result"/);
 assert.match(llmCostHtml, /prompt-caching-calculator/);
 
 const defaultPromptCache = calculatePromptCacheSavings({
@@ -276,8 +278,8 @@ const unreachablePromptCache = calculatePromptCacheSavings({
   cacheHitRate: 100,
 });
 assert.equal(unreachablePromptCache.breakEvenHitRate, null);
-assert.match(promptCacheJs, /utm_source", "prompt_cache_share"/);
-assert.match(promptCacheJs, /utm_campaign", "ai_evidence_lab"/);
+assert.match(promptCacheJs, /source: "prompt_cache_share"/);
+assert.match(promptCacheJs, /content: "shared_prompt_cache_result"/);
 
 assert.deepEqual(
   normalizeFallbackFiles([" TEAM_GUIDE.md ", "CLAUDE.md", "team_guide.md", "../escape.md", "ONCALL.md, .agents.md"]),
@@ -298,6 +300,37 @@ assert.match(codexConfigHtml, /AGENTS\.override\.md/);
 
 assert.match(starterHtml, /<title>AI Evidence Starter Kit: 4 Free Evaluation Tools \| ResearchAudio<\/title>/);
 assert.match(starterHtml, /rel="canonical"/);
+
+const sharedCostUrl = buildAttributedShareUrl(
+  "https://deepmehta11.github.io/researchaudio-scorecard/ai-cost-calculator/?utm_source=old#result",
+  { modelCost: "0.42", successRate: "81", maxAttempts: "4" },
+  { source: "cost_calculator_share", content: "shared_cost_result" },
+);
+assert.equal(sharedCostUrl.searchParams.get("modelCost"), "0.42");
+assert.equal(sharedCostUrl.searchParams.get("successRate"), "81");
+assert.equal(sharedCostUrl.searchParams.get("maxAttempts"), "4");
+assert.equal(sharedCostUrl.searchParams.get("utm_source"), "cost_calculator_share");
+assert.equal(sharedCostUrl.searchParams.get("utm_medium"), "referral");
+assert.equal(sharedCostUrl.searchParams.get("utm_campaign"), "ai_evidence_lab");
+assert.equal(sharedCostUrl.searchParams.get("utm_content"), "shared_cost_result");
+assert.equal(sharedCostUrl.hash, "");
+
+assert.deepEqual(
+  parseSharedNumbers("?modelCost=0.42&successRate=999&maxAttempts=bad&utm_source=share", {
+    modelCost: { min: 0, max: 100 },
+    successRate: { min: 0.1, max: 100 },
+    maxAttempts: { min: 1, max: 20 },
+  }),
+  { modelCost: "0.42", successRate: "100" },
+  "shared numeric state should restore valid values, clamp bounds, and ignore malformed values",
+);
+
+assert.equal(parseSharedChecklist("?utm_source=share", ["access", "claim"]), null);
+assert.deepEqual(
+  parseSharedChecklist("?checks=claim,unknown,access,claim", ["access", "claim"]),
+  ["claim", "access"],
+  "shared checklist state should preserve valid unique controls only",
+);
 assert.match(starterHtml, /application\/ld\+json/);
 assert.match(starterHtml, /social-card\.png/);
 assert.match(starterHtml, /52,000\+/);

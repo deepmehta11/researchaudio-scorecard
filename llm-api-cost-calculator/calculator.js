@@ -1,3 +1,5 @@
+import { buildAttributedShareUrl, restoreSharedNumbers } from "../share-state.js";
+
 const DEFAULTS = {
   requestsPerMonth: 100000,
   inputTokens: 1200,
@@ -126,6 +128,8 @@ if (form) {
     return Object.fromEntries(Object.entries(fields).map(([name, input]) => [name, input.value]));
   }
 
+  const sharedValues = restoreSharedNumbers(fields, window.location.search);
+
   function update() {
     const result = calculateLlmApiCost(readInputs());
     output.total.textContent = money(result.totalCost);
@@ -150,11 +154,11 @@ if (form) {
 
   document.querySelector("#share-llm-cost").addEventListener("click", async () => {
     const result = calculateLlmApiCost(readInputs());
-    const url = new URL(window.location.href);
-    url.search = "";
-    url.searchParams.set("utm_source", "llm_cost_share");
-    url.searchParams.set("utm_medium", "referral");
-    url.searchParams.set("utm_campaign", "ai_evidence_lab");
+    const url = buildAttributedShareUrl(
+      window.location.href,
+      readInputs(),
+      { source: "llm_cost_share", content: "shared_llm_cost_result" },
+    );
     const text = `My estimated LLM API bill is ${money(result.totalCost)} per month, including caching and retry overhead. Calculate yours:`;
     try {
       if (navigator.share) {
@@ -170,4 +174,7 @@ if (form) {
   });
 
   update();
+  if (Object.keys(sharedValues).length > 0) {
+    output.shareStatus.textContent = "Shared budget loaded. Change any input to compare your workload.";
+  }
 }

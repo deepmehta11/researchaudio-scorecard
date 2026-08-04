@@ -1,3 +1,5 @@
+import { buildAttributedShareUrl, restoreSharedNumbers } from "../share-state.js";
+
 const DEFAULTS = {
   modelCost: 0.18,
   successRate: 72,
@@ -55,6 +57,8 @@ if (form) {
     return Object.fromEntries(Object.entries(fields).map(([name, input]) => [name, input.value]));
   }
 
+  const sharedValues = restoreSharedNumbers(fields, window.location.search);
+
   function update() {
     const result = calculateCost(readInputs());
     output.cost.textContent = money(result.costPerSuccess);
@@ -76,11 +80,11 @@ if (form) {
 
   document.querySelector("#share-cost").addEventListener("click", async () => {
     const result = calculateCost(readInputs());
-    const url = new URL(window.location.href);
-    url.search = "";
-    url.searchParams.set("utm_source", "cost_calculator_share");
-    url.searchParams.set("utm_medium", "referral");
-    url.searchParams.set("utm_campaign", "ai_evidence_lab");
+    const url = buildAttributedShareUrl(
+      window.location.href,
+      readInputs(),
+      { source: "cost_calculator_share", content: "shared_cost_result" },
+    );
     const text = `This AI workflow costs about ${money(result.costPerSuccess)} per successful task after retries and review. Calculate yours:`;
     try {
       if (navigator.share) {
@@ -96,4 +100,7 @@ if (form) {
   });
 
   update();
+  if (Object.keys(sharedValues).length > 0) {
+    output.shareStatus.textContent = "Shared estimate loaded. Change any input to compare your workflow.";
+  }
 }

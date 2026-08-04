@@ -16,6 +16,8 @@ An evergreen acquisition ecosystem for ResearchAudio. Seven browser-local tools 
 
 Every instrument uses the dedicated Beehiiv acquisition form and keeps user inputs in the browser.
 
+Every result share is restorable: the recipient opens the sender's exact score, diagnosis, budget, or business case with referral UTMs intact instead of landing on a blank default tool.
+
 Every main-branch deployment also verifies the site and submits all sitemap URLs to the IndexNow global endpoint after the public ownership key is available. IndexNow speeds discovery by participating search engines; it does not guarantee crawling, indexing, or rankings.
 
 ## Growth contract

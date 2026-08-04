@@ -1,3 +1,5 @@
+import { buildAttributedShareUrl, restoreSharedNumbers } from "../share-state.js";
+
 const DEFAULTS = {
   requestsPerMonth: 100000,
   reusableInputTokens: 8000,
@@ -124,6 +126,8 @@ if (form) {
     return Object.fromEntries(Object.entries(fields).map(([name, input]) => [name, input.value]));
   }
 
+  const sharedValues = restoreSharedNumbers(fields, window.location.search);
+
   function update() {
     const result = calculatePromptCacheSavings(readInputs());
     output.savings.textContent = money(result.savings);
@@ -148,11 +152,11 @@ if (form) {
 
   document.querySelector("#share-prompt-cache").addEventListener("click", async () => {
     const result = calculatePromptCacheSavings(readInputs());
-    const url = new URL(window.location.href);
-    url.search = "";
-    url.searchParams.set("utm_source", "prompt_cache_share");
-    url.searchParams.set("utm_medium", "referral");
-    url.searchParams.set("utm_campaign", "ai_evidence_lab");
+    const url = buildAttributedShareUrl(
+      window.location.href,
+      readInputs(),
+      { source: "prompt_cache_share", content: "shared_prompt_cache_result" },
+    );
     const text = `Prompt caching changes this workload by ${money(result.savings)} per month at a ${(result.hitRate * 100).toFixed(1)}% hit rate. Calculate yours:`;
     try {
       if (navigator.share) {
@@ -168,4 +172,7 @@ if (form) {
   });
 
   update();
+  if (Object.keys(sharedValues).length > 0) {
+    output.shareStatus.textContent = "Shared cache scenario loaded. Change any input to compare your workload.";
+  }
 }

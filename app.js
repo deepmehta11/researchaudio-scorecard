@@ -1,3 +1,5 @@
+import { buildAttributedShareUrl, parseSharedChecklist } from "./share-state.js";
+
 const STORAGE_KEY = "researchaudio-evidence-score-v1";
 
 const checks = [
@@ -133,14 +135,14 @@ function updateScore() {
 }
 
 async function shareScore() {
-  const score = inputs.filter((input) => input.checked).length;
+  const selected = selectedNames();
+  const score = selected.length;
   const classification = currentClassification(score);
-  const url = new URL(window.location.href);
-  url.search = "";
-  url.hash = "scorecard";
-  url.searchParams.set("utm_source", "scorecard_share");
-  url.searchParams.set("utm_medium", "referral");
-  url.searchParams.set("utm_campaign", "ai_launch_scorecard");
+  const url = buildAttributedShareUrl(
+    window.location.href,
+    { checks: selected },
+    { source: "scorecard_share", content: `shared_score_${score}`, hash: "scorecard" },
+  );
 
   const text = `This AI launch scored ${score}/7: ${classification.title}. Run the ResearchAudio evidence check:`;
 
@@ -170,5 +172,16 @@ resetButton.addEventListener("click", () => {
   inputs[0].focus();
 });
 
-restoreState();
+const sharedSelection = parseSharedChecklist(
+  window.location.search,
+  inputs.map((input) => input.name),
+);
+if (sharedSelection === null) {
+  restoreState();
+} else {
+  inputs.forEach((input) => { input.checked = sharedSelection.includes(input.name); });
+}
 updateScore();
+if (sharedSelection !== null) {
+  shareStatus.textContent = "Shared score loaded. Change any check to compare your assessment.";
+}

@@ -1,3 +1,5 @@
+import { buildAttributedShareUrl, parseSharedChecklist } from "../share-state.js";
+
 const STORAGE_KEY = "researchaudio-agent-loop-v1";
 
 export const controls = [
@@ -72,13 +74,14 @@ if (form) {
   });
 
   shareButton.addEventListener("click", async () => {
-    const score = selectedNames().length;
+    const selected = selectedNames();
+    const score = selected.length;
     const classification = classifyLoop(score);
-    const url = new URL(window.location.href);
-    url.search = "";
-    url.searchParams.set("utm_source", "loop_diagnostic_share");
-    url.searchParams.set("utm_medium", "referral");
-    url.searchParams.set("utm_campaign", "ai_evidence_lab");
+    const url = buildAttributedShareUrl(
+      window.location.href,
+      { checks: selected },
+      { source: "loop_diagnostic_share", content: `shared_loop_${score}` },
+    );
     const text = `This AI agent loop has ${score}/10 verified guardrails: ${classification.title}. Inspect yours:`;
     try {
       if (navigator.share) {
@@ -93,6 +96,17 @@ if (form) {
     }
   });
 
-  restoreState();
+  const sharedSelection = parseSharedChecklist(
+    window.location.search,
+    inputs.map((input) => input.name),
+  );
+  if (sharedSelection === null) {
+    restoreState();
+  } else {
+    inputs.forEach((input) => { input.checked = sharedSelection.includes(input.name); });
+  }
   update();
+  if (sharedSelection !== null) {
+    shareStatus.textContent = "Shared diagnosis loaded. Change any control to compare your loop.";
+  }
 }
