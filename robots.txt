@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://deepmehta11.github.io/researchaudio-scorecard/sitemap.xml
+Sitemap: https://tools.researchaudio.io/sitemap.xml

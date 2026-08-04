@@ -12,6 +12,8 @@ import { buildAttributedShareUrl, parseSharedChecklist, parseSharedNumbers } fro
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
+const brandedToolsOrigin = "https://tools.researchaudio.io";
+const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
 const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, starterHtml, starterJs, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
@@ -63,6 +65,23 @@ assert.match(js, /navigator\.share/);
 assert.match(js, /source: "scorecard_share"/);
 assert.match(js, /content: `shared_score_\$\{score\}`/);
 assert.match(js, /min: 7,[\s\S]*title: "Evidence-complete"/);
+
+for (const [name, page, pathname] of [
+  ["scorecard", html, "/"],
+  ["hub", toolsHtml, "/tools/"],
+  ["cost calculator", costHtml, "/ai-cost-calculator/"],
+  ["loop diagnostic", loopHtml, "/agent-loop-diagnostic/"],
+  ["agent ROI calculator", roiHtml, "/ai-agent-roi-calculator/"],
+  ["LLM API cost calculator", llmCostHtml, "/llm-api-cost-calculator/"],
+  ["prompt caching calculator", promptCacheHtml, "/prompt-caching-calculator/"],
+  ["Codex config generator", codexConfigHtml, "/codex-config-generator/"],
+  ["starter kit", starterHtml, "/evidence-starter-kit/"],
+]) {
+  const canonical = page.match(/<link rel="canonical" href="([^"]+)"/);
+  assert.ok(canonical, `${name} canonical missing`);
+  assert.equal(canonical[1], `${brandedToolsOrigin}${pathname}`, `${name} canonical should use the ResearchAudio tools domain`);
+  assert.doesNotMatch(page, retiredGitHubPagesPath, `${name} still exposes the retired GitHub Pages path`);
+}
 
 for (const [name, page] of [
   ["scorecard", html],
@@ -302,7 +321,7 @@ assert.match(starterHtml, /<title>AI Evidence Starter Kit: 4 Free Evaluation Too
 assert.match(starterHtml, /rel="canonical"/);
 
 const sharedCostUrl = buildAttributedShareUrl(
-  "https://deepmehta11.github.io/researchaudio-scorecard/ai-cost-calculator/?utm_source=old#result",
+  "https://tools.researchaudio.io/ai-cost-calculator/?utm_source=old#result",
   { modelCost: "0.42", successRate: "81", maxAttempts: "4" },
   { source: "cost_calculator_share", content: "shared_cost_result" },
 );
@@ -345,7 +364,11 @@ assert.match(starterJs, /utm_medium"\) === "onboarding"/);
 assert.doesNotMatch(starterHtml, /TODO|PLACEHOLDER|example\.com/);
 
 assert.equal((sitemap.match(/<url>/g) || []).length, 9, "sitemap should contain all nine crawlable pages");
-assert.match(robots, /Sitemap: https:\/\/deepmehta11\.github\.io\/researchaudio-scorecard\/sitemap\.xml/);
+const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+assert.equal(sitemapUrls.length, 9, "sitemap should publish nine URL locations");
+assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
+assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
+assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
 assert.match(llms, /AI Cost per Successful Task Calculator/);
 assert.match(llms, /AI Agent Loop Diagnostic/);
 assert.match(llms, /AI Agent ROI Calculator/);

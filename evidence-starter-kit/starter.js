@@ -36,7 +36,7 @@ if (currentUrl.searchParams.get("utm_medium") === "onboarding") {
 }
 
 document.querySelector("#share-kit").addEventListener("click", async () => {
-  const url = new URL("https://deepmehta11.github.io/researchaudio-scorecard/evidence-starter-kit/");
+  const url = new URL("https://tools.researchaudio.io/evidence-starter-kit/");
   url.searchParams.set("utm_source", "evidence_starter_share");
   url.searchParams.set("utm_medium", "referral");
   url.searchParams.set("utm_campaign", "ai_evidence_lab");

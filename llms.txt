@@ -4,21 +4,21 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
 
 ## Free tools
 
-- AI Launch Evidence Scorecard: https://deepmehta11.github.io/researchaudio-scorecard/
+- AI Launch Evidence Scorecard: https://tools.researchaudio.io/
   Seven checks for deciding whether an AI product launch provides reproducible, decision-ready evidence.
-- AI Cost per Successful Task Calculator: https://deepmehta11.github.io/researchaudio-scorecard/ai-cost-calculator/
+- AI Cost per Successful Task Calculator: https://tools.researchaudio.io/ai-cost-calculator/
   Calculates AI workflow cost after retries, failure probability, and human review.
-- AI Agent Loop Diagnostic: https://deepmehta11.github.io/researchaudio-scorecard/agent-loop-diagnostic/
+- AI Agent Loop Diagnostic: https://tools.researchaudio.io/agent-loop-diagnostic/
   Ten checks for termination, validation, recovery, tracing, budgets, and human escalation.
-- AI Agent ROI Calculator: https://deepmehta11.github.io/researchaudio-scorecard/ai-agent-roi-calculator/
+- AI Agent ROI Calculator: https://tools.researchaudio.io/ai-agent-roi-calculator/
   Stress-tests automation ROI after failed tasks, human review, usage cost, recurring cost, and implementation payback.
-- LLM API Cost Calculator: https://deepmehta11.github.io/researchaudio-scorecard/llm-api-cost-calculator/
+- LLM API Cost Calculator: https://tools.researchaudio.io/llm-api-cost-calculator/
   Estimates monthly LLM API spend from input and output tokens, current prices, prompt caching, retry overhead, and attached per-request costs.
-- Prompt Caching Cost Calculator: https://deepmehta11.github.io/researchaudio-scorecard/prompt-caching-calculator/
+- Prompt Caching Cost Calculator: https://tools.researchaudio.io/prompt-caching-calculator/
   Calculates cache-read and cache-write spend, monthly savings, and the break-even cache hit rate from current user-supplied prices.
-- Codex CLI config.toml Generator: https://deepmehta11.github.io/researchaudio-scorecard/codex-config-generator/
+- Codex CLI config.toml Generator: https://tools.researchaudio.io/codex-config-generator/
   Generates project_doc_fallback_filenames and project_doc_max_bytes settings while explaining the AGENTS.md resolution order.
-- AI Evidence Starter Kit: https://deepmehta11.github.io/researchaudio-scorecard/evidence-starter-kit/
+- AI Evidence Starter Kit: https://tools.researchaudio.io/evidence-starter-kit/
   A guided four-step path through the Evidence Lab with browser-local progress and an attributed share action.
 
 ## Publisher

@@ -2,6 +2,8 @@
 
 An evergreen acquisition ecosystem for ResearchAudio. Seven browser-local tools turn AI launch claims, token budgets, cache economics, workflow economics, agent reliability, automation business cases, and Codex configuration into concrete inspections before inviting visitors into the daily briefing.
 
+Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain connected to the Beehiiv publication at `https://researchaudio.io/`.
+
 ## Live instruments
 
 - `/` — AI Launch Evidence Scorecard: seven gates for decision-ready launch evidence.

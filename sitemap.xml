@@ -1,55 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://deepmehta11.github.io/researchaudio-scorecard/</loc>
+    <loc>https://tools.researchaudio.io/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://deepmehta11.github.io/researchaudio-scorecard/tools/</loc>
+    <loc>https://tools.researchaudio.io/tools/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://deepmehta11.github.io/researchaudio-scorecard/ai-cost-calculator/</loc>
+    <loc>https://tools.researchaudio.io/ai-cost-calculator/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://deepmehta11.github.io/researchaudio-scorecard/agent-loop-diagnostic/</loc>
+    <loc>https://tools.researchaudio.io/agent-loop-diagnostic/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://deepmehta11.github.io/researchaudio-scorecard/ai-agent-roi-calculator/</loc>
+    <loc>https://tools.researchaudio.io/ai-agent-roi-calculator/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://deepmehta11.github.io/researchaudio-scorecard/llm-api-cost-calculator/</loc>
+    <loc>https://tools.researchaudio.io/llm-api-cost-calculator/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://deepmehta11.github.io/researchaudio-scorecard/prompt-caching-calculator/</loc>
+    <loc>https://tools.researchaudio.io/prompt-caching-calculator/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://deepmehta11.github.io/researchaudio-scorecard/codex-config-generator/</loc>
+    <loc>https://tools.researchaudio.io/codex-config-generator/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://deepmehta11.github.io/researchaudio-scorecard/evidence-starter-kit/</loc>
+    <loc>https://tools.researchaudio.io/evidence-starter-kit/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
