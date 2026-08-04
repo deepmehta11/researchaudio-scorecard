@@ -1,0 +1,17 @@
+# ResearchAudio Evidence Lab
+
+ResearchAudio publishes evidence-led AI briefings for engineers and builders.
+
+## Free tools
+
+- AI Launch Evidence Scorecard: https://deepmehta11.github.io/researchaudio-scorecard/
+  Seven checks for deciding whether an AI product launch provides reproducible, decision-ready evidence.
+- AI Cost per Successful Task Calculator: https://deepmehta11.github.io/researchaudio-scorecard/ai-cost-calculator/
+  Calculates AI workflow cost after retries, failure probability, and human review.
+- AI Agent Loop Diagnostic: https://deepmehta11.github.io/researchaudio-scorecard/agent-loop-diagnostic/
+  Ten checks for termination, validation, recovery, tracing, budgets, and human escalation.
+
+## Publisher
+
+- ResearchAudio: https://researchaudio.io/
+- Subscribe: https://researchaudio.io/subscribe

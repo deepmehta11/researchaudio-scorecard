@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Agent Loop Diagnostic Checklist | ResearchAudio</title>
+    <meta name="description" content="Check an AI agent loop for termination, validation, budget, recovery, tracing, and escalation guardrails before it reaches production." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <link rel="canonical" href="https://deepmehta11.github.io/researchaudio-scorecard/agent-loop-diagnostic/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Your agent may be fine. Is its loop controlled?" />
+    <meta property="og:description" content="Run the free ten-point agent loop diagnostic from ResearchAudio." />
+    <meta property="og:url" content="https://deepmehta11.github.io/researchaudio-scorecard/agent-loop-diagnostic/" />
+    <meta property="og:image" content="https://deepmehta11.github.io/researchaudio-scorecard/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://deepmehta11.github.io/researchaudio-scorecard/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "AI Agent Loop Diagnostic",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "url": "https://deepmehta11.github.io/researchaudio-scorecard/agent-loop-diagnostic/",
+        "description": "A ten-point diagnostic for checking production guardrails around an AI agent loop.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#diagnostic">Skip to the diagnostic</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=agent_loop_diagnostic&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=agent_loop_diagnostic&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=agent_loop_diagnostic&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Instrument 03 / agent reliability</p>
+          <h1 id="hero-title">Your agent may be fine. Is its loop controlled?</h1>
+          <p class="hero-deck">Ten checks expose the missing guardrail between a clever demo and a production agent that can stop, recover, and explain itself.</p>
+        </div>
+        <aside class="lab-index" aria-label="Diagnostic scope">
+          <span>Loop guardrails</span>
+          <strong>10</strong>
+          <p>Check only controls that exist in code or operations today. A planned guardrail is still a missing guardrail.</p>
+        </aside>
+      </section>
+
+      <section class="instrument-shell" id="diagnostic" aria-labelledby="diagnostic-title">
+        <div class="instrument-intro">
+          <div>
+            <p class="eyebrow">Inspect one production path</p>
+            <h2 id="diagnostic-title">Check what contains the loop.</h2>
+          </div>
+          <p>Run this against a concrete workflow, not the entire agent platform. Different tools and risk levels need different controls.</p>
+        </div>
+
+        <div class="diagnostic-layout">
+          <form class="diagnostic-list" id="loop-form">
+            <label class="diagnostic-card" for="check-success"><input id="check-success" name="success" type="checkbox" /><span class="diagnostic-index">S1</span><span class="diagnostic-copy"><strong>Success is machine-checkable</strong><span>The loop ends on an explicit acceptance test, not on the model saying it is done.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-cap"><input id="check-cap" name="cap" type="checkbox" /><span class="diagnostic-index">T2</span><span class="diagnostic-copy"><strong>Every retry path is capped</strong><span>Attempts, wall time, tokens, or cost terminate the loop deterministically.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-state"><input id="check-state" name="state" type="checkbox" /><span class="diagnostic-index">S3</span><span class="diagnostic-copy"><strong>State is inspected between steps</strong><span>Each iteration reads the current artifact or environment before choosing another action.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-output"><input id="check-output" name="output" type="checkbox" /><span class="diagnostic-index">V4</span><span class="diagnostic-copy"><strong>Tool outputs are validated</strong><span>Exit codes, schemas, assertions, and postconditions gate the next step.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-failure"><input id="check-failure" name="failure" type="checkbox" /><span class="diagnostic-index">F5</span><span class="diagnostic-copy"><strong>Failures are classified</strong><span>Retryable, permanent, policy, and user-input failures take different paths.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-checkpoint"><input id="check-checkpoint" name="checkpoint" type="checkbox" /><span class="diagnostic-index">C6</span><span class="diagnostic-copy"><strong>Useful work is checkpointed</strong><span>A restart resumes from known state instead of replaying the entire workflow.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-budget"><input id="check-budget" name="budget" type="checkbox" /><span class="diagnostic-index">B7</span><span class="diagnostic-copy"><strong>Budget and latency are guarded</strong><span>Production limits stop locally correct behavior from becoming operationally wrong.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-escalation"><input id="check-escalation" name="escalation" type="checkbox" /><span class="diagnostic-index">H8</span><span class="diagnostic-copy"><strong>Human escalation has a contract</strong><span>The agent knows when to ask, what evidence to include, and who can resolve it.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-termination"><input id="check-termination" name="termination" type="checkbox" /><span class="diagnostic-index">X9</span><span class="diagnostic-copy"><strong>Termination behavior is tested</strong><span>Tests cover success, exhaustion, cancellation, timeouts, and repeated failure.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-trace"><input id="check-trace" name="trace" type="checkbox" /><span class="diagnostic-index">R10</span><span class="diagnostic-copy"><strong>The decision trail is retained</strong><span>Operators can reconstruct inputs, tool calls, state changes, and stop reasons.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+          </form>
+
+          <aside class="result-console" aria-live="polite" aria-labelledby="loop-result-title">
+            <div class="tool-status"><span>Control state</span><b id="loop-status">BLIND</b></div>
+            <p class="primary-result"><span id="loop-score">0</span><small>/ 10</small></p>
+            <p class="result-label">Verified guardrails</p>
+            <h3 id="loop-result-title">Blind loop</h3>
+            <p class="result-note" id="loop-summary">The workflow can act, but there is not enough control to trust how it stops or recovers.</p>
+            <div class="result-grid"><div><span>Next missing control</span><strong id="loop-next">Define a machine-checkable success condition.</strong></div><div><span>Risk band</span><strong id="loop-risk">Critical</strong></div></div>
+            <button class="action-button" id="share-loop" type="button" disabled>Share this diagnosis</button>
+            <button class="secondary-button" id="reset-loop" type="button">Reset all checks</button>
+            <p class="share-status" id="share-status" role="status"></p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="Agent loop interpretation">
+        <p class="eyebrow">Control model</p>
+        <p><strong>0–3: blind.</strong><br />The loop can act without a reliable stop or recovery path.</p>
+        <p><strong>4–7: bounded.</strong><br />Some controls exist, but incident behavior is still ambiguous.</p>
+        <p><strong>8–10: controlled.</strong><br />The loop is observable, testable, and operationally contained.</p>
+      </section>
+
+      <section class="subscribe-block" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Production evidence</p>
+          <h2 id="subscribe-title">Get the failure mode behind the agent demo.</h2>
+          <p>ResearchAudio traces the primary sources, constraints, and missing operational evidence in AI launches.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links"><a href="../">Launch scorecard</a><a href="../ai-cost-calculator/">Cost calculator</a></div>
+    </footer>
+    <script type="module" src="diagnostic.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#eaf2f0"/>
+  <g stroke="#102b2a" stroke-width="1" opacity="0.08">
+    <path d="M0 28h1200M0 56h1200M0 84h1200M0 112h1200M0 140h1200M0 168h1200M0 196h1200M0 224h1200M0 252h1200M0 280h1200M0 308h1200M0 336h1200M0 364h1200M0 392h1200M0 420h1200M0 448h1200M0 476h1200M0 504h1200M0 532h1200M0 560h1200M0 588h1200M28 0v630M56 0v630M84 0v630M112 0v630M140 0v630M168 0v630M196 0v630M224 0v630M252 0v630M280 0v630M308 0v630M336 0v630M364 0v630M392 0v630M420 0v630M448 0v630M476 0v630M504 0v630M532 0v630M560 0v630M588 0v630M616 0v630M644 0v630M672 0v630M700 0v630M728 0v630M756 0v630M784 0v630M812 0v630M840 0v630M868 0v630M896 0v630M924 0v630M952 0v630M980 0v630M1008 0v630M1036 0v630M1064 0v630M1092 0v630M1120 0v630M1148 0v630M1176 0v630"/>
+  </g>
+  <rect x="64" y="54" width="42" height="42" fill="#102b2a"/>
+  <text x="85" y="81" text-anchor="middle" fill="#fff" font-family="monospace" font-size="15" font-weight="700">RA</text>
+  <text x="122" y="83" fill="#102b2a" font-family="Arial, sans-serif" font-size="27" font-weight="700">ResearchAudio</text>
+  <text x="64" y="170" fill="#2c5dff" font-family="monospace" font-size="18" font-weight="700" letter-spacing="2">EVIDENCE LAB / 03 INSTRUMENTS</text>
+  <text x="64" y="245" fill="#102b2a" font-family="Georgia, serif" font-size="69" font-weight="700">The decision behind</text>
+  <text x="64" y="321" fill="#102b2a" font-family="Georgia, serif" font-size="69" font-weight="700">the AI demo.</text>
+  <text x="64" y="379" fill="#526b68" font-family="Arial, sans-serif" font-size="24">Audit the claim. Price the outcome. Inspect the loop.</text>
+  <g transform="translate(64 448)">
+    <rect width="318" height="116" fill="#f7faf8" stroke="#102b2a" stroke-width="3"/>
+    <text x="22" y="35" fill="#2c5dff" font-family="monospace" font-size="14" font-weight="700">01 / CLAIM</text>
+    <text x="22" y="79" fill="#102b2a" font-family="Georgia, serif" font-size="30" font-weight="700">Evidence scorecard</text>
+  </g>
+  <g transform="translate(400 448)">
+    <rect width="318" height="116" fill="#e6f049" stroke="#102b2a" stroke-width="3"/>
+    <text x="22" y="35" fill="#2c5dff" font-family="monospace" font-size="14" font-weight="700">02 / ECONOMICS</text>
+    <text x="22" y="79" fill="#102b2a" font-family="Georgia, serif" font-size="30" font-weight="700">Cost per success</text>
+  </g>
+  <g transform="translate(736 448)">
+    <rect width="400" height="116" fill="#dce7ff" stroke="#102b2a" stroke-width="3"/>
+    <text x="22" y="35" fill="#2c5dff" font-family="monospace" font-size="14" font-weight="700">03 / RELIABILITY</text>
+    <text x="22" y="79" fill="#102b2a" font-family="Georgia, serif" font-size="30" font-weight="700">Agent loop diagnostic</text>
+  </g>
+</svg>

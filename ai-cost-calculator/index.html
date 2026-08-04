@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Cost per Successful Task Calculator | ResearchAudio</title>
+    <meta name="description" content="Calculate the real cost of an AI workflow after retries, failures, and human review—not just the model price per call." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <link rel="canonical" href="https://deepmehta11.github.io/researchaudio-scorecard/ai-cost-calculator/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What does one successful AI task actually cost?" />
+    <meta property="og:description" content="A free retry-adjusted AI cost calculator from ResearchAudio." />
+    <meta property="og:url" content="https://deepmehta11.github.io/researchaudio-scorecard/ai-cost-calculator/" />
+    <meta property="og:image" content="https://deepmehta11.github.io/researchaudio-scorecard/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://deepmehta11.github.io/researchaudio-scorecard/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "AI Cost per Successful Task Calculator",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Any",
+        "url": "https://deepmehta11.github.io/researchaudio-scorecard/ai-cost-calculator/",
+        "description": "Calculate retry-adjusted AI workflow cost after model calls, failure rate, and human review.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#calculator">Skip to the calculator</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=ai_cost_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=ai_cost_calculator&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=ai_cost_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Instrument 02 / operating economics</p>
+          <h1 id="hero-title">The model price is not the task cost.</h1>
+          <p class="hero-deck">Add failure probability, retry limits, and human review to reveal what one successful AI task actually costs.</p>
+        </div>
+        <aside class="lab-index" aria-label="Calculator method">
+          <span>Hidden denominator</span>
+          <strong>✓</strong>
+          <p>The calculation uses a capped geometric retry model and divides expected spend by the probability of eventual success.</p>
+        </aside>
+      </section>
+
+      <section class="instrument-shell" id="calculator" aria-labelledby="calculator-title">
+        <div class="instrument-intro">
+          <div>
+            <p class="eyebrow">Enter one workflow</p>
+            <h2 id="calculator-title">Price the outcome, not the attempt.</h2>
+          </div>
+          <p>Use observed production numbers when possible. A 90% benchmark success rate is not a 90% workflow success rate.</p>
+        </div>
+
+        <div class="calculator-layout">
+          <form class="input-panel" id="cost-form">
+            <label class="input-card" for="model-cost">
+              <span class="field-copy"><strong>Model cost per attempt</strong><small>All model, retrieval, and tool-call charges for one try.</small></span>
+              <span class="number-field"><span>$</span><input id="model-cost" name="modelCost" type="number" min="0" max="1000000" step="0.001" value="0.18" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="success-rate">
+              <span class="field-copy"><strong>Success rate per attempt</strong><small>The percentage of attempts that satisfy the actual acceptance test.</small></span>
+              <span class="number-field suffix"><span>%</span><input id="success-rate" name="successRate" type="number" min="0.1" max="100" step="0.1" value="72" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="max-attempts">
+              <span class="field-copy"><strong>Maximum attempts</strong><small>The initial run plus allowed retries before the task stops.</small></span>
+              <span class="number-field suffix"><span>tries</span><input id="max-attempts" name="maxAttempts" type="number" min="1" max="20" step="1" value="3" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="review-minutes">
+              <span class="field-copy"><strong>Human review per task</strong><small>Minutes spent checking, correcting, or approving the final output.</small></span>
+              <span class="number-field suffix"><span>min</span><input id="review-minutes" name="reviewMinutes" type="number" min="0" max="1440" step="0.1" value="4" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="hourly-cost">
+              <span class="field-copy"><strong>Reviewer loaded hourly cost</strong><small>Salary, benefits, and overhead expressed as an hourly cost.</small></span>
+              <span class="number-field"><span>$</span><input id="hourly-cost" name="hourlyCost" type="number" min="0" max="1000000" step="1" value="75" inputmode="decimal" /></span>
+            </label>
+          </form>
+
+          <aside class="result-console" aria-live="polite" aria-labelledby="cost-result-label">
+            <div class="tool-status"><span>Cost model</span><b id="cost-status">READY</b></div>
+            <p class="primary-result"><span id="cost-per-success">$0.00</span><small>/ success</small></p>
+            <p class="result-label" id="cost-result-label">Expected cost per successful task</p>
+            <div class="result-grid">
+              <div><span>Success within limit</span><strong id="eventual-success">0%</strong></div>
+              <div><span>Expected attempts</span><strong id="expected-attempts">0</strong></div>
+              <div><span>Model spend / task</span><strong id="model-spend">$0.00</strong></div>
+              <div><span>Human review / task</span><strong id="review-spend">$0.00</strong></div>
+            </div>
+            <p class="result-note" id="cost-note"></p>
+            <button class="action-button" id="share-cost" type="button">Share this calculator</button>
+            <button class="secondary-button" id="reset-cost" type="button">Restore example</button>
+            <p class="share-status" id="share-status" role="status"></p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="Cost calculation interpretation">
+        <p class="eyebrow">Read the result</p>
+        <p><strong>Retries buy success.</strong><br />They also buy more spend and latency.</p>
+        <p><strong>Review dominates quickly.</strong><br />A few expert minutes can outweigh model charges.</p>
+        <p><strong>Failures still cost money.</strong><br />The denominator must include tasks that never succeed.</p>
+      </section>
+
+      <section class="subscribe-block" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Evidence, not price theater</p>
+          <h2 id="subscribe-title">Get the cost and limitation behind the headline.</h2>
+          <p>ResearchAudio turns AI launches into sourced, practical adoption decisions.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links"><a href="../">Launch scorecard</a><a href="../agent-loop-diagnostic/">Loop diagnostic</a></div>
+    </footer>
+    <script type="module" src="calculator.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>

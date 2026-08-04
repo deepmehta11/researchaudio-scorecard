@@ -9,13 +9,20 @@
       content="Score any AI product launch against seven evidence checks. Find the missing proof before your team adopts, buys, or ships it."
     />
     <meta name="theme-color" content="#eaf2f0" />
+    <link rel="canonical" href="https://deepmehta11.github.io/researchaudio-scorecard/" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Would this AI launch survive one skeptical engineer?" />
     <meta
       property="og:description"
       content="Run the free seven-point evidence check from ResearchAudio."
     />
+    <meta property="og:url" content="https://deepmehta11.github.io/researchaudio-scorecard/" />
+    <meta property="og:image" content="https://deepmehta11.github.io/researchaudio-scorecard/social-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://deepmehta11.github.io/researchaudio-scorecard/social-card.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -23,6 +30,19 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "AI Launch Evidence Scorecard",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Any",
+        "url": "https://deepmehta11.github.io/researchaudio-scorecard/",
+        "description": "A free seven-point diagnostic for checking whether an AI launch provides decision-ready evidence.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#scorecard">Skip to the scorecard</a>
@@ -32,10 +52,10 @@
         <span class="wordmark-mark" aria-hidden="true">RA</span>
         <span>ResearchAudio</span>
       </a>
-      <div class="instrument-label">
-        <span class="status-dot" aria-hidden="true"></span>
-        Evidence lab / instrument 01
-      </div>
+      <nav class="header-nav" aria-label="Primary navigation">
+        <a href="tools/?utm_source=launch_scorecard&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=scorecard&amp;utm_medium=tool&amp;utm_campaign=ai_launch_scorecard">Latest briefings</a>
+      </nav>
     </header>
 
     <main>
@@ -167,6 +187,28 @@
         </div>
       </section>
 
+      <section class="lab-switchboard" aria-labelledby="lab-switchboard-title">
+        <div class="lab-switchboard-heading">
+          <p class="eyebrow">ResearchAudio evidence lab</p>
+          <h2 id="lab-switchboard-title">The launch claim is only one part of the decision.</h2>
+          <p>Continue with the instrument that matches the next risk: operating economics or agent reliability.</p>
+        </div>
+        <div class="lab-switchboard-grid">
+          <a class="lab-tool-card" href="ai-cost-calculator/?utm_source=launch_scorecard&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=cost_calculator">
+            <span class="lab-tool-code">Instrument 02</span>
+            <strong>AI cost per successful task</strong>
+            <span>Replace token-price theater with retry-adjusted operating cost.</span>
+            <b>Open calculator →</b>
+          </a>
+          <a class="lab-tool-card" href="agent-loop-diagnostic/?utm_source=launch_scorecard&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=loop_diagnostic">
+            <span class="lab-tool-code">Instrument 03</span>
+            <strong>Agent loop diagnostic</strong>
+            <span>Find the missing guardrail before another retry becomes another incident.</span>
+            <b>Inspect the loop →</b>
+          </a>
+        </div>
+      </section>
+
       <section class="subscribe-section" id="subscribe" aria-labelledby="subscribe-title">
         <div class="subscribe-context">
           <p class="eyebrow">Evidence, not launch theater</p>
@@ -228,7 +270,10 @@
 
     <footer class="site-footer">
       <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
-      <a href="https://researchaudio.io/?utm_source=scorecard&amp;utm_medium=tool&amp;utm_campaign=ai_launch_scorecard">Read the latest briefings</a>
+      <div class="footer-links">
+        <a href="tools/?utm_source=launch_scorecard&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab">Browse the evidence lab</a>
+        <a href="https://researchaudio.io/?utm_source=scorecard&amp;utm_medium=tool&amp;utm_campaign=ai_launch_scorecard">Read the latest briefings</a>
+      </div>
     </footer>
 
     <script src="app.js" defer></script>
