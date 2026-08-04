@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Launch Evidence Scorecard | ResearchAudio</title>
+    <meta
+      name="description"
+      content="Score any AI product launch against seven evidence checks. Find the missing proof before your team adopts, buys, or ships it."
+    />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Would this AI launch survive one skeptical engineer?" />
+    <meta
+      property="og:description"
+      content="Run the free seven-point evidence check from ResearchAudio."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#scorecard">Skip to the scorecard</a>
+
+    <header class="site-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=scorecard&amp;utm_medium=tool&amp;utm_campaign=ai_launch_scorecard">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <div class="instrument-label">
+        <span class="status-dot" aria-hidden="true"></span>
+        Evidence lab / instrument 01
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Free launch diagnostic</p>
+          <h1 id="hero-title">Would this AI launch survive one skeptical engineer?</h1>
+          <p class="hero-deck">
+            Seven checks. Two minutes. A clear read on whether the announcement contains enough
+            evidence to support a real decision.
+          </p>
+          <a class="primary-link" href="#scorecard">Score the launch <span aria-hidden="true">↓</span></a>
+          <p class="privacy-note">No login. Your answers stay in this browser.</p>
+        </div>
+
+        <div class="evidence-instrument" aria-label="Live evidence score">
+          <div class="instrument-topline">
+            <span>Evidence signal</span>
+            <span id="meter-state">UNTESTED</span>
+          </div>
+          <div class="meter-reading" aria-live="polite">
+            <span id="hero-score">0</span><span class="meter-denominator">/7</span>
+          </div>
+          <div class="signal-grid" id="signal-grid" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <p id="meter-caption">Run the checks to expose the gap between the claim and the proof.</p>
+        </div>
+      </section>
+
+      <section class="scorecard-section" id="scorecard" aria-labelledby="scorecard-title">
+        <div class="section-heading">
+          <p class="eyebrow">The seven evidence gates</p>
+          <h2 id="scorecard-title">Check only what the launch actually proves.</h2>
+          <p>Do not award points for reputation, vibes, or a roadmap promise.</p>
+        </div>
+
+        <div class="scorecard-layout">
+          <form class="checks" id="evidence-form">
+            <label class="check-card" for="check-access">
+              <input id="check-access" name="access" type="checkbox" />
+              <span class="check-index">A1</span>
+              <span class="check-copy">
+                <strong>Access is real</strong>
+                <span>A working product, API, repository, or documented access path exists today.</span>
+              </span>
+              <span class="check-indicator" aria-hidden="true"></span>
+            </label>
+
+            <label class="check-card" for="check-claim">
+              <input id="check-claim" name="claim" type="checkbox" />
+              <span class="check-index">C2</span>
+              <span class="check-copy">
+                <strong>The core claim is falsifiable</strong>
+                <span>The launch names a number, condition, or outcome that another team can test.</span>
+              </span>
+              <span class="check-indicator" aria-hidden="true"></span>
+            </label>
+
+            <label class="check-card" for="check-baseline">
+              <input id="check-baseline" name="baseline" type="checkbox" />
+              <span class="check-index">B3</span>
+              <span class="check-copy">
+                <strong>The baseline is named</strong>
+                <span>Comparisons use the same task, tools, budget, and evaluation conditions.</span>
+              </span>
+              <span class="check-indicator" aria-hidden="true"></span>
+            </label>
+
+            <label class="check-card" for="check-cost">
+              <input id="check-cost" name="cost" type="checkbox" />
+              <span class="check-index">K4</span>
+              <span class="check-copy">
+                <strong>The operating cost is visible</strong>
+                <span>Price, latency, compute, token use, or another real constraint is disclosed.</span>
+              </span>
+              <span class="check-indicator" aria-hidden="true"></span>
+            </label>
+
+            <label class="check-card" for="check-failure">
+              <input id="check-failure" name="failure" type="checkbox" />
+              <span class="check-index">F5</span>
+              <span class="check-copy">
+                <strong>Failure cases are documented</strong>
+                <span>The announcement states where the system breaks, degrades, or stays untested.</span>
+              </span>
+              <span class="check-indicator" aria-hidden="true"></span>
+            </label>
+
+            <label class="check-card" for="check-reproduction">
+              <input id="check-reproduction" name="reproduction" type="checkbox" />
+              <span class="check-index">R6</span>
+              <span class="check-copy">
+                <strong>The result can be reproduced</strong>
+                <span>Methods, prompts, data, code, logs, or test artifacts are available.</span>
+              </span>
+              <span class="check-indicator" aria-hidden="true"></span>
+            </label>
+
+            <label class="check-card" for="check-owner">
+              <input id="check-owner" name="owner" type="checkbox" />
+              <span class="check-index">O7</span>
+              <span class="check-copy">
+                <strong>The evidence has an owner and date</strong>
+                <span>A named team, version, and evaluation date make the proof auditable.</span>
+              </span>
+              <span class="check-indicator" aria-hidden="true"></span>
+            </label>
+
+            <button class="reset-button" id="reset-score" type="button">Reset all checks</button>
+          </form>
+
+          <aside class="result-panel" aria-labelledby="result-title">
+            <div class="result-score"><span id="result-score">0</span><span>/7</span></div>
+            <p class="result-kicker">Current classification</p>
+            <h3 id="result-title">Untested claim</h3>
+            <p id="result-summary">
+              Start with the proof you can verify. The score updates as you complete each check.
+            </p>
+            <div class="next-action">
+              <span>Next inspection</span>
+              <strong id="next-action">Verify that someone can access the thing being announced.</strong>
+            </div>
+            <button class="share-button" id="share-score" type="button" disabled>
+              Share this score
+            </button>
+            <p class="share-status" id="share-status" role="status"></p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="subscribe-section" id="subscribe" aria-labelledby="subscribe-title">
+        <div class="subscribe-context">
+          <p class="eyebrow">Evidence, not launch theater</p>
+          <h2 id="subscribe-title">Make this your filter for the next AI announcement.</h2>
+          <p>
+            ResearchAudio traces the claim, the method, the cost, and the missing evidence so
+            engineers and product teams can decide without reading twenty launch threads.
+          </p>
+          <ul>
+            <li>Primary-source links</li>
+            <li>Named limitations</li>
+            <li>Practical adoption questions</li>
+          </ul>
+        </div>
+        <div class="subscribe-form-shell">
+          <script
+            async
+            src="https://subscribe-forms.beehiiv.com/v3/loader.js"
+            data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"
+          ></script>
+          <noscript>
+            <p>
+              JavaScript is required for the signup form. You can also subscribe at
+              <a href="https://researchaudio.io/subscribe">researchaudio.io/subscribe</a>.
+            </p>
+          </noscript>
+        </div>
+      </section>
+
+      <section class="method-section" aria-labelledby="method-title">
+        <div>
+          <p class="eyebrow">How to read the score</p>
+          <h2 id="method-title">A low score is not a verdict. It is a list of unanswered questions.</h2>
+        </div>
+        <div class="score-bands">
+          <article>
+            <span>0–2</span>
+            <h3>Marketing claim</h3>
+            <p>Interesting enough to watch, not strong enough to plan around.</p>
+          </article>
+          <article>
+            <span>3–4</span>
+            <h3>Promising, under-proven</h3>
+            <p>Run a bounded test before committing budget, users, or architecture.</p>
+          </article>
+          <article>
+            <span>5–6</span>
+            <h3>Decision-ready</h3>
+            <p>Enough evidence exists for a real evaluation with known open questions.</p>
+          </article>
+          <article>
+            <span>7</span>
+            <h3>Evidence-complete</h3>
+            <p>The launch gives an independent team a fair chance to reproduce the result.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <a href="https://researchaudio.io/?utm_source=scorecard&amp;utm_medium=tool&amp;utm_campaign=ai_launch_scorecard">Read the latest briefings</a>
+    </footer>
+
+    <script src="app.js" defer></script>
+    <script
+      type="text/javascript"
+      async
+      src="https://subscribe-forms.beehiiv.com/attribution.js"
+    ></script>
+  </body>
+</html>
