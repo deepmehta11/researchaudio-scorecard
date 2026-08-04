@@ -8,7 +8,7 @@ import { calculateAgentRoi, classifyAgentRoi } from "../ai-agent-roi-calculator/
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
-const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, starterHtml, starterJs, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -18,6 +18,8 @@ const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, sit
   readFile(path.join(root, "agent-loop-diagnostic/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-roi-calculator/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-roi-calculator/calculator.js"), "utf8"),
+  readFile(path.join(root, "evidence-starter-kit/index.html"), "utf8"),
+  readFile(path.join(root, "evidence-starter-kit/starter.js"), "utf8"),
   readFile(path.join(root, "sitemap.xml"), "utf8"),
   readFile(path.join(root, "robots.txt"), "utf8"),
   readFile(path.join(root, "llms.txt"), "utf8"),
@@ -124,11 +126,27 @@ assert.equal(classifyAgentRoi(holdRoi).status, "HOLD");
 assert.match(roiJs, /utm_source", "agent_roi_share"/);
 assert.match(roiJs, /utm_campaign", "ai_evidence_lab"/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 5, "sitemap should contain all five crawlable pages");
+assert.match(starterHtml, /<title>AI Evidence Starter Kit: 4 Free Evaluation Tools \| ResearchAudio<\/title>/);
+assert.match(starterHtml, /rel="canonical"/);
+assert.match(starterHtml, /application\/ld\+json/);
+assert.match(starterHtml, /social-card\.png/);
+assert.match(starterHtml, /52,000\+/);
+assert.match(starterHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=evidence_starter_kit/);
+assert.equal((starterHtml.match(/data-step=/g) || []).length, 4, "starter kit should contain four progress steps");
+assert.match(starterHtml, /Three confirmed referrals unlock the AI Launch Evidence Checklist PDF automatically/);
+assert.match(starterJs, /researchaudio_evidence_starter_progress_v1/);
+assert.match(starterJs, /utm_source", "evidence_starter_share"/);
+assert.match(starterJs, /utm_medium", "referral"/);
+assert.match(starterJs, /utm_campaign", "ai_evidence_lab"/);
+assert.match(starterJs, /utm_medium"\) === "onboarding"/);
+assert.doesNotMatch(starterHtml, /TODO|PLACEHOLDER|example\.com/);
+
+assert.equal((sitemap.match(/<url>/g) || []).length, 6, "sitemap should contain all six crawlable pages");
 assert.match(robots, /Sitemap: https:\/\/deepmehta11\.github\.io\/researchaudio-scorecard\/sitemap\.xml/);
 assert.match(llms, /AI Cost per Successful Task Calculator/);
 assert.match(llms, /AI Agent Loop Diagnostic/);
 assert.match(llms, /AI Agent ROI Calculator/);
+assert.match(llms, /AI Evidence Starter Kit/);
 assert.deepEqual([...socialCard.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], "social card should be a PNG");
 assert.equal(publishedKey.trim(), indexNowKey, "public IndexNow key must match the submission script");
 assert.match(indexNowScript, /https:\/\/api\.indexnow\.org\/indexnow/);
@@ -141,4 +159,4 @@ assert.match(indexNowWorkflow, /head_sha=\$\{GITHUB_SHA\}/);
 assert.match(indexNowWorkflow, /pages build and deployment/);
 assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 
-console.log("Evidence Lab verified: 4 tools, 5 crawlable pages, direct attributed subscribe CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 4 tools, 1 activation kit, 6 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

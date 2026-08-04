@@ -12,6 +12,8 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Ten checks for termination, validation, recovery, tracing, budgets, and human escalation.
 - AI Agent ROI Calculator: https://deepmehta11.github.io/researchaudio-scorecard/ai-agent-roi-calculator/
   Stress-tests automation ROI after failed tasks, human review, usage cost, recurring cost, and implementation payback.
+- AI Evidence Starter Kit: https://deepmehta11.github.io/researchaudio-scorecard/evidence-starter-kit/
+  A guided four-step path through the Evidence Lab with browser-local progress and an attributed share action.
 
 ## Publisher
 
