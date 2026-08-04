@@ -5,11 +5,12 @@ import path from "node:path";
 import { calculateCost } from "../ai-cost-calculator/calculator.js";
 import { classifyLoop, controls } from "../agent-loop-diagnostic/diagnostic.js";
 import { calculateAgentRoi, classifyAgentRoi } from "../ai-agent-roi-calculator/calculator.js";
+import { calculateLlmApiCost } from "../llm-api-cost-calculator/calculator.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, starterHtml, starterJs, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, starterHtml, starterJs, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -19,6 +20,8 @@ const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, sta
   readFile(path.join(root, "agent-loop-diagnostic/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-roi-calculator/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-roi-calculator/calculator.js"), "utf8"),
+  readFile(path.join(root, "llm-api-cost-calculator/index.html"), "utf8"),
+  readFile(path.join(root, "llm-api-cost-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "evidence-starter-kit/index.html"), "utf8"),
   readFile(path.join(root, "evidence-starter-kit/starter.js"), "utf8"),
   readFile(path.join(root, "sitemap.xml"), "utf8"),
@@ -57,6 +60,7 @@ for (const [name, page] of [
   ["cost calculator", costHtml],
   ["loop diagnostic", loopHtml],
   ["agent ROI calculator", roiHtml],
+  ["LLM API cost calculator", llmCostHtml],
 ]) {
   assert.match(page, /https:\/\/researchaudio\.io\/subscribe\?utm_source=/, `${name} direct subscribe CTA missing`);
   assert.match(page, /utm_campaign=ai_evidence_lab/, `${name} acquisition campaign missing`);
@@ -69,6 +73,7 @@ for (const [name, page, title] of [
   ["cost calculator", costHtml, "AI Cost per Successful Task Calculator"],
   ["loop diagnostic", loopHtml, "AI Agent Loop Diagnostic Checklist"],
   ["agent ROI calculator", roiHtml, "AI Agent ROI Calculator with Failure & Review"],
+  ["LLM API cost calculator", llmCostHtml, "LLM API Cost Calculator (Input &amp; Output Tokens)"],
 ]) {
   assert.match(page, new RegExp(`<title>${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} \\| ResearchAudio<\\/title>`), `${name} title missing`);
   assert.match(page, /rel="canonical"/, `${name} canonical missing`);
@@ -94,6 +99,12 @@ for (const [name, page, questions] of [
     "How do you calculate AI agent ROI?",
     "What costs belong in an AI agent ROI model?",
     "What is a reasonable AI agent payback period?",
+  ]],
+  ["LLM API cost calculator", llmCostHtml, [
+    "How do you calculate LLM API cost?",
+    "Why are input and output tokens priced separately?",
+    "How does prompt caching affect LLM cost?",
+    "How do retries affect token cost?",
   ]],
 ]) {
   assert.doesNotThrow(() => parseStructuredData(page), `${name} structured data must be valid JSON`);
@@ -156,6 +167,53 @@ assert.equal(classifyAgentRoi(holdRoi).status, "HOLD");
 assert.match(roiJs, /utm_source", "agent_roi_share"/);
 assert.match(roiJs, /utm_campaign", "ai_evidence_lab"/);
 
+const defaultLlmCost = calculateLlmApiCost({
+  requestsPerMonth: 100000,
+  inputTokens: 1200,
+  outputTokens: 300,
+  inputPricePerMillion: 1,
+  outputPricePerMillion: 5,
+  cacheHitRate: 30,
+  cacheDiscount: 75,
+  retryOverhead: 8,
+  otherCostPerRequest: 0,
+});
+assert.ok(Math.abs(defaultLlmCost.totalTokens - 162000000) < 0.001);
+assert.ok(Math.abs(defaultLlmCost.inputSpend - 100.44) < 0.0001);
+assert.ok(Math.abs(defaultLlmCost.outputSpend - 162) < 0.0001);
+assert.ok(Math.abs(defaultLlmCost.retrySpend - 19.44) < 0.0001);
+assert.ok(Math.abs(defaultLlmCost.cacheSavings - 29.16) < 0.0001);
+assert.ok(Math.abs(defaultLlmCost.totalCost - 262.44) < 0.0001);
+assert.ok(Math.abs(defaultLlmCost.costPerRequest - 0.0026244) < 0.0000001);
+const emptyLlmCost = calculateLlmApiCost({
+  requestsPerMonth: -10,
+  inputTokens: 1000,
+  outputTokens: 100,
+  inputPricePerMillion: 1,
+  outputPricePerMillion: 1,
+  cacheHitRate: 200,
+  cacheDiscount: 200,
+  retryOverhead: -5,
+  otherCostPerRequest: -1,
+});
+assert.equal(emptyLlmCost.totalCost, 0);
+assert.equal(emptyLlmCost.costPerRequest, 0);
+const retryHeavyLlmCost = calculateLlmApiCost({
+  requestsPerMonth: 100,
+  inputTokens: 1000,
+  outputTokens: 0,
+  inputPricePerMillion: 10,
+  outputPricePerMillion: 0,
+  cacheHitRate: 0,
+  cacheDiscount: 0,
+  retryOverhead: 200,
+  otherCostPerRequest: 0,
+});
+assert.equal(retryHeavyLlmCost.retryMultiplier, 3);
+assert.equal(retryHeavyLlmCost.totalCost, 3);
+assert.match(llmCostJs, /utm_source", "llm_cost_share"/);
+assert.match(llmCostJs, /utm_campaign", "ai_evidence_lab"/);
+
 assert.match(starterHtml, /<title>AI Evidence Starter Kit: 4 Free Evaluation Tools \| ResearchAudio<\/title>/);
 assert.match(starterHtml, /rel="canonical"/);
 assert.match(starterHtml, /application\/ld\+json/);
@@ -171,11 +229,12 @@ assert.match(starterJs, /utm_campaign", "ai_evidence_lab"/);
 assert.match(starterJs, /utm_medium"\) === "onboarding"/);
 assert.doesNotMatch(starterHtml, /TODO|PLACEHOLDER|example\.com/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 6, "sitemap should contain all six crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 7, "sitemap should contain all seven crawlable pages");
 assert.match(robots, /Sitemap: https:\/\/deepmehta11\.github\.io\/researchaudio-scorecard\/sitemap\.xml/);
 assert.match(llms, /AI Cost per Successful Task Calculator/);
 assert.match(llms, /AI Agent Loop Diagnostic/);
 assert.match(llms, /AI Agent ROI Calculator/);
+assert.match(llms, /LLM API Cost Calculator/);
 assert.match(llms, /AI Evidence Starter Kit/);
 assert.deepEqual([...socialCard.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], "social card should be a PNG");
 assert.equal(publishedKey.trim(), indexNowKey, "public IndexNow key must match the submission script");
@@ -189,4 +248,4 @@ assert.match(indexNowWorkflow, /head_sha=\$\{GITHUB_SHA\}/);
 assert.match(indexNowWorkflow, /pages build and deployment/);
 assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 
-console.log("Evidence Lab verified: 4 tools, 1 activation kit, 6 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 5 tools, 1 activation kit, 7 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

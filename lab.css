@@ -240,6 +240,12 @@ h2 {
   background: #ffd8c2;
 }
 
+.tool-card:nth-child(5) {
+  grid-column: 1 / -1;
+  min-height: 300px;
+  background: #d8f1df;
+}
+
 .tool-card:hover {
   box-shadow: 3px 3px 0 var(--ink);
   transform: translate(5px, 5px);
