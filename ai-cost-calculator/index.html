@@ -32,6 +32,38 @@
         "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
       }
     </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do you calculate AI cost per successful task?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Estimate the spend across all allowed attempts, add human review cost, and divide that total by the probability that the task succeeds before the retry limit."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do retries affect AI cost?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Retries can increase the chance of eventual success, but every additional attempt adds model, retrieval, tool, and latency cost. A retry limit makes that tradeoff measurable."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Should human review be included in AI workflow cost?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Include the loaded labor cost of checking, correcting, approving, and escalating AI output. In many workflows, review costs more than the model calls."
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#calculator">Skip to the calculator</a>
@@ -121,6 +153,29 @@
         <p><strong>Retries buy success.</strong><br />They also buy more spend and latency.</p>
         <p><strong>Review dominates quickly.</strong><br />A few expert minutes can outweigh model charges.</p>
         <p><strong>Failures still cost money.</strong><br />The denominator must include tasks that never succeed.</p>
+      </section>
+
+      <section class="guide-section" aria-labelledby="cost-guide-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Calculation guide</p>
+          <h2 id="cost-guide-title">How to calculate AI cost per successful task.</h2>
+          <p>Per-call pricing hides the cost of failed attempts and the work required to approve an outcome. Use one observed workflow, a real acceptance test, and the same retry policy used in production.</p>
+          <a class="guide-link" href="https://researchaudio.io/p/ai-evidence-lab?utm_source=ai_cost_calculator&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=guide_link">Read the full four-test AI evaluation guide →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item">
+            <h3>How do you calculate AI cost per successful task?</h3>
+            <p>Estimate spend across every allowed attempt, add human review cost, then divide by the probability that the task succeeds before the retry limit. That denominator keeps unsuccessful tasks in the economics.</p>
+          </article>
+          <article class="faq-item">
+            <h3>How do retries affect AI cost?</h3>
+            <p>Retries can raise the chance of eventual success, but each one adds model, retrieval, tool, and latency cost. Compare the extra success probability with the extra spend instead of assuming more attempts are always better.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Should human review be included in AI workflow cost?</h3>
+            <p>Yes. Price the loaded labor used to check, correct, approve, and escalate AI output. Even a few expert minutes can cost more than the model calls, so excluding review can reverse the decision.</p>
+          </article>
+        </div>
       </section>
 
       <section class="subscribe-block" aria-labelledby="subscribe-title">

@@ -32,6 +32,38 @@
         "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
       }
     </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do you calculate AI agent ROI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Compare current labor cost with the cost after automation, including failed tasks, human review, usage charges, recurring costs, and implementation cost. ROI should be tested across conservative, base, and upside scenarios."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What costs belong in an AI agent ROI model?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Include implementation, model and tool usage, retrieval, infrastructure, monitoring, maintenance, human review, exception handling, and the labor that remains when tasks are uncovered or fail."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is a reasonable AI agent payback period?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "There is no universal threshold. Set a payback limit that matches the workflow risk and confidence in the inputs, then require the project to remain acceptable under conservative pilot assumptions."
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#roi-calculator">Skip to the ROI calculator</a>
@@ -170,6 +202,29 @@
           <p><strong>Cost after AI</strong> keeps every uncovered or failed task in the human queue, adds review labor to every attempted automation, then adds usage-based and recurring costs.</p>
           <p><strong>Monthly savings</strong> is baseline labor minus cost after AI. Payback divides one-time implementation cost by positive monthly savings. Year-one ROI subtracts implementation cost from twelve months of savings.</p>
           <p>This is a planning model, not a forecast or guarantee. It excludes revenue lift, quality changes, taxes, financing, and risk-adjusted discounting. Replace every example input with pilot evidence.</p>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="roi-guide-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Decision guide</p>
+          <h2 id="roi-guide-title">Questions to answer before approving AI agent ROI.</h2>
+          <p>A spreadsheet can make any agent look efficient. A defensible business case keeps failed work, review labor, recurring operations, and uncertainty visible.</p>
+          <a class="guide-link" href="https://researchaudio.io/p/ai-evidence-lab?utm_source=ai_agent_roi&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=guide_link">Read the full four-test AI evaluation guide →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item">
+            <h3>How do you calculate AI agent ROI?</h3>
+            <p>Compare current labor cost with cost after automation, keeping failed tasks and uncovered work in the human queue. Subtract review, usage, recurring, and implementation costs, then test the result across conservative, base, and upside scenarios.</p>
+          </article>
+          <article class="faq-item">
+            <h3>What costs belong in an AI agent ROI model?</h3>
+            <p>Include implementation, model and tool usage, retrieval, infrastructure, monitoring, maintenance, human review, exception handling, and the labor that remains when tasks fail or sit outside automation coverage.</p>
+          </article>
+          <article class="faq-item">
+            <h3>What is a reasonable AI agent payback period?</h3>
+            <p>There is no universal threshold. Set one that matches the workflow risk, expected lifetime, and confidence in the inputs. Require the project to stay acceptable under conservative pilot assumptions—not only the base case.</p>
+          </article>
         </div>
       </section>
 

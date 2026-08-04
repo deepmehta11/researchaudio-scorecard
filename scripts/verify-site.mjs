@@ -8,6 +8,7 @@ import { calculateAgentRoi, classifyAgentRoi } from "../ai-agent-roi-calculator/
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
+const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
 const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, starterHtml, starterJs, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
@@ -78,10 +79,39 @@ for (const [name, page, title] of [
   assert.doesNotMatch(page, /TODO|PLACEHOLDER|example\.com/, `${name} contains placeholder copy`);
 }
 
+for (const [name, page, questions] of [
+  ["cost calculator", costHtml, [
+    "How do you calculate AI cost per successful task?",
+    "How do retries affect AI cost?",
+    "Should human review be included in AI workflow cost?",
+  ]],
+  ["loop diagnostic", loopHtml, [
+    "What is an AI agent loop?",
+    "How do you stop an AI agent loop?",
+    "What should be logged in an AI agent loop?",
+  ]],
+  ["agent ROI calculator", roiHtml, [
+    "How do you calculate AI agent ROI?",
+    "What costs belong in an AI agent ROI model?",
+    "What is a reasonable AI agent payback period?",
+  ]],
+]) {
+  assert.doesNotThrow(() => parseStructuredData(page), `${name} structured data must be valid JSON`);
+  assert.equal((page.match(/"@type": "FAQPage"/g) || []).length, 1, `${name} should have one FAQPage schema`);
+  assert.match(page, /utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=guide_link/, `${name} evidence guide attribution missing`);
+  for (const question of questions) {
+    const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    assert.match(page, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `${name} visible FAQ question missing: ${question}`);
+    assert.match(page, new RegExp(`"name": "${escapedQuestion}"`), `${name} FAQ schema question missing: ${question}`);
+  }
+}
+
 assert.match(labCss, /@media \(max-width: 620px\)/);
 assert.match(labCss, /prefers-reduced-motion/);
 assert.match(labCss, /focus-visible/);
 assert.match(labCss, /\.result-join/);
+assert.match(labCss, /\.guide-section/);
+assert.match(labCss, /\.faq-item/);
 assert.match(css, /\.result-join/);
 assert.equal((loopHtml.match(/type="checkbox"/g) || []).length, 10, "expected ten loop controls");
 assert.equal(controls.length, 10, "diagnostic logic and markup should share ten controls");

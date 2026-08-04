@@ -32,6 +32,38 @@
         "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
       }
     </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is an AI agent loop?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "An AI agent loop repeatedly observes state, chooses an action, uses a tool or model, checks the result, and continues until a success or stop condition is reached."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do you stop an AI agent loop?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Use machine-checkable success criteria plus hard limits on attempts, time, tokens, or spend. Add cancellation, failure classification, and human escalation paths for cases that cannot finish safely."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What should be logged in an AI agent loop?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Retain inputs, state changes, model decisions, tool calls and outputs, validation results, retry reasons, costs, and the final stop reason so operators can reconstruct the run."
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#diagnostic">Skip to the diagnostic</a>
@@ -107,6 +139,29 @@
         <p><strong>0–3: blind.</strong><br />The loop can act without a reliable stop or recovery path.</p>
         <p><strong>4–7: bounded.</strong><br />Some controls exist, but incident behavior is still ambiguous.</p>
         <p><strong>8–10: controlled.</strong><br />The loop is observable, testable, and operationally contained.</p>
+      </section>
+
+      <section class="guide-section" aria-labelledby="loop-guide-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Production guide</p>
+          <h2 id="loop-guide-title">What controls a production AI agent loop?</h2>
+          <p>A useful loop observes state, acts, validates the result, and stops for a known reason. Production readiness comes from deterministic limits and evidence operators can inspect—not from the agent declaring itself finished.</p>
+          <a class="guide-link" href="https://researchaudio.io/p/ai-evidence-lab?utm_source=agent_loop_diagnostic&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=guide_link">Read the full four-test AI evaluation guide →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item">
+            <h3>What is an AI agent loop?</h3>
+            <p>An agent loop repeatedly observes the current state, chooses an action, uses a tool or model, validates the result, and continues until it reaches an explicit success or stop condition.</p>
+          </article>
+          <article class="faq-item">
+            <h3>How do you stop an AI agent loop?</h3>
+            <p>Pair machine-checkable success criteria with hard caps on attempts, wall time, tokens, or spend. Add cancellation, classified failure paths, and a human escalation contract for work the loop cannot finish safely.</p>
+          </article>
+          <article class="faq-item">
+            <h3>What should be logged in an AI agent loop?</h3>
+            <p>Retain inputs, state changes, model decisions, tool calls and outputs, validation results, retry reasons, costs, and the final stop reason. The record should let an operator reconstruct why the loop continued or ended.</p>
+          </article>
+        </div>
       </section>
 
       <section class="subscribe-block" aria-labelledby="subscribe-title">

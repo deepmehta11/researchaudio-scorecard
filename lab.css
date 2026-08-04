@@ -576,6 +576,56 @@ h2 {
   color: var(--muted);
 }
 
+.guide-section {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(420px, 1fr);
+  gap: 46px 80px;
+  align-items: start;
+  padding: 96px 0;
+  border-top: 2px solid var(--ink);
+}
+
+.guide-intro > p:not(.eyebrow) {
+  max-width: 620px;
+  color: var(--muted);
+}
+
+.guide-link {
+  display: inline-block;
+  margin-top: 18px;
+  color: var(--blue);
+  font: 700 0.78rem/1.45 var(--mono);
+  text-underline-offset: 5px;
+  text-transform: uppercase;
+}
+
+.faq-list {
+  display: grid;
+  border-top: 2px solid var(--ink);
+}
+
+.faq-item {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.7fr) 1fr;
+  gap: 24px;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.faq-item h3,
+.faq-item p {
+  margin: 0;
+}
+
+.faq-item h3 {
+  font: 700 1.15rem/1.2 var(--body);
+  letter-spacing: -0.02em;
+}
+
+.faq-item p {
+  color: var(--muted);
+}
+
 .starter-section {
   padding: 96px 0 112px;
   border-top: 2px solid var(--ink);
@@ -837,6 +887,7 @@ h2 {
   .diagnostic-layout,
   .scenario-section,
   .method-section,
+  .guide-section,
   .starter-heading,
   .activation-strip,
   .subscribe-block {
@@ -914,6 +965,7 @@ h2 {
   .instrument-shell,
   .scenario-section,
   .method-section,
+  .guide-section,
   .starter-section,
   .activation-strip,
   .subscribe-block {
@@ -931,6 +983,11 @@ h2 {
 
   .scenario-grid {
     grid-template-columns: 1fr;
+  }
+
+  .faq-item {
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
 
   .scenario-card {
