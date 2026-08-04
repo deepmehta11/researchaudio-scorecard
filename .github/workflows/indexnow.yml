@@ -1,0 +1,71 @@
+name: Notify search engines
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: read
+
+concurrency:
+  group: indexnow-main
+  cancel-in-progress: true
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify the acquisition site
+        run: node scripts/verify-site.mjs
+      - name: Verify the IndexNow payload
+        run: node scripts/submit-indexnow.mjs --check
+      - name: Wait for this exact Pages deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          build_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/pages/builds/latest"
+
+          for attempt in {1..36}; do
+            build="$(curl --fail --silent --show-error \
+              --header "Accept: application/vnd.github+json" \
+              --header "Authorization: Bearer ${GH_TOKEN}" \
+              --header "X-GitHub-Api-Version: 2022-11-28" \
+              "$build_url" 2>/dev/null || true)"
+            status="$(jq -r '.status // empty' <<<"$build")"
+            commit="$(jq -r '.commit // empty' <<<"$build")"
+
+            if [[ "$status" == "built" && "$commit" == "$GITHUB_SHA" ]]; then
+              echo "GitHub Pages built ${GITHUB_SHA}."
+              exit 0
+            fi
+
+            echo "Waiting for Pages build ${GITHUB_SHA} (${attempt}/36; latest=${commit:-none}; status=${status:-unknown})."
+            sleep 10
+          done
+
+          echo "The exact commit was not deployed before the timeout."
+          exit 1
+      - name: Wait for the ownership key to be public
+        shell: bash
+        run: |
+          key="b5f8e5d9ef605861f4432c4b66a2d884"
+          key_url="https://deepmehta11.github.io/researchaudio-scorecard/${key}.txt"
+
+          for attempt in {1..30}; do
+            if [[ "$(curl --fail --silent --show-error "$key_url" 2>/dev/null || true)" == "$key" ]]; then
+              echo "IndexNow ownership key is live."
+              exit 0
+            fi
+
+            echo "Waiting for GitHub Pages deployment (${attempt}/30)."
+            sleep 10
+          done
+
+          echo "Ownership key did not become public before the timeout."
+          exit 1
+      - name: Submit the sitemap URLs
+        run: node scripts/submit-indexnow.mjs

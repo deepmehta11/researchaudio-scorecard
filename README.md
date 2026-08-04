@@ -11,6 +11,8 @@ An evergreen acquisition ecosystem for ResearchAudio. Three browser-local tools 
 
 Every instrument uses the dedicated Beehiiv acquisition form and keeps user inputs in the browser.
 
+Every main-branch deployment also verifies the site and submits all sitemap URLs to the IndexNow global endpoint after the public ownership key is available. IndexNow speeds discovery by participating search engines; it does not guarantee crawling, indexing, or rankings.
+
 ## Growth contract
 
 - Primary metric: new active subscribers attributed to `utm_campaign=ai_evidence_lab` or the legacy `ai_launch_scorecard` launch-instrument campaign.
@@ -30,8 +32,9 @@ Then open `http://127.0.0.1:4173`.
 
 ## Distribution loop
 
-1. Match the instrument to the briefing: launch proof, operating cost, or agent reliability.
-2. Link it near the first decision table in every relevant ResearchAudio web post.
-3. Publish one result card per issue on LinkedIn, X, Reddit, and relevant engineering communities.
-4. Use built-in share actions; each carries tool-specific referral attribution.
-5. Review Beehiiv source and campaign breakdowns weekly. Keep only channels that produce active subscribers, not raw clicks.
+1. Deploy on `main`; the workflow verifies the site and notifies IndexNow of every sitemap URL.
+2. Match the instrument to the briefing: launch proof, operating cost, or agent reliability.
+3. Link it near the first decision table in every relevant ResearchAudio web post.
+4. Publish one result card per issue on LinkedIn, X, Reddit, and relevant engineering communities.
+5. Use built-in share actions; each carries tool-specific referral attribution.
+6. Review Beehiiv source and campaign breakdowns weekly. Keep only channels that produce active subscribers, not raw clicks.

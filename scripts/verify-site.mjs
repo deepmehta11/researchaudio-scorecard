@@ -6,7 +6,8 @@ import { calculateCost } from "../ai-cost-calculator/calculator.js";
 import { classifyLoop, controls } from "../agent-loop-diagnostic/diagnostic.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, sitemap, robots, llms, socialCard] = await Promise.all([
+const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
+const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -18,6 +19,9 @@ const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, sitemap, robots, ll
   readFile(path.join(root, "robots.txt"), "utf8"),
   readFile(path.join(root, "llms.txt"), "utf8"),
   readFile(path.join(root, "social-card.png")),
+  readFile(path.join(root, `${indexNowKey}.txt`), "utf8"),
+  readFile(path.join(root, "scripts/submit-indexnow.mjs"), "utf8"),
+  readFile(path.join(root, ".github/workflows/indexnow.yml"), "utf8"),
 ]);
 
 assert.match(html, /<title>AI Launch Evidence Scorecard \| ResearchAudio<\/title>/);
@@ -90,5 +94,14 @@ assert.match(robots, /Sitemap: https:\/\/deepmehta11\.github\.io\/researchaudio-
 assert.match(llms, /AI Cost per Successful Task Calculator/);
 assert.match(llms, /AI Agent Loop Diagnostic/);
 assert.deepEqual([...socialCard.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], "social card should be a PNG");
+assert.equal(publishedKey.trim(), indexNowKey, "public IndexNow key must match the submission script");
+assert.match(indexNowScript, /https:\/\/api\.indexnow\.org\/indexnow/);
+assert.match(indexNowScript, /keyLocation/);
+assert.match(indexNowScript, /--check/);
+assert.match(indexNowWorkflow, /node scripts\/verify-site\.mjs/);
+assert.match(indexNowWorkflow, /node scripts\/submit-indexnow\.mjs/);
+assert.match(indexNowWorkflow, /Wait for this exact Pages deployment/);
+assert.match(indexNowWorkflow, /commit.*GITHUB_SHA/);
+assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 
-console.log("Evidence Lab verified: 3 tools, 4 crawlable pages, direct attributed subscribe CTAs, calculation logic, accessibility, and responsive CSS are present.");
+console.log("Evidence Lab verified: 3 tools, 4 crawlable pages, direct attributed subscribe CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
