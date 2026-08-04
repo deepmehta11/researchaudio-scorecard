@@ -1,6 +1,6 @@
 # ResearchAudio Evidence Lab
 
-An evergreen acquisition ecosystem for ResearchAudio. Six browser-local tools turn AI launch claims, token budgets, cache economics, workflow economics, agent reliability, and automation business cases into concrete inspections before inviting visitors into the daily briefing.
+An evergreen acquisition ecosystem for ResearchAudio. Seven browser-local tools turn AI launch claims, token budgets, cache economics, workflow economics, agent reliability, automation business cases, and Codex configuration into concrete inspections before inviting visitors into the daily briefing.
 
 ## Live instruments
 
@@ -10,6 +10,7 @@ An evergreen acquisition ecosystem for ResearchAudio. Six browser-local tools tu
 - `/ai-agent-roi-calculator/` — AI agent ROI after failure, human review, recurring cost, and implementation payback.
 - `/llm-api-cost-calculator/` — monthly LLM API budget after input/output tokens, caching, retries, and attached usage costs.
 - `/prompt-caching-calculator/` — cache-read and cache-write economics with a break-even hit-rate calculation.
+- `/codex-config-generator/` — copy-ready Codex CLI project document fallbacks and instruction byte limits.
 - `/evidence-starter-kit/` — post-signup activation, four-tool progress, referral reward explanation, and attributed sharing.
 - `/tools/` — crawlable, interlinked Evidence Lab hub.
 

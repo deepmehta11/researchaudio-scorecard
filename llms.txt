@@ -16,6 +16,8 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Estimates monthly LLM API spend from input and output tokens, current prices, prompt caching, retry overhead, and attached per-request costs.
 - Prompt Caching Cost Calculator: https://deepmehta11.github.io/researchaudio-scorecard/prompt-caching-calculator/
   Calculates cache-read and cache-write spend, monthly savings, and the break-even cache hit rate from current user-supplied prices.
+- Codex CLI config.toml Generator: https://deepmehta11.github.io/researchaudio-scorecard/codex-config-generator/
+  Generates project_doc_fallback_filenames and project_doc_max_bytes settings while explaining the AGENTS.md resolution order.
 - AI Evidence Starter Kit: https://deepmehta11.github.io/researchaudio-scorecard/evidence-starter-kit/
   A guided four-step path through the Evidence Lab with browser-local progress and an attributed share action.
 

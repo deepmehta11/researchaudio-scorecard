@@ -7,11 +7,12 @@ import { classifyLoop, controls } from "../agent-loop-diagnostic/diagnostic.js";
 import { calculateAgentRoi, classifyAgentRoi } from "../ai-agent-roi-calculator/calculator.js";
 import { calculateLlmApiCost } from "../llm-api-cost-calculator/calculator.js";
 import { calculatePromptCacheSavings } from "../prompt-caching-calculator/calculator.js";
+import { buildCodexConfig, normalizeFallbackFiles, normalizeMaxBytes } from "../codex-config-generator/generator.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, promptCacheHtml, promptCacheJs, starterHtml, starterJs, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, starterHtml, starterJs, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -25,6 +26,8 @@ const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llm
   readFile(path.join(root, "llm-api-cost-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "prompt-caching-calculator/index.html"), "utf8"),
   readFile(path.join(root, "prompt-caching-calculator/calculator.js"), "utf8"),
+  readFile(path.join(root, "codex-config-generator/index.html"), "utf8"),
+  readFile(path.join(root, "codex-config-generator/generator.js"), "utf8"),
   readFile(path.join(root, "evidence-starter-kit/index.html"), "utf8"),
   readFile(path.join(root, "evidence-starter-kit/starter.js"), "utf8"),
   readFile(path.join(root, "sitemap.xml"), "utf8"),
@@ -47,6 +50,7 @@ assert.match(html, /social-card\.png/);
 assert.match(html, /ai-cost-calculator/);
 assert.match(html, /agent-loop-diagnostic/);
 assert.match(html, /prompt-caching-calculator/);
+assert.match(html, /codex-config-generator/);
 assert.doesNotMatch(html, /TODO|PLACEHOLDER|example\.com/);
 
 assert.match(css, /@media \(max-width: 620px\)/);
@@ -66,6 +70,7 @@ for (const [name, page] of [
   ["agent ROI calculator", roiHtml],
   ["LLM API cost calculator", llmCostHtml],
   ["prompt caching calculator", promptCacheHtml],
+  ["Codex config generator", codexConfigHtml],
 ]) {
   assert.match(page, /https:\/\/researchaudio\.io\/subscribe\?utm_source=/, `${name} direct subscribe CTA missing`);
   assert.match(page, /utm_campaign=ai_evidence_lab/, `${name} acquisition campaign missing`);
@@ -80,6 +85,7 @@ for (const [name, page, title] of [
   ["agent ROI calculator", roiHtml, "AI Agent ROI Calculator with Failure & Review"],
   ["LLM API cost calculator", llmCostHtml, "LLM API Cost Calculator (Input &amp; Output Tokens)"],
   ["prompt caching calculator", promptCacheHtml, "Prompt Caching Cost Calculator &amp; Break-Even Hit Rate"],
+  ["Codex config generator", codexConfigHtml, "Codex CLI config.toml Generator"],
 ]) {
   assert.match(page, new RegExp(`<title>${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} \\| ResearchAudio<\\/title>`), `${name} title missing`);
   assert.match(page, /rel="canonical"/, `${name} canonical missing`);
@@ -118,6 +124,12 @@ for (const [name, page, questions] of [
     "When can prompt caching cost more?",
     "Which input tokens belong in a cache calculation?",
   ]],
+  ["Codex config generator", codexConfigHtml, [
+    "What does project_doc_fallback_filenames do?",
+    "What does project_doc_max_bytes do?",
+    "Does a fallback file replace AGENTS.md?",
+    "Where should Codex config.toml go?",
+  ]],
 ]) {
   assert.doesNotThrow(() => parseStructuredData(page), `${name} structured data must be valid JSON`);
   assert.equal((page.match(/"@type": "FAQPage"/g) || []).length, 1, `${name} should have one FAQPage schema`);
@@ -135,6 +147,7 @@ assert.match(labCss, /focus-visible/);
 assert.match(labCss, /\.result-join/);
 assert.match(labCss, /\.guide-section/);
 assert.match(labCss, /\.faq-item/);
+assert.match(labCss, /\.config-output/);
 assert.match(css, /\.result-join/);
 assert.equal((loopHtml.match(/type="checkbox"/g) || []).length, 10, "expected ten loop controls");
 assert.equal(controls.length, 10, "diagnostic logic and markup should share ten controls");
@@ -266,6 +279,23 @@ assert.equal(unreachablePromptCache.breakEvenHitRate, null);
 assert.match(promptCacheJs, /utm_source", "prompt_cache_share"/);
 assert.match(promptCacheJs, /utm_campaign", "ai_evidence_lab"/);
 
+assert.deepEqual(
+  normalizeFallbackFiles([" TEAM_GUIDE.md ", "CLAUDE.md", "team_guide.md", "../escape.md", "ONCALL.md, .agents.md"]),
+  ["TEAM_GUIDE.md", "CLAUDE.md", "ONCALL.md", ".agents.md"],
+  "Codex fallback filenames should be trimmed, filename-safe, and deduplicated case-insensitively",
+);
+assert.deepEqual(normalizeFallbackFiles("ONCALL.md, CLAUDE.md"), ["ONCALL.md", "CLAUDE.md"]);
+assert.equal(normalizeMaxBytes(0), 32768);
+assert.equal(normalizeMaxBytes(64), 1024);
+assert.equal(normalizeMaxBytes(2000000), 1048576);
+assert.equal(
+  buildCodexConfig({ fallbackFiles: ["TEAM_GUIDE.md", "CLAUDE.md"], maxBytes: 65536 }),
+  'project_doc_fallback_filenames = ["TEAM_GUIDE.md", "CLAUDE.md"]\nproject_doc_max_bytes = 65536',
+);
+assert.match(codexConfigJs, /utm_source", "codex_config_share"/);
+assert.match(codexConfigJs, /utm_campaign", "ai_evidence_lab"/);
+assert.match(codexConfigHtml, /AGENTS\.override\.md/);
+
 assert.match(starterHtml, /<title>AI Evidence Starter Kit: 4 Free Evaluation Tools \| ResearchAudio<\/title>/);
 assert.match(starterHtml, /rel="canonical"/);
 assert.match(starterHtml, /application\/ld\+json/);
@@ -281,13 +311,14 @@ assert.match(starterJs, /utm_campaign", "ai_evidence_lab"/);
 assert.match(starterJs, /utm_medium"\) === "onboarding"/);
 assert.doesNotMatch(starterHtml, /TODO|PLACEHOLDER|example\.com/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 8, "sitemap should contain all eight crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 9, "sitemap should contain all nine crawlable pages");
 assert.match(robots, /Sitemap: https:\/\/deepmehta11\.github\.io\/researchaudio-scorecard\/sitemap\.xml/);
 assert.match(llms, /AI Cost per Successful Task Calculator/);
 assert.match(llms, /AI Agent Loop Diagnostic/);
 assert.match(llms, /AI Agent ROI Calculator/);
 assert.match(llms, /LLM API Cost Calculator/);
 assert.match(llms, /Prompt Caching Cost Calculator/);
+assert.match(llms, /Codex CLI config\.toml Generator/);
 assert.match(llms, /AI Evidence Starter Kit/);
 assert.deepEqual([...socialCard.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], "social card should be a PNG");
 assert.equal(publishedKey.trim(), indexNowKey, "public IndexNow key must match the submission script");
@@ -301,4 +332,4 @@ assert.match(indexNowWorkflow, /head_sha=\$\{GITHUB_SHA\}/);
 assert.match(indexNowWorkflow, /pages build and deployment/);
 assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 
-console.log("Evidence Lab verified: 6 tools, 1 activation kit, 8 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 7 tools, 1 activation kit, 9 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

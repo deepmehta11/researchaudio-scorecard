@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Codex CLI config.toml Generator | ResearchAudio</title>
+    <meta name="description" content="Generate project_doc_fallback_filenames and project_doc_max_bytes settings for Codex CLI. Copy a valid config.toml snippet with AGENTS.md guidance." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <link rel="canonical" href="https://deepmehta11.github.io/researchaudio-scorecard/codex-config-generator/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Build the Codex project-doc config you actually need" />
+    <meta property="og:description" content="Choose fallback instruction files, set the AGENTS.md byte limit, and copy a ready-to-use Codex config.toml snippet." />
+    <meta property="og:url" content="https://deepmehta11.github.io/researchaudio-scorecard/codex-config-generator/" />
+    <meta property="og:image" content="https://deepmehta11.github.io/researchaudio-scorecard/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://deepmehta11.github.io/researchaudio-scorecard/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Codex CLI config.toml Generator",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "url": "https://deepmehta11.github.io/researchaudio-scorecard/codex-config-generator/",
+        "description": "A free browser-local generator for Codex CLI project_doc_fallback_filenames and project_doc_max_bytes settings.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What does project_doc_fallback_filenames do?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "It gives Codex an ordered list of additional instruction filenames to try when AGENTS.md is missing at a directory level."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What does project_doc_max_bytes do?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "It sets the byte limit for project guidance Codex reads into the initial instructions. The documented default is 32768 bytes, or 32 KiB."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does a fallback file replace AGENTS.md?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Codex checks AGENTS.override.md and AGENTS.md first. A configured fallback filename is tried only when AGENTS.md is absent at that directory level."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Where should Codex config.toml go?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Personal defaults belong in ~/.codex/config.toml. Trusted projects can also use a project-scoped .codex/config.toml for supported settings."
+            }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#codex-config-builder">Skip to the Codex config generator</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=codex_config_generator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=codex_config_generator&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=codex_config_generator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=codex_config_generator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Instrument 07 / Codex configuration</p>
+          <h1 id="hero-title">Generate the Codex project-doc config your repository needs.</h1>
+          <p class="hero-deck">Choose fallback instruction files, set the project guidance byte limit, and copy one inspectable <code>config.toml</code> snippet.</p>
+        </div>
+        <aside class="lab-index" aria-label="Codex config generator scope">
+          <span>Config fields</span>
+          <strong>02</strong>
+          <p>Focused on the two project-document settings developers repeatedly search for. No account, upload, or repository access required.</p>
+        </aside>
+      </section>
+
+      <section class="instrument-shell" id="codex-config-builder" aria-labelledby="builder-title">
+        <div class="instrument-intro">
+          <div>
+            <p class="eyebrow">Build a valid snippet</p>
+            <h2 id="builder-title">Configure fallback docs without overriding AGENTS.md.</h2>
+          </div>
+          <p>Everything runs in this browser. The generator accepts filename-safe values, removes duplicates, and keeps the documented 32 KiB default visible.</p>
+        </div>
+
+        <div class="calculator-layout">
+          <form class="input-panel" id="codex-config-form">
+            <fieldset class="choice-card">
+              <legend>Fallback instruction files</legend>
+              <p>Select files Codex should try when <code>AGENTS.md</code> is missing at a directory level.</p>
+              <div class="choice-grid">
+                <label><input type="checkbox" name="fallbackFile" value="TEAM_GUIDE.md" checked /> <span><strong>TEAM_GUIDE.md</strong><small>Team conventions</small></span></label>
+                <label><input type="checkbox" name="fallbackFile" value="CLAUDE.md" checked /> <span><strong>CLAUDE.md</strong><small>Existing agent guidance</small></span></label>
+                <label><input type="checkbox" name="fallbackFile" value="CONTRIBUTING.md" /> <span><strong>CONTRIBUTING.md</strong><small>Contribution workflow</small></span></label>
+                <label><input type="checkbox" name="fallbackFile" value="PROJECT_GUIDE.md" /> <span><strong>PROJECT_GUIDE.md</strong><small>Project-specific rules</small></span></label>
+              </div>
+            </fieldset>
+
+            <label class="input-card" for="custom-fallback-files">
+              <span class="field-copy"><strong>Additional filenames</strong><small>Comma-separated filenames only. Paths and invalid characters are ignored.</small></span>
+              <span class="text-field"><input id="custom-fallback-files" name="customFallbackFiles" type="text" placeholder="ONCALL.md, .agents.md" autocomplete="off" /></span>
+            </label>
+
+            <label class="input-card" for="project-doc-max-bytes">
+              <span class="field-copy"><strong>Project guidance limit</strong><small>32 KiB is the documented default. Raise it only when project instructions are being truncated.</small></span>
+              <span class="select-field">
+                <select id="project-doc-max-bytes" name="projectDocMaxBytes">
+                  <option value="32768">32 KiB · default</option>
+                  <option value="65536" selected>64 KiB</option>
+                  <option value="131072">128 KiB</option>
+                  <option value="262144">256 KiB</option>
+                </select>
+              </span>
+            </label>
+          </form>
+
+          <aside class="result-console config-console" aria-live="polite" aria-labelledby="result-title">
+            <div class="tool-status"><span>Generated snippet</span><b id="config-status">READY</b></div>
+            <p class="config-result-title" id="result-title">~/.codex/config.toml</p>
+            <pre class="config-output"><code id="config-output">project_doc_fallback_filenames = ["TEAM_GUIDE.md", "CLAUDE.md"]
+project_doc_max_bytes = 65536</code></pre>
+            <div class="result-grid config-summary">
+              <div><span>Fallback files</span><strong id="fallback-count">2</strong></div>
+              <div><span>Instruction limit</span><strong id="byte-limit">64 KiB</strong></div>
+              <div><span>AGENTS.md priority</span><strong>Preserved</strong></div>
+              <div><span>Data sent</span><strong>None</strong></div>
+            </div>
+            <p class="result-note" id="config-note">Codex checks AGENTS.md before these ordered fallback names.</p>
+            <button class="action-button" id="copy-config" type="button">Copy config.toml snippet</button>
+            <button class="secondary-button" id="share-config" type="button">Share this setup</button>
+            <button class="secondary-button" id="reset-config" type="button">Restore example</button>
+            <p class="share-status" id="copy-status" role="status"></p>
+            <div class="result-join">
+              <span>Daily evidence brief · 52,000+ readers</span>
+              <a href="https://researchaudio.io/subscribe?utm_source=codex_config_generator&amp;utm_medium=tool_result&amp;utm_campaign=ai_evidence_lab&amp;utm_content=result_join">Get the next engineering teardown →</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="Codex project instruction rules">
+        <p class="eyebrow">Resolution order</p>
+        <p><strong>AGENTS.override.md first.</strong><br />It takes precedence at each directory level.</p>
+        <p><strong>AGENTS.md next.</strong><br />Fallback names are tried only when it is absent.</p>
+        <p><strong>Root to working directory.</strong><br />Closer guidance appears later and can override earlier instructions.</p>
+      </section>
+
+      <section class="method-section" aria-labelledby="method-title">
+        <div>
+          <p class="eyebrow">Current Codex behavior</p>
+          <h2 id="method-title">What the generated Codex config.toml changes.</h2>
+        </div>
+        <div class="method-copy">
+          <p><strong><code>project_doc_fallback_filenames</code></strong> adds ordered filename candidates after <code>AGENTS.override.md</code> and <code>AGENTS.md</code>. It is useful when a repository already keeps durable instructions in files such as <code>TEAM_GUIDE.md</code> or <code>CLAUDE.md</code>.</p>
+          <p><strong><code>project_doc_max_bytes</code></strong> controls how much project guidance can enter the initial instruction chain. The documented default is 32 KiB. A larger number prevents truncation but also consumes more context.</p>
+          <p><strong>Personal scope</strong> lives in <code>~/.codex/config.toml</code>. Supported project defaults can live in <code>.codex/config.toml</code> when the repository is trusted.</p>
+          <p><strong>Reload required.</strong> Start a new Codex command or session after changing configuration so the instruction discovery process runs again.</p>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="config-guide-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Codex CLI guide</p>
+          <h2 id="config-guide-title">The four questions behind these two settings.</h2>
+          <p>Use fallback files to reuse real repository guidance, not to create a second conflicting instruction system.</p>
+          <a class="guide-link" href="https://researchaudio.io/p/openai-codex-the-technical-deep-dive-most-engineers-skip?utm_source=codex_config_generator&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=guide_link">Read the full Codex CLI technical guide →</a>
+          <a class="guide-link" href="../agent-loop-diagnostic/?utm_source=codex_config_generator&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=agent_loop">Auditing an agent workflow next? →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item">
+            <h3>What does project_doc_fallback_filenames do?</h3>
+            <p>It gives Codex an ordered list of additional instruction filenames to try when <code>AGENTS.md</code> is missing at a directory level.</p>
+          </article>
+          <article class="faq-item">
+            <h3>What does project_doc_max_bytes do?</h3>
+            <p>It sets the byte limit for project guidance Codex reads into the initial instructions. The documented default is 32,768 bytes, or 32 KiB.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Does a fallback file replace AGENTS.md?</h3>
+            <p>No. Codex checks <code>AGENTS.override.md</code> and <code>AGENTS.md</code> first. Fallback filenames are tried only when <code>AGENTS.md</code> is absent at that level.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Where should Codex config.toml go?</h3>
+            <p>Personal defaults belong in <code>~/.codex/config.toml</code>. Trusted projects can also use <code>.codex/config.toml</code> for supported project-scoped settings.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">One teardown at a time</p>
+          <h2 id="subscribe-title">Get the next useful AI engineering configuration.</h2>
+          <p>ResearchAudio turns changing AI tools into sourced, practical workflows for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=codex_config_generator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script type="module" src="generator.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>

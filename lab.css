@@ -248,6 +248,10 @@ h2 {
   background: #eadfff;
 }
 
+.tool-card:nth-child(7) {
+  background: #ffe7ad;
+}
+
 .tool-card:hover {
   box-shadow: 3px 3px 0 var(--ink);
   transform: translate(5px, 5px);
@@ -256,6 +260,7 @@ h2 {
 .tool-card:focus-visible,
 .action-button:focus-visible,
 .secondary-button:focus-visible,
+.choice-grid label:has(input:focus-visible),
 .diagnostic-card:has(input:focus-visible) {
   outline: 4px solid var(--orange);
   outline-offset: 3px;
@@ -396,6 +401,81 @@ h2 {
   outline-offset: 2px;
 }
 
+.choice-card {
+  margin: 0;
+  padding: 22px;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+}
+
+.choice-card legend {
+  padding: 0 8px;
+  font-weight: 700;
+}
+
+.choice-card > p {
+  margin: 0 0 18px;
+  color: var(--muted);
+}
+
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.choice-grid label {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px;
+  background: var(--white);
+  border: 1px solid var(--ink);
+  cursor: pointer;
+}
+
+.choice-grid input {
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  accent-color: var(--blue);
+}
+
+.choice-grid span,
+.choice-grid strong,
+.choice-grid small {
+  display: block;
+}
+
+.choice-grid small {
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+.text-field,
+.select-field {
+  display: block;
+  background: var(--white);
+  border: 2px solid var(--ink);
+}
+
+.text-field input,
+.select-field select {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  font: 600 0.88rem/1.2 var(--mono);
+}
+
+.text-field input:focus,
+.select-field select:focus {
+  outline: 3px solid var(--yellow);
+  outline-offset: 2px;
+}
+
 .result-console {
   position: sticky;
   top: 24px;
@@ -404,6 +484,31 @@ h2 {
   background: var(--ink);
   border: 2px solid var(--ink);
   box-shadow: 8px 8px 0 var(--blue);
+}
+
+.config-result-title {
+  margin: 26px 0 12px;
+  color: var(--yellow);
+  font: 600 0.82rem/1.3 var(--mono);
+}
+
+.config-output {
+  min-height: 150px;
+  margin: 0 0 20px;
+  padding: 18px;
+  overflow-x: auto;
+  color: #eaf6f2;
+  background: #0d2421;
+  border: 1px solid #5a7370;
+  white-space: pre-wrap;
+}
+
+.config-output code {
+  font: 500 0.8rem/1.7 var(--mono);
+}
+
+.config-summary {
+  margin-top: 0;
 }
 
 .tool-status {
@@ -986,6 +1091,10 @@ h2 {
   }
 
   .input-card {
+    grid-template-columns: 1fr;
+  }
+
+  .choice-grid {
     grid-template-columns: 1fr;
   }
 
