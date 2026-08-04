@@ -41,6 +41,18 @@ assert.match(js, /navigator\.share/);
 assert.match(js, /utm_source", "scorecard_share"/);
 assert.match(js, /min: 7,[\s\S]*title: "Evidence-complete"/);
 
+for (const [name, page] of [
+  ["scorecard", html],
+  ["hub", toolsHtml],
+  ["cost calculator", costHtml],
+  ["loop diagnostic", loopHtml],
+]) {
+  assert.match(page, /https:\/\/researchaudio\.io\/subscribe\?utm_source=/, `${name} direct subscribe CTA missing`);
+  assert.match(page, /utm_campaign=ai_evidence_lab/, `${name} acquisition campaign missing`);
+  assert.match(page, /utm_content=(header_join|hero_join|result_join)/, `${name} CTA placement attribution missing`);
+  assert.match(page, /52,000\+/, `${name} subscriber proof missing`);
+}
+
 for (const [name, page, title] of [
   ["hub", toolsHtml, "Free AI Evaluation Tools for Builders"],
   ["cost calculator", costHtml, "AI Cost per Successful Task Calculator"],
@@ -58,6 +70,8 @@ for (const [name, page, title] of [
 assert.match(labCss, /@media \(max-width: 620px\)/);
 assert.match(labCss, /prefers-reduced-motion/);
 assert.match(labCss, /focus-visible/);
+assert.match(labCss, /\.result-join/);
+assert.match(css, /\.result-join/);
 assert.equal((loopHtml.match(/type="checkbox"/g) || []).length, 10, "expected ten loop controls");
 assert.equal(controls.length, 10, "diagnostic logic and markup should share ten controls");
 
@@ -77,4 +91,4 @@ assert.match(llms, /AI Cost per Successful Task Calculator/);
 assert.match(llms, /AI Agent Loop Diagnostic/);
 assert.deepEqual([...socialCard.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], "social card should be a PNG");
 
-console.log("Evidence Lab verified: 3 tools, 4 crawlable pages, Beehiiv attribution, calculation logic, accessibility, and responsive CSS are present.");
+console.log("Evidence Lab verified: 3 tools, 4 crawlable pages, direct attributed subscribe CTAs, calculation logic, accessibility, and responsive CSS are present.");

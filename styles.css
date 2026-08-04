@@ -124,6 +124,14 @@ input {
   text-underline-offset: 5px;
 }
 
+.header-nav .join-link {
+  padding: 10px 12px;
+  color: var(--white);
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  text-decoration: none;
+}
+
 .status-dot {
   width: 9px;
   height: 9px;
@@ -515,6 +523,27 @@ h2 {
   font: 0.72rem/1.4 var(--mono);
 }
 
+.result-join {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #49625f;
+}
+
+.result-join span {
+  color: #92aaa6;
+  font: 0.68rem/1.35 var(--mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.result-join a {
+  color: var(--yellow);
+  font-weight: 700;
+  text-underline-offset: 5px;
+}
+
 .subscribe-section {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(360px, 0.7fr);
@@ -751,7 +780,7 @@ h2 {
     min-height: 68px;
   }
 
-  .header-nav a:last-child {
+  .header-nav .briefings-link {
     display: none;
   }
 
