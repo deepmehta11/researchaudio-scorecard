@@ -59,7 +59,7 @@ jobs:
         shell: bash
         run: |
           key="b5f8e5d9ef605861f4432c4b66a2d884"
-          key_url="https://deepmehta11.github.io/researchaudio-scorecard/${key}.txt"
+          key_url="https://tools.researchaudio.io/${key}.txt"
 
           for attempt in {1..30}; do
             if [[ "$(curl --fail --silent --show-error "$key_url" 2>/dev/null || true)" == "$key" ]]; then

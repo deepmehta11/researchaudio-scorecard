@@ -387,5 +387,7 @@ assert.match(indexNowWorkflow, /Wait for this exact Pages deployment/);
 assert.match(indexNowWorkflow, /head_sha=\$\{GITHUB_SHA\}/);
 assert.match(indexNowWorkflow, /pages build and deployment/);
 assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
+assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
+assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
 console.log("Evidence Lab verified: 7 tools, 1 activation kit, 9 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
