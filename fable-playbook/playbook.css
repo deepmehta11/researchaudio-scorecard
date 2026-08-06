@@ -1,0 +1,295 @@
+.playbook-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.55fr);
+  gap: clamp(44px, 8vw, 110px);
+  align-items: center;
+  min-height: 680px;
+  padding: 84px 0 96px;
+}
+
+.playbook-hero h1 {
+  max-width: 900px;
+  font-size: clamp(3.8rem, 7.5vw, 7.2rem);
+}
+
+.playbook-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 24px;
+  align-items: center;
+  margin-top: 34px;
+}
+
+.playbook-download,
+.playbook-open {
+  font: 700 0.78rem/1.2 var(--mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.playbook-download {
+  display: inline-block;
+  padding: 16px 20px;
+  color: var(--white);
+  background: var(--blue);
+  border: 2px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  text-decoration: none;
+  transition: box-shadow 150ms ease, transform 150ms ease;
+}
+
+.playbook-download:hover {
+  box-shadow: 2px 2px 0 var(--ink);
+  transform: translate(4px, 4px);
+}
+
+.playbook-download:focus-visible,
+.playbook-open:focus-visible {
+  outline: 4px solid var(--orange);
+  outline-offset: 4px;
+}
+
+.playbook-open {
+  color: var(--blue);
+  text-underline-offset: 5px;
+}
+
+.archive-note {
+  max-width: 760px;
+  margin: 30px 0 0;
+  padding-left: 16px;
+  color: var(--muted);
+  border-left: 4px solid var(--orange);
+  font-size: 0.88rem;
+}
+
+.cost-receipt {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0;
+  padding: 24px;
+  color: var(--white);
+  background: var(--ink);
+  border: 2px solid var(--ink);
+  box-shadow: 9px 9px 0 var(--yellow);
+  transform: rotate(1.2deg);
+}
+
+.receipt-head,
+.receipt-total {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  font: 600 0.7rem/1.2 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.receipt-head {
+  padding-bottom: 18px;
+  color: #aec4c0;
+  border-bottom: 1px dashed #68817d;
+}
+
+.cost-receipt > p,
+.cost-receipt > strong {
+  margin: 0;
+  padding: 18px 0;
+  border-bottom: 1px dashed #49625f;
+}
+
+.cost-receipt > p {
+  color: #c1d2cf;
+}
+
+.cost-receipt > strong {
+  color: var(--yellow);
+  font: 600 0.82rem/1.2 var(--mono);
+}
+
+.receipt-total {
+  align-items: end;
+  padding-top: 28px;
+}
+
+.receipt-total b {
+  color: var(--yellow);
+  font: 600 2.4rem/0.9 var(--mono);
+  letter-spacing: -0.08em;
+}
+
+.one-rule {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.62fr);
+  gap: 48px 90px;
+  align-items: end;
+  padding: 96px 0;
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+}
+
+.one-rule h2 {
+  max-width: 850px;
+}
+
+.one-rule > p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.move-ledger {
+  padding: 108px 0;
+}
+
+.ledger-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.55fr);
+  gap: 42px 80px;
+  align-items: end;
+  margin-bottom: 54px;
+}
+
+.ledger-heading > p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.move-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 32px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 2px solid var(--ink);
+}
+
+.move-list li {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 4px 16px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.move-list span {
+  grid-row: 1 / 3;
+  color: var(--blue);
+  font: 600 0.76rem/1.4 var(--mono);
+}
+
+.move-list strong {
+  font-size: 1.05rem;
+}
+
+.move-list small {
+  color: var(--muted);
+}
+
+.download-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 44px 80px;
+  align-items: center;
+  padding: 64px;
+  color: var(--white);
+  background: var(--ink);
+  box-shadow: 10px 10px 0 var(--yellow);
+}
+
+.download-panel .eyebrow {
+  color: var(--yellow);
+}
+
+.download-panel h2 {
+  max-width: 800px;
+  font-size: clamp(2.7rem, 5vw, 4.8rem);
+}
+
+.download-panel p:last-child {
+  max-width: 720px;
+  color: #c1d2cf;
+}
+
+.download-panel .playbook-download {
+  color: var(--ink);
+  background: var(--yellow);
+  border-color: var(--white);
+  box-shadow: 6px 6px 0 var(--blue);
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .playbook-hero,
+  .one-rule,
+  .ledger-heading,
+  .download-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .cost-receipt {
+    max-width: 600px;
+    transform: none;
+  }
+
+  .download-panel {
+    padding: 44px;
+  }
+}
+
+@media (max-width: 620px) {
+  .playbook-hero,
+  .one-rule,
+  .move-ledger {
+    padding-top: 72px;
+    padding-bottom: 72px;
+  }
+
+  .playbook-hero h1 {
+    font-size: clamp(3.1rem, 15vw, 5rem);
+  }
+
+  .move-list {
+    grid-template-columns: 1fr;
+  }
+
+  .download-panel {
+    margin-bottom: 18px;
+    padding: 28px 22px;
+  }
+
+  .download-panel .playbook-download {
+    width: 100%;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .subscribe-form-shell {
+    min-height: 304px;
+    overflow: hidden;
+  }
+
+  .subscribe-form-shell > div {
+    width: 430px !important;
+    max-width: none !important;
+    transform: scale(0.84);
+    transform-origin: top left;
+  }
+}
+
+@media (max-width: 360px) {
+  .subscribe-form-shell {
+    min-height: 260px;
+  }
+
+  .subscribe-form-shell > div {
+    transform: scale(0.68);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cost-receipt {
+    transform: none;
+  }
+}

@@ -16,7 +16,7 @@ const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const brandedToolsOrigin = "https://tools.researchaudio.io";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, starterHtml, starterJs, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -36,6 +36,9 @@ const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llm
   readFile(path.join(root, "voice-ai-latency-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "evidence-starter-kit/index.html"), "utf8"),
   readFile(path.join(root, "evidence-starter-kit/starter.js"), "utf8"),
+  readFile(path.join(root, "fable-playbook/index.html"), "utf8"),
+  readFile(path.join(root, "fable-playbook/playbook.css"), "utf8"),
+  readFile(path.join(root, "fable-playbook/fable5-cost-playbook.pdf")),
   readFile(path.join(root, "sitemap.xml"), "utf8"),
   readFile(path.join(root, "robots.txt"), "utf8"),
   readFile(path.join(root, "llms.txt"), "utf8"),
@@ -81,6 +84,7 @@ for (const [name, page, pathname] of [
   ["Codex config generator", codexConfigHtml, "/codex-config-generator/"],
   ["voice AI latency calculator", voiceLatencyHtml, "/voice-ai-latency-calculator/"],
   ["starter kit", starterHtml, "/evidence-starter-kit/"],
+  ["Fable 5 cost playbook", fablePlaybookHtml, "/fable-playbook/"],
 ]) {
   const canonical = page.match(/<link rel="canonical" href="([^"]+)"/);
   assert.ok(canonical, `${name} canonical missing`);
@@ -376,6 +380,20 @@ assert.match(voiceLatencyHtml, /href="https:\/\/researchaudio\.io\/p\/voice-ai-l
 assert.match(toolsHtml, /voice-ai-latency-calculator/);
 assert.match(labCss, /\.latency-tape/);
 
+assert.match(fablePlaybookHtml, /<title>Fable 5 Cost Playbook \(10-Move PDF\) \| ResearchAudio<\/title>/);
+assert.match(fablePlaybookHtml, /fable5-cost-playbook\.pdf/);
+assert.match(fablePlaybookHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
+assert.match(fablePlaybookHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
+assert.match(fablePlaybookHtml, /utm_campaign=fable_5_cost_playbook/);
+assert.match(fablePlaybookHtml, /Archive note:/);
+assert.match(fablePlaybookHtml, /application\/ld\+json/);
+assert.doesNotThrow(() => parseStructuredData(fablePlaybookHtml), "Fable playbook structured data must be valid JSON");
+assert.deepEqual([...fablePlaybookPdf.subarray(0, 5)], [37, 80, 68, 70, 45], "Fable playbook asset should be a PDF");
+assert.match(fablePlaybookCss, /@media \(max-width: 620px\)/);
+assert.match(fablePlaybookCss, /prefers-reduced-motion/);
+assert.match(fablePlaybookCss, /focus-visible/);
+assert.match(toolsHtml, /fable-playbook/);
+
 assert.match(starterHtml, /<title>AI Evidence Starter Kit: 4 Free Evaluation Tools \| ResearchAudio<\/title>/);
 assert.match(starterHtml, /rel="canonical"/);
 
@@ -422,9 +440,9 @@ assert.match(starterJs, /utm_campaign", "ai_evidence_lab"/);
 assert.match(starterJs, /utm_medium"\) === "onboarding"/);
 assert.doesNotMatch(starterHtml, /TODO|PLACEHOLDER|example\.com/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 10, "sitemap should contain all ten crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 11, "sitemap should contain all eleven crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 10, "sitemap should publish ten URL locations");
+assert.equal(sitemapUrls.length, 11, "sitemap should publish eleven URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -436,6 +454,7 @@ assert.match(llms, /Prompt Caching Cost Calculator/);
 assert.match(llms, /Codex CLI config\.toml Generator/);
 assert.match(llms, /Voice AI Latency Calculator/);
 assert.match(llms, /AI Evidence Starter Kit/);
+assert.match(llms, /The Fable 5 Cost Playbook/);
 assert.deepEqual([...socialCard.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], "social card should be a PNG");
 assert.equal(publishedKey.trim(), indexNowKey, "public IndexNow key must match the submission script");
 assert.match(indexNowScript, /https:\/\/api\.indexnow\.org\/indexnow/);
@@ -450,4 +469,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 8 tools, 1 activation kit, 10 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 8 tools, 1 activation kit, 1 field guide, 11 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
