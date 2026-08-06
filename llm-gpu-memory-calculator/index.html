@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LLM GPU Memory Calculator (VRAM &amp; GPU Count) | ResearchAudio</title>
+    <meta name="description" content="Estimate LLM model-weight VRAM, inference headroom, usable memory per GPU, and the minimum GPU count from model parameters and quantization." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/llm-gpu-memory-calculator/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Will this LLM fit in GPU memory?" />
+    <meta property="og:description" content="A free VRAM and minimum-GPU estimator for LLM inference planning." />
+    <meta property="og:url" content="https://tools.researchaudio.io/llm-gpu-memory-calculator/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "LLM GPU Memory Calculator",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "url": "https://tools.researchaudio.io/llm-gpu-memory-calculator/",
+        "description": "A free calculator for estimating LLM model-weight memory, inference headroom, usable VRAM, and minimum GPU count.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How much GPU memory does an LLM need?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A weight-only estimate is parameter count multiplied by bits per parameter, converted to bytes. Inference also needs memory for runtime overhead, activations, and the KV cache, so deployment capacity must be higher than the weight file alone."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How many GPUs does a 70B model need?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The answer depends on weight precision, VRAM per GPU, reserved memory, runtime overhead, context length, and concurrency. At 16-bit precision, 70 billion parameters require about 130 GiB for weights before inference overhead."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does quantization change LLM VRAM?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Lower-bit weight formats reduce the bytes required per parameter. Real quantized formats may also store scales, metadata, and some non-quantized layers, so the simple bit-width estimate is a planning floor rather than an exact runtime measurement."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does this calculator include KV cache memory?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Not explicitly. Use the configurable inference-headroom input for an early estimate, then validate the chosen model, context length, batch size, concurrency, and serving runtime with a deployment-specific profiler."
+            }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#gpu-memory-calculator">Skip to the GPU memory calculator</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=llm_gpu_memory_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=llm_gpu_memory_calculator&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=llm_gpu_memory_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=llm_gpu_memory_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Instrument 09 / GPU fit</p>
+          <h1 id="hero-title">Find out if the model fits before renting the GPUs.</h1>
+          <p class="hero-deck">Turn parameter count, weight precision, inference headroom, and usable VRAM into a transparent minimum-GPU estimate.</p>
+        </div>
+        <aside class="lab-index" aria-label="GPU memory model scope">
+          <span>Planning inputs</span>
+          <strong>06</strong>
+          <p>Vendor-neutral by design. Enter the actual VRAM available to the hardware and runtime you are evaluating.</p>
+        </aside>
+      </section>
+
+      <section class="instrument-shell" id="gpu-memory-calculator" aria-labelledby="calculator-title">
+        <div class="instrument-intro">
+          <div>
+            <p class="eyebrow">Size one deployment</p>
+            <h2 id="calculator-title">Convert model weights into a VRAM plan.</h2>
+          </div>
+          <p>This is an early inference estimate, not a benchmark. Nothing is submitted or stored; every calculation runs in this browser.</p>
+        </div>
+
+        <div class="calculator-layout">
+          <form class="input-panel" id="gpu-memory-form">
+            <label class="input-card" for="parameter-count">
+              <span class="field-copy"><strong>Model parameters</strong><small>Use the total parameter count, not active MoE parameters.</small></span>
+              <span class="number-field suffix"><span>B</span><input id="parameter-count" name="parameterBillions" type="number" min="0" max="10000" step="0.1" value="70" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="weight-bits">
+              <span class="field-copy"><strong>Weight precision</strong><small>Simple bits-per-parameter estimate before format overhead.</small></span>
+              <span class="select-field">
+                <select id="weight-bits" name="bitsPerParameter">
+                  <option value="32">FP32 · 32-bit</option>
+                  <option value="16">FP16 / BF16 · 16-bit</option>
+                  <option value="8">INT8 · 8-bit</option>
+                  <option value="4" selected>INT4 · 4-bit</option>
+                </select>
+              </span>
+            </label>
+            <label class="input-card" for="inference-headroom">
+              <span class="field-copy"><strong>Inference headroom</strong><small>Planning allowance for runtime overhead, activations, and KV cache.</small></span>
+              <span class="number-field suffix"><span>%</span><input id="inference-headroom" name="inferenceHeadroom" type="number" min="0" max="300" step="1" value="20" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="vram-per-gpu">
+              <span class="field-copy"><strong>VRAM per GPU</strong><small>Use the capacity of the exact accelerator you can deploy.</small></span>
+              <span class="number-field suffix"><span>GiB</span><input id="vram-per-gpu" name="vramPerGpu" type="number" min="0" max="10000" step="1" value="24" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="usable-vram">
+              <span class="field-copy"><strong>Usable VRAM</strong><small>Leave room for the runtime, fragmentation, and non-model allocations.</small></span>
+              <span class="number-field suffix"><span>%</span><input id="usable-vram" name="usableVramPercent" type="number" min="1" max="100" step="1" value="90" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="available-gpus">
+              <span class="field-copy"><strong>GPUs available</strong><small>The hardware count in the deployment you are checking.</small></span>
+              <span class="number-field suffix"><span>GPU</span><input id="available-gpus" name="availableGpus" type="number" min="0" max="10000" step="1" value="2" inputmode="numeric" /></span>
+            </label>
+          </form>
+
+          <aside class="result-console" aria-live="polite" aria-labelledby="result-title">
+            <div class="tool-status"><span>Minimum deployment</span><b id="gpu-memory-status">FITS</b></div>
+            <p class="primary-result"><span id="minimum-gpus">0</span><small> GPUs</small></p>
+            <p class="result-label" id="result-title">Minimum GPUs at the stated usable VRAM</p>
+            <div class="result-grid">
+              <div><span>Weight memory</span><strong id="weight-memory">0 GiB</strong></div>
+              <div><span>Planning target</span><strong id="planning-target">0 GiB</strong></div>
+              <div><span>Usable / GPU</span><strong id="usable-per-gpu">0 GiB</strong></div>
+              <div><span>Available capacity</span><strong id="available-capacity">0 GiB</strong></div>
+              <div><span>Capacity margin</span><strong id="capacity-margin">0 GiB</strong></div>
+              <div><span>Weight format</span><strong id="weight-format">INT4</strong></div>
+            </div>
+            <p class="result-note" id="gpu-memory-note">Enter the model and hardware you are considering.</p>
+            <button class="action-button" id="share-gpu-memory" type="button">Share this exact VRAM plan</button>
+            <button class="secondary-button" id="reset-gpu-memory" type="button">Restore 70B example</button>
+            <p class="share-status" id="share-status" role="status"></p>
+            <div class="result-join">
+              <span>Daily evidence brief · 52,000+ readers</span>
+              <a href="https://researchaudio.io/subscribe?utm_source=llm_gpu_memory_calculator&amp;utm_medium=tool_result&amp;utm_campaign=ai_evidence_lab&amp;utm_content=result_join">Get the next infrastructure teardown →</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="GPU memory interpretation">
+        <p class="eyebrow">Sizing boundaries</p>
+        <p><strong>Weights are the floor.</strong><br />A file fitting in VRAM does not prove the serving workload fits.</p>
+        <p><strong>Context consumes memory.</strong><br />KV cache grows with architecture, sequence length, batch size, and concurrency.</p>
+        <p><strong>Profile the runtime.</strong><br />Tensor parallelism, kernels, and quantization formats add deployment-specific overhead.</p>
+      </section>
+
+      <section class="method-section" aria-labelledby="method-title">
+        <div>
+          <p class="eyebrow">Transparent method</p>
+          <h2 id="method-title">What this LLM GPU memory calculator computes.</h2>
+        </div>
+        <div class="method-copy">
+          <p><strong>Weight memory</strong> is total parameters multiplied by bits per parameter, divided by eight, then converted from bytes to GiB. It deliberately uses total parameters for sparse models because inactive experts still have to be stored unless the deployment explicitly offloads them.</p>
+          <p><strong>Planning target</strong> adds the headroom you choose. Hugging Face's model memory estimator describes weight loading as a floor and notes that inference can require additional memory. Use measured runtime data instead of the default once you have it.</p>
+          <p><strong>Minimum GPUs</strong> divides the planning target by usable VRAM per GPU and rounds up. This capacity check does not promise throughput, latency, interconnect efficiency, or compatibility with a particular tensor-parallel configuration.</p>
+          <p>Quantized formats can include scales, metadata, and higher-precision modules. The calculator therefore treats bit width as a planning input, not a guarantee that every 4-bit or 8-bit artifact occupies exactly the same amount of memory.</p>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="gpu-guide-title">
+        <div class="guide-intro">
+          <p class="eyebrow">GPU sizing guide</p>
+          <h2 id="gpu-guide-title">Four questions before you call the model deployable.</h2>
+          <p>Memory fit is necessary, but it is only the first gate. Validate the exact model artifact, context window, batch profile, serving runtime, and hardware topology.</p>
+          <a class="guide-link" href="https://researchaudio.io/p/understanding-gpu-architecture-technical-deep-dive-from-fundamentals-to-modern-design?utm_source=llm_gpu_memory_calculator&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=guide_link">Read ResearchAudio's GPU architecture guide →</a>
+          <a class="guide-link" href="https://huggingface.co/docs/accelerate/en/usage_guides/model_size_estimator">Check the Hugging Face model memory estimator →</a>
+          <a class="guide-link" href="https://huggingface.co/docs/transformers/main_classes/quantization">Review current Transformers quantization support →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item">
+            <h3>How much GPU memory does an LLM need?</h3>
+            <p>Start with parameter count multiplied by bits per parameter. Then add capacity for runtime overhead, activations, and the KV cache. A weight-only estimate is a lower bound, not a production guarantee.</p>
+          </article>
+          <article class="faq-item">
+            <h3>How many GPUs does a 70B model need?</h3>
+            <p>At 16-bit precision, 70 billion parameters require about 130 GiB for weights before inference overhead. The final GPU count depends on usable VRAM per device, quantization, context length, concurrency, and the serving runtime.</p>
+          </article>
+          <article class="faq-item">
+            <h3>How does quantization change LLM VRAM?</h3>
+            <p>Lower-bit formats reduce weight memory, but real artifacts can also store scales, metadata, and some modules at higher precision. Treat the bit-width result as an estimate and check the actual model artifact.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Does this calculator include KV cache memory?</h3>
+            <p>Not explicitly. Use inference headroom for early planning, then profile the exact architecture, context length, batch size, concurrency, and runtime before reserving hardware.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">The deployment behind the benchmark</p>
+          <h2 id="subscribe-title">Get the next AI infrastructure teardown.</h2>
+          <p>ResearchAudio turns model releases, hardware claims, and rate cards into practical decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=llm_gpu_memory_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../tools/">All tools</a>
+        <a href="../llm-api-cost-calculator/">LLM API cost calculator</a>
+        <a href="https://researchaudio.io/?utm_source=llm_gpu_memory_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script type="module" src="calculator.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>

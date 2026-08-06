@@ -6,6 +6,7 @@ import { calculateCost } from "../ai-cost-calculator/calculator.js";
 import { classifyLoop, controls } from "../agent-loop-diagnostic/diagnostic.js";
 import { calculateAgentRoi, classifyAgentRoi } from "../ai-agent-roi-calculator/calculator.js";
 import { calculateLlmApiCost } from "../llm-api-cost-calculator/calculator.js";
+import { calculateGpuMemory } from "../llm-gpu-memory-calculator/calculator.js";
 import { calculatePromptCacheSavings } from "../prompt-caching-calculator/calculator.js";
 import { buildCodexConfig, normalizeFallbackFiles, normalizeMaxBytes } from "../codex-config-generator/generator.js";
 import { calculateVoiceLatency, classifyVoiceLatency } from "../voice-ai-latency-calculator/calculator.js";
@@ -16,7 +17,7 @@ const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const brandedToolsOrigin = "https://tools.researchaudio.io";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -28,6 +29,8 @@ const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llm
   readFile(path.join(root, "ai-agent-roi-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "llm-api-cost-calculator/index.html"), "utf8"),
   readFile(path.join(root, "llm-api-cost-calculator/calculator.js"), "utf8"),
+  readFile(path.join(root, "llm-gpu-memory-calculator/index.html"), "utf8"),
+  readFile(path.join(root, "llm-gpu-memory-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "prompt-caching-calculator/index.html"), "utf8"),
   readFile(path.join(root, "prompt-caching-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "codex-config-generator/index.html"), "utf8"),
@@ -80,6 +83,7 @@ for (const [name, page, pathname] of [
   ["loop diagnostic", loopHtml, "/agent-loop-diagnostic/"],
   ["agent ROI calculator", roiHtml, "/ai-agent-roi-calculator/"],
   ["LLM API cost calculator", llmCostHtml, "/llm-api-cost-calculator/"],
+  ["LLM GPU memory calculator", gpuMemoryHtml, "/llm-gpu-memory-calculator/"],
   ["prompt caching calculator", promptCacheHtml, "/prompt-caching-calculator/"],
   ["Codex config generator", codexConfigHtml, "/codex-config-generator/"],
   ["voice AI latency calculator", voiceLatencyHtml, "/voice-ai-latency-calculator/"],
@@ -99,6 +103,7 @@ for (const [name, page] of [
   ["loop diagnostic", loopHtml],
   ["agent ROI calculator", roiHtml],
   ["LLM API cost calculator", llmCostHtml],
+  ["LLM GPU memory calculator", gpuMemoryHtml],
   ["prompt caching calculator", promptCacheHtml],
   ["Codex config generator", codexConfigHtml],
   ["voice AI latency calculator", voiceLatencyHtml],
@@ -115,6 +120,7 @@ for (const [name, page, title] of [
   ["loop diagnostic", loopHtml, "AI Agent Loop Diagnostic Checklist"],
   ["agent ROI calculator", roiHtml, "AI Agent ROI Calculator with Failure & Review"],
   ["LLM API cost calculator", llmCostHtml, "LLM API Cost Calculator (Input &amp; Output Tokens)"],
+  ["LLM GPU memory calculator", gpuMemoryHtml, "LLM GPU Memory Calculator (VRAM &amp; GPU Count)"],
   ["prompt caching calculator", promptCacheHtml, "Prompt Caching Cost Calculator &amp; Break-Even Hit Rate"],
   ["Codex config generator", codexConfigHtml, "Codex CLI config.toml Generator"],
   ["voice AI latency calculator", voiceLatencyHtml, "Voice AI Latency Calculator (Fast &amp; Slow Models)"],
@@ -149,6 +155,12 @@ for (const [name, page, questions] of [
     "Why are input and output tokens priced separately?",
     "How does prompt caching affect LLM cost?",
     "How do retries affect token cost?",
+  ]],
+  ["LLM GPU memory calculator", gpuMemoryHtml, [
+    "How much GPU memory does an LLM need?",
+    "How many GPUs does a 70B model need?",
+    "How does quantization change LLM VRAM?",
+    "Does this calculator include KV cache memory?",
   ]],
   ["prompt caching calculator", promptCacheHtml, [
     "How do you calculate prompt caching savings?",
@@ -189,6 +201,7 @@ assert.match(labCss, /\.result-join/);
 assert.match(labCss, /\.guide-section/);
 assert.match(labCss, /\.faq-item/);
 assert.match(labCss, /\.config-output/);
+assert.match(labCss, /\.subscribe-form-shell > div/);
 assert.match(css, /\.result-join/);
 assert.equal((loopHtml.match(/type="checkbox"/g) || []).length, 10, "expected ten loop controls");
 assert.equal(controls.length, 10, "diagnostic logic and markup should share ten controls");
@@ -280,6 +293,47 @@ assert.equal(retryHeavyLlmCost.totalCost, 3);
 assert.match(llmCostJs, /source: "llm_cost_share"/);
 assert.match(llmCostJs, /content: "shared_llm_cost_result"/);
 assert.match(llmCostHtml, /prompt-caching-calculator/);
+
+const defaultGpuMemory = calculateGpuMemory({
+  parameterBillions: 70,
+  bitsPerParameter: 4,
+  inferenceHeadroom: 20,
+  vramPerGpu: 24,
+  usableVramPercent: 90,
+  availableGpus: 2,
+});
+assert.ok(Math.abs(defaultGpuMemory.weightMemoryGiB - 32.5962901115) < 0.000001);
+assert.ok(Math.abs(defaultGpuMemory.planningTargetGiB - 39.1155481339) < 0.000001);
+assert.ok(Math.abs(defaultGpuMemory.usablePerGpuGiB - 21.6) < 0.000001);
+assert.equal(defaultGpuMemory.minimumGpus, 2);
+assert.equal(defaultGpuMemory.fitsAvailable, true);
+const fp16GpuMemory = calculateGpuMemory({
+  parameterBillions: 70,
+  bitsPerParameter: 16,
+  inferenceHeadroom: 20,
+  vramPerGpu: 80,
+  usableVramPercent: 90,
+  availableGpus: 2,
+});
+assert.equal(fp16GpuMemory.minimumGpus, 3);
+assert.equal(fp16GpuMemory.fitsAvailable, false);
+const emptyGpuMemory = calculateGpuMemory({
+  parameterBillions: -1,
+  bitsPerParameter: 3,
+  inferenceHeadroom: -10,
+  vramPerGpu: 0,
+  usableVramPercent: 200,
+  availableGpus: -2,
+});
+assert.equal(emptyGpuMemory.weightMemoryGiB, 0);
+assert.equal(emptyGpuMemory.minimumGpus, 0);
+assert.equal(emptyGpuMemory.bits, 4);
+assert.match(gpuMemoryJs, /source: "gpu_memory_share"/);
+assert.match(gpuMemoryJs, /content: "shared_gpu_memory_plan"/);
+assert.match(gpuMemoryHtml, /huggingface\.co\/docs\/accelerate\/en\/usage_guides\/model_size_estimator/);
+assert.match(gpuMemoryHtml, /understanding-gpu-architecture-technical-deep-dive/);
+assert.match(toolsHtml, /llm-gpu-memory-calculator/);
+assert.equal((toolsHtml.match(/class="tool-card"/g) || []).length, 9, "tools hub should contain nine instruments");
 
 const defaultPromptCache = calculatePromptCacheSavings({
   requestsPerMonth: 100000,
@@ -440,9 +494,9 @@ assert.match(starterJs, /utm_campaign", "ai_evidence_lab"/);
 assert.match(starterJs, /utm_medium"\) === "onboarding"/);
 assert.doesNotMatch(starterHtml, /TODO|PLACEHOLDER|example\.com/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 11, "sitemap should contain all eleven crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 12, "sitemap should contain all twelve crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 11, "sitemap should publish eleven URL locations");
+assert.equal(sitemapUrls.length, 12, "sitemap should publish twelve URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -450,6 +504,7 @@ assert.match(llms, /AI Cost per Successful Task Calculator/);
 assert.match(llms, /AI Agent Loop Diagnostic/);
 assert.match(llms, /AI Agent ROI Calculator/);
 assert.match(llms, /LLM API Cost Calculator/);
+assert.match(llms, /LLM GPU Memory Calculator/);
 assert.match(llms, /Prompt Caching Cost Calculator/);
 assert.match(llms, /Codex CLI config\.toml Generator/);
 assert.match(llms, /Voice AI Latency Calculator/);
@@ -469,4 +524,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 8 tools, 1 activation kit, 1 field guide, 11 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 9 tools, 1 activation kit, 1 field guide, 12 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

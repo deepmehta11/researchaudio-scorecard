@@ -256,6 +256,10 @@ h2 {
   background: #c6e3dd;
 }
 
+.tool-card:nth-child(9) {
+  background: #ffd5ea;
+}
+
 .tool-card:hover {
   box-shadow: 3px 3px 0 var(--ink);
   transform: translate(5px, 5px);
@@ -1206,6 +1210,18 @@ h2 {
     padding-bottom: 76px;
   }
 
+  .subscribe-form-shell {
+    min-height: 304px;
+    overflow: hidden;
+  }
+
+  .subscribe-form-shell > div {
+    width: 430px !important;
+    max-width: none !important;
+    transform: scale(0.84);
+    transform-origin: top left;
+  }
+
   .tool-card {
     min-height: 310px;
   }
@@ -1273,6 +1289,16 @@ h2 {
   .footer-links {
     align-items: flex-start;
     flex-direction: column;
+  }
+}
+
+@media (max-width: 360px) {
+  .subscribe-form-shell {
+    min-height: 260px;
+  }
+
+  .subscribe-form-shell > div {
+    transform: scale(0.68);
   }
 }
 
