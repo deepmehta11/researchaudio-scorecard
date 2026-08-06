@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Voice Agent Cost Calculator (Cost per Resolved Call) | ResearchAudio</title>
+    <meta name="description" content="Calculate AI voice agent cost per resolved call across platform, telephony, STT, TTS, LLM, fixed fees, resolution rate, and human handoffs." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/voice-ai-cost-calculator/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What does each resolved voice AI call actually cost?" />
+    <meta property="og:description" content="A free outcome-level cost calculator for voice AI agents, including failed resolutions and human handoffs." />
+    <meta property="og:url" content="https://tools.researchaudio.io/voice-ai-cost-calculator/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "AI Voice Agent Cost Calculator",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Any",
+        "url": "https://tools.researchaudio.io/voice-ai-cost-calculator/",
+        "description": "A free calculator for modeling loaded voice AI cost per call and per AI-resolved call, including human handoff costs.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do you calculate AI voice agent cost?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Add the per-minute platform, telephony, speech-to-text, text-to-speech, and language-model costs. Multiply that stack rate by connected minutes, add fixed fees, and include human work for calls the AI does not resolve."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is cost per resolved call?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Loaded cost per AI-resolved call divides total voice AI and human handoff spending by the calls the AI resolves without a handoff. It exposes the cost of failed or incomplete calls that a simple per-minute quote hides."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why does resolution rate change voice AI economics?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You pay the voice stack for every connected call, but only resolved calls create the intended automated outcome. Lower resolution also creates more human handoffs, so both the numerator rises and the useful outcome count falls."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which fees belong in a voice AI cost model?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Include orchestration or platform charges, telephony, speech recognition, language-model usage, speech synthesis, fixed subscriptions, phone numbers, and human work for escalations. Use your current invoices or provider rate cards."
+            }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#voice-cost-calculator">Skip to the voice AI cost calculator</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=voice_ai_cost_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=voice_ai_cost_calculator&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=voice_ai_cost_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=voice_ai_cost_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Instrument 10 / voice economics</p>
+          <h1 id="hero-title">Stop comparing voice agents by price per minute.</h1>
+          <p class="hero-deck">Model the loaded cost of every AI-resolved call after the voice stack, fixed fees, failed resolutions, and human handoffs.</p>
+        </div>
+        <aside class="lab-index" aria-label="Voice AI cost model scope">
+          <span>Cost inputs</span>
+          <strong>12</strong>
+          <p>Vendor-neutral. Replace every example rate with the numbers from your own invoices or current provider quotes.</p>
+        </aside>
+      </section>
+
+      <section class="instrument-shell" id="voice-cost-calculator" aria-labelledby="calculator-title">
+        <div class="instrument-intro">
+          <div>
+            <p class="eyebrow">Model one production month</p>
+            <h2 id="calculator-title">Price the outcome, not the demo.</h2>
+          </div>
+          <p>The defaults are an illustrative stack, not a vendor quote. Nothing is submitted or stored; every calculation runs in this browser.</p>
+        </div>
+
+        <div class="calculator-layout">
+          <form class="input-panel" id="voice-cost-form">
+            <p class="input-section-label">Traffic and stack</p>
+            <label class="input-card" for="calls-per-month">
+              <span class="field-copy"><strong>Calls per month</strong><small>Connected calls that incur usage cost.</small></span>
+              <span class="number-field suffix"><span>calls</span><input id="calls-per-month" name="callsPerMonth" type="number" min="0" max="100000000" step="100" value="5000" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="minutes-per-call">
+              <span class="field-copy"><strong>Average call length</strong><small>Connected minutes across successful and failed calls.</small></span>
+              <span class="number-field suffix"><span>min</span><input id="minutes-per-call" name="minutesPerCall" type="number" min="0" max="1440" step="0.1" value="4" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="platform-per-minute">
+              <span class="field-copy"><strong>Platform / orchestration</strong><small>Agent platform or realtime orchestration rate.</small></span>
+              <span class="number-field"><span>$</span><input id="platform-per-minute" name="platformPerMinute" type="number" min="0" max="1000" step="0.001" value="0.05" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="telephony-per-minute">
+              <span class="field-copy"><strong>Telephony</strong><small>Inbound, outbound, SIP, or WebRTC transport per minute.</small></span>
+              <span class="number-field"><span>$</span><input id="telephony-per-minute" name="telephonyPerMinute" type="number" min="0" max="1000" step="0.001" value="0.014" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="stt-per-minute">
+              <span class="field-copy"><strong>Speech to text</strong><small>Streaming transcription converted to a per-minute rate.</small></span>
+              <span class="number-field"><span>$</span><input id="stt-per-minute" name="sttPerMinute" type="number" min="0" max="1000" step="0.001" value="0.006" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="tts-per-minute">
+              <span class="field-copy"><strong>Text to speech</strong><small>Convert character or token billing to talk-minute cost.</small></span>
+              <span class="number-field"><span>$</span><input id="tts-per-minute" name="ttsPerMinute" type="number" min="0" max="1000" step="0.001" value="0.03" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="llm-per-minute">
+              <span class="field-copy"><strong>LLM usage</strong><small>Average model cost per connected conversation minute.</small></span>
+              <span class="number-field"><span>$</span><input id="llm-per-minute" name="llmPerMinute" type="number" min="0" max="1000" step="0.001" value="0.005" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="fixed-monthly-cost">
+              <span class="field-copy"><strong>Fixed monthly cost</strong><small>Subscriptions, numbers, support, and reserved capacity.</small></span>
+              <span class="number-field"><span>$</span><input id="fixed-monthly-cost" name="fixedMonthlyCost" type="number" min="0" max="100000000" step="10" value="200" inputmode="decimal" /></span>
+            </label>
+
+            <p class="input-section-label">Outcome and handoff</p>
+            <label class="input-card" for="resolution-rate">
+              <span class="field-copy"><strong>AI resolution rate</strong><small>Calls completed correctly without a human handoff.</small></span>
+              <span class="number-field suffix"><span>%</span><input id="resolution-rate" name="resolutionRate" type="number" min="0" max="100" step="1" value="70" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="handoff-minutes">
+              <span class="field-copy"><strong>Human time per unresolved call</strong><small>Escalation, cleanup, and repeat-contact work.</small></span>
+              <span class="number-field suffix"><span>min</span><input id="handoff-minutes" name="handoffMinutes" type="number" min="0" max="1440" step="0.5" value="6" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="human-hourly-cost">
+              <span class="field-copy"><strong>Loaded human hourly cost</strong><small>Wages plus benefits, management, tools, and overhead.</small></span>
+              <span class="number-field"><span>$</span><input id="human-hourly-cost" name="humanHourlyCost" type="number" min="0" max="100000" step="1" value="30" inputmode="decimal" /></span>
+            </label>
+            <label class="input-card" for="human-cost-per-call">
+              <span class="field-copy"><strong>Current human cost per resolved call</strong><small>Your all-in baseline for the same call type.</small></span>
+              <span class="number-field"><span>$</span><input id="human-cost-per-call" name="humanCostPerCall" type="number" min="0" max="100000" step="0.1" value="4" inputmode="decimal" /></span>
+            </label>
+          </form>
+
+          <aside class="result-console" aria-live="polite" aria-labelledby="result-title">
+            <div class="tool-status"><span>Outcome economics</span><b id="voice-cost-status">MODELED</b></div>
+            <p class="primary-result"><span id="cost-per-resolution">$0.00</span></p>
+            <p class="result-label" id="result-title">Loaded cost per AI-resolved call</p>
+            <div class="result-grid">
+              <div><span>Monthly spend</span><strong id="loaded-monthly-cost">$0</strong></div>
+              <div><span>Stack / minute</span><strong id="stack-cost-minute">$0.000</strong></div>
+              <div><span>AI cost / call</span><strong id="ai-cost-call">$0.000</strong></div>
+              <div><span>AI resolutions</span><strong id="resolved-calls">0</strong></div>
+              <div><span>Human handoffs</span><strong id="handoff-cost">$0</strong></div>
+              <div><span>Savings vs baseline</span><strong id="monthly-savings">$0</strong></div>
+            </div>
+            <p class="result-note" id="voice-cost-note">Enter your actual stack and outcome data.</p>
+            <button class="action-button" id="share-voice-cost" type="button">Share this exact cost model</button>
+            <button class="secondary-button" id="reset-voice-cost" type="button">Restore example stack</button>
+            <p class="share-status" id="share-status" role="status"></p>
+            <div class="result-join">
+              <span>Daily evidence brief · 52,000+ readers</span>
+              <a href="https://researchaudio.io/subscribe?utm_source=voice_ai_cost_calculator&amp;utm_medium=tool_result&amp;utm_campaign=ai_evidence_lab&amp;utm_content=result_join">Get the next voice AI teardown →</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="Voice AI cost interpretation">
+        <p class="eyebrow">Read the economics</p>
+        <p><strong>Every minute has layers.</strong><br />Platform, transport, speech, and model costs compound.</p>
+        <p><strong>Failure hits twice.</strong><br />You paid for the call and still need a person to finish it.</p>
+        <p><strong>Price the outcome.</strong><br />A cheap minute can produce an expensive resolution.</p>
+      </section>
+
+      <section class="method-section" aria-labelledby="method-title">
+        <div>
+          <p class="eyebrow">Transparent method</p>
+          <h2 id="method-title">What this voice AI cost calculator computes.</h2>
+        </div>
+        <div class="method-copy">
+          <p><strong>Voice stack cost</strong> adds the user-supplied platform, telephony, STT, TTS, and LLM rates. Monthly AI cost is that rate multiplied by connected minutes, plus fixed monthly fees.</p>
+          <p><strong>Failure burden</strong> is unresolved calls multiplied by human cleanup time and loaded hourly cost. This makes handoffs visible instead of treating them as free.</p>
+          <p><strong>Loaded cost per AI-resolved call</strong> divides total AI and handoff spend by calls resolved without a human. It is deliberately stricter than cost per minute or cost per attempted call.</p>
+          <p><strong>Break-even resolution</strong> solves for the AI resolution rate at which loaded cost per AI-resolved call equals the stated human baseline. Validate resolution correctness, repeat contacts, abandonment, and customer outcomes before treating containment as success.</p>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="voice-cost-guide-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Voice economics guide</p>
+          <h2 id="voice-cost-guide-title">Use invoices and measured outcomes, not a vendor headline.</h2>
+          <p>Rates change by provider, plan, region, direction, model, and volume. Replace the example values with current quotes or invoices, and use a verified resolution rate for the same call type.</p>
+          <a class="guide-link" href="../voice-ai-latency-calculator/?utm_source=voice_ai_cost_calculator&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latency_tool">Model the latency of the same voice stack →</a>
+          <a class="guide-link" href="https://researchaudio.io/p/voice-ai-latency-budget-guide?utm_source=voice_ai_cost_calculator&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=guide_link">Read ResearchAudio's voice AI architecture guide →</a>
+          <a class="guide-link" href="https://www.twilio.com/en-us/voice/pricing/us">Check current Twilio Voice pricing →</a>
+          <a class="guide-link" href="https://elevenlabs.io/pricing">Check current ElevenLabs pricing →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item">
+            <h3>How do you calculate AI voice agent cost?</h3>
+            <p>Add platform, telephony, speech-to-text, text-to-speech, and model cost per minute. Multiply by connected minutes, add fixed fees, then add the human work created by unresolved calls.</p>
+          </article>
+          <article class="faq-item">
+            <h3>What is cost per resolved call?</h3>
+            <p>This calculator divides all voice AI and handoff spend by calls the AI resolves without a person. That exposes paid attempts that fail, transfer, or create cleanup work.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Why does resolution rate change voice AI economics?</h3>
+            <p>A lower resolution rate means fewer successful outcomes from the same usage bill and more human escalations. The denominator shrinks while the failure burden grows.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Which fees belong in a voice AI cost model?</h3>
+            <p>Include orchestration, transport, STT, LLM, TTS, fixed subscriptions, phone numbers, capacity, support, and human escalation. Use current invoices or provider rate cards because pricing changes.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Unit economics without the sales deck</p>
+          <h2 id="subscribe-title">Get the next voice AI teardown.</h2>
+          <p>ResearchAudio turns architecture, pricing, and outcome claims into practical decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=voice_ai_cost_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../tools/">All tools</a>
+        <a href="../voice-ai-latency-calculator/">Voice AI latency calculator</a>
+        <a href="https://researchaudio.io/?utm_source=voice_ai_cost_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script type="module" src="calculator.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>

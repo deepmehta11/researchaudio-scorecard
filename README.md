@@ -1,6 +1,6 @@
 # ResearchAudio Evidence Lab
 
-An evergreen acquisition ecosystem for ResearchAudio. Eight browser-local tools turn AI launch claims, token budgets, voice latency, cache economics, workflow economics, agent reliability, automation business cases, and Codex configuration into concrete inspections before inviting visitors into the daily briefing.
+An evergreen acquisition ecosystem for ResearchAudio. Ten browser-local tools turn AI launch claims, token budgets, voice latency and outcome economics, GPU sizing, cache economics, workflow economics, agent reliability, automation business cases, and Codex configuration into concrete inspections before inviting visitors into the daily briefing.
 
 Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain connected to the Beehiiv publication at `https://researchaudio.io/`.
 
@@ -14,6 +14,8 @@ Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain con
 - `/prompt-caching-calculator/` — cache-read and cache-write economics with a break-even hit-rate calculation.
 - `/codex-config-generator/` — copy-ready Codex CLI project document fallbacks and instruction byte limits.
 - `/voice-ai-latency-calculator/` — first-audio latency across endpointing, transcription, parallel fast and slow model branches, TTS, and playout.
+- `/voice-ai-cost-calculator/` — loaded cost per AI-resolved call after platform, telephony, STT, TTS, LLM, fixed fees, and human handoffs.
+- `/llm-gpu-memory-calculator/` — model-weight VRAM, configurable headroom, usable memory, and minimum GPU count.
 - `/evidence-starter-kit/` — post-signup activation, four-tool progress, referral reward explanation, and attributed sharing.
 - `/tools/` — crawlable, interlinked Evidence Lab hub.
 
@@ -27,7 +29,8 @@ Every main-branch deployment also verifies the site and submits all sitemap URLs
 
 - Primary metric: new active subscribers attributed to `utm_campaign=ai_evidence_lab` or the legacy `ai_launch_scorecard` launch-instrument campaign.
 - Supporting metrics: qualified visits, scorecard completion rate, subscribe conversion rate, and shared-score visits.
-- Target model: 400 qualified visits per day at 25% conversion yields 100 subscribers per day. This is a traffic and conversion target, not a launch-day guarantee.
+- Target model: ResearchAudio does not yet have an observed organic signup rate. At a 3% planning assumption, 100 subscribers per day requires about 3,333 qualified visits per day; replace the assumption as soon as measured conversion data exists.
+- Stage gates: first 10 attributable organic signups, then a stable page-level conversion rate, then 25 per day, then 100 per day. Page launches and visits do not count as subscriber outcomes.
 - Source contract: every distributed URL must include `utm_source`, `utm_medium`, `utm_campaign=ai_evidence_lab`, and a meaningful `utm_content` value.
 - Subscriber system of record: Beehiiv publication `ResearchAudio` and form `AI Launch Evidence Scorecard — web acquisition`.
 

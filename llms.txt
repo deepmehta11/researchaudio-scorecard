@@ -20,6 +20,8 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Generates project_doc_fallback_filenames and project_doc_max_bytes settings while explaining the AGENTS.md resolution order.
 - Voice AI Latency Calculator: https://tools.researchaudio.io/voice-ai-latency-calculator/
   Estimates time to first audio across endpoint detection, transcript finalization, parallel fast and slow model branches, text-to-speech, and playout.
+- AI Voice Agent Cost Calculator: https://tools.researchaudio.io/voice-ai-cost-calculator/
+  Calculates loaded cost per AI-resolved call across platform, telephony, STT, TTS, LLM, fixed fees, failed resolutions, and human handoffs.
 - LLM GPU Memory Calculator: https://tools.researchaudio.io/llm-gpu-memory-calculator/
   Estimates model-weight VRAM, configurable inference headroom, usable memory per GPU, and minimum GPU count from parameter count and weight precision.
 - AI Evidence Starter Kit: https://tools.researchaudio.io/evidence-starter-kit/

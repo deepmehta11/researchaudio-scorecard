@@ -260,6 +260,10 @@ h2 {
   background: #ffd5ea;
 }
 
+.tool-card:nth-child(10) {
+  background: #d8e8ff;
+}
+
 .tool-card:hover {
   box-shadow: 3px 3px 0 var(--ink);
   transform: translate(5px, 5px);
@@ -350,6 +354,18 @@ h2 {
 .diagnostic-list {
   display: grid;
   gap: 14px;
+}
+
+.input-section-label {
+  margin: 18px 0 0;
+  color: var(--blue);
+  font: 600 0.78rem/1.3 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.input-section-label:first-child {
+  margin-top: 0;
 }
 
 .input-card {
