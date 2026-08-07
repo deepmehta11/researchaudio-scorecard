@@ -26,7 +26,7 @@ const brandedToolsOrigin = "https://tools.researchaudio.io";
 const cloudflareWebAnalyticsToken = "c20a9e29828c471c92ed7c2284901e05";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, kimiK3GuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -58,6 +58,7 @@ const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, cost
   readFile(path.join(root, "gpt-oss-hardware-requirements/index.html"), "utf8"),
   readFile(path.join(root, "deepseek-v4-flash-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "glm-5-2-gpu-requirements/index.html"), "utf8"),
+  readFile(path.join(root, "kimi-k3-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-security-checklist/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-security-checklist/checklist.js"), "utf8"),
   readFile(path.join(root, "ai-benchmark-audit-checklist/index.html"), "utf8"),
@@ -144,6 +145,7 @@ for (const [name, page, pathname] of [
   ["gpt-oss hardware requirements guide", gptOssGuideHtml, "/gpt-oss-hardware-requirements/"],
   ["DeepSeek V4 Flash GPU requirements guide", deepseekV4GuideHtml, "/deepseek-v4-flash-gpu-requirements/"],
   ["GLM-5.2 GPU requirements guide", glm52GuideHtml, "/glm-5-2-gpu-requirements/"],
+  ["Kimi K3 GPU requirements guide", kimiK3GuideHtml, "/kimi-k3-gpu-requirements/"],
   ["AI agent security checklist", securityGuideHtml, "/ai-agent-security-checklist/"],
   ["AI benchmark audit checklist", benchmarkGuideHtml, "/ai-benchmark-audit-checklist/"],
   ["starter kit", starterHtml, "/evidence-starter-kit/"],
@@ -345,6 +347,34 @@ for (const question of [
   const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   assert.match(glm52GuideHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `GLM-5.2 visible FAQ question missing: ${question}`);
   assert.match(glm52GuideHtml, new RegExp(`"name": "${escapedQuestion}"`), `GLM-5.2 FAQ schema question missing: ${question}`);
+}
+
+assert.match(kimiK3GuideHtml, /<title>Kimi K3 GPU Requirements: 1\.56 TB, 64\+ Accelerators \| ResearchAudio<\/title>/);
+assert.equal((kimiK3GuideHtml.match(/"@type": "TechArticle"/g) || []).length, 1, "Kimi K3 guide should have one TechArticle schema");
+assert.equal((kimiK3GuideHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "Kimi K3 guide should have one FAQPage schema");
+assert.doesNotThrow(() => parseStructuredData(kimiK3GuideHtml), "Kimi K3 guide structured data must be valid JSON");
+assert.match(kimiK3GuideHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=kimi_k3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab/);
+assert.match(kimiK3GuideHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
+assert.match(kimiK3GuideHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
+assert.match(kimiK3GuideHtml, /utm_content=direct_join/);
+assert.match(kimiK3GuideHtml, /subscribe-direct-fallback/);
+assert.equal((kimiK3GuideHtml.match(/class="scenario-card/g) || []).length, 4, "Kimi K3 guide should contain four deployment scenarios");
+assert.match(kimiK3GuideHtml, /parameterBillions=2800/);
+assert.match(kimiK3GuideHtml, /checkpointGiB=1453\.74/);
+assert.match(kimiK3GuideHtml, /1,560,936,091,448 bytes/);
+assert.match(kimiK3GuideHtml, /huggingface\.co\/moonshotai\/Kimi-K3/);
+assert.match(kimiK3GuideHtml, /kimi\.com\/blog\/kimi-k3/);
+assert.doesNotMatch(kimiK3GuideHtml, /TODO|PLACEHOLDER|example\.com/);
+for (const question of [
+  "How much GPU memory does Kimi K3 need?",
+  "Can Kimi K3 run on eight H200 GPUs?",
+  "What is the minimum H200 count for Kimi K3?",
+  "Why does Moonshot recommend 64 or more accelerators for Kimi K3?",
+  "Does Kimi K3 support a one-million-token context window?",
+]) {
+  const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  assert.match(kimiK3GuideHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `Kimi K3 visible FAQ question missing: ${question}`);
+  assert.match(kimiK3GuideHtml, new RegExp(`"name": "${escapedQuestion}"`), `Kimi K3 FAQ schema question missing: ${question}`);
 }
 
 for (const [name, page] of [
@@ -878,6 +908,30 @@ for (const scenario of [
   assert.equal(result.minimumGpus, scenario.minimum, `GLM-5.2 ${scenario.name} minimum GPU count should match the guide`);
   assert.equal(result.fitsAvailable, scenario.fits, `GLM-5.2 ${scenario.name} fit state should match the guide`);
 }
+for (const scenario of [
+  { name: "artifact on 8xH200", headroom: 0, gpus: 8, target: 1453.74, minimum: 12, fits: false },
+  { name: "artifact on 12xH200", headroom: 0, gpus: 12, target: 1453.74, minimum: 12, fits: true },
+  { name: "reserved floor on 16xH200", headroom: 20, gpus: 16, target: 1744.49, minimum: 14, fits: true },
+]) {
+  const result = calculateGpuMemory({
+    parameterBillions: 2800,
+    bitsPerParameter: 4,
+    checkpointGiB: 1453.74,
+    layers: 0,
+    kvHeads: 0,
+    headDimension: 0,
+    contextTokens: 0,
+    concurrentSequences: 1,
+    kvCacheBits: 8,
+    inferenceHeadroom: scenario.headroom,
+    vramPerGpu: 141,
+    usableVramPercent: 90,
+    availableGpus: scenario.gpus,
+  });
+  assert.equal(Number(result.planningTargetGiB.toFixed(2)), scenario.target, `Kimi K3 ${scenario.name} target should match the guide`);
+  assert.equal(result.minimumGpus, scenario.minimum, `Kimi K3 ${scenario.name} minimum GPU count should match the guide`);
+  assert.equal(result.fitsAvailable, scenario.fits, `Kimi K3 ${scenario.name} fit state should match the guide`);
+}
 assert.match(gpuMemoryHtml, /name="layers"/);
 assert.match(gpuMemoryHtml, /name="kvHeads"/);
 assert.match(gpuMemoryHtml, /name="headDimension"/);
@@ -888,6 +942,7 @@ assert.match(gpuMemoryHtml, /70b-llm-gpu-requirements/);
 assert.match(gpuMemoryHtml, /qwen3-gpu-requirements/);
 assert.match(gpuMemoryHtml, /deepseek-v4-flash-gpu-requirements/);
 assert.match(gpuMemoryHtml, /glm-5-2-gpu-requirements/);
+assert.match(gpuMemoryHtml, /kimi-k3-gpu-requirements/);
 assert.match(gpuGuideHtml, /51\.1 GiB/);
 assert.match(gpuGuideHtml, /90\.2 GiB/);
 assert.match(gpuGuideHtml, /168\.5 GiB/);
@@ -1315,12 +1370,13 @@ assert.match(voiceCostHtml, /elevenlabs\.io\/pricing/);
 assert.match(toolsHtml, /voice-ai-cost-calculator/);
 assert.match(toolsHtml, /voice-ai-cost-per-minute/);
 assert.match(toolsHtml, /ai-receptionist-cost/);
-assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 10, "tools hub should contain ten search field notes");
+assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 11, "tools hub should contain eleven search field notes");
 assert.match(toolsHtml, /7b-vs-13b-llm-gpu-requirements/);
 assert.match(toolsHtml, /70b-llm-gpu-requirements/);
 assert.match(toolsHtml, /qwen2-5-gpu-requirements/);
 assert.match(toolsHtml, /qwen3-gpu-requirements/);
 assert.match(toolsHtml, /deepseek-v4-flash-gpu-requirements/);
+assert.match(toolsHtml, /kimi-k3-gpu-requirements/);
 assert.match(toolsHtml, /gpt-oss-hardware-requirements/);
 assert.match(toolsHtml, /ai-agent-security-checklist/);
 assert.match(toolsHtml, /ai-benchmark-audit-checklist/);
@@ -1501,10 +1557,14 @@ assert.match(toolsHtml, /GLM-5\.2 GPU requirements/);
 assert.match(glm52GuideHtml, /SHORT 127\.74 GiB/);
 assert.match(glm52GuideHtml, /844\.49 GiB floor/);
 assert.match(glm52GuideHtml, /1,683\.83 GiB/);
+assert.match(toolsHtml, /Kimi K3 GPU requirements/);
+assert.match(kimiK3GuideHtml, /SHORT 438\.54 GiB/);
+assert.match(kimiK3GuideHtml, /69\.06 GiB remains/);
+assert.match(kimiK3GuideHtml, /1,744\.49 GiB target/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 30, "sitemap should contain all thirty crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 31, "sitemap should contain all thirty-one crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 30, "sitemap should publish thirty URL locations");
+assert.equal(sitemapUrls.length, 31, "sitemap should publish thirty-one URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -1523,6 +1583,7 @@ assert.match(llms, /Voice AI Latency Calculator/);
 assert.match(llms, /AI Voice Agent Cost Calculator/);
 assert.match(llms, /AI Evidence Starter Kit/);
 assert.match(llms, /Embeddable AI Tools/);
+assert.match(llms, /Kimi K3 GPU Requirements/);
 assert.match(llms, /The Fable 5 Cost Playbook/);
 assert.match(llms, /Voice AI Cost per Minute/);
 assert.match(llms, /AI Receptionist Cost Worksheet/);
@@ -1549,4 +1610,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 16 tools, 1 activation kit, 1 embed library, 10 field guides, 30 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 16 tools, 1 activation kit, 1 embed library, 11 field guides, 31 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

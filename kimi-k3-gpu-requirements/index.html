@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kimi K3 GPU Requirements: 1.56 TB, 64+ Accelerators | ResearchAudio</title>
+    <meta name="description" content="Size Kimi K3 from its official 1,453.74 GiB MXFP4 checkpoint, test 8× and 12× H200 weight floors, and separate memory fit from Moonshot's 64+ accelerator recommendation." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/kimi-k3-gpu-requirements/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Kimi K3 GPU requirements: 1.56 TB and 64+ accelerators" />
+    <meta property="og:description" content="Separate Kimi K3's exact 96-file checkpoint, raw GPU memory floor, runtime reserve, one-million-token context, and official supernode guidance." />
+    <meta property="og:url" content="https://tools.researchaudio.io/kimi-k3-gpu-requirements/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "Kimi K3 GPU Requirements and MXFP4 Memory Planning",
+        "description": "A primary-source deployment worksheet covering Kimi K3's official MXFP4 checkpoint, 2.8T total and 104B activated parameters, one-million-token context, raw H200 and B200 memory floors, and Moonshot's 64-plus-accelerator recommendation.",
+        "datePublished": "2026-08-07",
+        "dateModified": "2026-08-07",
+        "mainEntityOfPage": "https://tools.researchaudio.io/kimi-k3-gpu-requirements/",
+        "author": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How much GPU memory does Kimi K3 need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The official Kimi K3 repository contains 96 safetensors files totaling 1,560,936,091,448 bytes, or 1,453.74 GiB, before runtime workspace and context memory. Moonshot separately recommends a supernode configuration with 64 or more accelerators for inference efficiency." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can Kimi K3 run on eight H200 GPUs?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No straightforward full-checkpoint plan fits. Eight 141 GiB-class H200 GPUs provide 1,128 GiB of physical memory, 325.74 GiB less than the official weight files alone. At a 90 percent planning limit, the shortfall is 438.54 GiB." }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the minimum H200 count for Kimi K3?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Artifact-only arithmetic reaches the 1,453.74 GiB checkpoint at 12 H200-class GPUs when 90 percent of each 141 GiB device is treated as usable. That leaves only 69.06 GiB for everything beyond weights and is not an official or production-ready topology." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why does Moonshot recommend 64 or more accelerators for Kimi K3?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Kimi K3 activates 16 of 896 experts and depends on large high-bandwidth communication domains. Moonshot says inference efficiency benefits from supernode configurations with 64 or more accelerators. This is a serving and communication recommendation, not merely the minimum count that can hold the weight files." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does Kimi K3 support a one-million-token context window?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. The official model card lists a 1,048,576-token context window. Actual context and concurrency fit still require runtime measurement because Kimi Delta Attention and Gated MLA do not reduce to a portable dense KV-head formula." }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#kimi-k3-scenarios">Skip to the Kimi K3 GPU scenarios</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=kimi_k3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=kimi_k3_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=kimi_k3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=kimi_k3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Kimi K3 / MXFP4 deployment worksheet</p>
+          <h1 id="hero-title">1.56 TB of weights. 64+ accelerators.</h1>
+          <p class="hero-deck">Moonshot's official checkpoint spans 96 weight files and 1,453.74 GiB. Twelve H200-class GPUs only clear that artifact floor; the official serving recommendation is a 64-plus-accelerator supernode.</p>
+          <a class="hero-join-link" href="../llm-gpu-memory-calculator/?parameterBillions=2800&amp;bitsPerParameter=4&amp;checkpointGiB=1453.74&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=8&amp;inferenceHeadroom=20&amp;vramPerGpu=141&amp;usableVramPercent=90&amp;availableGpus=16&amp;utm_source=kimi_k3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_16xh200_plan">Open the editable 16 × H200 weight plan →</a>
+        </div>
+        <aside class="lab-index" aria-label="Kimi K3 checkpoint scope">
+          <span>Official weight files</span>
+          <strong>96</strong>
+          <p>1,560,936,091,448 bytes: 1,453.74 GiB before runtime workspace, context memory, and serving reserve.</p>
+        </aside>
+      </section>
+
+      <section class="scenario-section" id="kimi-k3-scenarios" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">Quick answer / memory floors</p>
+          <h2 id="scenario-title">Eight H200s do not hold the checkpoint. Twelve barely clear the files.</h2>
+          <p>These cards test resident-weight arithmetic only. They deliberately do not turn an artifact fit into a supported deployment claim. Moonshot's 64-plus recommendation addresses expert-parallel communication and inference efficiency at a different layer.</p>
+        </div>
+        <div class="scenario-grid guide-scenario-grid">
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=2800&amp;bitsPerParameter=4&amp;checkpointGiB=1453.74&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=8&amp;inferenceHeadroom=0&amp;vramPerGpu=141&amp;usableVramPercent=90&amp;availableGpus=8&amp;utm_source=kimi_k3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=8xh200_shortfall">
+            <span>Artifact · 8 × H200</span>
+            <strong>SHORT 438.54 GiB</strong>
+            <small>1,015.20 GiB usable vs 1,453.74 GiB files →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=2800&amp;bitsPerParameter=4&amp;checkpointGiB=1453.74&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=8&amp;inferenceHeadroom=0&amp;vramPerGpu=141&amp;usableVramPercent=90&amp;availableGpus=12&amp;utm_source=kimi_k3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=12xh200_raw_floor">
+            <span>Raw floor · 12 × H200</span>
+            <strong>69.06 GiB remains</strong>
+            <small>Artifact fits; practical serving reserve does not →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=2800&amp;bitsPerParameter=4&amp;checkpointGiB=1453.74&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=8&amp;inferenceHeadroom=20&amp;vramPerGpu=141&amp;usableVramPercent=90&amp;availableGpus=16&amp;utm_source=kimi_k3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=16xh200_reserved_floor">
+            <span>Reserved floor · 16 × H200</span>
+            <strong>1,744.49 GiB target</strong>
+            <small>Artifact + 20% reserve; context memory excluded →</small>
+          </a>
+          <a class="scenario-card" href="https://www.kimi.com/blog/kimi-k3">
+            <span>Official serving guidance</span>
+            <strong>64+ accelerators</strong>
+            <small>Supernode recommendation for inference efficiency →</small>
+          </a>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="matrix-title">
+        <div class="comparison-heading">
+          <div>
+            <p class="eyebrow">Artifact vs architecture</p>
+            <h2 id="matrix-title">The files prove memory. The architecture explains the cluster.</h2>
+          </div>
+          <p>The repository establishes what must be loaded. The model card establishes how little of the sparse model is active per token. Moonshot's release note establishes the communication domain it recommends for efficient serving.</p>
+        </div>
+        <p class="comparison-scroll-hint">Swipe the matrix horizontally →</p>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead>
+              <tr><th scope="col">Input</th><th scope="col">Official value</th><th scope="col">What it changes</th><th scope="col">What it does not prove</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Checkpoint</th><td>1,453.74 GiB · 96 files</td><td>Resident-weight floor</td><td>Runtime or cache allocation</td></tr>
+              <tr><th scope="row">Total / active</th><td>2.8T / 104B parameters</td><td>Storage vs per-token compute</td><td>Single-node feasibility</td></tr>
+              <tr><th scope="row">Expert routing</th><td>16 of 896 + 2 shared</td><td>Communication and sparse compute</td><td>Low interconnect cost</td></tr>
+              <tr><th scope="row">Attention stack</th><td>69 KDA + 24 Gated MLA layers</td><td>Context-state layout</td><td>Portable dense KV-cache math</td></tr>
+              <tr><th scope="row">Native context</th><td>1,048,576 tokens</td><td>Maximum advertised window</td><td>Concurrent full-window capacity</td></tr>
+              <tr><th scope="row">Official recommendation</th><td>64+ accelerators</td><td>High-bandwidth serving domain</td><td>A universal minimum GPU count</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">Artifact totals were calculated from the official Hugging Face repository's 96 safetensors file sizes on August 7, 2026. Recheck the inventory and model card after runtime or checkpoint revisions.</p>
+      </section>
+
+      <section class="principle-strip" aria-label="Kimi K3 deployment boundaries">
+        <p class="eyebrow">Read the estimate</p>
+        <p><strong>Active is not resident.</strong><br />Only 104B parameters activate per token, but the 2.8T model still has to be stored and routed.</p>
+        <p><strong>Twelve H200s is only math.</strong><br />It leaves about 69 GiB beyond the files and is not Moonshot's supported topology.</p>
+        <p><strong>One million tokens is runtime state.</strong><br />Measure KDA and Gated MLA cache behavior under your actual concurrency.</p>
+      </section>
+
+      <section class="method-section" aria-labelledby="context-title">
+        <div>
+          <p class="eyebrow">Context and cache boundary</p>
+          <h2 id="context-title">A one-million-token window does not come free with the weights.</h2>
+        </div>
+        <div class="method-copy formula-copy">
+          <p><strong>Official configuration</strong><br /><code>93 layers · 1,048,576 context</code></p>
+          <p><strong>Sparse model</strong><br /><code>896 experts · 16 selected · 2 shared</code></p>
+          <p><strong>Native quantization</strong><br /><code>MXFP4 weights · MXFP8 activations</code></p>
+          <p>The calculator links use the exact checkpoint as the weight input and leave cache at zero. Kimi K3 combines KDA and Gated MLA, so a familiar dense <code>2 × layers × KV heads × head dimension</code> estimate would manufacture false precision. Validate context length, batch size, and prefix-cache behavior in vLLM or SGLang.</p>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="sources-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Primary-source inputs</p>
+          <h2 id="sources-title">Start with Moonshot's files and recommendation.</h2>
+          <p>Checkpoint bytes and architecture metadata come from Moonshot's official Hugging Face repository. The 64-plus-accelerator recommendation, availability, API pricing, and deployment rationale come from Moonshot's Kimi K3 release note.</p>
+          <a class="guide-link" href="../llm-gpu-memory-calculator/?utm_source=kimi_k3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=blank_gpu_calculator">Open the GPU memory calculator →</a>
+          <a class="guide-link" href="../glm-5-2-gpu-requirements/?utm_source=kimi_k3_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=glm_5_2_guide">Compare GLM-5.2 hardware →</a>
+          <a class="guide-link" href="../what-llm-can-i-run/?utm_source=kimi_k3_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=model_finder">Find models for smaller GPU budgets →</a>
+          <a class="guide-link" href="https://huggingface.co/moonshotai/Kimi-K3">Official Kimi K3 model card →</a>
+          <a class="guide-link" href="https://huggingface.co/moonshotai/Kimi-K3/tree/main">Official checkpoint inventory →</a>
+          <a class="guide-link" href="https://huggingface.co/moonshotai/Kimi-K3/blob/main/config.json">Official Kimi K3 configuration →</a>
+          <a class="guide-link" href="https://www.kimi.com/blog/kimi-k3">Official Kimi K3 release note →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>How much GPU memory does Kimi K3 need?</h3><p>The official weight files total 1,453.74 GiB before runtime workspace or context memory. Moonshot separately recommends 64 or more accelerators for an efficient supernode deployment.</p></article>
+          <article class="faq-item"><h3>Can Kimi K3 run on eight H200 GPUs?</h3><p>No straightforward full-checkpoint plan fits. Even all 1,128 GiB of physical memory across eight 141 GiB-class devices is 325.74 GiB below the files; a 90% planning limit is 438.54 GiB short.</p></article>
+          <article class="faq-item"><h3>What is the minimum H200 count for Kimi K3?</h3><p>Twelve clears the artifact-only floor at 90% usable memory, leaving about 69.06 GiB. That is not enough evidence for a practical runtime and is not Moonshot's recommended topology.</p></article>
+          <article class="faq-item"><h3>Why does Moonshot recommend 64 or more accelerators for Kimi K3?</h3><p>Kimi K3 routes among 896 experts and needs a large high-bandwidth communication domain. Moonshot frames 64-plus as an inference-efficiency recommendation, not a simple weight-capacity minimum.</p></article>
+          <article class="faq-item"><h3>Does Kimi K3 support a one-million-token context window?</h3><p>Yes, the official model card lists 1,048,576 tokens. Actual full-window concurrency must still be proven in the chosen runtime because KDA and Gated MLA have model-specific state behavior.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Deployment math without the launch theatre</p>
+          <h2 id="subscribe-title">Get the next model and infrastructure teardown.</h2>
+          <p>ResearchAudio turns model releases, hardware claims, and serving constraints into practical decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <p class="subscribe-direct-fallback"><strong>Prefer the hosted signup page?</strong><a href="https://researchaudio.io/subscribe?utm_source=kimi_k3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join">Join ResearchAudio free →</a></p>
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=kimi_k3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../llm-gpu-memory-calculator/">GPU memory calculator</a>
+        <a href="../glm-5-2-gpu-requirements/">GLM-5.2 guide</a>
+        <a href="../deepseek-v4-flash-gpu-requirements/">DeepSeek V4 Flash guide</a>
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=kimi_k3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"c20a9e29828c471c92ed7c2284901e05","spa":false}'></script>
+  </body>
+</html>

@@ -59,6 +59,8 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Sizes the official V4 Flash 0731 release and its 155.43 GiB mixed FP4 and FP8 artifact, separates 284B total from 13B active parameters, and opens editable 32K, 128K, 384K, and 1M deployment comparisons.
 - GLM-5.2 GPU Requirements: https://tools.researchaudio.io/glm-5-2-gpu-requirements/
   Sizes the official 703.74 GiB FP8 artifact, proves why eight 80 GiB GPUs are short, and separates the supported 8xH200 baseline, 8xB200 full-context recipe, and 1,403.19 GiB BF16 artifact.
+- Kimi K3 GPU Requirements: https://tools.researchaudio.io/kimi-k3-gpu-requirements/
+  Sizes the official 1,453.74 GiB MXFP4 artifact, proves why eight H200-class GPUs are short, and separates the 12xH200 raw weight floor from Moonshot's 64-plus-accelerator serving recommendation.
 - gpt-oss Hardware Requirements: https://tools.researchaudio.io/gpt-oss-hardware-requirements/
   Compares gpt-oss-20b and gpt-oss-120b using official checkpoint sizes, MXFP4 weight math, architecture-aware KV-cache estimates, and editable 4K and 128K deployment scenarios.
 - AI Agent Security Checklist: https://tools.researchaudio.io/ai-agent-security-checklist/
