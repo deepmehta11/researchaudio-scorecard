@@ -4,13 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Free AI Evaluation Tools for Builders | ResearchAudio</title>
-    <meta name="description" content="Sixteen free AI evaluation tools plus fourteen practical field guides for auditing task fit, benchmarks, evidence, local LLM model fit, GPU and KV-cache memory, voice economics, latency, LLM spend, agent loops, ROI, and Codex workflows." />
+    <meta name="description" content="Sixteen free AI evaluation tools plus sixteen practical field guides for auditing task fit, benchmarks, evidence, local LLM model fit, GPU and KV-cache memory, voice economics, latency, LLM spend, agent loops, ROI, and Codex workflows." />
     <meta name="theme-color" content="#eaf2f0" />
     <link rel="canonical" href="https://tools.researchaudio.io/tools/" />
     <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="ResearchAudio Evidence Lab" />
-    <meta property="og:description" content="Sixteen free instruments and fourteen practical field guides for making better AI and agent-engineering decisions." />
+    <meta property="og:description" content="Sixteen free instruments and sixteen practical field guides for making better AI and agent-engineering decisions." />
     <meta property="og:url" content="https://tools.researchaudio.io/tools/" />
     <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -49,7 +49,9 @@
           { "@type": "TechArticle", "name": "AI Receptionist Cost Worksheet", "url": "https://tools.researchaudio.io/ai-receptionist-cost/" },
           { "@type": "TechArticle", "name": "7B vs 13B LLM GPU Requirements", "url": "https://tools.researchaudio.io/7b-vs-13b-llm-gpu-requirements/" },
           { "@type": "TechArticle", "name": "70B LLM GPU Requirements", "url": "https://tools.researchaudio.io/70b-llm-gpu-requirements/" },
+          { "@type": "TechArticle", "name": "RTX 3060 12GB Local LLM Guide", "url": "https://tools.researchaudio.io/rtx-3060-llm-models/" },
           { "@type": "TechArticle", "name": "RTX 4090 Local LLM Guide", "url": "https://tools.researchaudio.io/rtx-4090-llm-models/" },
+          { "@type": "TechArticle", "name": "RTX 5080 Local LLM Guide", "url": "https://tools.researchaudio.io/rtx-5080-llm-models/" },
           { "@type": "TechArticle", "name": "RTX 5090 Local LLM Guide", "url": "https://tools.researchaudio.io/rtx-5090-llm-models/" },
           { "@type": "TechArticle", "name": "Qwen2.5 GPU Requirements", "url": "https://tools.researchaudio.io/qwen2-5-gpu-requirements/" },
           { "@type": "TechArticle", "name": "Qwen3 GPU Requirements", "url": "https://tools.researchaudio.io/qwen3-gpu-requirements/" },
@@ -228,11 +230,23 @@
             <p>Separate INT4, INT8, and FP16 weight floors from explicit 32K KV cache and runtime headroom.</p>
             <b>Compare the scenarios →</b>
           </a>
+          <a class="resource-card" href="../rtx-3060-llm-models/?utm_source=evidence_lab&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=rtx_3060_llm_guide">
+            <span class="instrument-code">Field note / 12 GB GPU</span>
+            <h2>What LLM can an RTX 3060 12GB run?</h2>
+            <p>Separate the generic 14B INT4 weight tier from exact Qwen3 and gpt-oss profiles once context memory is included.</p>
+            <b>Inspect the RTX 3060 boundary →</b>
+          </a>
           <a class="resource-card" href="../rtx-4090-llm-models/?utm_source=evidence_lab&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=rtx_4090_llm_guide">
             <span class="instrument-code">Field note / 24 GB GPU</span>
             <h2>What LLM can an RTX 4090 run?</h2>
             <p>Compare generic INT4, INT8, and FP16 tiers with exact Qwen3 and gpt-oss profiles near the 24 GB boundary.</p>
             <b>Inspect the RTX 4090 boundary →</b>
+          </a>
+          <a class="resource-card" href="../rtx-5080-llm-models/?utm_source=evidence_lab&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=rtx_5080_llm_guide">
+            <span class="instrument-code">Field note / 16 GB GPU</span>
+            <h2>What LLM can an RTX 5080 run?</h2>
+            <p>Inspect the razor-thin Qwen3 14B and short-context gpt-oss-20b paper fits before trusting a 16 GB deployment.</p>
+            <b>Inspect the RTX 5080 boundary →</b>
           </a>
           <a class="resource-card" href="../rtx-5090-llm-models/?utm_source=evidence_lab&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=rtx_5090_llm_guide">
             <span class="instrument-code">Field note / 32 GB GPU</span>

@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>What LLM Can an RTX 5080 Run? 16GB VRAM Guide | ResearchAudio</title>
+    <meta name="description" content="See what local LLMs fit an RTX 5080 16GB at INT4, INT8, and FP16, with exact Qwen3 and gpt-oss scenarios, context memory, and editable VRAM calculations." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <link rel="canonical" href="https://tools.researchaudio.io/rtx-5080-llm-models/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="What LLM Can an RTX 5080 16GB Run?" />
+    <meta property="og:description" content="A 16 GB card reaches Qwen3 14B and gpt-oss-20b at short context only at the edge of this planning budget—not with comfortable margin." />
+    <meta property="og:url" content="https://tools.researchaudio.io/rtx-5080-llm-models/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "What LLM Can an RTX 5080 Run? 16GB VRAM Guide",
+        "description": "A hardware-first local LLM guide for the RTX 5080 with transparent INT4, INT8, and FP16 floors plus exact Qwen3 and gpt-oss memory scenarios.",
+        "datePublished": "2026-08-07",
+        "dateModified": "2026-08-07",
+        "author": { "@type": "Organization", "name": "ResearchAudio" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" },
+        "mainEntityOfPage": "https://tools.researchaudio.io/rtx-5080-llm-models/"
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What LLM can an RTX 5080 run?",
+            "acceptedAnswer": { "@type": "Answer", "text": "With a 10 percent usable-memory reserve and 20 percent inference headroom, the generic one-card weight floor reaches a 20B INT4, 8B INT8, or 3B FP16 tier. Named models still need exact checkpoint, context, KV-cache, and runtime checks." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can an RTX 5080 run Qwen3 14B?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The one-sequence 32K INT4 profile on this page reaches 14.27 GiB, leaving only about 0.13 GiB below the 14.4 GiB usable-memory budget. That is a paper fit, not comfortable runtime margin." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can an RTX 5080 run gpt-oss-20b?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The short 4K planning profile reaches 14.29 GiB and clears this budget by about 0.11 GiB, which is too narrow to promise. The conservative 128K profile reaches 22.56 GiB and does not fit fully on the card." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can an RTX 5080 run Qwen3 32B?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Not under this fully GPU-resident 32K INT4 profile. The planning target reaches 27.93 GiB, well above the 14.4 GiB usable-memory allowance." }
+          }
+        ]
+      }
+    ]
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#scenarios">Skip to the model scenarios</a>
+    <header class="lab-header" aria-label="ResearchAudio Evidence Lab">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=rtx_5080_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark"><span class="wordmark-mark" aria-hidden="true">RA</span><span>ResearchAudio</span></a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=rtx_5080_llm_models&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=rtx_5080_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=rtx_5080_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Hardware guide / 16 GB VRAM</p>
+          <h1 id="hero-title">What LLM can a 16 GB RTX 5080 run?</h1>
+          <p class="hero-deck">A 16 GB card reaches the generic 20B INT4 weight tier. Exact Qwen3 14B and short-context gpt-oss-20b profiles land so close to the budget that runtime allocation decides the result.</p>
+          <a class="hero-join-link" href="../what-llm-can-i-run/?vramPerGpu=16&amp;availableGpus=1&amp;bitsPerParameter=4&amp;inferenceHeadroom=20&amp;usableVramPercent=90&amp;utm_source=rtx_5080_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_model_finder">Open the 16 GB model finder →</a>
+        </div>
+        <aside class="lab-index" aria-label="Default planning budget"><span>Usable at 90%</span><strong>14.4</strong><p>GiB planning capacity on one 16 GB card. The remaining ten percent is reserved for the driver, runtime, and fragmentation.</p></aside>
+      </section>
+
+      <section class="method-section" aria-labelledby="floor-title">
+        <div><p class="eyebrow">Fast answer</p><h2 id="floor-title">The generic weight-only floor</h2></div>
+        <div class="method-copy formula-copy">
+          <p><strong>INT4</strong><br /><code>20B listed tier · 25.77B arithmetic ceiling</code></p>
+          <p><strong>INT8</strong><br /><code>8B listed tier · 12.88B arithmetic ceiling</code></p>
+          <p><strong>FP16 / BF16</strong><br /><code>3B listed tier · 6.44B arithmetic ceiling</code></p>
+          <p><strong>Default reserve</strong><br /><code>16 × 0.90 ÷ 1.20 = 12 GiB for weights</code></p>
+        </div>
+      </section>
+
+      <section class="scenario-section" id="scenarios" aria-labelledby="scenario-title">
+        <div><p class="eyebrow">Editable evidence</p><h2 id="scenario-title">The 16 GB tier has two razor-thin paper fits.</h2><p>Every model card opens an editable architecture-aware calculator rather than hiding the assumptions.</p></div>
+        <div class="scenario-grid guide-scenario-grid">
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=8.2&amp;bitsPerParameter=4&amp;layers=36&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=16&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_5080_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_8b_int4_32k">
+            <span>Qwen3 8B · INT4 · 32K</span><strong>9.98 GiB</strong><small>Fits with useful planning margin →</small>
+          </a>
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=14.8&amp;bitsPerParameter=4&amp;layers=40&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=16&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_5080_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_14b_int4_32k">
+            <span>Qwen3 14B · INT4 · 32K</span><strong>14.27 GiB</strong><small>Paper fit with only 0.13 GiB margin →</small>
+          </a>
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=20.91&amp;bitsPerParameter=4.25&amp;checkpointGiB=12.8&amp;layers=24&amp;kvHeads=8&amp;headDimension=64&amp;contextTokens=4096&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=10&amp;vramPerGpu=16&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_5080_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpt_oss_20b_4k">
+            <span>gpt-oss-20b · MXFP4 · 4K</span><strong>14.29 GiB</strong><small>Paper fit with only 0.11 GiB margin →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=8.2&amp;bitsPerParameter=8&amp;layers=36&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=16&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_5080_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_8b_int8_32k">
+            <span>Qwen3 8B · INT8 · 32K</span><strong>14.56 GiB</strong><small>Misses the default budget by 0.16 GiB →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=32.8&amp;bitsPerParameter=4&amp;layers=64&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=16&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_5080_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_32b_32k">
+            <span>Qwen3 32B · INT4 · 32K</span><strong>27.93 GiB</strong><small>Requires a larger memory tier or offload →</small>
+          </a>
+          <a class="scenario-card" href="../rtx-3060-llm-models/?utm_source=rtx_5080_llm_models&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=rtx_3060_comparison">
+            <span>RTX 3060 12GB comparison</span><strong>10.8 GiB</strong><small>See the lower-cost 12 GB boundary →</small>
+          </a>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="decision-title">
+        <div class="comparison-heading"><div><p class="eyebrow">Decision boundary</p><h2 id="decision-title">A calculated fit can still fail allocation.</h2></div><p>Two named profiles sit within 0.13 GiB of the default budget, so graph capture, allocator fragmentation, or runtime workspace can reverse the result.</p></div>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead><tr><th scope="col">Profile</th><th scope="col">Planning target</th><th scope="col">16 GB result</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Qwen3 8B INT4 · 32K</th><td>9.98 GiB</td><td>Fits with 4.42 GiB margin</td></tr>
+              <tr><th scope="row">Qwen3 14B INT4 · 32K</th><td>14.27 GiB</td><td>Paper fit; only 0.13 GiB margin</td></tr>
+              <tr><th scope="row">gpt-oss-20b · 4K</th><td>14.29 GiB</td><td>Paper fit; only 0.11 GiB margin</td></tr>
+              <tr><th scope="row">Qwen3 8B INT8 · 32K</th><td>14.56 GiB</td><td>Misses by 0.16 GiB</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="RTX 5080 LLM boundaries">
+        <p class="eyebrow">Capacity is only gate one</p>
+        <p><strong>0.11 GiB is not operational headroom.</strong><br />Treat the gpt-oss-20b 4K result as a paper boundary, not a promise.</p>
+        <p><strong>Context consumes VRAM.</strong><br />The conservative gpt-oss 128K profile rises to 22.56 GiB.</p>
+        <p><strong>Fit is not throughput.</strong><br />Bandwidth, kernels, offload, and batching decide delivered speed.</p>
+      </section>
+
+      <section class="guide-section" aria-labelledby="sources-title">
+        <div class="guide-intro"><p class="eyebrow">Primary sources</p><h2 id="sources-title">Inputs you can inspect.</h2>
+          <p>NVIDIA specifies 16 GB of GDDR7 memory for the RTX 5080. Model profiles reuse the primary-source architecture and checkpoint inputs documented in the Qwen3 and gpt-oss worksheets.</p>
+          <a class="guide-link" href="https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5080/">Official NVIDIA RTX 5080 specifications →</a>
+          <a class="guide-link" href="../qwen3-gpu-requirements/?utm_source=rtx_5080_llm_models&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_worksheet">Open the Qwen3 GPU worksheet →</a>
+          <a class="guide-link" href="../gpt-oss-hardware-requirements/?utm_source=rtx_5080_llm_models&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpt_oss_worksheet">Open the gpt-oss hardware worksheet →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>What LLM can an RTX 5080 run?</h3><p>At the default reserve, the generic one-card floor reaches a 20B INT4, 8B INT8, or 3B FP16 tier. Named models still need exact checkpoint, context, cache, and runtime checks.</p></article>
+          <article class="faq-item"><h3>Can an RTX 5080 run Qwen3 14B?</h3><p>The 32K INT4 planning profile reaches 14.27 GiB, about 0.13 GiB below the 14.4 GiB budget. Treat that as a paper fit requiring runtime validation.</p></article>
+          <article class="faq-item"><h3>Can an RTX 5080 run gpt-oss-20b?</h3><p>The 4K profile reaches 14.29 GiB and clears the budget by only 0.11 GiB. The conservative 128K profile reaches 22.56 GiB and does not fit fully on the card.</p></article>
+          <article class="faq-item"><h3>Can an RTX 5080 run Qwen3 32B?</h3><p>Not under this fully GPU-resident 32K INT4 profile. Its 27.93 GiB planning target exceeds the one-card allowance.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">
+        <div><p class="eyebrow">Hardware claims, checked</p><h2 id="subscribe-title">Get the next local-AI deployment teardown.</h2><p>ResearchAudio traces exact checkpoints, architecture, context, runtime constraints, and the gap between “fits” and “works.”</p></div>
+        <div class="subscribe-form-shell">
+          <p class="subscribe-direct-fallback"><strong>Prefer the hosted signup page?</strong><a href="https://researchaudio.io/subscribe?utm_source=rtx_5080_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join">Join ResearchAudio free →</a></p>
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=rtx_5080_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer"><p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p><div class="footer-links"><a href="../what-llm-can-i-run/">Model finder</a><a href="../llm-gpu-memory-calculator/">GPU calculator</a><a href="../tools/">All tools</a><a href="https://researchaudio.io/?utm_source=rtx_5080_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a></div></footer>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"c20a9e29828c471c92ed7c2284901e05","spa":false}'></script>
+  </body>
+</html>
