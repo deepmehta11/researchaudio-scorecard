@@ -5,6 +5,7 @@ import path from "node:path";
 import { calculateCost } from "../ai-cost-calculator/calculator.js";
 import { classifyLoop, controls } from "../agent-loop-diagnostic/diagnostic.js";
 import { classifyAgentSecurity, controls as securityControls } from "../ai-agent-security-checklist/checklist.js";
+import { classifyBenchmarkAudit, controls as benchmarkControls } from "../ai-benchmark-audit-checklist/checklist.js";
 import { calculateAgentRoi, classifyAgentRoi } from "../ai-agent-roi-calculator/calculator.js";
 import { calculateLlmApiCost } from "../llm-api-cost-calculator/calculator.js";
 import { calculateGpuMemory } from "../llm-gpu-memory-calculator/calculator.js";
@@ -20,7 +21,7 @@ const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const brandedToolsOrigin = "https://tools.researchaudio.io";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, kvCacheHtml, kvCacheJs, gpuGuideHtml, qwenGuideHtml, securityGuideHtml, securityGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, kvCacheHtml, kvCacheJs, gpuGuideHtml, qwenGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -43,6 +44,8 @@ const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, cost
   readFile(path.join(root, "qwen2-5-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-security-checklist/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-security-checklist/checklist.js"), "utf8"),
+  readFile(path.join(root, "ai-benchmark-audit-checklist/index.html"), "utf8"),
+  readFile(path.join(root, "ai-benchmark-audit-checklist/checklist.js"), "utf8"),
   readFile(path.join(root, "prompt-caching-calculator/index.html"), "utf8"),
   readFile(path.join(root, "prompt-caching-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "codex-config-generator/index.html"), "utf8"),
@@ -114,6 +117,7 @@ for (const [name, page, pathname] of [
   ["70B LLM GPU requirements guide", gpuGuideHtml, "/70b-llm-gpu-requirements/"],
   ["Qwen2.5 GPU requirements guide", qwenGuideHtml, "/qwen2-5-gpu-requirements/"],
   ["AI agent security checklist", securityGuideHtml, "/ai-agent-security-checklist/"],
+  ["AI benchmark audit checklist", benchmarkGuideHtml, "/ai-benchmark-audit-checklist/"],
   ["starter kit", starterHtml, "/evidence-starter-kit/"],
   ["Fable 5 cost playbook", fablePlaybookHtml, "/fable-playbook/"],
 ]) {
@@ -324,6 +328,28 @@ assert.match(securityGuideHtml, /genai\.owasp\.org/);
 assert.match(securityGuideHtml, /code\.claude\.com\/docs\/en\/security/);
 assert.match(securityGuideHtml, /airc\.nist\.gov/);
 assert.doesNotMatch(securityGuideHtml, /TODO|PLACEHOLDER|example\.com/);
+
+assert.equal(benchmarkControls.length, 12, "benchmark audit should expose twelve reproducibility checks");
+assert.equal(classifyBenchmarkAudit(0).status, "CLAIM");
+assert.equal(classifyBenchmarkAudit(4).status, "PARTIAL");
+assert.equal(classifyBenchmarkAudit(8).status, "DECISION-USEFUL");
+assert.equal(classifyBenchmarkAudit(12).status, "REPRODUCIBLE");
+assert.match(benchmarkGuideJs, /source: "ai_benchmark_audit_checklist_share"/);
+assert.match(benchmarkGuideJs, /content: `shared_benchmark_\$\{score\}`/);
+assert.match(benchmarkGuideHtml, /<title>AI Benchmark Audit Checklist: 12 Reproducibility Checks \| ResearchAudio<\/title>/);
+assert.equal((benchmarkGuideHtml.match(/type="checkbox"/g) || []).length, 12, "benchmark audit should render twelve protocol checks");
+assert.equal((benchmarkGuideHtml.match(/"@type": "WebApplication"/g) || []).length, 1, "benchmark audit should have WebApplication schema");
+assert.equal((benchmarkGuideHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "benchmark audit should have FAQ schema");
+assert.doesNotThrow(() => parseStructuredData(benchmarkGuideHtml), "benchmark audit structured data must be valid JSON");
+assert.match(benchmarkGuideHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
+assert.match(benchmarkGuideHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
+assert.match(benchmarkGuideHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=ai_benchmark_audit_checklist&amp;utm_medium=(organic_guide|tool_result)&amp;utm_campaign=ai_evidence_lab/);
+assert.match(benchmarkGuideHtml, /utm_content=subscribe_fallback/);
+assert.match(benchmarkGuideHtml, /developers\.openai\.com\/api\/docs\/guides\/evaluation-best-practices/);
+assert.match(benchmarkGuideHtml, /platform\.claude\.com\/docs\/en\/test-and-evaluate\/develop-tests/);
+assert.match(benchmarkGuideHtml, /metr\.org\/blog\/2026-1-29-time-horizon-1-1/);
+assert.match(benchmarkGuideHtml, /github\.com\/harbor-framework\/terminal-bench/);
+assert.doesNotMatch(benchmarkGuideHtml, /TODO|PLACEHOLDER|example\.com/);
 
 const defaultRoi = calculateAgentRoi({
   tasksPerMonth: 2000,
@@ -551,7 +577,7 @@ assert.match(kvCacheHtml, /Qwen2\.5 32B/);
 assert.match(kvCacheHtml, /Qwen2\.5 72B/);
 assert.equal((kvCacheHtml.match(/class="scenario-card/g) || []).length, 3, "KV-cache calculator should contain three sourced scenarios");
 assert.match(toolsHtml, /kv-cache-calculator/);
-assert.equal((toolsHtml.match(/class="tool-card"/g) || []).length, 11, "tools hub should contain eleven instruments");
+assert.equal((toolsHtml.match(/class="tool-card"/g) || []).length, 12, "tools hub should contain twelve instruments");
 
 const defaultPromptCache = calculatePromptCacheSavings({
   requestsPerMonth: 100000,
@@ -743,6 +769,7 @@ assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 5, "tools
 assert.match(toolsHtml, /70b-llm-gpu-requirements/);
 assert.match(toolsHtml, /qwen2-5-gpu-requirements/);
 assert.match(toolsHtml, /ai-agent-security-checklist/);
+assert.match(toolsHtml, /ai-benchmark-audit-checklist/);
 assert.match(voiceLatencyHtml, /voice-ai-cost-per-minute/);
 assert.match(labCss, /\.resource-section/);
 assert.match(labCss, /\.resource-grid/);
@@ -841,9 +868,9 @@ assert.match(qwenGuideHtml, /6\.35 GiB/);
 assert.match(qwenGuideHtml, /27\.76 GiB/);
 assert.match(qwenGuideHtml, /52\.62 GiB/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 20, "sitemap should contain all twenty crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 21, "sitemap should contain all twenty-one crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 20, "sitemap should publish twenty URL locations");
+assert.equal(sitemapUrls.length, 21, "sitemap should publish twenty-one URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -865,6 +892,7 @@ assert.match(llms, /AI Receptionist Cost Worksheet/);
 assert.match(llms, /70B LLM GPU Requirements/);
 assert.match(llms, /Qwen2\.5 GPU Requirements/);
 assert.match(llms, /AI Agent Security Checklist/);
+assert.match(llms, /AI Benchmark Audit Checklist/);
 assert.deepEqual([...socialCard.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], "social card should be a PNG");
 assert.equal(publishedKey.trim(), indexNowKey, "public IndexNow key must match the submission script");
 assert.match(indexNowScript, /https:\/\/api\.indexnow\.org\/indexnow/);
@@ -879,4 +907,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 11 tools, 1 activation kit, 1 embed library, 6 field guides, 20 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 12 tools, 1 activation kit, 1 embed library, 6 field guides, 21 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

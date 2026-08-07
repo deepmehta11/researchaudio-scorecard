@@ -265,6 +265,14 @@ h2 {
   background: #d8e8ff;
 }
 
+.tool-card:nth-child(11) {
+  background: #e6f0d7;
+}
+
+.tool-card:nth-child(12) {
+  background: #ffd8c2;
+}
+
 .tool-card:hover,
 .resource-card:hover {
   box-shadow: 3px 3px 0 var(--ink);
@@ -1155,6 +1163,152 @@ h2 {
   content: "";
 }
 
+.benchmark-receipt {
+  position: relative;
+  padding: 24px 24px 30px;
+  color: var(--ink);
+  background: var(--white);
+  border: 2px solid var(--ink);
+  box-shadow: 10px 10px 0 var(--blue);
+  font-family: var(--mono);
+}
+
+.benchmark-receipt::before,
+.benchmark-receipt::after {
+  position: absolute;
+  bottom: -12px;
+  width: 20px;
+  height: 20px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  content: "";
+}
+
+.benchmark-receipt::before {
+  left: -12px;
+}
+
+.benchmark-receipt::after {
+  right: -12px;
+}
+
+.receipt-kicker {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 13px;
+  border-bottom: 2px dashed var(--line);
+  font: 600 0.68rem/1.3 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.claim-score {
+  position: relative;
+  width: max-content;
+  margin: 25px 0 0;
+  font: 600 clamp(4.8rem, 9vw, 7.8rem)/0.8 var(--mono);
+  letter-spacing: -0.1em;
+}
+
+.claim-score::after {
+  position: absolute;
+  top: 48%;
+  right: -8%;
+  left: -4%;
+  height: 6px;
+  background: var(--orange);
+  content: "";
+  transform: rotate(-7deg);
+}
+
+.claim-label {
+  margin: 12px 0 24px;
+  color: var(--muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.benchmark-receipt dl {
+  margin: 0;
+  border-top: 1px solid var(--ink);
+}
+
+.benchmark-receipt dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.72rem;
+}
+
+.benchmark-receipt dt,
+.benchmark-receipt dd {
+  margin: 0;
+}
+
+.benchmark-receipt dd {
+  color: #ad3d19;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.receipt-verdict {
+  display: block;
+  margin-top: 24px;
+  padding: 10px 12px;
+  color: var(--white);
+  background: var(--ink);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-align: center;
+}
+
+.benchmark-console {
+  box-shadow: 8px 8px 0 var(--orange);
+}
+
+.benchmark-ledger {
+  display: grid;
+  grid-template-columns: minmax(0, 0.75fr) minmax(480px, 1fr);
+  gap: 50px 86px;
+  align-items: start;
+  padding: 100px 0;
+  border-top: 2px solid var(--ink);
+}
+
+.ledger-rows {
+  border-top: 2px solid var(--ink);
+}
+
+.ledger-rows > div {
+  display: grid;
+  grid-template-columns: 86px 1fr;
+  gap: 6px 18px;
+  padding: 20px 0;
+  border-bottom: 2px solid var(--ink);
+}
+
+.ledger-rows span {
+  grid-row: span 2;
+  color: var(--blue);
+  font: 600 0.72rem/1.4 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ledger-rows strong {
+  font-size: 1.12rem;
+}
+
+.ledger-rows p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
 .subscribe-block {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(360px, 0.7fr);
@@ -1547,6 +1701,7 @@ h2 {
   .method-section,
   .latency-stage-heading,
   .guide-section,
+  .benchmark-ledger,
   .starter-heading,
   .resource-heading,
   .activation-strip,
@@ -1658,6 +1813,7 @@ h2 {
   .method-section,
   .latency-stage-section,
   .guide-section,
+  .benchmark-ledger,
   .starter-section,
   .activation-strip,
   .resource-section,
@@ -1774,6 +1930,18 @@ h2 {
     gap: 10px;
     min-height: 118px;
     padding: 15px 13px;
+  }
+
+  .benchmark-receipt {
+    margin-right: 10px;
+  }
+
+  .ledger-rows > div {
+    grid-template-columns: 1fr;
+  }
+
+  .ledger-rows span {
+    grid-row: auto;
   }
 
   .principle-strip {

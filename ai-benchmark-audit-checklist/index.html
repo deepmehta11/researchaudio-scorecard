@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Benchmark Audit Checklist: 12 Reproducibility Checks | ResearchAudio</title>
+    <meta name="description" content="Audit any AI benchmark result with 12 checks for model version, harness, budgets, grading, task distribution, uncertainty, failures, cost, and reproducibility." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/ai-benchmark-audit-checklist/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="A benchmark score is not a protocol" />
+    <meta property="og:description" content="Twelve checks reveal whether an AI benchmark claim is reproducible and useful for a real decision." />
+    <meta property="og:url" content="https://tools.researchaudio.io/ai-benchmark-audit-checklist/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "AI Benchmark Audit Checklist",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "url": "https://tools.researchaudio.io/ai-benchmark-audit-checklist/",
+        "description": "A browser-local 12-point audit for AI benchmark reproducibility and decision usefulness.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What makes an AI benchmark result reproducible?",
+            "acceptedAnswer": { "@type": "Answer", "text": "A reproducible result identifies the benchmark and task version, exact model snapshot, prompts and harness, resource limits, runtime environment, grader, repeated trials, uncertainty, and inspectable artifacts." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why can two AI benchmark scores be incomparable?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Scores can change when teams use different task versions, scaffolds, prompts, tool access, time or token budgets, retry policies, graders, environments, or sampling methods." }
+          },
+          {
+            "@type": "Question",
+            "name": "How many trials should an AI benchmark use?",
+            "acceptedAnswer": { "@type": "Answer", "text": "There is no universal number. Run enough independent trials to estimate variability for the intended decision, then report the trial count, sampling method, spread, and uncertainty rather than only the mean." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is this AI benchmark checklist a certification?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. It is a triage worksheet that exposes missing protocol details. A strong score still requires independent reproduction and domain-specific review." }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body class="benchmark-page">
+    <a class="skip-link" href="#benchmark-checklist">Skip to the benchmark audit</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=ai_benchmark_audit_checklist&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=ai_benchmark_audit_checklist&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=ai_benchmark_audit_checklist&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=ai_benchmark_audit_checklist&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero benchmark-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Benchmark audit / reproducibility checklist</p>
+          <h1 id="hero-title">A benchmark score is not a protocol.</h1>
+          <p class="hero-deck">Put any model, agent, or coding benchmark claim through twelve checks. Expose the hidden versions, scaffolds, budgets, graders, task choices, and uncertainty before the number drives a decision.</p>
+          <a class="hero-join-link" href="#benchmark-checklist">Audit a benchmark claim →</a>
+        </div>
+        <aside class="benchmark-receipt" aria-label="Illustrative benchmark receipt">
+          <div class="receipt-kicker"><span>Benchmark receipt</span><span>RUN / ?</span></div>
+          <p class="claim-score" aria-label="Illustrative score with missing protocol">92.4</p>
+          <p class="claim-label">reported score</p>
+          <dl>
+            <div><dt>model snapshot</dt><dd>missing</dd></div>
+            <div><dt>harness version</dt><dd>missing</dd></div>
+            <div><dt>trial count</dt><dd>missing</dd></div>
+            <div><dt>failure artifacts</dt><dd>missing</dd></div>
+          </dl>
+          <strong class="receipt-verdict">CLAIM ONLY</strong>
+        </aside>
+      </section>
+
+      <section class="instrument-shell" id="benchmark-checklist" aria-labelledby="benchmark-title">
+        <div class="instrument-intro">
+          <div>
+            <p class="eyebrow">Inspect one published result</p>
+            <h2 id="benchmark-title">Can somebody reproduce the number?</h2>
+          </div>
+          <p>Count only details that are public, specific, and usable. This is a triage worksheet—not a certification, leaderboard, or substitute for rerunning the evaluation.</p>
+        </div>
+
+        <div class="diagnostic-layout">
+          <form class="diagnostic-list" id="benchmark-form">
+            <label class="diagnostic-card" for="check-suite"><input id="check-suite" name="suite" type="checkbox" /><span class="diagnostic-index">D1</span><span class="diagnostic-copy"><strong>Benchmark and task suite are versioned</strong><span>The exact dataset release, task IDs, exclusions, and any local modifications are named.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-model"><input id="check-model" name="model" type="checkbox" /><span class="diagnostic-index">M2</span><span class="diagnostic-copy"><strong>The exact model snapshot is pinned</strong><span>Model name, API snapshot or checkpoint, quantization, and decoding settings can be recovered.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-harness"><input id="check-harness" name="harness" type="checkbox" /><span class="diagnostic-index">H3</span><span class="diagnostic-copy"><strong>Prompt, scaffold, and harness are disclosed</strong><span>System instructions, agent loop, tool wiring, context construction, and evaluator version are available.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-budget"><input id="check-budget" name="budget" type="checkbox" /><span class="diagnostic-index">B4</span><span class="diagnostic-copy"><strong>Time, token, tool, and retry budgets match</strong><span>Compared systems receive equivalent limits—or the difference is explicit and part of the claim.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-environment"><input id="check-environment" name="environment" type="checkbox" /><span class="diagnostic-index">E5</span><span class="diagnostic-copy"><strong>The execution environment is reproducible</strong><span>Container, dependencies, hardware, network access, dates, and external services are pinned or captured.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-grader"><input id="check-grader" name="grader" type="checkbox" /><span class="diagnostic-index">G6</span><span class="diagnostic-copy"><strong>Success and grading are explicit</strong><span>Tests, rubrics, judge prompts, thresholds, and human-review procedures align with the stated task.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-distribution"><input id="check-distribution" name="distribution" type="checkbox" /><span class="diagnostic-index">T7</span><span class="diagnostic-copy"><strong>The task mix represents the decision</strong><span>Typical, edge, and adversarial cases reflect the users and failures the result will be used to judge.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-contamination"><input id="check-contamination" name="contamination" type="checkbox" /><span class="diagnostic-index">C8</span><span class="diagnostic-copy"><strong>Leakage and reward-hacking risks are checked</strong><span>Contamination, memorization, grader exploitation, accidental hints, and invalid tasks are investigated.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-uncertainty"><input id="check-uncertainty" name="uncertainty" type="checkbox" /><span class="diagnostic-index">U9</span><span class="diagnostic-copy"><strong>Repeated trials and uncertainty are reported</strong><span>Trial count, sampling, variance or confidence interval, and aggregation method accompany the headline score.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-baseline"><input id="check-baseline" name="baseline" type="checkbox" /><span class="diagnostic-index">P10</span><span class="diagnostic-copy"><strong>Baselines use the same protocol</strong><span>Older and competing systems are rerun under identical tasks, tools, budgets, graders, and infrastructure.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-artifacts"><input id="check-artifacts" name="artifacts" type="checkbox" /><span class="diagnostic-index">A11</span><span class="diagnostic-copy"><strong>Failures, logs, and artifacts are inspectable</strong><span>Per-task outcomes and representative failures are available—not only the aggregate score.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-cost"><input id="check-cost" name="cost" type="checkbox" /><span class="diagnostic-index">$12</span><span class="diagnostic-copy"><strong>Cost and latency are disclosed</strong><span>Spend, wall-clock time, token use, attempts, and human labor make the result operationally comparable.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+          </form>
+
+          <aside class="result-console benchmark-console" aria-live="polite" aria-labelledby="benchmark-result-title">
+            <div class="tool-status"><span>Protocol state</span><b id="benchmark-status">CLAIM</b></div>
+            <p class="primary-result"><span id="benchmark-score">0</span><small>/ 12</small></p>
+            <p class="result-label">Reproducibility checks</p>
+            <h3 id="benchmark-result-title">Headline only</h3>
+            <p class="result-note" id="benchmark-summary">The score is visible, but the protocol is not yet specific enough to reproduce or compare.</p>
+            <div class="result-grid"><div><span>Next missing field</span><strong id="benchmark-next">Name the benchmark release and exact task set.</strong></div><div><span>Decision use</span><strong id="benchmark-use">Do not rely on it</strong></div></div>
+            <button class="action-button" id="share-benchmark" type="button" disabled>Share this benchmark receipt</button>
+            <button class="secondary-button" id="reset-benchmark" type="button">Reset all checks</button>
+            <p class="share-status" id="share-status" role="status"></p>
+            <div class="result-join">
+              <span>Evidence-led AI briefings · 51,000+ readers</span>
+              <a href="https://researchaudio.io/subscribe?utm_source=ai_benchmark_audit_checklist&amp;utm_medium=tool_result&amp;utm_campaign=ai_evidence_lab&amp;utm_content=result_join">Get the next benchmark teardown →</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="Benchmark checklist interpretation">
+        <p class="eyebrow">Protocol bands</p>
+        <p><strong>0–3: headline only.</strong><br />A number without enough protocol to investigate.</p>
+        <p><strong>4–7: partial protocol.</strong><br />Some controls are visible; comparison remains fragile.</p>
+        <p><strong>8–10: decision-useful.</strong><br />The result can inform a bounded decision with stated uncertainty.</p>
+      </section>
+
+      <section class="benchmark-ledger" aria-labelledby="ledger-title">
+        <div>
+          <p class="eyebrow">Claim → protocol → decision</p>
+          <h2 id="ledger-title">The number is the last line of the receipt.</h2>
+        </div>
+        <div class="ledger-rows" role="list">
+          <div role="listitem"><span>Claim</span><strong>“Model A scores 92.4.”</strong><p>A useful lead, not yet an operational conclusion.</p></div>
+          <div role="listitem"><span>Protocol</span><strong>Which 92.4?</strong><p>Dataset, snapshot, scaffold, budget, grader, trials, and environment determine what the number means.</p></div>
+          <div role="listitem"><span>Decision</span><strong>Will it survive your workload?</strong><p>Use task distribution, failures, uncertainty, cost, and latency to bound the choice you can defend.</p></div>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="benchmark-guide-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Primary-source guide</p>
+          <h2 id="benchmark-guide-title">Small protocol changes can move the result.</h2>
+          <p>OpenAI recommends task-specific evals, logging, representative datasets, continuous evaluation, and calibration of automated scoring with human judgment. Anthropic similarly emphasizes measurable criteria, real-world task distributions, edge cases, and reliable graders.</p>
+          <p>METR's Time Horizon 1.1 update is a concrete warning: changes to tasks, human-time estimates, scoring, and agent scaffolding changed estimates and left wide confidence intervals. A benchmark claim should expose these variables before it becomes a purchase or deployment decision.</p>
+          <a class="guide-link" href="https://developers.openai.com/api/docs/guides/evaluation-best-practices">OpenAI evaluation best practices →</a>
+          <a class="guide-link" href="https://platform.claude.com/docs/en/test-and-evaluate/develop-tests">Anthropic: define success and build evaluations →</a>
+          <a class="guide-link" href="https://metr.org/blog/2026-1-29-time-horizon-1-1/">METR Time Horizon 1.1 update →</a>
+          <a class="guide-link" href="https://github.com/harbor-framework/terminal-bench">Terminal-Bench task and harness repository →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>What makes an AI benchmark result reproducible?</h3><p>Identify the task release, exact model snapshot, harness and prompts, resource limits, environment, grader, trial method, uncertainty, and artifacts. A third party should be able to reconstruct the run without guessing.</p></article>
+          <article class="faq-item"><h3>Why can two AI benchmark scores be incomparable?</h3><p>Changing the scaffold, tools, budget, retry policy, grader, task mix, environment, or model snapshot changes the protocol. Compare scores only when those variables match or their effects are isolated.</p></article>
+          <article class="faq-item"><h3>How many trials should an AI benchmark use?</h3><p>Enough to estimate variability for the decision at hand. Publish trial count, sampling method, spread, and uncertainty; a single average can hide unstable behavior.</p></article>
+          <article class="faq-item"><h3>Is this AI benchmark checklist a certification?</h3><p>No. It is a fast evidence audit. Even a 12/12 receipt needs independent reproduction and review for the intended domain, risk, and workload.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Read the protocol behind the score</p>
+          <h2 id="subscribe-title">Get the next benchmark claim audited.</h2>
+          <p>ResearchAudio turns primary sources, evaluation choices, failure cases, costs, and uncertainty into practical decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <a class="hero-join-link" href="https://researchaudio.io/subscribe?utm_source=ai_benchmark_audit_checklist&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=subscribe_fallback">Open the full signup page →</a>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=ai_benchmark_audit_checklist&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../ai-agent-security-checklist/">Agent security checklist</a>
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=ai_benchmark_audit_checklist&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script type="module" src="checklist.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>
