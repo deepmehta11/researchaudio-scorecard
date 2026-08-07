@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Codex exec Command Builder (--json &amp; Git Check) | ResearchAudio</title>
+    <meta name="description" content="Build a safe Codex exec command with --json, --ephemeral, sandbox, output schema, last-message file, and an explained --skip-git-repo-check option." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <link rel="canonical" href="https://tools.researchaudio.io/codex-exec-command-builder/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Build a Codex exec command without guessing the flags" />
+    <meta property="og:description" content="Generate a copy-ready Codex CLI command for JSONL automation, constrained sandboxes, output schemas, and deliberate non-Git execution." />
+    <meta property="og:url" content="https://tools.researchaudio.io/codex-exec-command-builder/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Codex exec Command Builder",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "url": "https://tools.researchaudio.io/codex-exec-command-builder/",
+        "description": "A browser-local command builder for Codex exec JSONL, ephemeral sessions, sandbox selection, output schemas, last-message files, and deliberate non-Git execution.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What does codex exec --json output?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The --json flag prints Codex execution events to standard output as JSONL: one JSON object per line. This is intended for automation and machine-readable logs."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I fix Not inside a trusted directory in Codex CLI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Run Codex from the intended Git repository whenever possible. For a deliberate workflow outside Git, codex exec supports --skip-git-repo-check. Specify the working directory carefully before using it."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does --skip-git-repo-check disable the Codex sandbox?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. The flag allows codex exec to run outside a Git repository. Sandbox and approval behavior are separate controls."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do Codex output schema and last-message files differ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "--output-schema points to a JSON Schema that constrains the final response shape. --output-last-message writes the agent's final message to a file. --json separately streams execution events as JSONL."
+            }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#codex-exec-builder">Skip to the command builder</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=codex_exec_builder&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=codex_exec_builder&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=codex_exec_builder&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=codex_exec_builder&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Instrument 14 / Codex automation</p>
+          <h1 id="hero-title">Build the exact <code>codex exec</code> command.</h1>
+          <p class="hero-deck">Generate one inspectable command for JSONL automation, ephemeral runs, constrained sandboxes, structured output, and the trusted-directory check.</p>
+        </div>
+        <aside class="lab-index" aria-label="Codex command builder scope">
+          <span>Official exec controls</span>
+          <strong>07</strong>
+          <p>Every option below maps to the current OpenAI Codex CLI source. The prompt and paths stay in this browser.</p>
+        </aside>
+      </section>
+
+      <section class="instrument-shell" id="codex-exec-builder" aria-labelledby="builder-title">
+        <div class="instrument-intro">
+          <div>
+            <p class="eyebrow">Compose a bounded run</p>
+            <h2 id="builder-title">Make the target and output explicit.</h2>
+          </div>
+          <p>The safe default keeps the Git repository check, uses a read-only sandbox, streams JSONL events, and avoids persisting session files.</p>
+        </div>
+
+        <div class="calculator-layout">
+          <form class="input-panel" id="codex-exec-form">
+            <label class="input-card" for="exec-prompt">
+              <span class="field-copy"><strong>Prompt</strong><small>Shell-safe quoting is applied automatically.</small></span>
+              <span class="text-field text-area-field"><textarea id="exec-prompt" name="prompt" rows="4">Review this repository and return the highest-risk issue.</textarea></span>
+            </label>
+
+            <label class="input-card" for="sandbox-mode">
+              <span class="field-copy"><strong>Sandbox mode</strong><small>Read-only is the default for inspection and CI review.</small></span>
+              <span class="select-field">
+                <select id="sandbox-mode" name="sandbox">
+                  <option value="read-only" selected>read-only</option>
+                  <option value="workspace-write">workspace-write</option>
+                  <option value="danger-full-access">danger-full-access</option>
+                </select>
+              </span>
+            </label>
+
+            <fieldset class="choice-card">
+              <legend>Execution controls</legend>
+              <p>Select only the flags the consumer of this run needs.</p>
+              <div class="choice-grid">
+                <label><input type="checkbox" name="json" checked /> <span><strong>JSONL events</strong><small>Add <code>--json</code> for automation.</small></span></label>
+                <label><input type="checkbox" name="ephemeral" checked /> <span><strong>Ephemeral</strong><small>Do not persist session files.</small></span></label>
+                <label><input type="checkbox" name="skipGitRepoCheck" /> <span><strong>Outside Git</strong><small>Add <code>--skip-git-repo-check</code>.</small></span></label>
+                <label><input type="checkbox" name="ignoreUserConfig" /> <span><strong>Ignore user config</strong><small>Do not load <code>$CODEX_HOME/config.toml</code>.</small></span></label>
+              </div>
+            </fieldset>
+
+            <label class="input-card" for="output-schema">
+              <span class="field-copy"><strong>Output schema file</strong><small>Optional JSON Schema for the final response.</small></span>
+              <span class="text-field"><input id="output-schema" name="outputSchema" type="text" placeholder="schemas/review.json" autocomplete="off" /></span>
+            </label>
+
+            <label class="input-card" for="last-message-file">
+              <span class="field-copy"><strong>Final message file</strong><small>Optional path for <code>--output-last-message</code>.</small></span>
+              <span class="text-field"><input id="last-message-file" name="lastMessageFile" type="text" placeholder="artifacts/review.txt" autocomplete="off" /></span>
+            </label>
+          </form>
+
+          <aside class="result-console config-console" aria-live="polite" aria-labelledby="result-title">
+            <div class="tool-status"><span>Generated command</span><b id="command-status">BOUNDED</b></div>
+            <p class="config-result-title" id="result-title">Copy into the intended repository</p>
+            <pre class="config-output command-output"><code id="command-output">codex exec --json --ephemeral --color never --sandbox read-only 'Review this repository and return the highest-risk issue.'</code></pre>
+            <div class="result-grid config-summary">
+              <div><span>Output stream</span><strong id="output-mode">JSONL</strong></div>
+              <div><span>Git guard</span><strong id="git-guard">Required</strong></div>
+              <div><span>Session files</span><strong id="session-mode">Not saved</strong></div>
+              <div><span>Sandbox</span><strong id="sandbox-summary">read-only</strong></div>
+            </div>
+            <p class="result-note" id="command-note">Run this from the repository you intend Codex to inspect.</p>
+            <button class="action-button" id="copy-command" type="button">Copy command</button>
+            <button class="secondary-button" id="share-command" type="button">Share this setup</button>
+            <button class="secondary-button" id="reset-command" type="button">Restore safe example</button>
+            <p class="share-status" id="command-copy-status" role="status"></p>
+            <div class="result-join">
+              <span>Daily evidence brief · 51,000+ readers</span>
+              <a href="https://researchaudio.io/subscribe?utm_source=codex_exec_builder&amp;utm_medium=tool_result&amp;utm_campaign=ai_evidence_lab&amp;utm_content=result_join">Get the next Codex teardown →</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="Codex exec safety rules">
+        <p class="eyebrow">Three separate boundaries</p>
+        <p><strong>Git check.</strong><br />Confirms the command targets a repository unless deliberately skipped.</p>
+        <p><strong>Sandbox.</strong><br />Controls filesystem and command authority; it is independent of the Git check.</p>
+        <p><strong>Output contract.</strong><br />JSONL events, a final-message file, and a response schema solve different automation needs.</p>
+      </section>
+
+      <section class="method-section" aria-labelledby="method-title">
+        <div>
+          <p class="eyebrow">Current CLI contract</p>
+          <h2 id="method-title">What each generated flag changes.</h2>
+        </div>
+        <div class="method-copy">
+          <p><strong><code>--json</code></strong> prints execution events as newline-delimited JSON. Parse one object per line instead of expecting a single JSON document.</p>
+          <p><strong><code>--ephemeral</code></strong> runs without persisting session files. It does not change model or sandbox behavior.</p>
+          <p><strong><code>--skip-git-repo-check</code></strong> allows execution outside a Git repository. Use it only when the working directory is already explicit and controlled.</p>
+          <p><strong><code>--output-schema</code></strong> points to a JSON Schema for the final response. <strong><code>--output-last-message</code></strong> writes the last agent message to a file.</p>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="exec-guide-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Codex exec guide</p>
+          <h2 id="exec-guide-title">Fix the trusted-directory error without hiding the target.</h2>
+          <p>The best fix is usually to run inside the intended repository. The skip flag is for deliberate non-Git automation, not a blanket trust setting.</p>
+          <a class="guide-link" href="https://github.com/openai/codex/blob/main/codex-rs/exec/src/cli.rs">Inspect the current OpenAI Codex exec source →</a>
+          <a class="guide-link" href="../codex-config-generator/?utm_source=codex_exec_builder&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=config_generator">Need project-doc settings? Build config.toml →</a>
+          <a class="guide-link" href="https://researchaudio.io/p/openai-codex-the-technical-deep-dive-most-engineers-skip?utm_source=codex_exec_builder&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=guide_link">Read the full Codex CLI technical guide →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item">
+            <h3>What does codex exec --json output?</h3>
+            <p>It streams Codex execution events to standard output as JSONL: one JSON object per line. This is useful for CI, logging, and event-driven automation.</p>
+          </article>
+          <article class="faq-item">
+            <h3>How do I fix Not inside a trusted directory in Codex CLI?</h3>
+            <p>Run Codex from the intended Git repository whenever possible. For a deliberate workflow outside Git, add <code>--skip-git-repo-check</code> and make the target directory unambiguous.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Does --skip-git-repo-check disable the Codex sandbox?</h3>
+            <p>No. The flag only bypasses the Git-repository requirement. The sandbox and approval controls remain separate.</p>
+          </article>
+          <article class="faq-item">
+            <h3>How do Codex output schema and last-message files differ?</h3>
+            <p><code>--output-schema</code> constrains the final response shape. <code>--output-last-message</code> saves the final agent message. <code>--json</code> separately streams the full event sequence.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Automation without folklore</p>
+          <h2 id="subscribe-title">Get the next sourced Codex workflow.</h2>
+          <p>ResearchAudio turns changing AI tooling into practical, inspectable decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=codex_exec_builder&amp;utm_medium=organic_tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../tools/">All tools</a>
+        <a href="../codex-config-generator/">Codex config generator</a>
+        <a href="https://researchaudio.io/?utm_source=codex_exec_builder&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script type="module" src="builder.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>

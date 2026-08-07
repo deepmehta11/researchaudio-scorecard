@@ -20,6 +20,8 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Calculates cache-read and cache-write spend, monthly savings, and the break-even cache hit rate from current user-supplied prices.
 - Codex CLI config.toml Generator: https://tools.researchaudio.io/codex-config-generator/
   Generates project_doc_fallback_filenames and project_doc_max_bytes settings while explaining the AGENTS.md resolution order.
+- Codex exec Command Builder: https://tools.researchaudio.io/codex-exec-command-builder/
+  Builds a shell-safe codex exec command for JSONL events, ephemeral sessions, sandbox selection, response schemas, last-message files, and deliberate non-Git execution.
 - Voice AI Latency Calculator: https://tools.researchaudio.io/voice-ai-latency-calculator/
   Estimates time to first audio across endpoint detection, transcript finalization, parallel fast and slow model branches, text-to-speech, and playout.
 - AI Voice Agent Cost Calculator: https://tools.researchaudio.io/voice-ai-cost-calculator/

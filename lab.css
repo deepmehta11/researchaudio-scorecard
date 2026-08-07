@@ -498,6 +498,7 @@ h2 {
 }
 
 .text-field input,
+.text-field textarea,
 .select-field select {
   width: 100%;
   min-width: 0;
@@ -508,7 +509,16 @@ h2 {
   font: 600 0.88rem/1.2 var(--mono);
 }
 
+.text-field textarea {
+  resize: vertical;
+}
+
+.text-area-field textarea {
+  min-height: 112px;
+}
+
 .text-field input:focus,
+.text-field textarea:focus,
 .select-field select:focus {
   outline: 3px solid var(--yellow);
   outline-offset: 2px;
@@ -539,6 +549,10 @@ h2 {
   background: #0d2421;
   border: 1px solid #5a7370;
   white-space: pre-wrap;
+}
+
+.command-output {
+  min-height: 190px;
 }
 
 .config-output code {

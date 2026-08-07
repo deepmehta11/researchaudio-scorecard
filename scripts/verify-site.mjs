@@ -13,6 +13,7 @@ import { calculateGpuMemory } from "../llm-gpu-memory-calculator/calculator.js";
 import { calculateKvCache, MODEL_PRESETS } from "../kv-cache-calculator/calculator.js";
 import { calculatePromptCacheSavings } from "../prompt-caching-calculator/calculator.js";
 import { buildCodexConfig, normalizeFallbackFiles, normalizeMaxBytes } from "../codex-config-generator/generator.js";
+import { buildCodexExecCommand, shellQuote } from "../codex-exec-command-builder/builder.js";
 import { calculateVoiceLatency, classifyVoiceLatency } from "../voice-ai-latency-calculator/calculator.js";
 import { calculateVoiceAiCost } from "../voice-ai-cost-calculator/calculator.js";
 import { buildAttributedShareUrl, parseSharedChecklist, parseSharedNumbers } from "../share-state.js";
@@ -22,7 +23,7 @@ const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const brandedToolsOrigin = "https://tools.researchaudio.io";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, kvCacheHtml, kvCacheJs, gpuGuideHtml, qwenGuideHtml, gptOssGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, kvCacheHtml, kvCacheJs, gpuGuideHtml, qwenGuideHtml, gptOssGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -54,6 +55,8 @@ const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, cost
   readFile(path.join(root, "prompt-caching-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "codex-config-generator/index.html"), "utf8"),
   readFile(path.join(root, "codex-config-generator/generator.js"), "utf8"),
+  readFile(path.join(root, "codex-exec-command-builder/index.html"), "utf8"),
+  readFile(path.join(root, "codex-exec-command-builder/builder.js"), "utf8"),
   readFile(path.join(root, "voice-ai-latency-calculator/index.html"), "utf8"),
   readFile(path.join(root, "voice-ai-latency-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "voice-ai-cost-calculator/index.html"), "utf8"),
@@ -86,6 +89,7 @@ assert.match(html, /ai-cost-calculator/);
 assert.match(html, /agent-loop-diagnostic/);
 assert.match(html, /prompt-caching-calculator/);
 assert.match(html, /codex-config-generator/);
+assert.match(html, /codex-exec-command-builder/);
 assert.match(html, /voice-ai-latency-calculator/);
 assert.match(html, /voice-ai-cost-calculator/);
 assert.match(html, /llm-gpu-memory-calculator/);
@@ -115,6 +119,7 @@ for (const [name, page, pathname] of [
   ["LLM KV cache calculator", kvCacheHtml, "/kv-cache-calculator/"],
   ["prompt caching calculator", promptCacheHtml, "/prompt-caching-calculator/"],
   ["Codex config generator", codexConfigHtml, "/codex-config-generator/"],
+  ["Codex exec command builder", codexExecHtml, "/codex-exec-command-builder/"],
   ["voice AI latency calculator", voiceLatencyHtml, "/voice-ai-latency-calculator/"],
   ["voice AI cost calculator", voiceCostHtml, "/voice-ai-cost-calculator/"],
   ["voice AI cost per minute guide", voiceCostPerMinuteHtml, "/voice-ai-cost-per-minute/"],
@@ -217,6 +222,7 @@ for (const [name, page] of [
   ["LLM KV cache calculator", kvCacheHtml],
   ["prompt caching calculator", promptCacheHtml],
   ["Codex config generator", codexConfigHtml],
+  ["Codex exec command builder", codexExecHtml],
   ["voice AI latency calculator", voiceLatencyHtml],
   ["voice AI cost calculator", voiceCostHtml],
 ]) {
@@ -237,6 +243,7 @@ for (const [name, page, title] of [
   ["LLM KV cache calculator", kvCacheHtml, "LLM KV Cache Calculator (VRAM &amp; Concurrency)"],
   ["prompt caching calculator", promptCacheHtml, "Prompt Caching Cost Calculator &amp; Break-Even Hit Rate"],
   ["Codex config generator", codexConfigHtml, "Codex CLI config.toml Generator"],
+  ["Codex exec command builder", codexExecHtml, "Codex exec Command Builder (--json &amp; Git Check)"],
   ["voice AI latency calculator", voiceLatencyHtml, "Voice AI Latency Calculator (Fast &amp; Slow Models)"],
   ["voice AI cost calculator", voiceCostHtml, "AI Voice Agent Cost Calculator (Cost per Resolved Call)"],
 ]) {
@@ -294,6 +301,12 @@ for (const [name, page, questions] of [
     "What does project_doc_max_bytes do?",
     "Does a fallback file replace AGENTS.md?",
     "Where should Codex config.toml go?",
+  ]],
+  ["Codex exec command builder", codexExecHtml, [
+    "What does codex exec --json output?",
+    "How do I fix Not inside a trusted directory in Codex CLI?",
+    "Does --skip-git-repo-check disable the Codex sandbox?",
+    "How do Codex output schema and last-message files differ?",
   ]],
   ["voice AI latency calculator", voiceLatencyHtml, [
     "How do you calculate voice AI response latency?",
@@ -683,7 +696,7 @@ assert.match(kvCacheHtml, /Qwen2\.5 32B/);
 assert.match(kvCacheHtml, /Qwen2\.5 72B/);
 assert.equal((kvCacheHtml.match(/class="scenario-card/g) || []).length, 3, "KV-cache calculator should contain three sourced scenarios");
 assert.match(toolsHtml, /kv-cache-calculator/);
-assert.equal((toolsHtml.match(/class="tool-card"/g) || []).length, 13, "tools hub should contain thirteen instruments");
+assert.equal((toolsHtml.match(/class="tool-card"/g) || []).length, 14, "tools hub should contain fourteen instruments");
 
 const defaultPromptCache = calculatePromptCacheSavings({
   requestsPerMonth: 100000,
@@ -740,6 +753,40 @@ assert.equal(
 assert.match(codexConfigJs, /utm_source", "codex_config_share"/);
 assert.match(codexConfigJs, /utm_campaign", "ai_evidence_lab"/);
 assert.match(codexConfigHtml, /AGENTS\.override\.md/);
+
+assert.equal(
+  buildCodexExecCommand(),
+  "codex exec --json --ephemeral --color never --sandbox read-only 'Review this repository and return the highest-risk issue.'",
+  "Codex exec builder should default to a read-only ephemeral JSONL run with Git validation",
+);
+assert.equal(shellQuote("it's"), "'it'\\''s'", "Codex exec builder should shell-quote apostrophes");
+assert.equal(
+  buildCodexExecCommand({
+    prompt: "Review it's output",
+    sandbox: "workspace-write",
+    skipGitRepoCheck: true,
+    ignoreUserConfig: true,
+    outputSchema: "schemas/review schema.json",
+    lastMessageFile: "artifacts/last message.txt",
+  }),
+  "codex exec --json --ephemeral --color never --sandbox workspace-write --skip-git-repo-check --ignore-user-config --output-schema 'schemas/review schema.json' --output-last-message 'artifacts/last message.txt' 'Review it'\\''s output'",
+  "Codex exec builder should emit selected Git, config, schema, and last-message controls",
+);
+assert.match(
+  buildCodexExecCommand({ sandbox: "invalid" }),
+  /--sandbox read-only/,
+  "Codex exec builder should fall back to the safest supported sandbox",
+);
+assert.equal((codexExecHtml.match(/"@type": "WebApplication"/g) || []).length, 1, "Codex exec builder should have WebApplication schema");
+assert.equal((codexExecHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "Codex exec builder should have FAQ schema");
+assert.doesNotThrow(() => parseStructuredData(codexExecHtml), "Codex exec builder structured data must be valid JSON");
+assert.match(codexExecHtml, /github\.com\/openai\/codex\/blob\/main\/codex-rs\/exec\/src\/cli\.rs/);
+assert.match(codexExecHtml, /utm_source=codex_exec_builder&amp;utm_medium=tool_result&amp;utm_campaign=ai_evidence_lab/);
+assert.match(codexExecHtml, /--skip-git-repo-check/);
+assert.match(codexExecHtml, /--output-schema/);
+assert.match(codexExecHtml, /--output-last-message/);
+assert.match(codexExecJs, /utm_source", "codex_exec_builder_share"/);
+assert.match(codexExecJs, /utm_campaign", "ai_evidence_lab"/);
 
 const defaultVoiceLatency = calculateVoiceLatency({
   endpointMs: 280,
@@ -878,6 +925,7 @@ assert.match(toolsHtml, /gpt-oss-hardware-requirements/);
 assert.match(toolsHtml, /ai-agent-security-checklist/);
 assert.match(toolsHtml, /ai-benchmark-audit-checklist/);
 assert.match(toolsHtml, /ai-task-fit-diagnostic/);
+assert.match(toolsHtml, /codex-exec-command-builder/);
 assert.match(voiceLatencyHtml, /voice-ai-cost-per-minute/);
 assert.match(labCss, /\.resource-section/);
 assert.match(labCss, /\.resource-grid/);
@@ -997,9 +1045,9 @@ assert.match(qwenGuideHtml, /6\.35 GiB/);
 assert.match(qwenGuideHtml, /27\.76 GiB/);
 assert.match(qwenGuideHtml, /52\.62 GiB/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 23, "sitemap should contain all twenty-three crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 24, "sitemap should contain all twenty-four crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 23, "sitemap should publish twenty-three URL locations");
+assert.equal(sitemapUrls.length, 24, "sitemap should publish twenty-four URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -1011,6 +1059,7 @@ assert.match(llms, /LLM GPU Memory Calculator/);
 assert.match(llms, /LLM KV Cache Calculator/);
 assert.match(llms, /Prompt Caching Cost Calculator/);
 assert.match(llms, /Codex CLI config\.toml Generator/);
+assert.match(llms, /Codex exec Command Builder/);
 assert.match(llms, /Voice AI Latency Calculator/);
 assert.match(llms, /AI Voice Agent Cost Calculator/);
 assert.match(llms, /AI Evidence Starter Kit/);
@@ -1037,4 +1086,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 13 tools, 1 activation kit, 1 embed library, 7 field guides, 23 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 14 tools, 1 activation kit, 1 embed library, 7 field guides, 24 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
