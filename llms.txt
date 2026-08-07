@@ -57,8 +57,12 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Shows how Qwen3 8B moves from a comfortable 4K and 8K INT4 fit to 16K and 32K full-cache shortfalls on the 8GB card.
 - RTX 4060 Ti 16GB Local LLM Guide: https://tools.researchaudio.io/rtx-4060-ti-16gb-llm-models/
   Verifies the 16GB variant before testing Qwen3 14B, gpt-oss-20b, and Qwen3 8B INT8 at the narrow one-card boundary.
+- RTX 3090 vs RTX 4090 Local LLM Comparison: https://tools.researchaudio.io/rtx-3090-vs-4090-local-llm/
+  Shows why both 24GB cards share the same model-fit ceiling, then separates VRAM capacity from workload-specific throughput and total system value.
 - RTX 4090 Local LLM Guide: https://tools.researchaudio.io/rtx-4090-llm-models/
   Shows what model-size tiers clear a 24 GB card, then tests Qwen3 14B, 30B-A3B, 32B, gpt-oss-20b, and a 70B floor with editable architecture-aware scenarios.
+- RTX 5060 Ti 8GB vs 16GB Local LLM Comparison: https://tools.researchaudio.io/rtx-5060-ti-8gb-vs-16gb-local-llm/
+  Compares exact Qwen3 and gpt-oss planning scenarios to show where the 16GB variant's doubled VRAM changes the local-LLM boundary.
 - RTX 5080 Local LLM Guide: https://tools.researchaudio.io/rtx-5080-llm-models/
   Shows what the 16 GB tier changes, including the narrow Qwen3 14B and short-context gpt-oss-20b planning boundaries.
 - RTX 5090 Local LLM Guide: https://tools.researchaudio.io/rtx-5090-llm-models/

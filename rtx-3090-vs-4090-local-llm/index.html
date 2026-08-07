@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RTX 3090 vs 4090 for Local LLMs: Does 24GB Fit More? | ResearchAudio</title>
+    <meta name="description" content="Compare RTX 3090 and RTX 4090 for local LLMs. Both have 24GB VRAM, so model capacity ties; use editable Qwen3 and gpt-oss checks before paying for speed." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/rtx-3090-vs-4090-local-llm/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="RTX 3090 vs RTX 4090 for local LLMs" />
+    <meta property="og:description" content="The 24GB capacity answer is a tie. Compare exact model-fit boundaries, then benchmark the runtime before choosing on speed or value." />
+    <meta property="og:url" content="https://tools.researchaudio.io/rtx-3090-vs-4090-local-llm/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "RTX 3090 vs RTX 4090 for Local LLMs: Does 24GB Fit More?",
+        "description": "A capacity-first comparison of the 24GB RTX 3090 and RTX 4090 with exact Qwen3 and gpt-oss planning scenarios.",
+        "datePublished": "2026-08-07",
+        "dateModified": "2026-08-07",
+        "mainEntityOfPage": "https://tools.researchaudio.io/rtx-3090-vs-4090-local-llm/",
+        "author": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Does an RTX 4090 fit larger local LLMs than an RTX 3090?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Not when VRAM capacity is the limiting factor. NVIDIA specifies 24GB of GDDR6X memory for both cards, so this page gives each the same 21.6 GiB planning budget after reserving ten percent. Runtime speed and efficiency are separate questions." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can an RTX 3090 or RTX 4090 run Qwen3 30B-A3B?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The fully GPU-resident INT4 32K scenario on this page reaches 20.64 GiB and fits within the 21.6 GiB planning budget on either 24GB card, but with narrow margin that still needs runtime validation." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can an RTX 3090 or RTX 4090 run Qwen3 32B at 32K?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Not under this page's fully GPU-resident INT4 planning profile. The 32K scenario reaches 27.93 GiB after cache and headroom, above the 21.6 GiB default budget for either card." }
+          },
+          {
+            "@type": "Question",
+            "name": "Which is better for local LLMs, RTX 3090 or RTX 4090?",
+            "acceptedAnswer": { "@type": "Answer", "text": "They tie on one-card model capacity because both have 24GB. Choose only after measuring the exact runtime, model, context, batch size, power limit, system compatibility, condition, and total cost relevant to your workload." }
+          }
+        ]
+      }
+    ]
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#scenarios">Skip to the model scenarios</a>
+    <header class="lab-header" aria-label="ResearchAudio Evidence Lab">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark"><span class="wordmark-mark" aria-hidden="true">RA</span><span>ResearchAudio</span></a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Buyer comparison / 24 GB VRAM</p>
+          <h1 id="hero-title">RTX 3090 vs RTX 4090 for local LLMs: capacity is a tie.</h1>
+          <p class="hero-deck">Both cards carry 24GB of GDDR6X. That means the same fully GPU-resident model-fit ceiling under identical assumptions. Pay for measured throughput or system value—not an imaginary VRAM advantage.</p>
+          <a class="hero-join-link" href="../llm-gpu-memory-calculator/?parameterBillions=30.5&amp;bitsPerParameter=4&amp;layers=48&amp;kvHeads=4&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_capacity_check">Test your exact model →</a>
+        </div>
+        <aside class="lab-index" aria-label="Shared planning capacity">
+          <span>Both cards at 90%</span>
+          <strong>21.6</strong>
+          <p>GiB planning capacity on either 24GB card. This is a capacity comparison, not a tokens-per-second benchmark.</p>
+        </aside>
+      </section>
+
+      <section class="method-section" aria-labelledby="verdict-title">
+        <div><p class="eyebrow">Fast verdict</p><h2 id="verdict-title">Same model ceiling. Different performance class.</h2></div>
+        <div class="method-copy formula-copy">
+          <p><strong>RTX 3090</strong><br /><code>24 GB GDDR6X · Ampere</code></p>
+          <p><strong>RTX 4090</strong><br /><code>24 GB GDDR6X · Ada Lovelace</code></p>
+          <p><strong>Capacity budget</strong><br /><code>24 × 0.90 = 21.6 GiB each</code></p>
+          <p><strong>Decision rule</strong><br /><code>Fit first · benchmark second</code></p>
+        </div>
+      </section>
+
+      <section class="scenario-section" id="scenarios" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">Shared model boundary</p>
+          <h2 id="scenario-title">These model-fit answers do not change between the cards.</h2>
+          <p>Each card opens an editable, fully GPU-resident estimate. Change context, cache precision, runtime headroom, or GPU count before treating a paper fit as a deployment plan.</p>
+        </div>
+        <div class="scenario-grid guide-scenario-grid">
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=14.8&amp;bitsPerParameter=4&amp;layers=40&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_14b_32k"><span>Qwen3 14B · INT4 · 32K</span><strong>14.27 GiB</strong><small>Fits either card's planning budget →</small></a>
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=30.5&amp;bitsPerParameter=4&amp;layers=48&amp;kvHeads=4&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_30b_a3b_32k"><span>Qwen3 30B-A3B · INT4 · 32K</span><strong>20.64 GiB</strong><small>Narrow fit on either 24GB card →</small></a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=32.8&amp;bitsPerParameter=4&amp;layers=64&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_32b_32k"><span>Qwen3 32B · INT4 · 32K</span><strong>27.93 GiB</strong><small>Misses either one-card budget →</small></a>
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=20.91&amp;bitsPerParameter=4.25&amp;checkpointGiB=12.8&amp;layers=24&amp;kvHeads=8&amp;headDimension=64&amp;contextTokens=4096&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=10&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpt_oss_20b_4k"><span>gpt-oss-20b · MXFP4 · 4K</span><strong>14.29 GiB</strong><small>Fits either card's planning budget →</small></a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=20.91&amp;bitsPerParameter=4.25&amp;checkpointGiB=12.8&amp;layers=24&amp;kvHeads=8&amp;headDimension=64&amp;contextTokens=131072&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpt_oss_20b_128k"><span>gpt-oss-20b · MXFP4 · 128K</span><strong>22.56 GiB</strong><small>Narrow miss on either card →</small></a>
+          <a class="scenario-card" href="../70b-llm-gpu-requirements/?utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=70b_boundary"><span>70B · raw INT4 weights</span><strong>32.60 GiB</strong><small>More than either card before cache →</small></a>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="decision-title">
+        <div class="comparison-heading"><div><p class="eyebrow">Buying decision</p><h2 id="decision-title">Separate fit from delivered performance.</h2></div><p>The RTX 4090 has a newer architecture and more CUDA cores, but those specifications do not establish tokens per second for your model and runtime. Benchmark the exact workload.</p></div>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead><tr><th scope="col">Question</th><th scope="col">RTX 3090</th><th scope="col">RTX 4090</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Official memory</th><td>24 GB GDDR6X</td><td>24 GB GDDR6X</td></tr>
+              <tr><th scope="row">Default usable budget</th><td>21.6 GiB</td><td>21.6 GiB</td></tr>
+              <tr><th scope="row">One-card model ceiling</th><td>Same at equal assumptions</td><td>Same at equal assumptions</td></tr>
+              <tr><th scope="row">What still needs testing</th><td colspan="2">Runtime, model, context, batch, power, thermals, system fit, condition, and total cost</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="RTX 3090 versus RTX 4090 decision boundaries">
+        <p class="eyebrow">Do not buy from one number</p>
+        <p><strong>Capacity ties.</strong><br />Both cards get the same 24GB model-fit answer under equal assumptions.</p>
+        <p><strong>Speed needs evidence.</strong><br />The exact engine, kernels, quantization, context, and batch decide delivered throughput.</p>
+        <p><strong>Total value is local.</strong><br />Include card condition, power, cooling, chassis, warranty, and your actual workload.</p>
+      </section>
+
+      <section class="guide-section" aria-labelledby="sources-title">
+        <div class="guide-intro"><p class="eyebrow">Primary sources</p><h2 id="sources-title">Verify the capacity claim at the source.</h2>
+          <p>NVIDIA's RTX 3090 guide and Ampere architecture paper specify 24GB of GDDR6X. NVIDIA also specifies 24GB of GDDR6X for the RTX 4090. ResearchAudio's calculator applies the same reserve and model assumptions to both.</p>
+          <a class="guide-link" href="https://www.nvidia.com/content/geforce-gtx/GEFORCE_RTX_3090_USER_GUIDE_v01.pdf">Official NVIDIA RTX 3090 user guide →</a>
+          <a class="guide-link" href="https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4090/">Official NVIDIA RTX 4090 specifications →</a>
+          <a class="guide-link" href="../rtx-4090-llm-models/?utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=rtx_4090_capacity_guide">Open the detailed 24GB model guide →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>Does an RTX 4090 fit larger local LLMs than an RTX 3090?</h3><p>No when VRAM is the binding constraint. Both have 24GB, so the fully resident model-fit boundary is the same under equal assumptions.</p></article>
+          <article class="faq-item"><h3>Can an RTX 3090 or RTX 4090 run Qwen3 30B-A3B?</h3><p>The 32K INT4 scenario reaches 20.64 GiB and fits the 21.6 GiB planning budget narrowly on either card. Validate the exact runtime before deployment.</p></article>
+          <article class="faq-item"><h3>Can an RTX 3090 or RTX 4090 run Qwen3 32B at 32K?</h3><p>Not under this fully GPU-resident profile. Cache and headroom lift the estimate to 27.93 GiB, above either card's default budget.</p></article>
+          <article class="faq-item"><h3>Which is better for local LLMs, RTX 3090 or RTX 4090?</h3><p>Capacity alone cannot choose between them. Measure throughput and total system value for your engine, model, context, batch, power, and hardware constraints.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">
+        <div><p class="eyebrow">Hardware claims, checked</p><h2 id="subscribe-title">Get the next local-AI deployment teardown.</h2><p>ResearchAudio traces exact checkpoints, context, runtime constraints, and the gap between “fits” and “works.”</p></div>
+        <div class="subscribe-form-shell">
+          <p class="subscribe-direct-fallback"><strong>Prefer the hosted signup page?</strong><a href="https://researchaudio.io/subscribe?utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join">Join ResearchAudio free →</a></p>
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links"><a href="../what-llm-can-i-run/">Model finder</a><a href="../llm-gpu-memory-calculator/">GPU calculator</a><a href="../tools/">All tools</a><a href="https://researchaudio.io/?utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a></div>
+    </footer>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"c20a9e29828c471c92ed7c2284901e05","spa":false}'></script>
+  </body>
+</html>

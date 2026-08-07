@@ -1,6 +1,6 @@
 # ResearchAudio Evidence Lab
 
-An evergreen acquisition ecosystem for ResearchAudio. Sixteen browser-local tools, nineteen practical field guides, and a self-serve embed library turn AI task framing, benchmark and launch claims, token budgets, voice latency and outcome economics, hardware-first local LLM discovery, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability and security, automation business cases, and Codex workflows into concrete inspections before inviting visitors into the daily briefing.
+An evergreen acquisition ecosystem for ResearchAudio. Sixteen browser-local tools, twenty-one practical field guides, and a self-serve embed library turn AI task framing, benchmark and launch claims, token budgets, voice latency and outcome economics, hardware-first local LLM discovery, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability and security, automation business cases, and Codex workflows into concrete inspections before inviting visitors into the daily briefing.
 
 Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain connected to the Beehiiv publication at `https://researchaudio.io/`.
 
@@ -24,7 +24,9 @@ Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain con
 - `/rtx-3060-llm-models/` — hardware-first 12 GB guide separating the generic 14B INT4 weight tier from exact Qwen3 and gpt-oss context-memory boundaries.
 - `/rtx-4060-llm-models/` — hardware-first 8 GB guide showing where Qwen3 8B crosses from a 4K and 8K fit into 16K and 32K full-cache shortfalls.
 - `/rtx-4060-ti-16gb-llm-models/` — variant-specific 16 GB guide exposing the narrow Qwen3 14B and short-context gpt-oss-20b planning fits.
+- `/rtx-3090-vs-4090-local-llm/` — buyer-focused comparison showing that both 24 GB cards share a model-fit ceiling and that runtime value needs workload-specific measurement.
 - `/rtx-4090-llm-models/` — hardware-first 24 GB guide with generic precision floors plus exact Qwen3 and gpt-oss deployment boundaries.
+- `/rtx-5060-ti-8gb-vs-16gb-local-llm/` — variant comparison showing where doubling VRAM changes exact Qwen3 and gpt-oss fit decisions.
 - `/rtx-5080-llm-models/` — hardware-first 16 GB guide exposing razor-thin Qwen3 14B and short-context gpt-oss-20b paper fits.
 - `/rtx-5090-llm-models/` — hardware-first 32 GB guide showing where Qwen3 32B and a 128K gpt-oss-20b profile cross into narrow one-card fits.
 - `/qwen2-5-gpu-requirements/` — crawlable Qwen2.5 7B, 32B, and 72B matrix across INT4, INT8, BF16, 32K KV cache, and 128K context.
