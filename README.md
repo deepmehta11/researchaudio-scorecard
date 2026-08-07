@@ -1,6 +1,6 @@
 # ResearchAudio Evidence Lab
 
-An evergreen acquisition ecosystem for ResearchAudio. Ten browser-local tools and four practical field guides turn AI launch claims, token budgets, voice latency and outcome economics, GPU sizing, cache economics, workflow economics, agent reliability, automation business cases, and Codex configuration into concrete inspections before inviting visitors into the daily briefing.
+An evergreen acquisition ecosystem for ResearchAudio. Eleven browser-local tools and four practical field guides turn AI launch claims, token budgets, voice latency and outcome economics, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability, automation business cases, and Codex configuration into concrete inspections before inviting visitors into the daily briefing.
 
 Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain connected to the Beehiiv publication at `https://researchaudio.io/`.
 
@@ -14,6 +14,7 @@ Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain con
 - `/prompt-caching-calculator/` — cache-read and cache-write economics with a break-even hit-rate calculation.
 - `/codex-config-generator/` — copy-ready Codex CLI project document fallbacks and instruction byte limits.
 - `/voice-ai-latency-calculator/` — first-audio latency across endpointing, transcription, parallel fast and slow model branches, TTS, and playout.
+- `/kv-cache-calculator/` — exact KV-cache memory per token, full-context sequence, concurrency level, and GQA/MHA architecture.
 - `/voice-ai-cost-calculator/` — loaded cost per AI-resolved call after platform, telephony, STT, TTS, LLM, fixed fees, and human handoffs.
 - `/voice-ai-cost-per-minute/` — crawlable field note with the full stack-rate formula and editable sensitivity scenarios.
 - `/ai-receptionist-cost/` — crawlable monthly worksheet with after-hours, appointment, and high-volume call scenarios.

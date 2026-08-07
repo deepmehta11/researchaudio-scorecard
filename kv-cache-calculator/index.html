@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LLM KV Cache Calculator (VRAM &amp; Concurrency) | ResearchAudio</title>
+    <meta name="description" content="Calculate exact LLM KV-cache memory per token, sequence, context window, and concurrent request from layers, KV heads, head dimension, and cache precision." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/kv-cache-calculator/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How much VRAM will the KV cache use?" />
+    <meta property="og:description" content="An architecture-aware KV-cache calculator for context length, concurrency, GQA savings, and available VRAM." />
+    <meta property="og:url" content="https://tools.researchaudio.io/kv-cache-calculator/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "LLM KV Cache Calculator",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "url": "https://tools.researchaudio.io/kv-cache-calculator/",
+        "description": "A free architecture-aware calculator for LLM KV-cache memory per token, sequence, context window, concurrency level, and available VRAM.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do you calculate LLM KV cache memory?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Multiply two for keys and values by transformer layers, KV heads, head dimension, cached tokens, concurrent sequences, and bytes per cache element. Convert the resulting bytes to GiB." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why do grouped-query attention models use less KV cache?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Grouped-query attention shares key and value heads across multiple query heads. When KV heads are fewer than attention heads, the cache stores fewer key and value elements per token." }
+          },
+          {
+            "@type": "Question",
+            "name": "How does context length affect KV cache memory?",
+            "acceptedAnswer": { "@type": "Answer", "text": "For a full cache, memory grows linearly with cached tokens and concurrent sequences. Doubling either input doubles the calculated cache memory, before runtime-specific optimizations or allocation overhead." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does KV cache memory include model weights?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. This calculator isolates KV-cache memory. Add the result to model weights, runtime allocations, activations, and other serving overhead when planning total GPU memory." }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#kv-cache-calculator">Skip to the KV-cache calculator</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=kv_cache_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=kv_cache_calculator&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=kv_cache_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=kv_cache_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Instrument 10 / inference cache</p>
+          <h1 id="hero-title">Context length has a memory bill.</h1>
+          <p class="hero-deck">Calculate KV-cache memory per token, per sequence, and across concurrent requests—then compare grouped-query attention with a full multi-head cache.</p>
+        </div>
+        <aside class="lab-index" aria-label="KV-cache model scope">
+          <span>Planning inputs</span>
+          <strong>09</strong>
+          <p>Exact arithmetic from model architecture and cache shape. Runtime allocation behavior still needs a deployment benchmark.</p>
+        </aside>
+      </section>
+
+      <section class="instrument-shell" id="kv-cache-calculator" aria-labelledby="calculator-title">
+        <div class="instrument-intro">
+          <div>
+            <p class="eyebrow">Size one cache</p>
+            <h2 id="calculator-title">Make context and concurrency explicit.</h2>
+          </div>
+          <p>Choose a sourced model preset or enter the exact configuration. Nothing is submitted or stored; every calculation runs in this browser.</p>
+        </div>
+
+        <div class="calculator-layout">
+          <form class="input-panel" id="kv-cache-form">
+            <p class="input-section-label">Model architecture</p>
+            <label class="input-card" for="model-preset">
+              <span class="field-copy"><strong>Model preset</strong><small>Presets copy architecture values; every field remains editable.</small></span>
+              <span class="select-field">
+                <select id="model-preset" name="modelPreset">
+                  <option value="custom">Custom architecture</option>
+                  <option value="qwen2.5-7b" selected>Qwen2.5 7B</option>
+                  <option value="qwen2.5-32b">Qwen2.5 32B</option>
+                  <option value="qwen2.5-72b">Qwen2.5 72B</option>
+                  <option value="mistral-7b-v0.3">Mistral 7B v0.3</option>
+                </select>
+              </span>
+            </label>
+            <label class="input-card" for="model-layers">
+              <span class="field-copy"><strong>Transformer layers</strong><small><code>num_hidden_layers</code> in many model configs.</small></span>
+              <span class="number-field suffix"><span>layers</span><input id="model-layers" name="layers" type="number" min="1" max="10000" step="1" value="28" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="attention-heads">
+              <span class="field-copy"><strong>Attention heads</strong><small>Total query heads, used for the MHA comparison.</small></span>
+              <span class="number-field suffix"><span>heads</span><input id="attention-heads" name="attentionHeads" type="number" min="1" max="10000" step="1" value="28" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="kv-heads">
+              <span class="field-copy"><strong>Key-value heads</strong><small>Use <code>num_key_value_heads</code>, not total query heads.</small></span>
+              <span class="number-field suffix"><span>heads</span><input id="kv-heads" name="kvHeads" type="number" min="1" max="10000" step="1" value="4" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="head-dimension">
+              <span class="field-copy"><strong>Head dimension</strong><small>Use the configured value or hidden size divided by attention heads.</small></span>
+              <span class="number-field suffix"><span>dim</span><input id="head-dimension" name="headDimension" type="number" min="1" max="65536" step="1" value="128" inputmode="numeric" /></span>
+            </label>
+            <p class="input-section-label">Serving workload</p>
+            <label class="input-card" for="context-tokens">
+              <span class="field-copy"><strong>Cached context</strong><small>Full cached tokens held by each live sequence.</small></span>
+              <span class="number-field suffix"><span>tokens</span><input id="context-tokens" name="contextTokens" type="number" min="0" max="10000000" step="128" value="32768" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="concurrent-sequences">
+              <span class="field-copy"><strong>Concurrent sequences</strong><small>Simultaneous full caches, not prompt-processing microbatch size.</small></span>
+              <span class="number-field suffix"><span>seq</span><input id="concurrent-sequences" name="concurrentSequences" type="number" min="1" max="100000" step="1" value="1" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="kv-cache-bits">
+              <span class="field-copy"><strong>KV-cache precision</strong><small>Confirm the exact runtime supports the selected cache format.</small></span>
+              <span class="select-field">
+                <select id="kv-cache-bits" name="kvCacheBits">
+                  <option value="32">FP32 · 32-bit</option>
+                  <option value="16" selected>FP16 / BF16 · 16-bit</option>
+                  <option value="8">FP8 / INT8 · 8-bit</option>
+                  <option value="4">INT4 · 4-bit</option>
+                </select>
+              </span>
+            </label>
+            <label class="input-card" for="available-kv-vram">
+              <span class="field-copy"><strong>VRAM reserved for KV</strong><small>Memory left after weights and other runtime allocations.</small></span>
+              <span class="number-field suffix"><span>GiB</span><input id="available-kv-vram" name="availableKvVramGiB" type="number" min="0" max="100000" step="0.1" value="16" inputmode="decimal" /></span>
+            </label>
+          </form>
+
+          <aside class="result-console" aria-live="polite" aria-labelledby="result-title">
+            <div class="tool-status"><span>Cache plan</span><b id="kv-cache-status">BASELINE</b></div>
+            <p class="primary-result"><span id="total-kv-cache">0 GiB</span></p>
+            <p class="result-label" id="result-title">Total KV cache at stated concurrency</p>
+            <div class="result-grid">
+              <div><span>Per token</span><strong id="kv-per-token">0 KiB</strong></div>
+              <div><span>Per sequence</span><strong id="kv-per-sequence">0 GiB</strong></div>
+              <div><span>Cached tokens</span><strong id="cached-tokens">0</strong></div>
+              <div><span>Full MHA cache</span><strong id="mha-cache">0 GiB</strong></div>
+              <div><span>GQA reduction</span><strong id="gqa-reduction">—</strong></div>
+              <div><span>GQA memory saved</span><strong id="gqa-savings">0 GiB</strong></div>
+              <div><span>Max full contexts</span><strong id="max-sequences">0</strong></div>
+              <div><span>Cache format</span><strong id="kv-precision">16-bit KV</strong></div>
+            </div>
+            <p class="result-note" id="kv-cache-note">Enter the model architecture and serving workload.</p>
+            <button class="action-button" id="share-kv-cache" type="button">Share this exact cache plan</button>
+            <button class="secondary-button" id="reset-kv-cache" type="button">Restore Qwen2.5 7B example</button>
+            <p class="share-status" id="share-status" role="status"></p>
+            <div class="result-join">
+              <span>Daily evidence brief · 51,000+ readers</span>
+              <a href="https://researchaudio.io/subscribe?utm_source=kv_cache_calculator&amp;utm_medium=tool_result&amp;utm_campaign=ai_evidence_lab&amp;utm_content=result_join">Get the next infrastructure teardown →</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="scenario-section" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">Sourced architecture presets</p>
+          <h2 id="scenario-title">Same 32K context. Different cache shapes.</h2>
+          <p>These scenarios use 16-bit KV cache, one full-context sequence, and architecture fields from the publishers' model configurations. Open one, then change context and concurrency.</p>
+        </div>
+        <div class="scenario-grid guide-scenario-grid">
+          <a class="scenario-card is-base" href="./?modelPreset=qwen2.5-7b&amp;layers=28&amp;attentionHeads=28&amp;kvHeads=4&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;availableKvVramGiB=16&amp;utm_source=kv_cache_calculator&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen_7b_32k">
+            <span>Qwen2.5 7B · 32K</span>
+            <strong>1.75 GiB</strong>
+            <small>56 KiB per token · 7× GQA reduction →</small>
+          </a>
+          <a class="scenario-card" href="./?modelPreset=qwen2.5-32b&amp;layers=64&amp;attentionHeads=40&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;availableKvVramGiB=24&amp;utm_source=kv_cache_calculator&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen_32b_32k">
+            <span>Qwen2.5 32B · 32K</span>
+            <strong>8 GiB</strong>
+            <small>256 KiB per token · 5× GQA reduction →</small>
+          </a>
+          <a class="scenario-card" href="./?modelPreset=qwen2.5-72b&amp;layers=80&amp;attentionHeads=64&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;availableKvVramGiB=24&amp;utm_source=kv_cache_calculator&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen_72b_32k">
+            <span>Qwen2.5 72B · 32K</span>
+            <strong>10 GiB</strong>
+            <small>320 KiB per token · 8× GQA reduction →</small>
+          </a>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="KV-cache interpretation">
+        <p class="eyebrow">Cache boundaries</p>
+        <p><strong>Full context is a ceiling.</strong><br />Real requests may hold fewer cached tokens at a given moment.</p>
+        <p><strong>Concurrency multiplies.</strong><br />Each independent full sequence needs its own cache unless prefixes are shared.</p>
+        <p><strong>Allocation still matters.</strong><br />Paged, sliding-window, chunked, and offloaded caches change residency and waste.</p>
+      </section>
+
+      <section class="method-section" aria-labelledby="method-title">
+        <div>
+          <p class="eyebrow">Transparent method</p>
+          <h2 id="method-title">What this KV-cache calculator computes.</h2>
+        </div>
+        <div class="method-copy formula-copy">
+          <p><strong>Bytes per token</strong><br /><code>2 × layers × KV heads × head dimension × bytes per element</code></p>
+          <p><strong>Bytes per sequence</strong><br /><code>bytes per token × cached context tokens</code></p>
+          <p><strong>Total cache</strong><br /><code>bytes per sequence × concurrent sequences</code></p>
+          <p><strong>GQA comparison</strong> replaces KV heads with total attention heads to show the cache a full multi-head-attention architecture would use at the same layer count, head dimension, context, concurrency, and precision.</p>
+          <p>The arithmetic describes a dense full cache. It does not add model weights, activations, CUDA context, allocator fragmentation, metadata, block rounding, or runtime workspace. Use the <a href="../llm-gpu-memory-calculator/?utm_source=kv_cache_calculator&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=full_gpu_plan">LLM GPU Memory Calculator</a> for the combined capacity plan.</p>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="guide-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Source the inputs</p>
+          <h2 id="guide-title">Read the model config before trusting the result.</h2>
+          <p>Architecture names vary. Confirm hidden layers, attention heads, KV heads, head dimension, cache format, and any hybrid or sliding-window behavior in the exact model and runtime you plan to serve.</p>
+          <a class="guide-link" href="https://huggingface.co/docs/transformers/en/kv_cache">Review the Transformers KV-cache guide →</a>
+          <a class="guide-link" href="https://huggingface.co/Qwen/Qwen2.5-7B-Instruct/blob/main/config.json">Inspect the Qwen2.5 7B config →</a>
+          <a class="guide-link" href="https://huggingface.co/Qwen/Qwen2.5-32B-Instruct/blob/main/config.json">Inspect the Qwen2.5 32B config →</a>
+          <a class="guide-link" href="https://huggingface.co/Qwen/Qwen2.5-72B-Instruct/blob/main/config.json">Inspect the Qwen2.5 72B config →</a>
+          <a class="guide-link" href="https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3/blob/main/config.json?utm_source=kv_cache_calculator&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=guide_link">Inspect the Mistral 7B v0.3 config →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item">
+            <h3>How do you calculate LLM KV cache memory?</h3>
+            <p>Multiply two for keys and values by layers, KV heads, head dimension, cached tokens, concurrent sequences, and bytes per cache element. Divide bytes by 1,073,741,824 for GiB.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Why do grouped-query attention models use less KV cache?</h3>
+            <p>Grouped-query attention shares key and value heads across multiple query heads. Fewer KV heads means fewer stored elements per token than full multi-head attention.</p>
+          </article>
+          <article class="faq-item">
+            <h3>How does context length affect KV cache memory?</h3>
+            <p>A dense full cache grows linearly with cached tokens and concurrent sequences. Double either input and the calculated memory doubles.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Does KV cache memory include model weights?</h3>
+            <p>No. This result isolates the cache. Add weights and deployment-specific runtime allocations before deciding whether the full workload fits.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Infrastructure without the benchmark theatre</p>
+          <h2 id="subscribe-title">Get the next AI systems teardown.</h2>
+          <p>ResearchAudio turns model releases, hardware claims, and serving constraints into practical decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=kv_cache_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../llm-gpu-memory-calculator/">GPU memory calculator</a>
+        <a href="../70b-llm-gpu-requirements/">70B GPU guide</a>
+        <a href="../tools/">All tools</a>
+      </div>
+    </footer>
+    <script type="module" src="calculator.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>

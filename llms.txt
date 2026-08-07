@@ -24,6 +24,8 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Calculates loaded cost per AI-resolved call across platform, telephony, STT, TTS, LLM, fixed fees, failed resolutions, and human handoffs.
 - LLM GPU Memory Calculator: https://tools.researchaudio.io/llm-gpu-memory-calculator/
   Estimates model-weight VRAM, optional architecture-aware KV cache, runtime headroom, usable memory per GPU, and minimum GPU count.
+- LLM KV Cache Calculator: https://tools.researchaudio.io/kv-cache-calculator/
+  Calculates exact KV-cache memory per token, sequence, context window, and concurrent request, plus GQA savings and full-context capacity.
 - AI Evidence Starter Kit: https://tools.researchaudio.io/evidence-starter-kit/
   A guided four-step path through the Evidence Lab with browser-local progress and an attributed share action.
 

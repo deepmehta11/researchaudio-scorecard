@@ -7,6 +7,7 @@ import { classifyLoop, controls } from "../agent-loop-diagnostic/diagnostic.js";
 import { calculateAgentRoi, classifyAgentRoi } from "../ai-agent-roi-calculator/calculator.js";
 import { calculateLlmApiCost } from "../llm-api-cost-calculator/calculator.js";
 import { calculateGpuMemory } from "../llm-gpu-memory-calculator/calculator.js";
+import { calculateKvCache, MODEL_PRESETS } from "../kv-cache-calculator/calculator.js";
 import { calculatePromptCacheSavings } from "../prompt-caching-calculator/calculator.js";
 import { buildCodexConfig, normalizeFallbackFiles, normalizeMaxBytes } from "../codex-config-generator/generator.js";
 import { calculateVoiceLatency, classifyVoiceLatency } from "../voice-ai-latency-calculator/calculator.js";
@@ -18,7 +19,7 @@ const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const brandedToolsOrigin = "https://tools.researchaudio.io";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, gpuGuideHtml, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, kvCacheHtml, kvCacheJs, gpuGuideHtml, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -32,6 +33,8 @@ const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llm
   readFile(path.join(root, "llm-api-cost-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "llm-gpu-memory-calculator/index.html"), "utf8"),
   readFile(path.join(root, "llm-gpu-memory-calculator/calculator.js"), "utf8"),
+  readFile(path.join(root, "kv-cache-calculator/index.html"), "utf8"),
+  readFile(path.join(root, "kv-cache-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "70b-llm-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "prompt-caching-calculator/index.html"), "utf8"),
   readFile(path.join(root, "prompt-caching-calculator/calculator.js"), "utf8"),
@@ -72,6 +75,7 @@ assert.match(html, /codex-config-generator/);
 assert.match(html, /voice-ai-latency-calculator/);
 assert.match(html, /voice-ai-cost-calculator/);
 assert.match(html, /llm-gpu-memory-calculator/);
+assert.match(html, /kv-cache-calculator/);
 assert.doesNotMatch(html, /TODO|PLACEHOLDER|example\.com/);
 
 assert.match(css, /@media \(max-width: 620px\)/);
@@ -92,6 +96,7 @@ for (const [name, page, pathname] of [
   ["agent ROI calculator", roiHtml, "/ai-agent-roi-calculator/"],
   ["LLM API cost calculator", llmCostHtml, "/llm-api-cost-calculator/"],
   ["LLM GPU memory calculator", gpuMemoryHtml, "/llm-gpu-memory-calculator/"],
+  ["LLM KV cache calculator", kvCacheHtml, "/kv-cache-calculator/"],
   ["prompt caching calculator", promptCacheHtml, "/prompt-caching-calculator/"],
   ["Codex config generator", codexConfigHtml, "/codex-config-generator/"],
   ["voice AI latency calculator", voiceLatencyHtml, "/voice-ai-latency-calculator/"],
@@ -153,6 +158,7 @@ for (const [name, page] of [
   ["agent ROI calculator", roiHtml],
   ["LLM API cost calculator", llmCostHtml],
   ["LLM GPU memory calculator", gpuMemoryHtml],
+  ["LLM KV cache calculator", kvCacheHtml],
   ["prompt caching calculator", promptCacheHtml],
   ["Codex config generator", codexConfigHtml],
   ["voice AI latency calculator", voiceLatencyHtml],
@@ -171,6 +177,7 @@ for (const [name, page, title] of [
   ["agent ROI calculator", roiHtml, "AI Agent ROI Calculator with Failure & Review"],
   ["LLM API cost calculator", llmCostHtml, "LLM API Cost Calculator (Input &amp; Output Tokens)"],
   ["LLM GPU memory calculator", gpuMemoryHtml, "LLM GPU Memory Calculator (VRAM &amp; GPU Count)"],
+  ["LLM KV cache calculator", kvCacheHtml, "LLM KV Cache Calculator (VRAM &amp; Concurrency)"],
   ["prompt caching calculator", promptCacheHtml, "Prompt Caching Cost Calculator &amp; Break-Even Hit Rate"],
   ["Codex config generator", codexConfigHtml, "Codex CLI config.toml Generator"],
   ["voice AI latency calculator", voiceLatencyHtml, "Voice AI Latency Calculator (Fast &amp; Slow Models)"],
@@ -212,6 +219,12 @@ for (const [name, page, questions] of [
     "How many GPUs does a 70B model need?",
     "How does quantization change LLM VRAM?",
     "Does this calculator include KV cache memory?",
+  ]],
+  ["LLM KV cache calculator", kvCacheHtml, [
+    "How do you calculate LLM KV cache memory?",
+    "Why do grouped-query attention models use less KV cache?",
+    "How does context length affect KV cache memory?",
+    "Does KV cache memory include model weights?",
   ]],
   ["prompt caching calculator", promptCacheHtml, [
     "How do you calculate prompt caching savings?",
@@ -422,7 +435,63 @@ assert.match(gpuMemoryHtml, /huggingface\.co\/docs\/accelerate\/en\/usage_guides
 assert.match(gpuMemoryHtml, /huggingface\.co\/docs\/transformers\/en\/kv_cache/);
 assert.match(gpuMemoryHtml, /understanding-gpu-architecture-technical-deep-dive/);
 assert.match(toolsHtml, /llm-gpu-memory-calculator/);
-assert.equal((toolsHtml.match(/class="tool-card"/g) || []).length, 10, "tools hub should contain ten instruments");
+assert.match(gpuMemoryHtml, /kv-cache-calculator/);
+assert.match(gpuGuideHtml, /kv-cache-calculator/);
+
+const defaultKvCache = calculateKvCache({
+  layers: 28,
+  attentionHeads: 28,
+  kvHeads: 4,
+  headDimension: 128,
+  contextTokens: 32768,
+  concurrentSequences: 1,
+  kvCacheBits: 16,
+  availableKvVramGiB: 16,
+});
+assert.equal(defaultKvCache.bytesPerToken, 57344);
+assert.equal(defaultKvCache.perSequenceGiB, 1.75);
+assert.equal(defaultKvCache.totalGiB, 1.75);
+assert.equal(defaultKvCache.mhaTotalGiB, 12.25);
+assert.equal(defaultKvCache.gqaReduction, 7);
+assert.equal(defaultKvCache.gqaSavingsGiB, 10.5);
+assert.equal(defaultKvCache.maxFullContextSequences, 9);
+assert.equal(defaultKvCache.totalCachedTokens, 32768);
+const qwen32KvCache = calculateKvCache({
+  ...MODEL_PRESETS["qwen2.5-32b"],
+  contextTokens: 32768,
+  concurrentSequences: 3,
+  kvCacheBits: 8,
+  availableKvVramGiB: 24,
+});
+assert.equal(qwen32KvCache.perSequenceGiB, 4);
+assert.equal(qwen32KvCache.totalGiB, 12);
+assert.equal(qwen32KvCache.maxFullContextSequences, 6);
+const invalidKvCache = calculateKvCache({
+  layers: 32,
+  attentionHeads: 4,
+  kvHeads: 8,
+  headDimension: 128,
+  contextTokens: 8192,
+  concurrentSequences: 1,
+  kvCacheBits: 3,
+  availableKvVramGiB: -1,
+});
+assert.equal(invalidKvCache.validHeadRatio, false);
+assert.equal(invalidKvCache.cacheBits, 16);
+assert.equal(invalidKvCache.availableGiB, 0);
+assert.match(kvCacheJs, /source: "kv_cache_share"/);
+assert.match(kvCacheJs, /content: "shared_kv_cache_result"/);
+assert.match(kvCacheHtml, /name="attentionHeads"/);
+assert.match(kvCacheHtml, /name="kvHeads"/);
+assert.match(kvCacheHtml, /name="contextTokens"/);
+assert.match(kvCacheHtml, /name="concurrentSequences"/);
+assert.match(kvCacheHtml, /name="availableKvVramGiB"/);
+assert.match(kvCacheHtml, /Qwen2\.5 7B/);
+assert.match(kvCacheHtml, /Qwen2\.5 32B/);
+assert.match(kvCacheHtml, /Qwen2\.5 72B/);
+assert.equal((kvCacheHtml.match(/class="scenario-card/g) || []).length, 3, "KV-cache calculator should contain three sourced scenarios");
+assert.match(toolsHtml, /kv-cache-calculator/);
+assert.equal((toolsHtml.match(/class="tool-card"/g) || []).length, 11, "tools hub should contain eleven instruments");
 
 const defaultPromptCache = calculatePromptCacheSavings({
   requestsPerMonth: 100000,
@@ -678,9 +747,9 @@ assert.match(starterJs, /utm_campaign", "ai_evidence_lab"/);
 assert.match(starterJs, /utm_medium"\) === "onboarding"/);
 assert.doesNotMatch(starterHtml, /TODO|PLACEHOLDER|example\.com/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 16, "sitemap should contain all sixteen crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 17, "sitemap should contain all seventeen crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 16, "sitemap should publish sixteen URL locations");
+assert.equal(sitemapUrls.length, 17, "sitemap should publish seventeen URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -689,6 +758,7 @@ assert.match(llms, /AI Agent Loop Diagnostic/);
 assert.match(llms, /AI Agent ROI Calculator/);
 assert.match(llms, /LLM API Cost Calculator/);
 assert.match(llms, /LLM GPU Memory Calculator/);
+assert.match(llms, /LLM KV Cache Calculator/);
 assert.match(llms, /Prompt Caching Cost Calculator/);
 assert.match(llms, /Codex CLI config\.toml Generator/);
 assert.match(llms, /Voice AI Latency Calculator/);
@@ -712,4 +782,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 10 tools, 1 activation kit, 4 field guides, 16 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 11 tools, 1 activation kit, 4 field guides, 17 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
