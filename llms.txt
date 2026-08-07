@@ -53,6 +53,10 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Compares INT4, INT8, and FP16 through explicit weight, KV-cache, runtime-headroom, and usable-VRAM assumptions.
 - RTX 3060 12GB Local LLM Guide: https://tools.researchaudio.io/rtx-3060-llm-models/
   Shows why the generic 14B INT4 weight tier does not guarantee a full deployment fit, with exact Qwen3 8B, Qwen3 14B, and gpt-oss-20b context-memory scenarios.
+- RTX 4060 8GB Local LLM Guide: https://tools.researchaudio.io/rtx-4060-llm-models/
+  Shows how Qwen3 8B moves from a comfortable 4K and 8K INT4 fit to 16K and 32K full-cache shortfalls on the 8GB card.
+- RTX 4060 Ti 16GB Local LLM Guide: https://tools.researchaudio.io/rtx-4060-ti-16gb-llm-models/
+  Verifies the 16GB variant before testing Qwen3 14B, gpt-oss-20b, and Qwen3 8B INT8 at the narrow one-card boundary.
 - RTX 4090 Local LLM Guide: https://tools.researchaudio.io/rtx-4090-llm-models/
   Shows what model-size tiers clear a 24 GB card, then tests Qwen3 14B, 30B-A3B, 32B, gpt-oss-20b, and a 70B floor with editable architecture-aware scenarios.
 - RTX 5080 Local LLM Guide: https://tools.researchaudio.io/rtx-5080-llm-models/

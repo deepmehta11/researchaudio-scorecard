@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>What LLM Can an RTX 4060 Run? 8GB VRAM Guide | ResearchAudio</title>
+    <meta name="description" content="See what local LLMs fit an RTX 4060 8GB, including exact Qwen3 8B context boundaries, conservative INT4, INT8, and FP16 floors, and editable VRAM calculations." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <link rel="canonical" href="https://tools.researchaudio.io/rtx-4060-llm-models/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="What LLM Can an RTX 4060 8GB Run?" />
+    <meta property="og:description" content="Qwen3 8B at INT4 clears this 8GB planning budget at 4K and 8K context, then crosses the boundary at 16K with a full BF16 KV cache." />
+    <meta property="og:url" content="https://tools.researchaudio.io/rtx-4060-llm-models/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "What LLM Can an RTX 4060 Run? 8GB VRAM Guide",
+        "description": "A hardware-first local LLM guide for the 8GB RTX 4060 with transparent precision floors and exact Qwen3 8B context-memory boundaries.",
+        "datePublished": "2026-08-07",
+        "dateModified": "2026-08-07",
+        "author": { "@type": "Organization", "name": "ResearchAudio" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" },
+        "mainEntityOfPage": "https://tools.researchaudio.io/rtx-4060-llm-models/"
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What LLM can an RTX 4060 8GB run?",
+            "acceptedAnswer": { "@type": "Answer", "text": "With a 10 percent usable-memory reserve and 20 percent inference headroom, the generic one-card weight floor reaches an 8B INT4, 3B INT8, or 3B FP16 tier. Named models still need their actual artifact, context, KV cache, and runtime allocations checked." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can an RTX 4060 run Qwen3 8B?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The one-sequence INT4 planning profile on this page reaches 5.26 GiB at 4K context and 5.93 GiB at 8K, both below the 7.2 GiB usable-memory budget. The exact artifact and runtime still require validation." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can an RTX 4060 run Qwen3 8B at 32K context?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Not under this fully GPU-resident profile with a BF16 KV cache and 20 percent runtime headroom. The 32K planning target reaches 9.98 GiB, while the 8GB card has a 7.2 GiB usable planning budget." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can an RTX 4060 run a 13B model?",
+            "acceptedAnswer": { "@type": "Answer", "text": "A generic 13B INT4 weight-only plan reaches 7.26 GiB with the stated headroom, narrowly above this page's 7.2 GiB usable budget before KV cache. Lower-bit artifacts, less reserve, or CPU offload can move the boundary, but require measurement." }
+          }
+        ]
+      }
+    ]
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#scenarios">Skip to the model scenarios</a>
+    <header class="lab-header" aria-label="ResearchAudio Evidence Lab">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=rtx_4060_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=rtx_4060_llm_models&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=rtx_4060_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=rtx_4060_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Hardware guide / 8 GB VRAM</p>
+          <h1 id="hero-title">What LLM can an RTX 4060 8GB run?</h1>
+          <p class="hero-deck">Eight gigabytes is a context-sensitive 8B INT4 tier. Qwen3 8B clears this planning model at 4K and 8K, then the full 16K profile crosses the one-card boundary.</p>
+          <a class="hero-join-link" href="../what-llm-can-i-run/?vramPerGpu=8&amp;availableGpus=1&amp;bitsPerParameter=4&amp;inferenceHeadroom=20&amp;usableVramPercent=90&amp;utm_source=rtx_4060_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_model_finder">Open the 8 GB model finder →</a>
+        </div>
+        <aside class="lab-index" aria-label="Default planning budget">
+          <span>Usable at 90%</span>
+          <strong>7.2</strong>
+          <p>GiB planning capacity on the 8GB card. Ten percent stays reserved for the driver, runtime, and fragmentation.</p>
+        </aside>
+      </section>
+
+      <section class="method-section" aria-labelledby="floor-title">
+        <div>
+          <p class="eyebrow">Fast answer</p>
+          <h2 id="floor-title">The generic weight-only floor</h2>
+        </div>
+        <div class="method-copy formula-copy">
+          <p><strong>INT4</strong><br /><code>8B listed tier · 12.88B arithmetic ceiling</code></p>
+          <p><strong>INT8</strong><br /><code>3B listed tier · 6.44B arithmetic ceiling</code></p>
+          <p><strong>FP16 / BF16</strong><br /><code>3B listed tier · 3.22B arithmetic ceiling</code></p>
+          <p><strong>Default reserve</strong><br /><code>8 × 0.90 ÷ 1.20 = 6 GiB for weights</code></p>
+        </div>
+      </section>
+
+      <section class="scenario-section" id="scenarios" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">Editable evidence</p>
+          <h2 id="scenario-title">Where Qwen3 8B crosses the 8GB boundary</h2>
+          <p>The same model and precision can fit or miss depending on context. Each card opens the calculator with the architecture, reserve, and headroom already filled in.</p>
+        </div>
+        <div class="scenario-grid guide-scenario-grid">
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=8.2&amp;bitsPerParameter=4&amp;layers=36&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=4096&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=8&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_4060_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_8b_int4_4k">
+            <span>Qwen3 8B · INT4 · 4K</span><strong>5.26 GiB</strong><small>Fits with about 1.94 GiB margin →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=8.2&amp;bitsPerParameter=4&amp;layers=36&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=8192&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=8&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_4060_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_8b_int4_8k">
+            <span>Qwen3 8B · INT4 · 8K</span><strong>5.93 GiB</strong><small>Fits with about 1.27 GiB margin →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=8.2&amp;bitsPerParameter=4&amp;layers=36&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=16384&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=8&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_4060_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_8b_int4_16k">
+            <span>Qwen3 8B · INT4 · 16K</span><strong>7.28 GiB</strong><small>Narrowly exceeds the 7.2 GiB budget →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=8.2&amp;bitsPerParameter=4&amp;layers=36&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=8&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_4060_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_8b_int4_32k">
+            <span>Qwen3 8B · INT4 · 32K</span><strong>9.98 GiB</strong><small>Exceeds the budget by about 2.78 GiB →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=13&amp;bitsPerParameter=4&amp;inferenceHeadroom=20&amp;vramPerGpu=8&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_4060_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=generic_13b_int4">
+            <span>Generic 13B · INT4 · weights only</span><strong>7.26 GiB</strong><small>Misses before context or KV cache →</small>
+          </a>
+          <a class="scenario-card" href="../rtx-4060-ti-16gb-llm-models/?utm_source=rtx_4060_llm_models&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=rtx_4060_ti_16gb_comparison">
+            <span>RTX 4060 Ti 16GB comparison</span><strong>14.4 GiB</strong><small>See what doubling VRAM changes →</small>
+          </a>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="decision-title">
+        <div class="comparison-heading"><div><p class="eyebrow">Decision boundary</p><h2 id="decision-title">The model name alone does not answer the fit question.</h2></div><p>The four Qwen3 profiles hold weights and runtime headroom constant. Only the BF16 KV-cache context changes.</p></div>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead><tr><th scope="col">Profile</th><th scope="col">Planning target</th><th scope="col">8GB result</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Qwen3 8B INT4 · 4K</th><td>5.26 GiB</td><td>Fits with 1.94 GiB margin</td></tr>
+              <tr><th scope="row">Qwen3 8B INT4 · 8K</th><td>5.93 GiB</td><td>Fits with 1.27 GiB margin</td></tr>
+              <tr><th scope="row">Qwen3 8B INT4 · 16K</th><td>7.28 GiB</td><td>Narrow paper miss</td></tr>
+              <tr><th scope="row">Qwen3 8B INT4 · 32K</th><td>9.98 GiB</td><td>Does not fit fully on GPU</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="RTX 4060 8GB LLM boundaries">
+        <p class="eyebrow">Capacity is only gate one</p>
+        <p><strong>Context is a budget.</strong><br />In this profile the BF16 KV cache grows from 0.56 GiB at 4K to 4.5 GiB at 32K.</p>
+        <p><strong>Small changes move a tight fit.</strong><br />KV-cache quantization or a smaller reserve can change the 16K result, but must be benchmarked.</p>
+        <p><strong>Fit is not throughput.</strong><br />Bandwidth, kernels, laptop power limits, offload, and batching decide delivered speed.</p>
+      </section>
+
+      <section class="guide-section" aria-labelledby="sources-title">
+        <div class="guide-intro"><p class="eyebrow">Primary sources</p><h2 id="sources-title">Inputs you can inspect.</h2>
+          <p>NVIDIA lists the RTX 4060 with 8GB GDDR6. The Qwen3 profiles reuse the architecture inputs and primary references documented in the ResearchAudio Qwen3 worksheet; this page adds explicit 4K-to-32K comparisons for the 8GB card.</p>
+          <a class="guide-link" href="https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4060-4060ti/">Official NVIDIA RTX 4060 family specifications →</a>
+          <a class="guide-link" href="../qwen3-gpu-requirements/?utm_source=rtx_4060_llm_models&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_worksheet">Open the Qwen3 GPU worksheet →</a>
+          <a class="guide-link" href="../rtx-3060-llm-models/?utm_source=rtx_4060_llm_models&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=rtx_3060_12gb_comparison">Compare the 12GB RTX 3060 boundary →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>What LLM can an RTX 4060 8GB run?</h3><p>At the default reserve, the generic one-card floor reaches an 8B INT4, 3B INT8, or 3B FP16 tier. Named models still need artifact, context, cache, and runtime inputs.</p></article>
+          <article class="faq-item"><h3>Can an RTX 4060 run Qwen3 8B?</h3><p>The INT4 planning profile reaches 5.26 GiB at 4K and 5.93 GiB at 8K. Both clear the 7.2 GiB budget, but the exact artifact and runtime still need validation.</p></article>
+          <article class="faq-item"><h3>Can an RTX 4060 run Qwen3 8B at 32K context?</h3><p>Not under this conservative fully GPU-resident plan. The target reaches 9.98 GiB with a BF16 KV cache and 20 percent headroom.</p></article>
+          <article class="faq-item"><h3>Can an RTX 4060 run a 13B model?</h3><p>The generic 13B INT4 weight-only target reaches 7.26 GiB, narrowly above this budget before context. Lower-bit artifacts or offload can move the line, with quality or speed tradeoffs.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">
+        <div><p class="eyebrow">Hardware claims, checked</p><h2 id="subscribe-title">Get the next local-AI deployment teardown.</h2><p>ResearchAudio traces exact checkpoints, architecture, context, runtime constraints, and the gap between “fits” and “works.”</p></div>
+        <div class="subscribe-form-shell">
+          <p class="subscribe-direct-fallback"><strong>Prefer the hosted signup page?</strong><a href="https://researchaudio.io/subscribe?utm_source=rtx_4060_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join">Join ResearchAudio free →</a></p>
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=rtx_4060_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links"><a href="../what-llm-can-i-run/">Model finder</a><a href="../llm-gpu-memory-calculator/">GPU calculator</a><a href="../tools/">All tools</a><a href="https://researchaudio.io/?utm_source=rtx_4060_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a></div>
+    </footer>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"c20a9e29828c471c92ed7c2284901e05","spa":false}'></script>
+  </body>
+</html>
