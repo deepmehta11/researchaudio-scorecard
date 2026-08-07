@@ -300,7 +300,7 @@ for (const [name, page, title] of [
   ["prompt caching calculator", promptCacheHtml, "Prompt Caching Cost Calculator &amp; Break-Even Hit Rate"],
   ["Codex config generator", codexConfigHtml, "Codex CLI config.toml Generator"],
   ["Codex exec command builder", codexExecHtml, "Codex exec Command Builder (--json &amp; Git Check)"],
-  ["voice AI latency calculator", voiceLatencyHtml, "Voice AI Latency Calculator (Fast &amp; Slow Models)"],
+  ["voice AI latency calculator", voiceLatencyHtml, "Voice AI Architecture: Fast + Slow Model Latency Calculator"],
   ["voice AI cost calculator", voiceCostHtml, "AI Voice Agent Cost Calculator (Cost per Resolved Call)"],
 ]) {
   assert.match(page, new RegExp(`<title>${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} \\| ResearchAudio<\\/title>`), `${name} title missing`);
@@ -906,6 +906,7 @@ assert.equal(classifyVoiceLatency(1001).status, "NOTICEABLE");
 assert.equal(classifyVoiceLatency(1501).status, "SLOW");
 assert.match(voiceLatencyJs, /source: "voice_latency_share"/);
 assert.match(voiceLatencyJs, /content: "shared_latency_budget"/);
+assert.match(voiceLatencyHtml, /Map fast and slow model latency in one voice AI architecture\./);
 assert.match(voiceLatencyHtml, /href="https:\/\/researchaudio\.io\/p\/voice-ai-latency-budget-guide\?utm_source=voice_ai_latency&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=guide_link"/);
 assert.match(toolsHtml, /voice-ai-latency-calculator/);
 assert.match(labCss, /\.latency-tape/);
