@@ -1084,10 +1084,17 @@ assert.match(starterJs, /querySelectorAll\("\[data-share-kit\]"\)/);
 assert.doesNotMatch(starterHtml, /TODO|PLACEHOLDER|example\.com/);
 
 for (const [name, page] of [
+  ["AI cost per successful task", costHtml],
+  ["AI agent loop", loopHtml],
+  ["AI task fit", taskFitHtml],
   ["AI agent ROI", roiHtml],
   ["LLM API cost", llmCostHtml],
   ["LLM GPU memory", gpuMemoryHtml],
   ["LLM KV cache", kvCacheHtml],
+  ["prompt caching", promptCacheHtml],
+  ["Codex config", codexConfigHtml],
+  ["Codex exec", codexExecHtml],
+  ["voice AI latency", voiceLatencyHtml],
   ["voice AI cost", voiceCostHtml],
   ["AI agent security", securityGuideHtml],
   ["AI benchmark audit", benchmarkGuideHtml],
@@ -1099,14 +1106,30 @@ assert.match(embedModeJs, /utm_medium", "embedded_tool"/);
 assert.match(embedModeJs, /utm_campaign", "ai_evidence_lab"/);
 assert.match(embedModeJs, /target = "_blank"/);
 assert.match(embedsHtml, /<title>Embed Free AI Tools on Your Website \| ResearchAudio<\/title>/);
-assert.equal((embedsHtml.match(/data-widget-url=/g) || []).length, 7, "embed library should offer seven widgets");
-assert.equal((embedsHtml.match(/data-copy-embed/g) || []).length, 7, "every widget should expose a copy action");
+assert.equal((embedsHtml.match(/data-widget-url=/g) || []).length, 14, "embed library should offer fourteen widgets");
+assert.equal((embedsHtml.match(/data-copy-embed/g) || []).length, 14, "every widget should expose a copy action");
 assert.doesNotThrow(() => parseStructuredData(embedsHtml), "embed library structured data must be valid JSON");
-assert.equal((embedsHtml.match(/"@type": "ListItem"/g) || []).length, 7, "embed library schema should enumerate seven widgets");
-assert.equal((embedsHtml.match(/"@type": "WebApplication"/g) || []).length, 7, "every embedded tool should have WebApplication schema");
+assert.equal((embedsHtml.match(/"@type": "ListItem"/g) || []).length, 14, "embed library schema should enumerate fourteen widgets");
+assert.equal((embedsHtml.match(/"@type": "WebApplication"/g) || []).length, 14, "every embedded tool should have WebApplication schema");
 assert.equal((embedsHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "embed library should have FAQ schema");
-assert.match(embedsHtml, /data-widget-url="https:\/\/tools\.researchaudio\.io\/ai-benchmark-audit-checklist\/"/);
-assert.match(embedsHtml, /data-widget-url="https:\/\/tools\.researchaudio\.io\/ai-agent-security-checklist\/"/);
+for (const pathName of [
+  "ai-benchmark-audit-checklist",
+  "ai-agent-security-checklist",
+  "llm-api-cost-calculator",
+  "llm-gpu-memory-calculator",
+  "kv-cache-calculator",
+  "voice-ai-cost-calculator",
+  "ai-agent-roi-calculator",
+  "agent-loop-diagnostic",
+  "ai-cost-calculator",
+  "ai-task-fit-diagnostic",
+  "codex-config-generator",
+  "codex-exec-command-builder",
+  "prompt-caching-calculator",
+  "voice-ai-latency-calculator",
+]) {
+  assert.match(embedsHtml, new RegExp(`data-widget-url="https:\\/\\/tools\\.researchaudio\\.io\\/${pathName}\\/"`), `embed library should include ${pathName}`);
+}
 assert.match(embedsHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
 assert.match(embedsHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
 for (const platform of ["WordPress", "Webflow", "Ghost", "Beehiiv", "Static HTML"]) {

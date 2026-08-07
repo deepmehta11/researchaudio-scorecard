@@ -29,7 +29,7 @@ Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain con
 - `/llm-gpu-memory-calculator/` — model-weight VRAM, optional architecture-aware KV cache, runtime headroom, usable memory, and minimum GPU count.
 - `/evidence-starter-kit/` — post-signup activation, four-tool progress, referral reward explanation, and attributed sharing.
 - `/tools/` — crawlable, interlinked Evidence Lab hub.
-- `/embeds/` — copy-ready, source-attributed iframe widgets plus a self-serve installation guide for WordPress, Webflow, Ghost, Beehiiv, and static sites. The page publishes a seven-tool application index and matching FAQ schema for search discovery.
+- `/embeds/` — copy-ready, source-attributed iframe widgets plus a self-serve installation guide for WordPress, Webflow, Ghost, Beehiiv, and static sites. The page publishes a fourteen-tool application index and matching FAQ schema for search discovery.
 
 Every instrument uses the dedicated Beehiiv acquisition form and keeps user inputs in the browser.
 
@@ -62,5 +62,5 @@ Then open `http://127.0.0.1:4173`.
 3. Link it near the first decision table in every relevant ResearchAudio web post.
 4. Publish one result card per issue on LinkedIn, X, Reddit, and relevant engineering communities.
 5. Redirect new Evidence Lab subscribers into the starter kit, then use its attributed share action and three-referral reward to compound distribution.
-6. Offer the seven-widget embed library to technical publishers; each checklist and calculator keeps a visible ResearchAudio credit and rewrites signup links to the publisher-specific `embed_*` source.
+6. Offer the fourteen-widget embed library to technical publishers; each tool keeps a visible ResearchAudio credit and rewrites signup links to the publisher-specific `embed_*` source.
 7. Review Beehiiv source and campaign breakdowns weekly. Keep only channels that produce active subscribers, not raw clicks.
