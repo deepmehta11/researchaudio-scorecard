@@ -1,6 +1,6 @@
 # ResearchAudio Evidence Lab
 
-An evergreen acquisition ecosystem for ResearchAudio. Sixteen browser-local tools, nine practical field guides, and a self-serve embed library turn AI task framing, benchmark and launch claims, token budgets, voice latency and outcome economics, hardware-first local LLM discovery, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability and security, automation business cases, and Codex workflows into concrete inspections before inviting visitors into the daily briefing.
+An evergreen acquisition ecosystem for ResearchAudio. Sixteen browser-local tools, ten practical field guides, and a self-serve embed library turn AI task framing, benchmark and launch claims, token budgets, voice latency and outcome economics, hardware-first local LLM discovery, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability and security, automation business cases, and Codex workflows into concrete inspections before inviting visitors into the daily briefing.
 
 Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain connected to the Beehiiv publication at `https://researchaudio.io/`.
 
@@ -24,6 +24,8 @@ Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain con
 - `/qwen2-5-gpu-requirements/` — crawlable Qwen2.5 7B, 32B, and 72B matrix across INT4, INT8, BF16, 32K KV cache, and 128K context.
 - `/qwen3-gpu-requirements/` — crawlable Qwen3 8B, 14B, 32B, and 30B-A3B matrix with exact 32K cache math, MoE memory boundaries, and first-party runtime checks.
 - `/gpt-oss-hardware-requirements/` — primary-source gpt-oss-20b and gpt-oss-120b GPU memory guide with MXFP4, checkpoint, 4K, and 128K scenarios.
+- `/deepseek-v4-flash-gpu-requirements/` — primary-source DeepSeek V4 Flash 0731 guide with the exact mixed-precision artifact and editable 32K-to-1M deployment comparisons.
+- `/glm-5-2-gpu-requirements/` — primary-source GLM-5.2 guide with exact FP8 and BF16 artifact totals plus supported 8xH200 and 8xB200 deployment tiers.
 - `/ai-agent-security-checklist/` — interactive 12-point control review grounded in current OWASP, Anthropic, and NIST primary guidance.
 - `/ai-benchmark-audit-checklist/` — interactive 12-point reproducibility review grounded in current OpenAI, Anthropic, METR, and Terminal-Bench primary sources.
 - `/llm-gpu-memory-calculator/` — model-weight VRAM, optional architecture-aware KV cache, runtime headroom, usable memory, and minimum GPU count.

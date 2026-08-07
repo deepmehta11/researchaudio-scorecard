@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GLM-5.2 GPU Requirements: 8×H200 FP8 | ResearchAudio</title>
+    <meta name="description" content="Size GLM-5.2 from its official 703.74 GiB FP8 checkpoint, compare 8×80 GiB, 8×H200, 8×B200, and BF16 plans, and open an editable GPU worksheet." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/glm-5-2-gpu-requirements/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="GLM-5.2 GPU requirements: 703.74 GiB FP8, 8×H200" />
+    <meta property="og:description" content="Separate the official FP8 artifact, BF16 artifact, runtime reserve, and 1M-context hardware before choosing a GLM-5.2 deployment." />
+    <meta property="og:url" content="https://tools.researchaudio.io/glm-5-2-gpu-requirements/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "GLM-5.2 GPU Requirements and FP8 VRAM Planning",
+        "description": "A primary-source deployment worksheet covering the official GLM-5.2 FP8 and BF16 artifacts, vLLM-supported H200 and B200 hardware, one-million-token context, runtime headroom, and editable GPU plans.",
+        "datePublished": "2026-08-07",
+        "dateModified": "2026-08-07",
+        "mainEntityOfPage": "https://tools.researchaudio.io/glm-5-2-gpu-requirements/",
+        "author": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How much GPU memory does GLM-5.2 need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The official GLM-5.2-FP8 repository contains 141 safetensors files totaling 703.74 GiB before KV cache and runtime workspace. The current vLLM recipe uses one 8-GPU H200 or H20 node for the standard FP8 deployment and 8 B200 GPUs with FP8 KV cache for the full one-million-token context." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can GLM-5.2 run on eight 80 GB GPUs?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Not as a straightforward full-checkpoint FP8 deployment. Eight 80 GiB-class GPUs expose 576 GiB at 90 percent usable memory, which is 127.74 GiB less than the official 703.74 GiB FP8 artifact before KV cache or runtime reserve." }
+          },
+          {
+            "@type": "Question",
+            "name": "How many H200 GPUs does GLM-5.2 need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The current vLLM GLM-5.2 recipe specifies tensor parallel size eight and lists 8 H200 GPUs as the standard single-node FP8 deployment. A simple artifact-plus-20-percent-reserve worksheet targets 844.49 GiB before KV cache, within eight 141 GB-class H200 devices at 90 percent usable memory." }
+          },
+          {
+            "@type": "Question",
+            "name": "What hardware supports the full GLM-5.2 one-million-token context?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The current vLLM recipe identifies 8 B200 GPUs with FP8 KV cache as the full one-million-token configuration. It also says max-num-seqs is the main concurrency control and should be reduced if representative long prompts run out of memory." }
+          },
+          {
+            "@type": "Question",
+            "name": "How large are the GLM-5.2 BF16 and FP8 checkpoints?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The official BF16 repository has 282 safetensors files totaling 1,403.19 GiB. The official FP8 repository has 141 safetensors files totaling 703.74 GiB. Those are downloadable artifact sizes, not complete serving-memory measurements." }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#glm-5-2-scenarios">Skip to the GLM-5.2 GPU scenarios</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=glm_5_2_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=glm_5_2_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=glm_5_2_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=glm_5_2_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">GLM-5.2 FP8 / deployment worksheet</p>
+          <h1 id="hero-title">703.74 GiB FP8. 8 × H200.</h1>
+          <p class="hero-deck">Z.ai's official FP8 checkpoint spans 141 weight files. vLLM's supported single-node baseline uses eight H200-class GPUs; its full 1M-context baseline moves to eight B200s with FP8 KV cache.</p>
+          <a class="hero-join-link" href="../llm-gpu-memory-calculator/?parameterBillions=753.38&amp;bitsPerParameter=8&amp;checkpointGiB=703.74&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=8&amp;inferenceHeadroom=20&amp;vramPerGpu=141&amp;usableVramPercent=90&amp;availableGpus=8&amp;utm_source=glm_5_2_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_h200_plan">Open the editable 8 × H200 plan →</a>
+        </div>
+        <aside class="lab-index" aria-label="GLM-5.2 FP8 hardware scope">
+          <span>Official FP8 weight files</span>
+          <strong>141</strong>
+          <p>755,632,050,320 bytes across the safetensors: 703.74 GiB before KV cache, runtime workspace, and serving reserve.</p>
+        </aside>
+      </section>
+
+      <section class="scenario-section" id="glm-5-2-scenarios" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">Quick answer / supported tiers</p>
+          <h2 id="scenario-title">Eight 80 GiB GPUs are short. Eight H200s are the practical FP8 baseline.</h2>
+          <p>The first card proves the weight-floor failure. The next two pair the exact artifact with vLLM's supported NVIDIA topologies. The BF16 card makes the multi-node boundary explicit. Calculator targets exclude KV cache unless stated.</p>
+        </div>
+        <div class="scenario-grid guide-scenario-grid">
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=753.38&amp;bitsPerParameter=8&amp;checkpointGiB=703.74&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=8&amp;inferenceHeadroom=0&amp;vramPerGpu=80&amp;usableVramPercent=90&amp;availableGpus=8&amp;utm_source=glm_5_2_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=fp8_8x80_floor">
+            <span>FP8 artifact · 8 × 80 GiB</span>
+            <strong>SHORT 127.74 GiB</strong>
+            <small>576 GiB usable vs 703.74 GiB files →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=753.38&amp;bitsPerParameter=8&amp;checkpointGiB=703.74&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=8&amp;inferenceHeadroom=20&amp;vramPerGpu=141&amp;usableVramPercent=90&amp;availableGpus=8&amp;utm_source=glm_5_2_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=fp8_8xh200_standard">
+            <span>Standard FP8 · 8 × H200</span>
+            <strong>844.49 GiB floor</strong>
+            <small>703.74 artifact + 20% reserve; cache excluded →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=753.38&amp;bitsPerParameter=8&amp;checkpointGiB=703.74&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=8&amp;inferenceHeadroom=20&amp;vramPerGpu=180&amp;usableVramPercent=90&amp;availableGpus=8&amp;utm_source=glm_5_2_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=fp8_8xb200_1m">
+            <span>Full 1M recipe · 8 × B200</span>
+            <strong>FP8 KV required</strong>
+            <small>vLLM-supported full-context topology; tune concurrency →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=753.33&amp;bitsPerParameter=16&amp;checkpointGiB=1403.19&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=141&amp;usableVramPercent=90&amp;availableGpus=16&amp;utm_source=glm_5_2_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=bf16_16xh200_floor">
+            <span>BF16 floor · 16 × H200</span>
+            <strong>1,683.83 GiB</strong>
+            <small>1,403.19 artifact + 20% reserve; cache excluded →</small>
+          </a>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="matrix-title">
+        <div class="comparison-heading">
+          <div>
+            <p class="eyebrow">Artifact vs deployment</p>
+            <h2 id="matrix-title">The checkpoint proves the floor. The serving recipe proves the topology.</h2>
+          </div>
+          <p>The official repositories expose the bytes to load. Z.ai's model card and configuration establish the 1M window and architecture. vLLM's maintained recipe establishes supported hardware and runtime flags.</p>
+        </div>
+        <p class="comparison-scroll-hint">Swipe the matrix horizontally →</p>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead>
+              <tr><th scope="col">Input</th><th scope="col">Official value</th><th scope="col">What it changes</th><th scope="col">What it does not prove</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">FP8 artifact</th><td>703.74 GiB · 141 files</td><td>Resident-weight floor</td><td>KV cache or runtime workspace</td></tr>
+              <tr><th scope="row">BF16 artifact</th><td>1,403.19 GiB · 282 files</td><td>Multi-node weight floor</td><td>Throughput or interconnect cost</td></tr>
+              <tr><th scope="row">Standard FP8</th><td>8 × H200 · TP=8</td><td>Supported single-node baseline</td><td>Full 1M context at every concurrency</td></tr>
+              <tr><th scope="row">Full context</th><td>1,048,576 tokens</td><td>Native context boundary</td><td>Concurrent-sequence fit</td></tr>
+              <tr><th scope="row">Full 1M NVIDIA recipe</th><td>8 × B200 · FP8 KV</td><td>Supported full-window topology</td><td>Your traffic-shaped capacity</td></tr>
+              <tr><th scope="row">Sparse architecture</th><td>753.38B checkpoint parameters</td><td>Artifact and routing scale</td><td>All parameters active per token</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">Artifact totals were calculated from the official Hugging Face safetensors file sizes on August 7, 2026. Hardware guidance follows the vLLM GLM-5.2 recipe updated July 12, 2026. Recheck both sources if either release changes.</p>
+      </section>
+
+      <section class="principle-strip" aria-label="GLM-5.2 deployment boundaries">
+        <p class="eyebrow">Read the estimate</p>
+        <p><strong>Eight H100s are not enough.</strong><br />Their 576 GiB usable planning capacity is below the FP8 files alone.</p>
+        <p><strong>H200 is the standard node.</strong><br />The current vLLM recipe uses tensor parallel size eight for FP8.</p>
+        <p><strong>B200 unlocks the 1M recipe.</strong><br />FP8 KV cache and concurrency tuning remain part of the serving plan.</p>
+      </section>
+
+      <section class="method-section" aria-labelledby="context-title">
+        <div>
+          <p class="eyebrow">Context and cache boundary</p>
+          <h2 id="context-title">One million tokens is a runtime allocation, not a checkpoint property.</h2>
+        </div>
+        <div class="method-copy formula-copy">
+          <p><strong>Official configuration</strong><br /><code>78 layers · 1,048,576 max positions</code></p>
+          <p><strong>Compressed attention inputs</strong><br /><code>512 KV LoRA rank · 64 RoPE dimensions</code></p>
+          <p><strong>Standard H200 recipe</strong><br /><code>FP8 KV · TP=8 · MTP=5</code></p>
+          <p>The calculator cards deliberately keep cache out of the numeric floor because GLM-5.2 uses sparse, compressed attention rather than a portable dense K/V-head formula. For full context, follow the runtime's reported KV capacity and tune <code>max-num-seqs</code> against representative long prompts.</p>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="sources-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Primary-source inputs</p>
+          <h2 id="sources-title">Use the official files. Then prove the runtime.</h2>
+          <p>Checkpoint size, parameter metadata, context support, configuration, and release claims come from Z.ai's official repositories. Hardware and serving flags come from vLLM's maintained GLM-5.2 recipe—not a third-party VRAM table.</p>
+          <a class="guide-link" href="../llm-gpu-memory-calculator/?utm_source=glm_5_2_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=blank_gpu_calculator">Open the GPU memory calculator →</a>
+          <a class="guide-link" href="../deepseek-v4-flash-gpu-requirements/?utm_source=glm_5_2_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=deepseek_v4_guide">Compare DeepSeek V4 Flash hardware →</a>
+          <a class="guide-link" href="../what-llm-can-i-run/?utm_source=glm_5_2_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=model_finder">Find models for smaller GPU budgets →</a>
+          <a class="guide-link" href="https://huggingface.co/zai-org/GLM-5.2">Official GLM-5.2 model card →</a>
+          <a class="guide-link" href="https://huggingface.co/zai-org/GLM-5.2/blob/main/config.json">Official GLM-5.2 configuration →</a>
+          <a class="guide-link" href="https://huggingface.co/zai-org/GLM-5.2-FP8/tree/main">Official FP8 checkpoint inventory →</a>
+          <a class="guide-link" href="https://huggingface.co/zai-org/GLM-5.2/tree/main">Official BF16 checkpoint inventory →</a>
+          <a class="guide-link" href="https://recipes.vllm.ai/zai-org/GLM-5.2">Official vLLM deployment recipe →</a>
+          <a class="guide-link" href="https://arxiv.org/abs/2602.15763">GLM-5 technical report →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>How much GPU memory does GLM-5.2 need?</h3><p>The official FP8 artifact is 703.74 GiB before cache and runtime workspace. vLLM's current standard recipe uses one 8-GPU H200 or H20 node; the full 1M NVIDIA recipe uses eight B200s with FP8 KV cache.</p></article>
+          <article class="faq-item"><h3>Can GLM-5.2 run on eight 80 GB GPUs?</h3><p>Not as a straightforward full-checkpoint FP8 deployment. Eight 80 GiB-class GPUs expose 576 GiB at 90% usable memory—127.74 GiB less than the official artifact before cache or runtime reserve.</p></article>
+          <article class="faq-item"><h3>How many H200 GPUs does GLM-5.2 need?</h3><p>The maintained vLLM recipe specifies eight H200 GPUs and tensor parallel size eight for the standard FP8 deployment. The editable worksheet adds a transparent 20% runtime reserve while leaving cache out of the numeric floor.</p></article>
+          <article class="faq-item"><h3>What hardware supports the full GLM-5.2 one-million-token context?</h3><p>vLLM's current NVIDIA recipe identifies eight B200 GPUs with FP8 KV cache. It treats <code>max-num-seqs</code> as the main fit control, so representative concurrent long prompts still need an OOM smoke test.</p></article>
+          <article class="faq-item"><h3>How large are the GLM-5.2 BF16 and FP8 checkpoints?</h3><p>The official BF16 repository totals 1,403.19 GiB across 282 safetensors files. The official FP8 repository totals 703.74 GiB across 141 files. Neither total includes the full serving allocation.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Deployment math without the launch theatre</p>
+          <h2 id="subscribe-title">Get the next model and infrastructure teardown.</h2>
+          <p>ResearchAudio turns model releases, hardware claims, and serving constraints into practical decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <p class="subscribe-direct-fallback"><strong>Prefer the hosted signup page?</strong><a href="https://researchaudio.io/subscribe?utm_source=glm_5_2_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join">Join ResearchAudio free →</a></p>
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=glm_5_2_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../llm-gpu-memory-calculator/">GPU memory calculator</a>
+        <a href="../deepseek-v4-flash-gpu-requirements/">DeepSeek V4 Flash guide</a>
+        <a href="../qwen3-gpu-requirements/">Qwen3 guide</a>
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=glm_5_2_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>

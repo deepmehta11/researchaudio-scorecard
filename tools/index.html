@@ -4,13 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Free AI Evaluation Tools for Builders | ResearchAudio</title>
-    <meta name="description" content="Sixteen free AI evaluation tools plus nine practical field guides for auditing task fit, benchmarks, evidence, local LLM model fit, GPU and KV-cache memory, voice economics, latency, LLM spend, agent loops, ROI, and Codex workflows." />
+    <meta name="description" content="Sixteen free AI evaluation tools plus ten practical field guides for auditing task fit, benchmarks, evidence, local LLM model fit, GPU and KV-cache memory, voice economics, latency, LLM spend, agent loops, ROI, and Codex workflows." />
     <meta name="theme-color" content="#eaf2f0" />
     <link rel="canonical" href="https://tools.researchaudio.io/tools/" />
     <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="ResearchAudio Evidence Lab" />
-    <meta property="og:description" content="Sixteen free instruments and nine practical field guides for making better AI and agent-engineering decisions." />
+    <meta property="og:description" content="Sixteen free instruments and ten practical field guides for making better AI and agent-engineering decisions." />
     <meta property="og:url" content="https://tools.researchaudio.io/tools/" />
     <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -52,6 +52,7 @@
           { "@type": "TechArticle", "name": "Qwen2.5 GPU Requirements", "url": "https://tools.researchaudio.io/qwen2-5-gpu-requirements/" },
           { "@type": "TechArticle", "name": "Qwen3 GPU Requirements", "url": "https://tools.researchaudio.io/qwen3-gpu-requirements/" },
           { "@type": "TechArticle", "name": "DeepSeek V4 Flash GPU Requirements", "url": "https://tools.researchaudio.io/deepseek-v4-flash-gpu-requirements/" },
+          { "@type": "TechArticle", "name": "GLM-5.2 GPU Requirements", "url": "https://tools.researchaudio.io/glm-5-2-gpu-requirements/" },
           { "@type": "TechArticle", "name": "gpt-oss Hardware Requirements", "url": "https://tools.researchaudio.io/gpt-oss-hardware-requirements/" },
           { "@type": "WebApplication", "name": "AI Agent Security Checklist", "url": "https://tools.researchaudio.io/ai-agent-security-checklist/" }
         ]
@@ -195,7 +196,7 @@
             <p class="eyebrow">Search field notes</p>
             <h2 id="voice-economics-title">Start with the simple metric. Finish with the system.</h2>
           </div>
-          <p>Nine vendor-neutral worksheets turn security, voice-pricing, and GPU-sizing questions into explicit controls and assumptions.</p>
+          <p>Ten vendor-neutral worksheets turn security, voice-pricing, and GPU-sizing questions into explicit controls and assumptions.</p>
         </div>
         <div class="resource-grid">
           <a class="resource-card" href="../voice-ai-cost-per-minute/?utm_source=evidence_lab&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=voice_cost_per_minute_guide">
@@ -239,6 +240,12 @@
             <h2>DeepSeek V4 Flash GPU requirements</h2>
             <p>Start with the official 0731 release and its 155.43 GiB mixed-precision artifact, then compare 32K, 128K, 384K, and 1M context plans.</p>
             <b>Size DeepSeek V4 Flash 0731 →</b>
+          </a>
+          <a class="resource-card" href="../glm-5-2-gpu-requirements/?utm_source=evidence_lab&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=glm_5_2_gpu_guide">
+            <span class="instrument-code">Field note / current model</span>
+            <h2>GLM-5.2 GPU requirements</h2>
+            <p>Start with the official 703.74 GiB FP8 artifact, then compare the 8×80 GiB shortfall, 8×H200 baseline, 8×B200 full-context recipe, and BF16 floor.</p>
+            <b>Size GLM-5.2 FP8 →</b>
           </a>
           <a class="resource-card" href="../gpt-oss-hardware-requirements/?utm_source=evidence_lab&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpt_oss_hardware_guide">
             <span class="instrument-code">Field note / open weights</span>

@@ -25,7 +25,7 @@ const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const brandedToolsOrigin = "https://tools.researchaudio.io";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -56,6 +56,7 @@ const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, cost
   readFile(path.join(root, "qwen3-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "gpt-oss-hardware-requirements/index.html"), "utf8"),
   readFile(path.join(root, "deepseek-v4-flash-gpu-requirements/index.html"), "utf8"),
+  readFile(path.join(root, "glm-5-2-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-security-checklist/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-security-checklist/checklist.js"), "utf8"),
   readFile(path.join(root, "ai-benchmark-audit-checklist/index.html"), "utf8"),
@@ -141,6 +142,7 @@ for (const [name, page, pathname] of [
   ["Qwen3 GPU requirements guide", qwen3GuideHtml, "/qwen3-gpu-requirements/"],
   ["gpt-oss hardware requirements guide", gptOssGuideHtml, "/gpt-oss-hardware-requirements/"],
   ["DeepSeek V4 Flash GPU requirements guide", deepseekV4GuideHtml, "/deepseek-v4-flash-gpu-requirements/"],
+  ["GLM-5.2 GPU requirements guide", glm52GuideHtml, "/glm-5-2-gpu-requirements/"],
   ["AI agent security checklist", securityGuideHtml, "/ai-agent-security-checklist/"],
   ["AI benchmark audit checklist", benchmarkGuideHtml, "/ai-benchmark-audit-checklist/"],
   ["starter kit", starterHtml, "/evidence-starter-kit/"],
@@ -309,6 +311,36 @@ for (const question of [
   const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   assert.match(deepseekV4GuideHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `DeepSeek V4 visible FAQ question missing: ${question}`);
   assert.match(deepseekV4GuideHtml, new RegExp(`"name": "${escapedQuestion}"`), `DeepSeek V4 FAQ schema question missing: ${question}`);
+}
+
+assert.match(glm52GuideHtml, /<title>GLM-5\.2 GPU Requirements: 8×H200 FP8 \| ResearchAudio<\/title>/);
+assert.equal((glm52GuideHtml.match(/"@type": "TechArticle"/g) || []).length, 1, "GLM-5.2 guide should have one TechArticle schema");
+assert.equal((glm52GuideHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "GLM-5.2 guide should have one FAQPage schema");
+assert.doesNotThrow(() => parseStructuredData(glm52GuideHtml), "GLM-5.2 guide structured data must be valid JSON");
+assert.match(glm52GuideHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=glm_5_2_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab/);
+assert.match(glm52GuideHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
+assert.match(glm52GuideHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
+assert.match(glm52GuideHtml, /utm_content=direct_join/);
+assert.match(glm52GuideHtml, /subscribe-direct-fallback/);
+assert.equal((glm52GuideHtml.match(/class="scenario-card/g) || []).length, 4, "GLM-5.2 guide should contain four editable scenarios");
+assert.match(glm52GuideHtml, /parameterBillions=753\.38/);
+assert.match(glm52GuideHtml, /checkpointGiB=703\.74/);
+assert.match(glm52GuideHtml, /checkpointGiB=1403\.19/);
+assert.match(glm52GuideHtml, /755,632,050,320 bytes/);
+assert.match(glm52GuideHtml, /huggingface\.co\/zai-org\/GLM-5\.2-FP8/);
+assert.match(glm52GuideHtml, /recipes\.vllm\.ai\/zai-org\/GLM-5\.2/);
+assert.match(glm52GuideHtml, /arxiv\.org\/abs\/2602\.15763/);
+assert.doesNotMatch(glm52GuideHtml, /TODO|PLACEHOLDER|example\.com/);
+for (const question of [
+  "How much GPU memory does GLM-5.2 need?",
+  "Can GLM-5.2 run on eight 80 GB GPUs?",
+  "How many H200 GPUs does GLM-5.2 need?",
+  "What hardware supports the full GLM-5.2 one-million-token context?",
+  "How large are the GLM-5.2 BF16 and FP8 checkpoints?",
+]) {
+  const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  assert.match(glm52GuideHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `GLM-5.2 visible FAQ question missing: ${question}`);
+  assert.match(glm52GuideHtml, new RegExp(`"name": "${escapedQuestion}"`), `GLM-5.2 FAQ schema question missing: ${question}`);
 }
 
 for (const [name, page] of [
@@ -818,6 +850,30 @@ for (const scenario of [
   });
   assert.equal(Number(result.planningTargetGiB.toFixed(2)), scenario.target, `DeepSeek V4 ${scenario.context}-token target should match the guide`);
 }
+for (const scenario of [
+  { name: "FP8 artifact on 8x80", checkpointGiB: 703.74, bits: 8, headroom: 0, vram: 80, gpus: 8, target: 703.74, minimum: 10, fits: false },
+  { name: "FP8 on 8xH200", checkpointGiB: 703.74, bits: 8, headroom: 20, vram: 141, gpus: 8, target: 844.49, minimum: 7, fits: true },
+  { name: "BF16 on 16xH200", checkpointGiB: 1403.19, bits: 16, headroom: 20, vram: 141, gpus: 16, target: 1683.83, minimum: 14, fits: true },
+]) {
+  const result = calculateGpuMemory({
+    parameterBillions: 753.38,
+    bitsPerParameter: scenario.bits,
+    checkpointGiB: scenario.checkpointGiB,
+    layers: 0,
+    kvHeads: 0,
+    headDimension: 0,
+    contextTokens: 0,
+    concurrentSequences: 1,
+    kvCacheBits: 8,
+    inferenceHeadroom: scenario.headroom,
+    vramPerGpu: scenario.vram,
+    usableVramPercent: 90,
+    availableGpus: scenario.gpus,
+  });
+  assert.equal(Number(result.planningTargetGiB.toFixed(2)), scenario.target, `GLM-5.2 ${scenario.name} target should match the guide`);
+  assert.equal(result.minimumGpus, scenario.minimum, `GLM-5.2 ${scenario.name} minimum GPU count should match the guide`);
+  assert.equal(result.fitsAvailable, scenario.fits, `GLM-5.2 ${scenario.name} fit state should match the guide`);
+}
 assert.match(gpuMemoryHtml, /name="layers"/);
 assert.match(gpuMemoryHtml, /name="kvHeads"/);
 assert.match(gpuMemoryHtml, /name="headDimension"/);
@@ -827,6 +883,7 @@ assert.match(gpuMemoryHtml, /name="kvCacheBits"/);
 assert.match(gpuMemoryHtml, /70b-llm-gpu-requirements/);
 assert.match(gpuMemoryHtml, /qwen3-gpu-requirements/);
 assert.match(gpuMemoryHtml, /deepseek-v4-flash-gpu-requirements/);
+assert.match(gpuMemoryHtml, /glm-5-2-gpu-requirements/);
 assert.match(gpuGuideHtml, /51\.1 GiB/);
 assert.match(gpuGuideHtml, /90\.2 GiB/);
 assert.match(gpuGuideHtml, /168\.5 GiB/);
@@ -1254,7 +1311,7 @@ assert.match(voiceCostHtml, /elevenlabs\.io\/pricing/);
 assert.match(toolsHtml, /voice-ai-cost-calculator/);
 assert.match(toolsHtml, /voice-ai-cost-per-minute/);
 assert.match(toolsHtml, /ai-receptionist-cost/);
-assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 9, "tools hub should contain nine search field notes");
+assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 10, "tools hub should contain ten search field notes");
 assert.match(toolsHtml, /7b-vs-13b-llm-gpu-requirements/);
 assert.match(toolsHtml, /70b-llm-gpu-requirements/);
 assert.match(toolsHtml, /qwen2-5-gpu-requirements/);
@@ -1435,10 +1492,15 @@ assert.match(deepseekV4GuideHtml, /173\.93 GiB/);
 assert.match(deepseekV4GuideHtml, /199\.42 GiB/);
 assert.match(deepseekV4GuideHtml, /225\.22 GiB/);
 assert.match(deepseekV4GuideHtml, /289\.72 GiB/);
+assert.match(deepseekV4GuideHtml, /glm-5-2-gpu-requirements/);
+assert.match(toolsHtml, /GLM-5\.2 GPU requirements/);
+assert.match(glm52GuideHtml, /SHORT 127\.74 GiB/);
+assert.match(glm52GuideHtml, /844\.49 GiB floor/);
+assert.match(glm52GuideHtml, /1,683\.83 GiB/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 29, "sitemap should contain all twenty-nine crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 30, "sitemap should contain all thirty crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 29, "sitemap should publish twenty-nine URL locations");
+assert.equal(sitemapUrls.length, 30, "sitemap should publish thirty URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -1465,6 +1527,7 @@ assert.match(llms, /70B LLM GPU Requirements/);
 assert.match(llms, /Qwen2\.5 GPU Requirements/);
 assert.match(llms, /Qwen3 GPU Requirements/);
 assert.match(llms, /DeepSeek V4 Flash GPU Requirements/);
+assert.match(llms, /GLM-5\.2 GPU Requirements/);
 assert.match(llms, /AI Agent Security Checklist/);
 assert.match(llms, /AI Benchmark Audit Checklist/);
 assert.match(llms, /AI Task Fit Diagnostic/);
@@ -1482,4 +1545,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 16 tools, 1 activation kit, 1 embed library, 9 field guides, 29 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 16 tools, 1 activation kit, 1 embed library, 10 field guides, 30 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
