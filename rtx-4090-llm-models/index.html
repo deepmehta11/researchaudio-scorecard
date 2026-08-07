@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>What LLM Can an RTX 4090 Run? 24GB VRAM Guide | ResearchAudio</title>
+    <meta name="description" content="See what local LLMs fit an RTX 4090 at INT4, INT8, and FP16, with exact Qwen3 and gpt-oss scenarios, context memory, and editable VRAM calculations." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/rtx-4090-llm-models/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="What local LLMs fit an RTX 4090?" />
+    <meta property="og:description" content="A 24 GB card can clear a 32B INT4 weight floor, but context and architecture decide which named models actually fit." />
+    <meta property="og:url" content="https://tools.researchaudio.io/rtx-4090-llm-models/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "What LLM Can an RTX 4090 Run? 24GB VRAM Guide",
+        "description": "A hardware-first local LLM guide for the RTX 4090 with transparent INT4, INT8, and FP16 floors plus exact Qwen3 and gpt-oss memory scenarios.",
+        "datePublished": "2026-08-07",
+        "dateModified": "2026-08-07",
+        "mainEntityOfPage": "https://tools.researchaudio.io/rtx-4090-llm-models/",
+        "author": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What LLM can an RTX 4090 run?",
+            "acceptedAnswer": { "@type": "Answer", "text": "With 24 GB of VRAM, 90 percent usable memory, and 20 percent runtime headroom, an RTX 4090 clears this site's generic weight floor for a 32B tier at INT4, 14B at INT8, or 8B at FP16. Named models still need architecture-aware context and runtime checks." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can an RTX 4090 run Qwen3 32B?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Not under this page's fully GPU-resident 32K planning profile. Qwen3 32B at INT4 reaches 27.93 GiB after an eight GiB BF16 KV cache and 20 percent headroom, above the 21.6 GiB usable-memory budget used for one 24 GB card." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can an RTX 4090 run gpt-oss-20b?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The official 12.8 GiB checkpoint reaches a 14.29 GiB planning target for one 4K sequence and fits this page's RTX 4090 budget. A conservative full 128K cache profile reaches 22.56 GiB and exceeds the 21.6 GiB default usable-memory allowance." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can an RTX 4090 run a 70B model entirely in VRAM?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No at the ordinary four-bit weight floor used here. Seventy billion parameters require about 32.6 GiB for raw four-bit weights before KV cache, runtime workspace, metadata, and fragmentation." }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#scenarios">Skip to the model scenarios</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=rtx_4090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=rtx_4090_llm_models&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=rtx_4090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=rtx_4090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Local LLM hardware / RTX 4090</p>
+          <h1 id="hero-title">What LLM can a 24 GB RTX 4090 run?</h1>
+          <p class="hero-deck">A 24 GB card clears a generic 32B INT4 weight floor. The useful answer comes after adding the exact checkpoint, architecture, context window, runtime reserve, and the memory the driver leaves available.</p>
+          <a class="hero-join-link" href="../what-llm-can-i-run/?vramPerGpu=24&amp;availableGpus=1&amp;bitsPerParameter=4&amp;inferenceHeadroom=20&amp;usableVramPercent=90&amp;utm_source=rtx_4090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_model_finder">Open the 24 GB model finder →</a>
+        </div>
+        <aside class="lab-index" aria-label="RTX 4090 planning capacity">
+          <span>Usable at 90%</span>
+          <strong>21.6</strong>
+          <p>GiB planning capacity on one 24 GB card. Vendor GB and software GiB are not interchangeable measurements.</p>
+        </aside>
+      </section>
+
+      <section class="method-section" aria-labelledby="floor-title">
+        <div>
+          <p class="eyebrow">Fast capacity answer</p>
+          <h2 id="floor-title">Start with the weight floor. Do not stop there.</h2>
+        </div>
+        <div class="method-copy formula-copy">
+          <p><strong>INT4</strong><br /><code>32B listed tier · 38.7B arithmetic ceiling</code></p>
+          <p><strong>INT8</strong><br /><code>14B listed tier · 19.3B arithmetic ceiling</code></p>
+          <p><strong>FP16 / BF16</strong><br /><code>8B listed tier · 9.7B arithmetic ceiling</code></p>
+          <p><strong>Default reserve</strong><br /><code>24 × 0.90 ÷ 1.20 = 18 GiB for weights</code></p>
+        </div>
+      </section>
+
+      <section class="scenario-section" id="scenarios" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">Named-model checks</p>
+          <h2 id="scenario-title">Models near the RTX 4090 boundary.</h2>
+          <p>These are fully GPU-resident planning estimates, not speed claims. Open any card to change context, cache precision, headroom, or GPU count.</p>
+        </div>
+        <div class="scenario-grid guide-scenario-grid">
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=14.8&amp;bitsPerParameter=4&amp;layers=40&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_4090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_14b_32k">
+            <span>Qwen3 14B · INT4 · 32K</span>
+            <strong>14.27 GiB</strong>
+            <small>Fits the 21.6 GiB planning budget →</small>
+          </a>
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=30.5&amp;bitsPerParameter=4&amp;layers=48&amp;kvHeads=4&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_4090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_30b_a3b_32k">
+            <span>Qwen3 30B-A3B · INT4 · 32K</span>
+            <strong>20.64 GiB</strong>
+            <small>Fits with a narrow default margin →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=32.8&amp;bitsPerParameter=4&amp;layers=64&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_4090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_32b_32k">
+            <span>Qwen3 32B · INT4 · 32K</span>
+            <strong>27.93 GiB</strong>
+            <small>Exceeds one-card planning capacity →</small>
+          </a>
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=20.91&amp;bitsPerParameter=4.25&amp;checkpointGiB=12.8&amp;layers=24&amp;kvHeads=8&amp;headDimension=64&amp;contextTokens=4096&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=10&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_4090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpt_oss_20b_4k">
+            <span>gpt-oss-20b · MXFP4 · 4K</span>
+            <strong>14.29 GiB</strong>
+            <small>Fits the default one-card budget →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=20.91&amp;bitsPerParameter=4.25&amp;checkpointGiB=12.8&amp;layers=24&amp;kvHeads=8&amp;headDimension=64&amp;contextTokens=131072&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_4090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpt_oss_20b_128k">
+            <span>gpt-oss-20b · MXFP4 · 128K</span>
+            <strong>22.56 GiB</strong>
+            <small>Exceeds the 21.6 GiB default budget →</small>
+          </a>
+          <a class="scenario-card" href="../70b-llm-gpu-requirements/?utm_source=rtx_4090_llm_models&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=70b_boundary">
+            <span>70B · raw INT4 weights</span>
+            <strong>32.60 GiB</strong>
+            <small>More than 24 GB before cache →</small>
+          </a>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="decision-title">
+        <div class="comparison-heading">
+          <div>
+            <p class="eyebrow">Read the boundary</p>
+            <h2 id="decision-title">Why “32B fits” can still be false.</h2>
+          </div>
+          <p>The generic tier finder excludes KV cache and artifact-specific overhead. The named-model profiles include architecture-aware cache and an explicit runtime reserve.</p>
+        </div>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead><tr><th scope="col">Question</th><th scope="col">Fast answer</th><th scope="col">Deployment answer</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Largest INT4 tier</th><td>32B weight floor</td><td>Inspect the exact checkpoint and context</td></tr>
+              <tr><th scope="row">Qwen3 30B-A3B</th><td>20.64 GiB at 32K</td><td>Fits narrowly; benchmark the runtime</td></tr>
+              <tr><th scope="row">Qwen3 32B</th><td>15.27 GiB raw INT4 weights</td><td>27.93 GiB with 32K cache and headroom</td></tr>
+              <tr><th scope="row">gpt-oss-20b</th><td>14.29 GiB at 4K</td><td>22.56 GiB in the conservative 128K profile</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="RTX 4090 LLM boundaries">
+        <p class="eyebrow">Capacity is only gate one</p>
+        <p><strong>Context consumes VRAM.</strong><br />The KV cache grows with tokens, layers, KV heads, head dimension, precision, and concurrency.</p>
+        <p><strong>MoE still loads experts.</strong><br />Active parameters reduce compute per token; they do not erase resident checkpoint memory.</p>
+        <p><strong>Fit is not throughput.</strong><br />Bandwidth, kernels, offload, batching, and power limits decide delivered speed.</p>
+      </section>
+
+      <section class="guide-section" aria-labelledby="sources-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Primary references and next checks</p>
+          <h2 id="sources-title">Keep the hardware claim auditable.</h2>
+          <p>NVIDIA specifies 24 GB of GDDR6X memory for the RTX 4090. The model scenarios use the same architecture and checkpoint inputs documented in the ResearchAudio Qwen3 and gpt-oss worksheets.</p>
+          <a class="guide-link" href="https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4090/">Official NVIDIA RTX 4090 specifications →</a>
+          <a class="guide-link" href="../qwen3-gpu-requirements/?utm_source=rtx_4090_llm_models&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_worksheet">Open the Qwen3 GPU worksheet →</a>
+          <a class="guide-link" href="../gpt-oss-hardware-requirements/?utm_source=rtx_4090_llm_models&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpt_oss_worksheet">Open the gpt-oss hardware worksheet →</a>
+          <a class="guide-link" href="../rtx-5090-llm-models/?utm_source=rtx_4090_llm_models&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=rtx_5090_comparison">Compare the 32 GB RTX 5090 boundary →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>What LLM can an RTX 4090 run?</h3><p>At the default reserve, the generic one-card floor reaches a 32B INT4, 14B INT8, or 8B FP16 tier. Named models still need exact checkpoint, cache, context, and runtime inputs.</p></article>
+          <article class="faq-item"><h3>Can an RTX 4090 run Qwen3 32B?</h3><p>Not under this page's 32K fully GPU-resident profile: the 27.93 GiB planning target exceeds the 21.6 GiB usable-memory budget.</p></article>
+          <article class="faq-item"><h3>Can an RTX 4090 run gpt-oss-20b?</h3><p>The 4K profile reaches 14.29 GiB and fits. The conservative 128K profile reaches 22.56 GiB and exceeds the default one-card allowance.</p></article>
+          <article class="faq-item"><h3>Can an RTX 4090 run a 70B model entirely in VRAM?</h3><p>No at the ordinary four-bit floor used here. Raw INT4 weights alone require about 32.6 GiB before cache and runtime allocations.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Hardware claims, checked</p>
+          <h2 id="subscribe-title">Get the next local-AI deployment teardown.</h2>
+          <p>ResearchAudio traces exact checkpoints, architecture, context, runtime constraints, and the gap between “fits” and “works.”</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <p class="subscribe-direct-fallback"><strong>Prefer the hosted signup page?</strong><a href="https://researchaudio.io/subscribe?utm_source=rtx_4090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join">Join ResearchAudio free →</a></p>
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=rtx_4090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../what-llm-can-i-run/">Model finder</a>
+        <a href="../llm-gpu-memory-calculator/">GPU calculator</a>
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=rtx_4090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"c20a9e29828c471c92ed7c2284901e05","spa":false}'></script>
+  </body>
+</html>

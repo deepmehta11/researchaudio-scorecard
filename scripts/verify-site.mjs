@@ -26,7 +26,7 @@ const brandedToolsOrigin = "https://tools.researchaudio.io";
 const cloudflareWebAnalyticsToken = "c20a9e29828c471c92ed7c2284901e05";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, kimiK3GuideHtml, gemma4GuideHtml, diffusionGemmaGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, rtx4090GuideHtml, rtx5090GuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, kimiK3GuideHtml, gemma4GuideHtml, diffusionGemmaGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -53,6 +53,8 @@ const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, cost
   readFile(path.join(root, "kv-cache-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "7b-vs-13b-llm-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "70b-llm-gpu-requirements/index.html"), "utf8"),
+  readFile(path.join(root, "rtx-4090-llm-models/index.html"), "utf8"),
+  readFile(path.join(root, "rtx-5090-llm-models/index.html"), "utf8"),
   readFile(path.join(root, "qwen2-5-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "qwen3-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "gpt-oss-hardware-requirements/index.html"), "utf8"),
@@ -142,6 +144,8 @@ for (const [name, page, pathname] of [
   ["AI receptionist cost worksheet", aiReceptionistCostHtml, "/ai-receptionist-cost/"],
   ["7B versus 13B LLM GPU requirements guide", smallGpuGuideHtml, "/7b-vs-13b-llm-gpu-requirements/"],
   ["70B LLM GPU requirements guide", gpuGuideHtml, "/70b-llm-gpu-requirements/"],
+  ["RTX 4090 local LLM guide", rtx4090GuideHtml, "/rtx-4090-llm-models/"],
+  ["RTX 5090 local LLM guide", rtx5090GuideHtml, "/rtx-5090-llm-models/"],
   ["Qwen2.5 GPU requirements guide", qwenGuideHtml, "/qwen2-5-gpu-requirements/"],
   ["Qwen3 GPU requirements guide", qwen3GuideHtml, "/qwen3-gpu-requirements/"],
   ["gpt-oss hardware requirements guide", gptOssGuideHtml, "/gpt-oss-hardware-requirements/"],
@@ -231,6 +235,40 @@ for (const question of [
   const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   assert.match(smallGpuGuideHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `7B versus 13B visible FAQ question missing: ${question}`);
   assert.match(smallGpuGuideHtml, new RegExp(`"name": "${escapedQuestion}"`), `7B versus 13B FAQ schema question missing: ${question}`);
+}
+
+for (const [name, page, title, source, officialUrl, values, questions] of [
+  ["RTX 4090 local LLM guide", rtx4090GuideHtml, "What LLM Can an RTX 4090 Run? 24GB VRAM Guide", "rtx_4090_llm_models", "https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4090/", ["14.27", "20.64", "27.93", "14.29", "22.56", "32.60"], [
+    "What LLM can an RTX 4090 run?",
+    "Can an RTX 4090 run Qwen3 32B?",
+    "Can an RTX 4090 run gpt-oss-20b?",
+    "Can an RTX 4090 run a 70B model entirely in VRAM?",
+  ]],
+  ["RTX 5090 local LLM guide", rtx5090GuideHtml, "What LLM Can an RTX 5090 Run? 32GB VRAM Guide", "rtx_5090_llm_models", "https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/", ["20.64", "27.93", "22.56", "46.26", "32.60", "21.6"], [
+    "What LLM can an RTX 5090 run?",
+    "Can an RTX 5090 run Qwen3 32B?",
+    "Can an RTX 5090 run gpt-oss-20b at 128K context?",
+    "Can an RTX 5090 run a 70B model entirely in VRAM?",
+  ]],
+]) {
+  assert.match(page, new RegExp(`<title>${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} \\| ResearchAudio<\\/title>`), `${name} title missing`);
+  assert.equal((page.match(/"@type": "TechArticle"/g) || []).length, 1, `${name} should have one TechArticle schema`);
+  assert.equal((page.match(/"@type": "FAQPage"/g) || []).length, 1, `${name} should have one FAQPage schema`);
+  assert.doesNotThrow(() => parseStructuredData(page), `${name} structured data must be valid JSON`);
+  assert.match(page, new RegExp(`https:\\/\\/researchaudio\\.io\\/subscribe\\?utm_source=${source}&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab`), `${name} direct subscribe attribution missing`);
+  assert.match(page, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/, `${name} Beehiiv form missing`);
+  assert.match(page, /subscribe-forms\.beehiiv\.com\/attribution\.js/, `${name} attribution missing`);
+  assert.equal((page.match(/class="scenario-card/g) || []).length, 6, `${name} should contain six evidence scenarios`);
+  assert.match(page, new RegExp(officialUrl.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), `${name} official NVIDIA source missing`);
+  for (const value of values) {
+    assert.match(page, new RegExp(`${value.replace(".", "\\.")} GiB`), `${name} should expose the ${value} GiB planning value`);
+  }
+  assert.doesNotMatch(page, /TODO|PLACEHOLDER|example\.com/, `${name} contains placeholder copy`);
+  for (const question of questions) {
+    const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    assert.match(page, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `${name} visible FAQ question missing: ${question}`);
+    assert.match(page, new RegExp(`"name": "${escapedQuestion}"`), `${name} FAQ schema question missing: ${question}`);
+  }
 }
 
 assert.match(gptOssGuideHtml, /<title>gpt-oss 20B &amp; 120B Hardware Requirements \| ResearchAudio<\/title>/);
@@ -1434,9 +1472,11 @@ assert.match(voiceCostHtml, /elevenlabs\.io\/pricing/);
 assert.match(toolsHtml, /voice-ai-cost-calculator/);
 assert.match(toolsHtml, /voice-ai-cost-per-minute/);
 assert.match(toolsHtml, /ai-receptionist-cost/);
-assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 13, "tools hub should contain thirteen search field notes");
+assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 15, "tools hub should contain fifteen search field notes");
 assert.match(toolsHtml, /7b-vs-13b-llm-gpu-requirements/);
 assert.match(toolsHtml, /70b-llm-gpu-requirements/);
+assert.match(toolsHtml, /rtx-4090-llm-models/);
+assert.match(toolsHtml, /rtx-5090-llm-models/);
 assert.match(toolsHtml, /qwen2-5-gpu-requirements/);
 assert.match(toolsHtml, /qwen3-gpu-requirements/);
 assert.match(toolsHtml, /deepseek-v4-flash-gpu-requirements/);
@@ -1636,9 +1676,9 @@ assert.match(diffusionGemmaGuideHtml, /48\.10 GiB at BF16/);
 assert.match(diffusionGemmaGuideHtml, /17\.53 GiB at NVFP4/);
 assert.match(diffusionGemmaGuideHtml, /0\.56 GiB margin/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 33, "sitemap should contain all thirty-three crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 35, "sitemap should contain all thirty-five crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 33, "sitemap should publish thirty-three URL locations");
+assert.equal(sitemapUrls.length, 35, "sitemap should publish thirty-five URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -1665,6 +1705,8 @@ assert.match(llms, /Voice AI Cost per Minute/);
 assert.match(llms, /AI Receptionist Cost Worksheet/);
 assert.match(llms, /7B vs 13B LLM GPU Requirements/);
 assert.match(llms, /70B LLM GPU Requirements/);
+assert.match(llms, /RTX 4090 Local LLM Guide/);
+assert.match(llms, /RTX 5090 Local LLM Guide/);
 assert.match(llms, /Qwen2\.5 GPU Requirements/);
 assert.match(llms, /Qwen3 GPU Requirements/);
 assert.match(llms, /DeepSeek V4 Flash GPU Requirements/);
@@ -1686,4 +1728,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 16 tools, 1 activation kit, 1 embed library, 13 search field notes, 33 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 16 tools, 1 activation kit, 1 embed library, 15 search field notes, 35 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

@@ -51,6 +51,10 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Compares INT4, INT8, and FP16 weight floors with explicit 32K GQA and MHA KV-cache examples, runtime headroom, and editable GPU plans.
 - 70B LLM GPU Requirements: https://tools.researchaudio.io/70b-llm-gpu-requirements/
   Compares INT4, INT8, and FP16 through explicit weight, KV-cache, runtime-headroom, and usable-VRAM assumptions.
+- RTX 4090 Local LLM Guide: https://tools.researchaudio.io/rtx-4090-llm-models/
+  Shows what model-size tiers clear a 24 GB card, then tests Qwen3 14B, 30B-A3B, 32B, gpt-oss-20b, and a 70B floor with editable architecture-aware scenarios.
+- RTX 5090 Local LLM Guide: https://tools.researchaudio.io/rtx-5090-llm-models/
+  Shows what changes at 32 GB, including the narrow Qwen3 32B 32K fit, a conservative 128K gpt-oss-20b profile, and the remaining 70B shortfall.
 - Qwen2.5 GPU Requirements: https://tools.researchaudio.io/qwen2-5-gpu-requirements/
   Compares Qwen2.5 7B, 32B, and 72B across INT4, INT8, and BF16 with official architecture inputs, exact 32K KV-cache math, and 128K context scenarios.
 - Qwen3 GPU Requirements: https://tools.researchaudio.io/qwen3-gpu-requirements/

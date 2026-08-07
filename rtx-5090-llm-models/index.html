@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>What LLM Can an RTX 5090 Run? 32GB VRAM Guide | ResearchAudio</title>
+    <meta name="description" content="See what local LLMs fit an RTX 5090 at INT4, INT8, and FP16, with exact Qwen3 and gpt-oss scenarios, context memory, and editable VRAM calculations." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/rtx-5090-llm-models/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="What local LLMs fit an RTX 5090?" />
+    <meta property="og:description" content="A 32 GB card can clear Qwen3 32B at INT4 and 32K in this planning model—but the memory margin is narrow." />
+    <meta property="og:url" content="https://tools.researchaudio.io/rtx-5090-llm-models/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "What LLM Can an RTX 5090 Run? 32GB VRAM Guide",
+        "description": "A hardware-first local LLM guide for the RTX 5090 with transparent INT4, INT8, and FP16 floors plus exact Qwen3 and gpt-oss memory scenarios.",
+        "datePublished": "2026-08-07",
+        "dateModified": "2026-08-07",
+        "mainEntityOfPage": "https://tools.researchaudio.io/rtx-5090-llm-models/",
+        "author": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What LLM can an RTX 5090 run?",
+            "acceptedAnswer": { "@type": "Answer", "text": "With 32 GB of VRAM, 90 percent usable memory, and 20 percent runtime headroom, an RTX 5090 clears this site's generic weight floor for a 32B tier at INT4, 20B at INT8, or 8B at FP16. Named models still need architecture-aware context and runtime checks." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can an RTX 5090 run Qwen3 32B?",
+            "acceptedAnswer": { "@type": "Answer", "text": "It clears this page's one-sequence 32K INT4 planning profile narrowly. The model reaches 27.93 GiB after an eight GiB BF16 KV cache and 20 percent runtime headroom, leaving about 0.87 GiB below the 28.8 GiB usable-memory budget used here." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can an RTX 5090 run gpt-oss-20b at 128K context?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The conservative full-cache profile on this site reaches 22.56 GiB using the official 12.8 GiB checkpoint, a six GiB BF16 cache allowance, and 20 percent runtime headroom. That clears the 28.8 GiB planning budget, though the actual serving engine and concurrency still need testing." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can an RTX 5090 run a 70B model entirely in VRAM?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Not at the ordinary four-bit weight floor used here. Seventy billion parameters require about 32.6 GiB for raw four-bit weights before KV cache, runtime workspace, metadata, and fragmentation." }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#scenarios">Skip to the model scenarios</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=rtx_5090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=rtx_5090_llm_models&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=rtx_5090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=rtx_5090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Local LLM hardware / RTX 5090</p>
+          <h1 id="hero-title">What LLM can a 32 GB RTX 5090 run?</h1>
+          <p class="hero-deck">A 32 GB card clears a generic 32B INT4 weight floor with more room than the RTX 4090. Qwen3 32B can also clear the 32K planning profile—but closely enough that runtime allocation still decides the result.</p>
+          <a class="hero-join-link" href="../what-llm-can-i-run/?vramPerGpu=32&amp;availableGpus=1&amp;bitsPerParameter=4&amp;inferenceHeadroom=20&amp;usableVramPercent=90&amp;utm_source=rtx_5090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_model_finder">Open the 32 GB model finder →</a>
+        </div>
+        <aside class="lab-index" aria-label="RTX 5090 planning capacity">
+          <span>Usable at 90%</span>
+          <strong>28.8</strong>
+          <p>GiB planning capacity on one 32 GB card. The remaining ten percent is reserved for the driver, runtime, and fragmentation.</p>
+        </aside>
+      </section>
+
+      <section class="method-section" aria-labelledby="floor-title">
+        <div>
+          <p class="eyebrow">Fast capacity answer</p>
+          <h2 id="floor-title">More VRAM changes the context boundary first.</h2>
+        </div>
+        <div class="method-copy formula-copy">
+          <p><strong>INT4</strong><br /><code>32B listed tier · 51.5B arithmetic ceiling</code></p>
+          <p><strong>INT8</strong><br /><code>20B listed tier · 25.8B arithmetic ceiling</code></p>
+          <p><strong>FP16 / BF16</strong><br /><code>8B listed tier · 12.9B arithmetic ceiling</code></p>
+          <p><strong>Default reserve</strong><br /><code>32 × 0.90 ÷ 1.20 = 24 GiB for weights</code></p>
+        </div>
+      </section>
+
+      <section class="scenario-section" id="scenarios" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">Named-model checks</p>
+          <h2 id="scenario-title">Models near the RTX 5090 boundary.</h2>
+          <p>The result is a capacity plan, not a tokens-per-second promise. Open any card to replace the default cache, context, reserve, or concurrency assumptions.</p>
+        </div>
+        <div class="scenario-grid guide-scenario-grid">
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=30.5&amp;bitsPerParameter=4&amp;layers=48&amp;kvHeads=4&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=32&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_5090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_30b_a3b_32k">
+            <span>Qwen3 30B-A3B · INT4 · 32K</span>
+            <strong>20.64 GiB</strong>
+            <small>Fits below the 28.8 GiB budget →</small>
+          </a>
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=32.8&amp;bitsPerParameter=4&amp;layers=64&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=32&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_5090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_32b_32k">
+            <span>Qwen3 32B · INT4 · 32K</span>
+            <strong>27.93 GiB</strong>
+            <small>Fits with about 0.87 GiB margin →</small>
+          </a>
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=20.91&amp;bitsPerParameter=4.25&amp;checkpointGiB=12.8&amp;layers=24&amp;kvHeads=8&amp;headDimension=64&amp;contextTokens=131072&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=32&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_5090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpt_oss_20b_128k">
+            <span>gpt-oss-20b · MXFP4 · 128K</span>
+            <strong>22.56 GiB</strong>
+            <small>Fits the conservative full-cache profile →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=32.8&amp;bitsPerParameter=8&amp;layers=64&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=32&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_5090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_32b_int8_32k">
+            <span>Qwen3 32B · INT8 · 32K</span>
+            <strong>46.26 GiB</strong>
+            <small>Precision pushes it beyond one card →</small>
+          </a>
+          <a class="scenario-card" href="../70b-llm-gpu-requirements/?utm_source=rtx_5090_llm_models&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=70b_boundary">
+            <span>70B · raw INT4 weights</span>
+            <strong>32.60 GiB</strong>
+            <small>Already above the 32 GB label →</small>
+          </a>
+          <a class="scenario-card" href="../rtx-4090-llm-models/?utm_source=rtx_5090_llm_models&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=rtx_4090_comparison">
+            <span>RTX 4090 comparison</span>
+            <strong>21.6 GiB</strong>
+            <small>See what changes with 24 GB →</small>
+          </a>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="comparison-title">
+        <div class="comparison-heading">
+          <div>
+            <p class="eyebrow">24 GB versus 32 GB</p>
+            <h2 id="comparison-title">The extra eight GB turns two near misses into fits.</h2>
+          </div>
+          <p>Both columns reserve ten percent of the card and use the same model, cache, and headroom assumptions. Performance differences are outside this capacity comparison.</p>
+        </div>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead><tr><th scope="col">Profile</th><th scope="col">RTX 4090 · 21.6 GiB usable</th><th scope="col">RTX 5090 · 28.8 GiB usable</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Qwen3 30B-A3B INT4 · 32K</th><td>Fits · 20.64 GiB</td><td>Fits · 20.64 GiB</td></tr>
+              <tr><th scope="row">Qwen3 32B INT4 · 32K</th><td>Does not fit · 27.93 GiB</td><td>Fits narrowly · 27.93 GiB</td></tr>
+              <tr><th scope="row">gpt-oss-20b · 128K</th><td>Does not fit · 22.56 GiB</td><td>Fits · 22.56 GiB</td></tr>
+              <tr><th scope="row">70B raw INT4 weights</th><td>Does not fit · 32.60 GiB</td><td>Does not fit · 32.60 GiB</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="RTX 5090 LLM boundaries">
+        <p class="eyebrow">Do not spend the margin twice</p>
+        <p><strong>0.87 GiB is narrow.</strong><br />A different artifact, graph capture, or runtime workspace can erase the Qwen3 32B margin.</p>
+        <p><strong>Context repeats.</strong><br />Concurrent sequences multiply the fully allocated KV-cache budget.</p>
+        <p><strong>VRAM is not speed.</strong><br />Capacity alone cannot prove useful latency, throughput, or software support.</p>
+      </section>
+
+      <section class="guide-section" aria-labelledby="sources-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Primary references and next checks</p>
+          <h2 id="sources-title">Verify the card, checkpoint, and runtime.</h2>
+          <p>NVIDIA specifies 32 GB of GDDR7 memory for the RTX 5090. The model profiles reuse the primary-source architecture and checkpoint inputs documented in the Qwen3 and gpt-oss worksheets.</p>
+          <a class="guide-link" href="https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/">Official NVIDIA RTX 5090 specifications →</a>
+          <a class="guide-link" href="../qwen3-gpu-requirements/?utm_source=rtx_5090_llm_models&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_worksheet">Open the Qwen3 GPU worksheet →</a>
+          <a class="guide-link" href="../gpt-oss-hardware-requirements/?utm_source=rtx_5090_llm_models&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpt_oss_worksheet">Open the gpt-oss hardware worksheet →</a>
+          <a class="guide-link" href="../llm-gpu-memory-calculator/?vramPerGpu=32&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_5090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=blank_calculator">Build a different model profile →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>What LLM can an RTX 5090 run?</h3><p>At the default reserve, the generic one-card floor reaches a 32B INT4, 20B INT8, or 8B FP16 tier. Named models still need exact checkpoint, context, and runtime checks.</p></article>
+          <article class="faq-item"><h3>Can an RTX 5090 run Qwen3 32B?</h3><p>The 32K INT4 planning profile reaches 27.93 GiB, about 0.87 GiB below the 28.8 GiB usable-memory budget used here. Treat that as a narrow fit requiring runtime validation.</p></article>
+          <article class="faq-item"><h3>Can an RTX 5090 run gpt-oss-20b at 128K context?</h3><p>The conservative full-cache profile reaches 22.56 GiB and clears the one-card budget. Concurrency, graph capture, and the selected engine can still change the result.</p></article>
+          <article class="faq-item"><h3>Can an RTX 5090 run a 70B model entirely in VRAM?</h3><p>Not at the ordinary four-bit floor used here. Raw INT4 weights alone require about 32.6 GiB before cache, workspace, and metadata.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Hardware claims, checked</p>
+          <h2 id="subscribe-title">Get the next local-AI deployment teardown.</h2>
+          <p>ResearchAudio traces exact checkpoints, architecture, context, runtime constraints, and the gap between “fits” and “works.”</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <p class="subscribe-direct-fallback"><strong>Prefer the hosted signup page?</strong><a href="https://researchaudio.io/subscribe?utm_source=rtx_5090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join">Join ResearchAudio free →</a></p>
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=rtx_5090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../what-llm-can-i-run/">Model finder</a>
+        <a href="../llm-gpu-memory-calculator/">GPU calculator</a>
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=rtx_5090_llm_models&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"c20a9e29828c471c92ed7c2284901e05","spa":false}'></script>
+  </body>
+</html>

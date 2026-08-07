@@ -4,13 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Free AI Evaluation Tools for Builders | ResearchAudio</title>
-    <meta name="description" content="Sixteen free AI evaluation tools plus twelve practical field guides for auditing task fit, benchmarks, evidence, local LLM model fit, GPU and KV-cache memory, voice economics, latency, LLM spend, agent loops, ROI, and Codex workflows." />
+    <meta name="description" content="Sixteen free AI evaluation tools plus fourteen practical field guides for auditing task fit, benchmarks, evidence, local LLM model fit, GPU and KV-cache memory, voice economics, latency, LLM spend, agent loops, ROI, and Codex workflows." />
     <meta name="theme-color" content="#eaf2f0" />
     <link rel="canonical" href="https://tools.researchaudio.io/tools/" />
     <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="ResearchAudio Evidence Lab" />
-    <meta property="og:description" content="Sixteen free instruments and twelve practical field guides for making better AI and agent-engineering decisions." />
+    <meta property="og:description" content="Sixteen free instruments and fourteen practical field guides for making better AI and agent-engineering decisions." />
     <meta property="og:url" content="https://tools.researchaudio.io/tools/" />
     <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -49,6 +49,8 @@
           { "@type": "TechArticle", "name": "AI Receptionist Cost Worksheet", "url": "https://tools.researchaudio.io/ai-receptionist-cost/" },
           { "@type": "TechArticle", "name": "7B vs 13B LLM GPU Requirements", "url": "https://tools.researchaudio.io/7b-vs-13b-llm-gpu-requirements/" },
           { "@type": "TechArticle", "name": "70B LLM GPU Requirements", "url": "https://tools.researchaudio.io/70b-llm-gpu-requirements/" },
+          { "@type": "TechArticle", "name": "RTX 4090 Local LLM Guide", "url": "https://tools.researchaudio.io/rtx-4090-llm-models/" },
+          { "@type": "TechArticle", "name": "RTX 5090 Local LLM Guide", "url": "https://tools.researchaudio.io/rtx-5090-llm-models/" },
           { "@type": "TechArticle", "name": "Qwen2.5 GPU Requirements", "url": "https://tools.researchaudio.io/qwen2-5-gpu-requirements/" },
           { "@type": "TechArticle", "name": "Qwen3 GPU Requirements", "url": "https://tools.researchaudio.io/qwen3-gpu-requirements/" },
           { "@type": "TechArticle", "name": "DeepSeek V4 Flash GPU Requirements", "url": "https://tools.researchaudio.io/deepseek-v4-flash-gpu-requirements/" },
@@ -225,6 +227,18 @@
             <h2>70B LLM GPU requirements</h2>
             <p>Separate INT4, INT8, and FP16 weight floors from explicit 32K KV cache and runtime headroom.</p>
             <b>Compare the scenarios →</b>
+          </a>
+          <a class="resource-card" href="../rtx-4090-llm-models/?utm_source=evidence_lab&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=rtx_4090_llm_guide">
+            <span class="instrument-code">Field note / 24 GB GPU</span>
+            <h2>What LLM can an RTX 4090 run?</h2>
+            <p>Compare generic INT4, INT8, and FP16 tiers with exact Qwen3 and gpt-oss profiles near the 24 GB boundary.</p>
+            <b>Inspect the RTX 4090 boundary →</b>
+          </a>
+          <a class="resource-card" href="../rtx-5090-llm-models/?utm_source=evidence_lab&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=rtx_5090_llm_guide">
+            <span class="instrument-code">Field note / 32 GB GPU</span>
+            <h2>What LLM can an RTX 5090 run?</h2>
+            <p>See where Qwen3 32B and a 128K gpt-oss-20b profile cross from a 24 GB near miss into a narrow 32 GB fit.</p>
+            <b>Inspect the RTX 5090 boundary →</b>
           </a>
           <a class="resource-card" href="../qwen2-5-gpu-requirements/?utm_source=evidence_lab&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen2_5_gpu_requirements_guide">
             <span class="instrument-code">Field note / model family</span>
