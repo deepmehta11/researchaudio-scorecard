@@ -1331,6 +1331,28 @@ h2 {
   min-height: 350px;
 }
 
+.subscribe-direct-fallback {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding: 22px 24px;
+  color: var(--ink) !important;
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  box-shadow: 7px 7px 0 var(--blue);
+}
+
+.subscribe-direct-fallback strong {
+  font: 700 1rem/1.35 var(--sans);
+}
+
+.subscribe-direct-fallback a {
+  color: var(--ink);
+  font: 700 0.78rem/1.35 var(--mono);
+  text-underline-offset: 5px;
+  text-transform: uppercase;
+}
+
 .lab-footer {
   display: flex;
   justify-content: space-between;

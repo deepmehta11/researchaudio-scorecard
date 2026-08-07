@@ -1,6 +1,6 @@
 # ResearchAudio Evidence Lab
 
-An evergreen acquisition ecosystem for ResearchAudio. Thirteen browser-local tools, six practical field guides, and a self-serve embed library turn AI task framing, benchmark and launch claims, token budgets, voice latency and outcome economics, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability and security, automation business cases, and Codex configuration into concrete inspections before inviting visitors into the daily briefing.
+An evergreen acquisition ecosystem for ResearchAudio. Thirteen browser-local tools, seven practical field guides, and a self-serve embed library turn AI task framing, benchmark and launch claims, token budgets, voice latency and outcome economics, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability and security, automation business cases, and Codex configuration into concrete inspections before inviting visitors into the daily briefing.
 
 Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain connected to the Beehiiv publication at `https://researchaudio.io/`.
 
@@ -21,6 +21,7 @@ Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain con
 - `/ai-receptionist-cost/` — crawlable monthly worksheet with after-hours, appointment, and high-volume call scenarios.
 - `/70b-llm-gpu-requirements/` — crawlable INT4, INT8, and FP16 guide with explicit 32K KV-cache scenarios.
 - `/qwen2-5-gpu-requirements/` — crawlable Qwen2.5 7B, 32B, and 72B matrix across INT4, INT8, BF16, 32K KV cache, and 128K context.
+- `/gpt-oss-hardware-requirements/` — primary-source gpt-oss-20b and gpt-oss-120b GPU memory guide with MXFP4, checkpoint, 4K, and 128K scenarios.
 - `/ai-agent-security-checklist/` — interactive 12-point control review grounded in current OWASP, Anthropic, and NIST primary guidance.
 - `/ai-benchmark-audit-checklist/` — interactive 12-point reproducibility review grounded in current OpenAI, Anthropic, METR, and Terminal-Bench primary sources.
 - `/llm-gpu-memory-calculator/` — model-weight VRAM, optional architecture-aware KV cache, runtime headroom, usable memory, and minimum GPU count.

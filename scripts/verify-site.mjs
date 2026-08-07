@@ -22,7 +22,7 @@ const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const brandedToolsOrigin = "https://tools.researchaudio.io";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, kvCacheHtml, kvCacheJs, gpuGuideHtml, qwenGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, kvCacheHtml, kvCacheJs, gpuGuideHtml, qwenGuideHtml, gptOssGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -45,6 +45,7 @@ const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, cost
   readFile(path.join(root, "kv-cache-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "70b-llm-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "qwen2-5-gpu-requirements/index.html"), "utf8"),
+  readFile(path.join(root, "gpt-oss-hardware-requirements/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-security-checklist/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-security-checklist/checklist.js"), "utf8"),
   readFile(path.join(root, "ai-benchmark-audit-checklist/index.html"), "utf8"),
@@ -120,6 +121,7 @@ for (const [name, page, pathname] of [
   ["AI receptionist cost worksheet", aiReceptionistCostHtml, "/ai-receptionist-cost/"],
   ["70B LLM GPU requirements guide", gpuGuideHtml, "/70b-llm-gpu-requirements/"],
   ["Qwen2.5 GPU requirements guide", qwenGuideHtml, "/qwen2-5-gpu-requirements/"],
+  ["gpt-oss hardware requirements guide", gptOssGuideHtml, "/gpt-oss-hardware-requirements/"],
   ["AI agent security checklist", securityGuideHtml, "/ai-agent-security-checklist/"],
   ["AI benchmark audit checklist", benchmarkGuideHtml, "/ai-benchmark-audit-checklist/"],
   ["starter kit", starterHtml, "/evidence-starter-kit/"],
@@ -172,6 +174,35 @@ for (const [name, page, title, source, calculatorPath, questions] of [
     assert.match(page, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `${name} visible FAQ question missing: ${question}`);
     assert.match(page, new RegExp(`"name": "${escapedQuestion}"`), `${name} FAQ schema question missing: ${question}`);
   }
+}
+
+assert.match(gptOssGuideHtml, /<title>gpt-oss 20B &amp; 120B Hardware Requirements \| ResearchAudio<\/title>/);
+assert.equal((gptOssGuideHtml.match(/"@type": "TechArticle"/g) || []).length, 1, "gpt-oss guide should have one TechArticle schema");
+assert.equal((gptOssGuideHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "gpt-oss guide should have one FAQPage schema");
+assert.doesNotThrow(() => parseStructuredData(gptOssGuideHtml), "gpt-oss guide structured data must be valid JSON");
+assert.match(gptOssGuideHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=gpt_oss_hardware_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab/);
+assert.match(gptOssGuideHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
+assert.match(gptOssGuideHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
+assert.match(gptOssGuideHtml, /utm_content=direct_join/);
+assert.match(gptOssGuideHtml, /subscribe-direct-fallback/);
+assert.match(labCss, /\.subscribe-direct-fallback/);
+assert.equal((gptOssGuideHtml.match(/class="scenario-card/g) || []).length, 4, "gpt-oss guide should contain four editable scenarios");
+assert.match(gptOssGuideHtml, /bitsPerParameter=4\.25/);
+assert.match(gptOssGuideHtml, /checkpointGiB=12\.8/);
+assert.match(gptOssGuideHtml, /checkpointGiB=60\.8/);
+assert.match(gptOssGuideHtml, /openai\.com\/index\/introducing-gpt-oss/);
+assert.match(gptOssGuideHtml, /deploymentsafety\.openai\.com\/gpt-oss\/architecture/);
+assert.match(gptOssGuideHtml, /huggingface\.co\/openai\/gpt-oss-20b\/blob\/main\/config\.json/);
+assert.match(gptOssGuideHtml, /huggingface\.co\/openai\/gpt-oss-120b\/blob\/main\/config\.json/);
+for (const question of [
+  "How much memory does gpt-oss-20b need?",
+  "How much GPU memory does gpt-oss-120b need?",
+  "Why are active parameters smaller than the memory requirement?",
+  "How does 128K context affect gpt-oss memory?",
+]) {
+  const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  assert.match(gptOssGuideHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `gpt-oss visible FAQ question missing: ${question}`);
+  assert.match(gptOssGuideHtml, new RegExp(`"name": "${escapedQuestion}"`), `gpt-oss FAQ schema question missing: ${question}`);
 }
 
 for (const [name, page] of [
@@ -517,6 +548,47 @@ assert.equal(contextAwareGpuMemory.kvCacheMemoryGiB, 10);
 assert.ok(Math.abs(contextAwareGpuMemory.planningTargetGiB - 51.1155481339) < 0.000001);
 assert.equal(contextAwareGpuMemory.minimumGpus, 2);
 assert.equal(contextAwareGpuMemory.fitsAvailable, true);
+const gptOss20b4k = calculateGpuMemory({
+  parameterBillions: 20.91,
+  bitsPerParameter: 4.25,
+  checkpointGiB: 12.8,
+  layers: 24,
+  kvHeads: 8,
+  headDimension: 64,
+  contextTokens: 4096,
+  concurrentSequences: 1,
+  kvCacheBits: 16,
+  inferenceHeadroom: 10,
+  vramPerGpu: 16,
+  usableVramPercent: 95,
+  availableGpus: 1,
+});
+assert.equal(gptOss20b4k.precisionLabel, "Checkpoint override");
+assert.equal(gptOss20b4k.usesCheckpointOverride, true);
+assert.equal(gptOss20b4k.weightMemoryGiB, 12.8);
+assert.equal(Number(gptOss20b4k.planningTargetGiB.toFixed(2)), 14.29);
+assert.equal(gptOss20b4k.minimumGpus, 1);
+assert.equal(gptOss20b4k.fitsAvailable, true);
+const gptOss120b128k = calculateGpuMemory({
+  parameterBillions: 116.83,
+  bitsPerParameter: 4.25,
+  checkpointGiB: 60.8,
+  layers: 36,
+  kvHeads: 8,
+  headDimension: 64,
+  contextTokens: 131072,
+  concurrentSequences: 1,
+  kvCacheBits: 16,
+  inferenceHeadroom: 20,
+  vramPerGpu: 80,
+  usableVramPercent: 90,
+  availableGpus: 2,
+});
+assert.equal(Number(gptOss120b128k.planningTargetGiB.toFixed(2)), 83.76);
+assert.equal(gptOss120b128k.minimumGpus, 2);
+assert.equal(gptOss120b128k.fitsAvailable, true);
+assert.match(gpuMemoryHtml, /value="4\.25">MXFP4 · 4\.25-bit floor/);
+assert.match(gpuMemoryHtml, /name="checkpointGiB"/);
 for (const scenario of [
   { parameters: 7.61, layers: 28, kvHeads: 4, target: 6.35 },
   { parameters: 32.5, layers: 64, kvHeads: 8, target: 27.76 },
@@ -799,9 +871,10 @@ assert.match(voiceCostHtml, /elevenlabs\.io\/pricing/);
 assert.match(toolsHtml, /voice-ai-cost-calculator/);
 assert.match(toolsHtml, /voice-ai-cost-per-minute/);
 assert.match(toolsHtml, /ai-receptionist-cost/);
-assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 5, "tools hub should contain five search field notes");
+assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 6, "tools hub should contain six search field notes");
 assert.match(toolsHtml, /70b-llm-gpu-requirements/);
 assert.match(toolsHtml, /qwen2-5-gpu-requirements/);
+assert.match(toolsHtml, /gpt-oss-hardware-requirements/);
 assert.match(toolsHtml, /ai-agent-security-checklist/);
 assert.match(toolsHtml, /ai-benchmark-audit-checklist/);
 assert.match(toolsHtml, /ai-task-fit-diagnostic/);
@@ -924,9 +997,9 @@ assert.match(qwenGuideHtml, /6\.35 GiB/);
 assert.match(qwenGuideHtml, /27\.76 GiB/);
 assert.match(qwenGuideHtml, /52\.62 GiB/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 22, "sitemap should contain all twenty-two crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 23, "sitemap should contain all twenty-three crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 22, "sitemap should publish twenty-two URL locations");
+assert.equal(sitemapUrls.length, 23, "sitemap should publish twenty-three URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -964,4 +1037,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 13 tools, 1 activation kit, 1 embed library, 6 field guides, 22 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 13 tools, 1 activation kit, 1 embed library, 7 field guides, 23 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

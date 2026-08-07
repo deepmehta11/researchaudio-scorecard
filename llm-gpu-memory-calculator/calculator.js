@@ -3,6 +3,7 @@ import { buildAttributedShareUrl, restoreSharedNumbers } from "../share-state.js
 const DEFAULTS = {
   parameterBillions: 70,
   bitsPerParameter: 4,
+  checkpointGiB: 0,
   layers: 0,
   kvHeads: 0,
   headDimension: 0,
@@ -22,6 +23,7 @@ const KV_PRECISION_LABELS = {
 };
 
 const PRECISION_LABELS = {
+  4.25: "MXFP4 floor",
   4: "INT4",
   8: "INT8",
   16: "FP16 / BF16",
@@ -51,6 +53,7 @@ function supportedKvBits(value) {
 export function calculateGpuMemory({
   parameterBillions,
   bitsPerParameter,
+  checkpointGiB,
   layers,
   kvHeads,
   headDimension,
@@ -64,6 +67,7 @@ export function calculateGpuMemory({
 }) {
   const parameters = nonNegative(parameterBillions) * 1_000_000_000;
   const bits = supportedBits(bitsPerParameter);
+  const exactCheckpointGiB = nonNegative(checkpointGiB);
   const layerCount = Math.floor(nonNegative(layers));
   const keyValueHeads = Math.floor(nonNegative(kvHeads));
   const keyValueHeadDimension = Math.floor(nonNegative(headDimension));
@@ -77,7 +81,9 @@ export function calculateGpuMemory({
   const gpuVram = nonNegative(vramPerGpu);
   const usableRate = boundedPercentage(usableVramPercent, 90);
   const gpuCount = Math.floor(nonNegative(availableGpus));
-  const weightMemoryGiB = (parameters * bits / 8) / (1024 ** 3);
+  const calculatedWeightMemoryGiB = (parameters * bits / 8) / (1024 ** 3);
+  const usesCheckpointOverride = exactCheckpointGiB > 0;
+  const weightMemoryGiB = usesCheckpointOverride ? exactCheckpointGiB : calculatedWeightMemoryGiB;
   const kvCacheMemoryGiB = hasKvCacheInputs
     ? (2 * layerCount * keyValueHeads * keyValueHeadDimension * sequenceLength * sequences * (cacheBits / 8)) / (1024 ** 3)
     : 0;
@@ -97,7 +103,10 @@ export function calculateGpuMemory({
   return {
     parameterBillions: parameters / 1_000_000_000,
     bits,
-    precisionLabel: PRECISION_LABELS[bits],
+    checkpointGiB: exactCheckpointGiB,
+    usesCheckpointOverride,
+    calculatedWeightMemoryGiB,
+    precisionLabel: usesCheckpointOverride ? "Checkpoint override" : PRECISION_LABELS[bits],
     layerCount,
     keyValueHeads,
     keyValueHeadDimension,

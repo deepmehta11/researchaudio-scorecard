@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>gpt-oss 20B &amp; 120B Hardware Requirements | ResearchAudio</title>
+    <meta name="description" content="Compare gpt-oss-20b and gpt-oss-120b GPU memory requirements using official checkpoint sizes, MXFP4 weight math, 4K and 128K KV-cache scenarios." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/gpt-oss-hardware-requirements/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="gpt-oss 20B vs 120B: the hardware budget behind 16 GB and 80 GB" />
+    <meta property="og:description" content="Separate official checkpoint size, MXFP4 weight math, KV cache, runtime headroom, and usable GPU memory before choosing hardware." />
+    <meta property="og:url" content="https://tools.researchaudio.io/gpt-oss-hardware-requirements/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "gpt-oss 20B and 120B Hardware Requirements",
+        "description": "A primary-source deployment worksheet covering official checkpoint sizes, MXFP4 weight math, grouped-query KV cache, runtime headroom, usable VRAM, and minimum GPU count for gpt-oss-20b and gpt-oss-120b.",
+        "datePublished": "2026-08-06",
+        "dateModified": "2026-08-06",
+        "mainEntityOfPage": "https://tools.researchaudio.io/gpt-oss-hardware-requirements/",
+        "author": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How much memory does gpt-oss-20b need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "OpenAI says gpt-oss-20b can run on systems with as little as 16 GB of memory. Its official MXFP4 checkpoint is 12.8 GiB. This page's one-sequence 4K load profile is 14.29 GiB after KV cache and a 10 percent runtime reserve." }
+          },
+          {
+            "@type": "Question",
+            "name": "How much GPU memory does gpt-oss-120b need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "OpenAI says gpt-oss-120b fits on one 80 GB GPU, such as an H100. Its official MXFP4 checkpoint is 60.8 GiB. This page's one-sequence 4K load profile is 67.19 GiB after KV cache and a 10 percent runtime reserve." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why are active parameters smaller than the memory requirement?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Mixture-of-experts routing activates only some experts for each token, reducing compute per token. The full checkpoint still contains all experts, so total parameters and the deployed artifact—not active parameters alone—set the weight-memory requirement." }
+          },
+          {
+            "@type": "Question",
+            "name": "How does 128K context affect gpt-oss memory?",
+            "acceptedAnswer": { "@type": "Answer", "text": "A conservative full-cache estimate adds about 6 GiB for gpt-oss-20b and 9 GiB for gpt-oss-120b at 131,072 tokens for one BF16 sequence. Actual runtimes can allocate differently because gpt-oss alternates dense and 128-token sliding attention layers." }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#gpt-oss-scenarios">Skip to the gpt-oss hardware scenarios</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=gpt_oss_hardware_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=gpt_oss_hardware_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=gpt_oss_hardware_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=gpt_oss_hardware_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">OpenAI open weights / deployment worksheet</p>
+          <h1 id="hero-title">gpt-oss 20B or 120B: what actually has to fit?</h1>
+          <p class="hero-deck">Start with OpenAI's 12.8 GiB and 60.8 GiB checkpoints. Then add context, concurrency, runtime headroom, and usable GPU memory before buying hardware.</p>
+          <a class="hero-join-link" href="../llm-gpu-memory-calculator/?parameterBillions=116.83&amp;bitsPerParameter=4.25&amp;checkpointGiB=60.8&amp;layers=36&amp;kvHeads=8&amp;headDimension=64&amp;contextTokens=4096&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=10&amp;vramPerGpu=80&amp;usableVramPercent=95&amp;availableGpus=1&amp;utm_source=gpt_oss_hardware_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_120b_4k">Open the editable 120B plan →</a>
+        </div>
+        <aside class="lab-index" aria-label="gpt-oss hardware scope">
+          <span>Official checkpoints</span>
+          <strong>02</strong>
+          <p>20.91B and 116.83B total parameters, MXFP4 MoE weights, 24 or 36 layers, 8 KV heads, 64 head dimensions, and up to 131,072 tokens.</p>
+        </aside>
+      </section>
+
+      <section class="scenario-section" id="gpt-oss-scenarios" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">Quick answer / one sequence</p>
+          <h2 id="scenario-title">16 GB is the small-model floor. 80 GB is the large-model floor.</h2>
+          <p>OpenAI's official memory claims describe the MXFP4 release artifacts. The first two editable load profiles use the exact checkpoints, one 4K BF16 cache, a 10% runtime reserve, and 95% usable memory. The 128K profiles tighten the operational boundary with 20% reserve and 90% usable memory.</p>
+        </div>
+        <div class="scenario-grid guide-scenario-grid">
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=20.91&amp;bitsPerParameter=4.25&amp;checkpointGiB=12.8&amp;layers=24&amp;kvHeads=8&amp;headDimension=64&amp;contextTokens=4096&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=10&amp;vramPerGpu=16&amp;usableVramPercent=95&amp;availableGpus=1&amp;utm_source=gpt_oss_hardware_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=20b_4k_scenario">
+            <span>gpt-oss-20b · 4K · 1 × 16 GB</span>
+            <strong>14.29 GiB</strong>
+            <small>12.80 checkpoint + 0.19 KV + reserve →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=116.83&amp;bitsPerParameter=4.25&amp;checkpointGiB=60.8&amp;layers=36&amp;kvHeads=8&amp;headDimension=64&amp;contextTokens=4096&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=10&amp;vramPerGpu=80&amp;usableVramPercent=95&amp;availableGpus=1&amp;utm_source=gpt_oss_hardware_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=120b_4k_scenario">
+            <span>gpt-oss-120b · 4K · 1 × 80 GB</span>
+            <strong>67.19 GiB</strong>
+            <small>60.80 checkpoint + 0.28 KV + reserve →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=20.91&amp;bitsPerParameter=4.25&amp;checkpointGiB=12.8&amp;layers=24&amp;kvHeads=8&amp;headDimension=64&amp;contextTokens=131072&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=gpt_oss_hardware_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=20b_128k_scenario">
+            <span>gpt-oss-20b · 128K · 1 × 24 GB</span>
+            <strong>22.56 GiB</strong>
+            <small>12.80 checkpoint + 6.00 KV + reserve; short →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=116.83&amp;bitsPerParameter=4.25&amp;checkpointGiB=60.8&amp;layers=36&amp;kvHeads=8&amp;headDimension=64&amp;contextTokens=131072&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=80&amp;usableVramPercent=90&amp;availableGpus=2&amp;utm_source=gpt_oss_hardware_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=120b_128k_scenario">
+            <span>gpt-oss-120b · 128K · 2 × 80 GB</span>
+            <strong>83.76 GiB</strong>
+            <small>60.80 checkpoint + 9.00 KV + reserve →</small>
+          </a>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="matrix-title">
+        <div class="comparison-heading">
+          <div>
+            <p class="eyebrow">Official artifact vs planning model</p>
+            <h2 id="matrix-title">Checkpoint size is real. Headroom is workload-specific.</h2>
+          </div>
+          <p>The official checkpoint includes higher-precision attention, embeddings, routing, metadata, and MXFP4 expert weights. The calculator is a transparent capacity model, not a replacement for loading the exact artifact in the intended runtime.</p>
+        </div>
+        <p class="comparison-scroll-hint">Swipe the matrix horizontally →</p>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead>
+              <tr><th scope="col">Model</th><th scope="col">Official architecture</th><th scope="col">Official checkpoint</th><th scope="col">OpenAI memory claim</th><th scope="col">4K planning target</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">gpt-oss-20b</th><td>24L · 20.91B total · 3.61B active</td><td>12.8 GiB</td><td>As little as 16 GB</td><td>14.29 GiB<br /><small>1 × 16 GB</small></td></tr>
+              <tr><th scope="row">gpt-oss-120b</th><td>36L · 116.83B total · 5.13B active</td><td>60.8 GiB</td><td>1 × 80 GB GPU</td><td>67.19 GiB<br /><small>1 × 80 GB</small></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">A GB vendor label and a GiB software measurement are different units. Drivers, kernels, graph capture, batching, and serving-engine allocations also consume memory. Treat “fits” as the start of benchmarking, not proof of acceptable speed.</p>
+      </section>
+
+      <section class="principle-strip" aria-label="gpt-oss deployment boundaries">
+        <p class="eyebrow">Read the claim</p>
+        <p><strong>Active is not resident.</strong><br />MoE routing reduces compute per token; it does not erase the inactive experts from the checkpoint.</p>
+        <p><strong>Context is not free.</strong><br />A fully allocated 128K cache materially changes the capacity plan.</p>
+        <p><strong>Capacity is not speed.</strong><br />CPU offload can make a model load while still missing the latency target.</p>
+      </section>
+
+      <section class="method-section" aria-labelledby="context-title">
+        <div>
+          <p class="eyebrow">The 128K boundary</p>
+          <h2 id="context-title">Advertised context and allocated cache are different decisions.</h2>
+        </div>
+        <div class="method-copy formula-copy">
+          <p><strong>gpt-oss-20b</strong><br /><code>0.19 GiB at 4K → 6 GiB at 128K</code></p>
+          <p><strong>gpt-oss-120b</strong><br /><code>0.28 GiB at 4K → 9 GiB at 128K</code></p>
+          <p><strong>Concurrency repeats the cache.</strong><br />Four fully allocated 128K sequences raise the conservative cache allowance to 24 GiB for 20B or 36 GiB for 120B.</p>
+          <p>These figures apply the standard full-cache formula across every layer. gpt-oss alternates dense attention with a 128-token sliding window, so an optimized runtime may allocate less. Measure the exact engine, batching policy, and cache format before reserving production capacity.</p>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="sources-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Primary-source inputs</p>
+          <h2 id="sources-title">Use OpenAI's artifact facts. Edit your workload assumptions.</h2>
+          <p>Model sizes, checkpoint sizes, MXFP4 precision, active parameters, layers, attention heads, KV heads, head dimension, sliding window, and context length come from OpenAI's model card and official model configurations.</p>
+          <a class="guide-link" href="../llm-gpu-memory-calculator/?utm_source=gpt_oss_hardware_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=blank_gpu_calculator">Open the GPU memory calculator →</a>
+          <a class="guide-link" href="../kv-cache-calculator/?utm_source=gpt_oss_hardware_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=kv_cache_calculator">Open the KV-cache calculator →</a>
+          <a class="guide-link" href="https://openai.com/index/introducing-gpt-oss/">OpenAI gpt-oss announcement →</a>
+          <a class="guide-link" href="https://deploymentsafety.openai.com/gpt-oss/architecture">OpenAI gpt-oss model architecture →</a>
+          <a class="guide-link" href="https://huggingface.co/openai/gpt-oss-20b/blob/main/config.json">Official gpt-oss-20b configuration →</a>
+          <a class="guide-link" href="https://huggingface.co/openai/gpt-oss-120b/blob/main/config.json">Official gpt-oss-120b configuration →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>How much memory does gpt-oss-20b need?</h3><p>OpenAI says the model can run on systems with as little as 16 GB. The official checkpoint is 12.8 GiB; this page's 4K load profile reaches 14.29 GiB after a full BF16 KV cache and a 10% runtime reserve.</p></article>
+          <article class="faq-item"><h3>How much GPU memory does gpt-oss-120b need?</h3><p>OpenAI says the 120B model fits on one 80 GB GPU. The official checkpoint is 60.8 GiB; this page's 4K load profile reaches 67.19 GiB after cache and a 10% runtime reserve.</p></article>
+          <article class="faq-item"><h3>Why are active parameters smaller than the memory requirement?</h3><p>Only 3.61B or 5.13B parameters are active for each token, but the deployed checkpoint contains 20.91B or 116.83B total parameters. Active parameters describe compute routing, not the whole resident weight artifact.</p></article>
+          <article class="faq-item"><h3>How does 128K context affect gpt-oss memory?</h3><p>A conservative full BF16 cache estimate adds 6 GiB for 20B or 9 GiB for 120B for one 131,072-token sequence. Optimized runtimes may allocate less because half the layers use 128-token sliding attention.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Deployment math without the launch theatre</p>
+          <h2 id="subscribe-title">Get the next model and infrastructure teardown.</h2>
+          <p>ResearchAudio turns model releases, hardware claims, and serving constraints into practical decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <p class="subscribe-direct-fallback"><strong>Prefer the hosted signup page?</strong><a href="https://researchaudio.io/subscribe?utm_source=gpt_oss_hardware_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join">Join ResearchAudio free →</a></p>
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=gpt_oss_hardware_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../llm-gpu-memory-calculator/">GPU memory calculator</a>
+        <a href="../qwen2-5-gpu-requirements/">Qwen2.5 guide</a>
+        <a href="../70b-llm-gpu-requirements/">70B guide</a>
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=gpt_oss_hardware_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>

@@ -98,7 +98,7 @@
         </div>
         <aside class="lab-index" aria-label="GPU memory model scope">
           <span>Planning inputs</span>
-          <strong>12</strong>
+          <strong>13</strong>
           <p>Vendor-neutral by design. Enter the actual VRAM available to the hardware and runtime you are evaluating.</p>
         </aside>
       </section>
@@ -126,9 +126,14 @@
                   <option value="32">FP32 · 32-bit</option>
                   <option value="16">FP16 / BF16 · 16-bit</option>
                   <option value="8">INT8 · 8-bit</option>
+                  <option value="4.25">MXFP4 · 4.25-bit floor</option>
                   <option value="4" selected>INT4 · 4-bit</option>
                 </select>
               </span>
+            </label>
+            <label class="input-card" for="checkpoint-size">
+              <span class="field-copy"><strong>Exact checkpoint size</strong><small>Optional. When known, this artifact size replaces the bits-per-parameter weight estimate.</small></span>
+              <span class="number-field suffix"><span>GiB</span><input id="checkpoint-size" name="checkpointGiB" type="number" min="0" max="10000" step="0.1" value="0" inputmode="decimal" /></span>
             </label>
             <p class="input-section-label">Optional KV cache</p>
             <label class="input-card" for="model-layers">
@@ -218,7 +223,7 @@
           <h2 id="method-title">What this LLM GPU memory calculator computes.</h2>
         </div>
         <div class="method-copy">
-          <p><strong>Weight memory</strong> is total parameters multiplied by bits per parameter, divided by eight, then converted from bytes to GiB. It deliberately uses total parameters for sparse models because inactive experts still have to be stored unless the deployment explicitly offloads them.</p>
+          <p><strong>Weight memory</strong> uses the exact checkpoint size when you provide one. Otherwise, it multiplies total parameters by bits per parameter, divides by eight, and converts bytes to GiB. It deliberately uses total parameters for sparse models because inactive experts still have to be stored unless the deployment explicitly offloads them.</p>
           <p><strong>KV-cache memory</strong> is <code>2 × layers × KV heads × head dimension × context tokens × concurrent sequences × bytes per KV element</code>. The factor of two stores keys and values. Sliding-window, chunked, quantized, offloaded, or shared-prefix caches need runtime-specific treatment.</p>
           <p><strong>Planning target</strong> adds the runtime headroom you choose after weights and any explicit KV cache. Hugging Face's model memory estimator describes weight loading as a floor and notes that inference can require additional memory. Use measured runtime data instead of the default once you have it.</p>
           <p><strong>Minimum GPUs</strong> divides the planning target by usable VRAM per GPU and rounds up. This capacity check does not promise throughput, latency, interconnect efficiency, or compatibility with a particular tensor-parallel configuration.</p>
