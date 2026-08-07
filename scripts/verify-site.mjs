@@ -832,6 +832,8 @@ assert.equal(
 assert.match(codexConfigJs, /utm_source", "codex_config_share"/);
 assert.match(codexConfigJs, /utm_campaign", "ai_evidence_lab"/);
 assert.match(codexConfigHtml, /AGENTS\.override\.md/);
+assert.match(codexConfigHtml, /Generate <code>project_doc_fallback_filenames<\/code> and <code>project_doc_max_bytes<\/code> for Codex CLI\./);
+assert.match(codexConfigHtml, /href="\.\.\/codex-exec-command-builder\/\?utm_source=codex_config_generator&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=exec_builder"/);
 
 assert.equal(
   buildCodexExecCommand(),
@@ -862,6 +864,7 @@ assert.doesNotThrow(() => parseStructuredData(codexExecHtml), "Codex exec builde
 assert.match(codexExecHtml, /github\.com\/openai\/codex\/blob\/main\/codex-rs\/exec\/src\/cli\.rs/);
 assert.match(codexExecHtml, /utm_source=codex_exec_builder&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab/);
 assert.match(codexExecHtml, /--skip-git-repo-check/);
+assert.match(codexExecHtml, /Build a <code>codex exec --json<\/code> command with an explicit Git check\./);
 assert.match(codexExecHtml, /--output-schema/);
 assert.match(codexExecHtml, /--output-last-message/);
 assert.match(codexExecJs, /utm_source", "codex_exec_builder_share"/);
