@@ -842,16 +842,20 @@ for (const [name, page] of [
   ["LLM GPU memory", gpuMemoryHtml],
   ["LLM KV cache", kvCacheHtml],
   ["voice AI cost", voiceCostHtml],
+  ["AI agent security", securityGuideHtml],
+  ["AI benchmark audit", benchmarkGuideHtml],
 ]) {
-  assert.match(page, /<script src="\.\.\/embed-mode\.js"><\/script>/, `${name} calculator should support embed mode`);
+  assert.match(page, /<script src="\.\.\/embed-mode\.js"><\/script>/, `${name} tool should support embed mode`);
 }
 assert.match(embedModeJs, /parameters\.get\("embed"\) === "1"/);
 assert.match(embedModeJs, /utm_medium", "embedded_tool"/);
 assert.match(embedModeJs, /utm_campaign", "ai_evidence_lab"/);
 assert.match(embedModeJs, /target = "_blank"/);
-assert.match(embedsHtml, /<title>Embed Free AI Calculators on Your Website \| ResearchAudio<\/title>/);
-assert.equal((embedsHtml.match(/data-widget-url=/g) || []).length, 5, "embed library should offer five widgets");
-assert.equal((embedsHtml.match(/data-copy-embed/g) || []).length, 5, "every widget should expose a copy action");
+assert.match(embedsHtml, /<title>Embed Free AI Tools on Your Website \| ResearchAudio<\/title>/);
+assert.equal((embedsHtml.match(/data-widget-url=/g) || []).length, 7, "embed library should offer seven widgets");
+assert.equal((embedsHtml.match(/data-copy-embed/g) || []).length, 7, "every widget should expose a copy action");
+assert.match(embedsHtml, /data-widget-url="https:\/\/tools\.researchaudio\.io\/ai-benchmark-audit-checklist\/"/);
+assert.match(embedsHtml, /data-widget-url="https:\/\/tools\.researchaudio\.io\/ai-agent-security-checklist\/"/);
 assert.match(embedsHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
 assert.match(embedsHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
 assert.match(embedsJs, /utm_source/);
@@ -885,7 +889,7 @@ assert.match(llms, /Codex CLI config\.toml Generator/);
 assert.match(llms, /Voice AI Latency Calculator/);
 assert.match(llms, /AI Voice Agent Cost Calculator/);
 assert.match(llms, /AI Evidence Starter Kit/);
-assert.match(llms, /Embeddable AI Calculators/);
+assert.match(llms, /Embeddable AI Tools/);
 assert.match(llms, /The Fable 5 Cost Playbook/);
 assert.match(llms, /Voice AI Cost per Minute/);
 assert.match(llms, /AI Receptionist Cost Worksheet/);
