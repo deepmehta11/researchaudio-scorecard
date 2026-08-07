@@ -23,7 +23,7 @@ const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const brandedToolsOrigin = "https://tools.researchaudio.io";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, kvCacheHtml, kvCacheJs, gpuGuideHtml, qwenGuideHtml, gptOssGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, kvCacheHtml, kvCacheJs, gpuGuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -46,6 +46,7 @@ const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, cost
   readFile(path.join(root, "kv-cache-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "70b-llm-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "qwen2-5-gpu-requirements/index.html"), "utf8"),
+  readFile(path.join(root, "qwen3-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "gpt-oss-hardware-requirements/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-security-checklist/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-security-checklist/checklist.js"), "utf8"),
@@ -126,6 +127,7 @@ for (const [name, page, pathname] of [
   ["AI receptionist cost worksheet", aiReceptionistCostHtml, "/ai-receptionist-cost/"],
   ["70B LLM GPU requirements guide", gpuGuideHtml, "/70b-llm-gpu-requirements/"],
   ["Qwen2.5 GPU requirements guide", qwenGuideHtml, "/qwen2-5-gpu-requirements/"],
+  ["Qwen3 GPU requirements guide", qwen3GuideHtml, "/qwen3-gpu-requirements/"],
   ["gpt-oss hardware requirements guide", gptOssGuideHtml, "/gpt-oss-hardware-requirements/"],
   ["AI agent security checklist", securityGuideHtml, "/ai-agent-security-checklist/"],
   ["AI benchmark audit checklist", benchmarkGuideHtml, "/ai-benchmark-audit-checklist/"],
@@ -208,6 +210,39 @@ for (const question of [
   const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   assert.match(gptOssGuideHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `gpt-oss visible FAQ question missing: ${question}`);
   assert.match(gptOssGuideHtml, new RegExp(`"name": "${escapedQuestion}"`), `gpt-oss FAQ schema question missing: ${question}`);
+}
+
+assert.match(qwen3GuideHtml, /<title>Qwen3 GPU Requirements: 8B, 14B &amp; 32B VRAM \| ResearchAudio<\/title>/);
+assert.equal((qwen3GuideHtml.match(/"@type": "TechArticle"/g) || []).length, 1, "Qwen3 guide should have one TechArticle schema");
+assert.equal((qwen3GuideHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "Qwen3 guide should have one FAQPage schema");
+assert.doesNotThrow(() => parseStructuredData(qwen3GuideHtml), "Qwen3 guide structured data must be valid JSON");
+assert.match(qwen3GuideHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=qwen3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab/);
+assert.match(qwen3GuideHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
+assert.match(qwen3GuideHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
+assert.equal((qwen3GuideHtml.match(/class="scenario-card/g) || []).length, 4, "Qwen3 guide should contain four editable scenarios");
+assert.match(qwen3GuideHtml, /parameterBillions=8\.2/);
+assert.match(qwen3GuideHtml, /parameterBillions=14\.8/);
+assert.match(qwen3GuideHtml, /parameterBillions=32\.8/);
+assert.match(qwen3GuideHtml, /parameterBillions=30\.5/);
+assert.match(qwen3GuideHtml, /11,001 MB/);
+assert.match(qwen3GuideHtml, /15,323 MB/);
+assert.match(qwen3GuideHtml, /27,718 MB/);
+assert.match(qwen3GuideHtml, /huggingface\.co\/Qwen\/Qwen3-8B/);
+assert.match(qwen3GuideHtml, /huggingface\.co\/Qwen\/Qwen3-14B/);
+assert.match(qwen3GuideHtml, /huggingface\.co\/Qwen\/Qwen3-32B/);
+assert.match(qwen3GuideHtml, /huggingface\.co\/Qwen\/Qwen3-30B-A3B/);
+assert.match(qwen3GuideHtml, /qwen\.readthedocs\.io\/en\/stable\/getting_started\/speed_benchmark\.html/);
+assert.doesNotMatch(qwen3GuideHtml, /TODO|PLACEHOLDER|example\.com/);
+for (const question of [
+  "How much GPU memory does Qwen3 8B need?",
+  "How much GPU memory does Qwen3 14B need?",
+  "How much GPU memory does Qwen3 32B need?",
+  "Does Qwen3 30B-A3B only need memory for 3.3B active parameters?",
+  "How does 128K context change Qwen3 VRAM requirements?",
+]) {
+  const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  assert.match(qwen3GuideHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `Qwen3 visible FAQ question missing: ${question}`);
+  assert.match(qwen3GuideHtml, new RegExp(`"name": "${escapedQuestion}"`), `Qwen3 FAQ schema question missing: ${question}`);
 }
 
 for (const [name, page] of [
@@ -623,6 +658,28 @@ for (const scenario of [
   });
   assert.equal(Number(result.planningTargetGiB.toFixed(2)), scenario.target, `Qwen2.5 ${scenario.parameters}B target should match the guide`);
 }
+for (const scenario of [
+  { name: "8B", parameters: 8.2, layers: 36, kvHeads: 8, target: 9.98 },
+  { name: "14B", parameters: 14.8, layers: 40, kvHeads: 8, target: 14.27 },
+  { name: "32B", parameters: 32.8, layers: 64, kvHeads: 8, target: 27.93 },
+  { name: "30B-A3B", parameters: 30.5, layers: 48, kvHeads: 4, target: 20.64 },
+]) {
+  const result = calculateGpuMemory({
+    parameterBillions: scenario.parameters,
+    bitsPerParameter: 4,
+    layers: scenario.layers,
+    kvHeads: scenario.kvHeads,
+    headDimension: 128,
+    contextTokens: 32768,
+    concurrentSequences: 1,
+    kvCacheBits: 16,
+    inferenceHeadroom: 20,
+    vramPerGpu: 48,
+    usableVramPercent: 90,
+    availableGpus: 2,
+  });
+  assert.equal(Number(result.planningTargetGiB.toFixed(2)), scenario.target, `Qwen3 ${scenario.name} target should match the guide`);
+}
 assert.match(gpuMemoryHtml, /name="layers"/);
 assert.match(gpuMemoryHtml, /name="kvHeads"/);
 assert.match(gpuMemoryHtml, /name="headDimension"/);
@@ -630,6 +687,7 @@ assert.match(gpuMemoryHtml, /name="contextTokens"/);
 assert.match(gpuMemoryHtml, /name="concurrentSequences"/);
 assert.match(gpuMemoryHtml, /name="kvCacheBits"/);
 assert.match(gpuMemoryHtml, /70b-llm-gpu-requirements/);
+assert.match(gpuMemoryHtml, /qwen3-gpu-requirements/);
 assert.match(gpuGuideHtml, /51\.1 GiB/);
 assert.match(gpuGuideHtml, /90\.2 GiB/);
 assert.match(gpuGuideHtml, /168\.5 GiB/);
@@ -918,9 +976,10 @@ assert.match(voiceCostHtml, /elevenlabs\.io\/pricing/);
 assert.match(toolsHtml, /voice-ai-cost-calculator/);
 assert.match(toolsHtml, /voice-ai-cost-per-minute/);
 assert.match(toolsHtml, /ai-receptionist-cost/);
-assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 6, "tools hub should contain six search field notes");
+assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 7, "tools hub should contain seven search field notes");
 assert.match(toolsHtml, /70b-llm-gpu-requirements/);
 assert.match(toolsHtml, /qwen2-5-gpu-requirements/);
+assert.match(toolsHtml, /qwen3-gpu-requirements/);
 assert.match(toolsHtml, /gpt-oss-hardware-requirements/);
 assert.match(toolsHtml, /ai-agent-security-checklist/);
 assert.match(toolsHtml, /ai-benchmark-audit-checklist/);
@@ -1044,10 +1103,16 @@ assert.match(qwenGuideHtml, /Official Qwen2\.5 72B model card/);
 assert.match(qwenGuideHtml, /6\.35 GiB/);
 assert.match(qwenGuideHtml, /27\.76 GiB/);
 assert.match(qwenGuideHtml, /52\.62 GiB/);
+assert.match(qwenGuideHtml, /qwen3-gpu-requirements/);
+assert.match(toolsHtml, /Qwen3 GPU requirements/);
+assert.match(qwen3GuideHtml, /9\.98 GiB/);
+assert.match(qwen3GuideHtml, /14\.27 GiB/);
+assert.match(qwen3GuideHtml, /27\.93 GiB/);
+assert.match(qwen3GuideHtml, /20\.64 GiB/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 24, "sitemap should contain all twenty-four crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 25, "sitemap should contain all twenty-five crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 24, "sitemap should publish twenty-four URL locations");
+assert.equal(sitemapUrls.length, 25, "sitemap should publish twenty-five URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -1069,6 +1134,7 @@ assert.match(llms, /Voice AI Cost per Minute/);
 assert.match(llms, /AI Receptionist Cost Worksheet/);
 assert.match(llms, /70B LLM GPU Requirements/);
 assert.match(llms, /Qwen2\.5 GPU Requirements/);
+assert.match(llms, /Qwen3 GPU Requirements/);
 assert.match(llms, /AI Agent Security Checklist/);
 assert.match(llms, /AI Benchmark Audit Checklist/);
 assert.match(llms, /AI Task Fit Diagnostic/);
@@ -1086,4 +1152,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 14 tools, 1 activation kit, 1 embed library, 7 field guides, 24 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 14 tools, 1 activation kit, 1 embed library, 8 field guides, 25 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

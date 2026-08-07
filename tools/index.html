@@ -4,13 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Free AI Evaluation Tools for Builders | ResearchAudio</title>
-    <meta name="description" content="Fourteen free AI evaluation tools plus seven practical field guides for auditing task fit, benchmarks, evidence, GPU and KV-cache memory, voice economics, latency, LLM spend, agent loops, ROI, and Codex workflows." />
+    <meta name="description" content="Fourteen free AI evaluation tools plus eight practical field guides for auditing task fit, benchmarks, evidence, GPU and KV-cache memory, voice economics, latency, LLM spend, agent loops, ROI, and Codex workflows." />
     <meta name="theme-color" content="#eaf2f0" />
     <link rel="canonical" href="https://tools.researchaudio.io/tools/" />
     <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="ResearchAudio Evidence Lab" />
-    <meta property="og:description" content="Fourteen free instruments and seven practical field guides for making better AI and agent-engineering decisions." />
+    <meta property="og:description" content="Fourteen free instruments and eight practical field guides for making better AI and agent-engineering decisions." />
     <meta property="og:url" content="https://tools.researchaudio.io/tools/" />
     <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -47,6 +47,7 @@
           { "@type": "TechArticle", "name": "AI Receptionist Cost Worksheet", "url": "https://tools.researchaudio.io/ai-receptionist-cost/" },
           { "@type": "TechArticle", "name": "70B LLM GPU Requirements", "url": "https://tools.researchaudio.io/70b-llm-gpu-requirements/" },
           { "@type": "TechArticle", "name": "Qwen2.5 GPU Requirements", "url": "https://tools.researchaudio.io/qwen2-5-gpu-requirements/" },
+          { "@type": "TechArticle", "name": "Qwen3 GPU Requirements", "url": "https://tools.researchaudio.io/qwen3-gpu-requirements/" },
           { "@type": "TechArticle", "name": "gpt-oss Hardware Requirements", "url": "https://tools.researchaudio.io/gpt-oss-hardware-requirements/" },
           { "@type": "WebApplication", "name": "AI Agent Security Checklist", "url": "https://tools.researchaudio.io/ai-agent-security-checklist/" }
         ]
@@ -178,7 +179,7 @@
             <p class="eyebrow">Search field notes</p>
             <h2 id="voice-economics-title">Start with the simple metric. Finish with the system.</h2>
           </div>
-          <p>Five vendor-neutral worksheets turn security, voice-pricing, and GPU-sizing questions into explicit controls and assumptions.</p>
+          <p>Seven vendor-neutral worksheets turn security, voice-pricing, and GPU-sizing questions into explicit controls and assumptions.</p>
         </div>
         <div class="resource-grid">
           <a class="resource-card" href="../voice-ai-cost-per-minute/?utm_source=evidence_lab&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=voice_cost_per_minute_guide">
@@ -204,6 +205,12 @@
             <h2>Qwen2.5 GPU requirements</h2>
             <p>Compare 7B, 32B, and 72B across INT4, INT8, BF16, exact 32K KV cache, and the 128K context jump.</p>
             <b>Choose the checkpoint →</b>
+          </a>
+          <a class="resource-card" href="../qwen3-gpu-requirements/?utm_source=evidence_lab&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_gpu_requirements_guide">
+            <span class="instrument-code">Field note / dense + MoE</span>
+            <h2>Qwen3 GPU requirements</h2>
+            <p>Compare 8B, 14B, 32B, and 30B-A3B across INT4, INT8, BF16, exact 32K cache, and Qwen's observed memory.</p>
+            <b>Size the Qwen3 family →</b>
           </a>
           <a class="resource-card" href="../gpt-oss-hardware-requirements/?utm_source=evidence_lab&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpt_oss_hardware_guide">
             <span class="instrument-code">Field note / open weights</span>

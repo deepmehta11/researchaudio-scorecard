@@ -47,6 +47,8 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Compares INT4, INT8, and FP16 through explicit weight, KV-cache, runtime-headroom, and usable-VRAM assumptions.
 - Qwen2.5 GPU Requirements: https://tools.researchaudio.io/qwen2-5-gpu-requirements/
   Compares Qwen2.5 7B, 32B, and 72B across INT4, INT8, and BF16 with official architecture inputs, exact 32K KV-cache math, and 128K context scenarios.
+- Qwen3 GPU Requirements: https://tools.researchaudio.io/qwen3-gpu-requirements/
+  Compares Qwen3 8B, 14B, 32B, and 30B-A3B across INT4, INT8, and BF16 with exact cache math, dense-versus-MoE boundaries, and Qwen's first-party memory benchmarks.
 - gpt-oss Hardware Requirements: https://tools.researchaudio.io/gpt-oss-hardware-requirements/
   Compares gpt-oss-20b and gpt-oss-120b using official checkpoint sizes, MXFP4 weight math, architecture-aware KV-cache estimates, and editable 4K and 128K deployment scenarios.
 - AI Agent Security Checklist: https://tools.researchaudio.io/ai-agent-security-checklist/

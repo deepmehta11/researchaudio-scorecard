@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Qwen3 GPU Requirements: 8B, 14B &amp; 32B VRAM | ResearchAudio</title>
+    <meta name="description" content="Compare Qwen3 8B, 14B, 32B, and 30B-A3B GPU memory across INT4, INT8, and BF16 with exact 32K KV-cache math and official benchmark checks." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/qwen3-gpu-requirements/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Qwen3 GPU memory: dense models and the 30B-A3B MoE trap" />
+    <meta property="og:description" content="Twelve transparent 32K serving estimates for Qwen3, checked against Qwen's published Transformers measurements." />
+    <meta property="og:url" content="https://tools.researchaudio.io/qwen3-gpu-requirements/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "Qwen3 GPU Requirements: 8B, 14B, 32B and 30B-A3B VRAM",
+        "description": "A transparent Qwen3 inference-memory worksheet covering dense and MoE weights, architecture-aware KV cache, runtime headroom, usable VRAM, and first-party benchmark checks.",
+        "datePublished": "2026-08-06",
+        "dateModified": "2026-08-06",
+        "mainEntityOfPage": "https://tools.researchaudio.io/qwen3-gpu-requirements/",
+        "author": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How much GPU memory does Qwen3 8B need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Qwen3 8B has 8.2 billion parameters. Its raw INT4 weight floor is about 3.82 GiB. With one 32K BF16 KV cache and 20 percent runtime headroom, this page's planning estimate is 9.98 GiB. Qwen's published Transformers benchmark reports 11,001 MB for AWQ-INT4 at a 30,720-token input." }
+          },
+          {
+            "@type": "Question",
+            "name": "How much GPU memory does Qwen3 14B need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Qwen3 14B has 14.8 billion parameters. Its raw INT4 weight floor is about 6.89 GiB. With one 32K BF16 KV cache and 20 percent runtime headroom, this page's planning estimate is 14.27 GiB. Qwen reports 15,323 MB for AWQ-INT4 at a 30,720-token input." }
+          },
+          {
+            "@type": "Question",
+            "name": "How much GPU memory does Qwen3 32B need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Qwen3 32B has 32.8 billion parameters. Its raw INT4 weight floor is about 15.27 GiB. With one 32K BF16 KV cache and 20 percent runtime headroom, this page's planning estimate is 27.93 GiB. Qwen reports 27,718 MB for AWQ-INT4 at a 30,720-token input." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does Qwen3 30B-A3B only need memory for 3.3B active parameters?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. The 30B-A3B model activates about 3.3 billion parameters per token, but the full 30.5 billion parameter checkpoint still has to be loaded. Its raw INT4 weight floor is about 14.20 GiB, and this page's one-sequence 32K planning estimate is 20.64 GiB." }
+          },
+          {
+            "@type": "Question",
+            "name": "How does 128K context change Qwen3 VRAM requirements?",
+            "acceptedAnswer": { "@type": "Answer", "text": "KV-cache memory grows linearly with cached context. Moving from 32K to 128K multiplies the cache by four: from 4.5 to 18 GiB for Qwen3 8B, 5 to 20 GiB for 14B, 8 to 32 GiB for 32B, and 3 to 12 GiB for 30B-A3B for one BF16 cache." }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#qwen3-scenarios">Skip to the Qwen3 GPU scenarios</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=qwen3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=qwen3_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=qwen3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=qwen3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Qwen3 / deployment worksheet</p>
+          <h1 id="hero-title">Dense models, one MoE trap, twelve memory targets.</h1>
+          <p class="hero-deck">Compare Qwen3 8B, 14B, 32B, and 30B-A3B across INT4, INT8, and BF16—then check the estimates against Qwen's published runtime measurements.</p>
+          <a class="hero-join-link" href="../llm-gpu-memory-calculator/?parameterBillions=32.8&amp;bitsPerParameter=4&amp;layers=64&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=48&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=qwen3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_qwen3_32b">Open the editable 32B model →</a>
+        </div>
+        <aside class="lab-index" aria-label="Qwen3 scenario scope">
+          <span>Serving estimates</span>
+          <strong>12</strong>
+          <p>Four model shapes × three weight precisions. Every estimate includes one full 32K BF16 KV cache and 20% runtime headroom.</p>
+        </aside>
+      </section>
+
+      <section class="scenario-section" id="qwen3-scenarios" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">Quick answer / INT4 at 32K</p>
+          <h2 id="scenario-title">The 32B dense model needs more memory than the 30B-A3B MoE—but not by much.</h2>
+          <p>Active parameters influence compute. Total parameters determine the weight memory that must be loaded. These capacity estimates use official Qwen parameter and architecture counts.</p>
+        </div>
+        <div class="scenario-grid guide-scenario-grid">
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=8.2&amp;bitsPerParameter=4&amp;layers=36&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=16&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=qwen3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_8b_int4_32k">
+            <span>Qwen3 8B · 1 × 16 GiB</span>
+            <strong>9.98 GiB</strong>
+            <small>3.82 weights + 4.50 KV + headroom →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=14.8&amp;bitsPerParameter=4&amp;layers=40&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=qwen3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_14b_int4_32k">
+            <span>Qwen3 14B · 1 × 24 GiB</span>
+            <strong>14.27 GiB</strong>
+            <small>6.89 weights + 5.00 KV + headroom →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=32.8&amp;bitsPerParameter=4&amp;layers=64&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=48&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=qwen3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_32b_int4_32k">
+            <span>Qwen3 32B · 1 × 48 GiB</span>
+            <strong>27.93 GiB</strong>
+            <small>15.27 weights + 8.00 KV + headroom →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=30.5&amp;bitsPerParameter=4&amp;layers=48&amp;kvHeads=4&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=qwen3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_30b_a3b_int4_32k">
+            <span>Qwen3 30B-A3B · 1 × 24 GiB</span>
+            <strong>20.64 GiB</strong>
+            <small>14.20 weights + 3.00 KV + headroom →</small>
+          </a>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="matrix-title">
+        <div class="comparison-heading">
+          <div>
+            <p class="eyebrow">32K serving matrix</p>
+            <h2 id="matrix-title">Precision changes the weights. Model shape fixes the cache.</h2>
+          </div>
+          <p>Planning target = (raw weight floor + one full 32K BF16 KV cache) × 1.20 runtime headroom. GPU examples reserve only 90% of listed VRAM.</p>
+        </div>
+        <p class="comparison-scroll-hint">Swipe the matrix horizontally →</p>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead>
+              <tr><th scope="col">Model</th><th scope="col">Architecture</th><th scope="col">INT4 target</th><th scope="col">INT8 target</th><th scope="col">BF16 target</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Qwen3 8B</th><td>36L · 8 KVH · 128D</td><td>9.98 GiB<br /><small>1 × 16 GiB</small></td><td>14.56 GiB<br /><small>1 × 24 GiB</small></td><td>23.73 GiB<br /><small>1 × 48 GiB</small></td></tr>
+              <tr><th scope="row">Qwen3 14B</th><td>40L · 8 KVH · 128D</td><td>14.27 GiB<br /><small>1 × 24 GiB</small></td><td>22.54 GiB<br /><small>1 × 48 GiB</small></td><td>39.08 GiB<br /><small>1 × 48 GiB</small></td></tr>
+              <tr><th scope="row">Qwen3 32B</th><td>64L · 8 KVH · 128D</td><td>27.93 GiB<br /><small>1 × 48 GiB</small></td><td>46.26 GiB<br /><small>1 × 80 GiB</small></td><td>82.91 GiB<br /><small>2 × 48 GiB</small></td></tr>
+              <tr><th scope="row">Qwen3 30B-A3B</th><td>48L · 4 KVH · 128D</td><td>20.64 GiB<br /><small>1 × 24 GiB</small></td><td>37.69 GiB<br /><small>1 × 48 GiB</small></td><td>71.77 GiB<br /><small>1 × 80 GiB</small></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">A real quantized artifact adds scales, metadata, and sometimes higher-precision modules. Treat the mathematical weight floor as an input—not a promise that an arbitrary checkpoint will fit.</p>
+      </section>
+
+      <section class="principle-strip" aria-label="Qwen3 deployment boundaries">
+        <p class="eyebrow">Read the estimate</p>
+        <p><strong>MoE saves compute, not weights.</strong><br />The 30B-A3B checkpoint loads all 30.5B parameters while activating about 3.3B per token.</p>
+        <p><strong>Concurrency multiplies cache.</strong><br />Every fully allocated sequence repeats the KV-cache budget.</p>
+        <p><strong>Capacity is not speed.</strong><br />A model that fits can still miss latency and throughput targets.</p>
+      </section>
+
+      <section class="method-section" aria-labelledby="observed-title">
+        <div>
+          <p class="eyebrow">First-party runtime check</p>
+          <h2 id="observed-title">Qwen measured the same breakpoints.</h2>
+        </div>
+        <div class="method-copy formula-copy">
+          <p><strong>Qwen3 8B · AWQ-INT4</strong><br /><code>11,001 MB at 30,720 input tokens</code></p>
+          <p><strong>Qwen3 14B · AWQ-INT4</strong><br /><code>15,323 MB at 30,720 input tokens</code></p>
+          <p><strong>Qwen3 32B · AWQ-INT4</strong><br /><code>27,718 MB at 30,720 input tokens</code></p>
+          <p>The official Transformers benchmark generated another 2,048 tokens and used one H20 96 GB GPU where possible. Runtime, kernels, quantization format, and allocation policy explain why observed memory is not identical to a planning formula.</p>
+        </div>
+      </section>
+
+      <section class="method-section" aria-labelledby="context-title">
+        <div>
+          <p class="eyebrow">The 128K context jump</p>
+          <h2 id="context-title">Four times the context means four times the KV cache.</h2>
+        </div>
+        <div class="method-copy formula-copy">
+          <p><strong>Qwen3 8B</strong><br /><code>4.5 GiB at 32K → 18 GiB at 128K</code></p>
+          <p><strong>Qwen3 14B</strong><br /><code>5 GiB at 32K → 20 GiB at 128K</code></p>
+          <p><strong>Qwen3 32B</strong><br /><code>8 GiB at 32K → 32 GiB at 128K</code></p>
+          <p><strong>Qwen3 30B-A3B</strong><br /><code>3 GiB at 32K → 12 GiB at 128K</code></p>
+          <p>The official model cards describe 32,768 native context and 131,072 tokens with YaRN. Confirm the serving engine's actual cache allocation before reserving hardware.</p>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="sources-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Primary-source inputs</p>
+          <h2 id="sources-title">Copy the architecture. Check it against the runtime.</h2>
+          <p>Parameter counts and model shapes come from Qwen's official model cards and configurations. Observed memory comes from Qwen's own Transformers benchmark—not a third-party VRAM table.</p>
+          <a class="guide-link" href="../llm-gpu-memory-calculator/?utm_source=qwen3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=blank_gpu_calculator">Open the GPU memory calculator →</a>
+          <a class="guide-link" href="../kv-cache-calculator/?utm_source=qwen3_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=kv_cache_calculator">Open the KV-cache calculator →</a>
+          <a class="guide-link" href="../qwen2-5-gpu-requirements/?utm_source=qwen3_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen2_5_guide">Compare the previous Qwen2.5 family →</a>
+          <a class="guide-link" href="https://huggingface.co/Qwen/Qwen3-8B">Official Qwen3 8B model card →</a>
+          <a class="guide-link" href="https://huggingface.co/Qwen/Qwen3-14B">Official Qwen3 14B model card →</a>
+          <a class="guide-link" href="https://huggingface.co/Qwen/Qwen3-32B">Official Qwen3 32B model card →</a>
+          <a class="guide-link" href="https://huggingface.co/Qwen/Qwen3-30B-A3B">Official Qwen3 30B-A3B model card →</a>
+          <a class="guide-link" href="https://qwen.readthedocs.io/en/stable/getting_started/speed_benchmark.html">Official Qwen3 speed and memory benchmark →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>How much GPU memory does Qwen3 8B need?</h3><p>The 8.2B checkpoint has a 3.82 GiB INT4 weight floor. This page's one-sequence 32K planning target is 9.98 GiB; Qwen's AWQ-INT4 benchmark measured 11,001 MB at a 30,720-token input.</p></article>
+          <article class="faq-item"><h3>How much GPU memory does Qwen3 14B need?</h3><p>The 14.8B checkpoint has a 6.89 GiB INT4 weight floor. Its 32K BF16 KV cache is 5 GiB, producing a 14.27 GiB planning target with 20% runtime headroom.</p></article>
+          <article class="faq-item"><h3>How much GPU memory does Qwen3 32B need?</h3><p>The 32.8B checkpoint has a 15.27 GiB INT4 weight floor. Its 32K BF16 KV cache is 8 GiB, producing a 27.93 GiB planning target with 20% runtime headroom.</p></article>
+          <article class="faq-item"><h3>Does Qwen3 30B-A3B only need memory for 3.3B active parameters?</h3><p>No. Active parameters describe per-token compute, while all 30.5B parameters must be loaded. The model's one-sequence 32K INT4 planning target is 20.64 GiB.</p></article>
+          <article class="faq-item"><h3>How does 128K context change Qwen3 VRAM requirements?</h3><p>KV-cache memory grows linearly with context. Moving from 32K to 128K multiplies each model's cache by four before concurrency and runtime headroom.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Infrastructure without the benchmark theatre</p>
+          <h2 id="subscribe-title">Get the next model deployment teardown.</h2>
+          <p>ResearchAudio turns model releases, hardware claims, and serving constraints into practical decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=qwen3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../llm-gpu-memory-calculator/">GPU memory calculator</a>
+        <a href="../qwen2-5-gpu-requirements/">Qwen2.5 guide</a>
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=qwen3_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>
