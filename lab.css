@@ -2370,3 +2370,82 @@ html.embed-mode .result-join a {
     position: static;
   }
 }
+
+.reader-share-loop {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.42fr);
+  gap: clamp(30px, 6vw, 88px);
+  align-items: end;
+  padding: clamp(32px, 6vw, 72px);
+  color: var(--ink);
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  box-shadow: 10px 10px 0 var(--blue);
+}
+
+.reader-share-loop h2 {
+  max-width: 760px;
+  margin-bottom: 14px;
+  font-size: clamp(2.25rem, 5vw, 4.8rem);
+}
+
+.reader-share-loop p:not(.eyebrow, .reader-share-status) {
+  max-width: 720px;
+  margin-bottom: 0;
+}
+
+.reader-share-actions {
+  display: grid;
+  gap: 12px;
+  align-items: start;
+}
+
+.reader-share-button,
+.reader-share-actions > a {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 52px;
+  padding: 12px 18px;
+  font: 700 0.78rem/1.2 var(--mono);
+  letter-spacing: 0.02em;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+}
+
+.reader-share-button {
+  color: var(--white);
+  background: var(--ink);
+  cursor: pointer;
+}
+
+.reader-share-actions > a {
+  color: var(--ink);
+  background: var(--white);
+}
+
+.reader-share-button:hover,
+.reader-share-button:focus-visible,
+.reader-share-actions > a:hover,
+.reader-share-actions > a:focus-visible {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--blue);
+}
+
+.reader-share-status {
+  min-height: 1.4em;
+  margin: 0;
+  overflow-wrap: anywhere;
+  font: 600 0.72rem/1.4 var(--mono);
+}
+
+@media (max-width: 720px) {
+  .reader-share-loop {
+    grid-template-columns: 1fr;
+    padding: 30px 22px;
+    box-shadow: 6px 6px 0 var(--blue);
+  }
+}

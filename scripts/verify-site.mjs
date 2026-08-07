@@ -19,6 +19,7 @@ import { buildCodexExecCommand, shellQuote } from "../codex-exec-command-builder
 import { calculateVoiceLatency, classifyVoiceLatency } from "../voice-ai-latency-calculator/calculator.js";
 import { calculateVoiceAiCost } from "../voice-ai-cost-calculator/calculator.js";
 import { buildAttributedShareUrl, parseSharedChecklist, parseSharedNumbers } from "../share-state.js";
+import { buildReaderShareUrl } from "../reader-share.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
@@ -26,12 +27,13 @@ const brandedToolsOrigin = "https://tools.researchaudio.io";
 const cloudflareWebAnalyticsToken = "c20a9e29828c471c92ed7c2284901e05";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, rtx3060GuideHtml, rtx4060GuideHtml, rtx4060Ti16GuideHtml, rtx3090Vs4090GuideHtml, rtx4090GuideHtml, rtx5060TiComparisonGuideHtml, rtx5080GuideHtml, rtx5090GuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, kimiK3GuideHtml, gemma4GuideHtml, diffusionGemmaGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, readerShareJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, rtx3060GuideHtml, rtx4060GuideHtml, rtx4060Ti16GuideHtml, rtx3090Vs4090GuideHtml, rtx4090GuideHtml, rtx5060TiComparisonGuideHtml, rtx5080GuideHtml, rtx5090GuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, kimiK3GuideHtml, gemma4GuideHtml, diffusionGemmaGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
   readFile(path.join(root, "lab.css"), "utf8"),
   readFile(path.join(root, "embed-mode.js"), "utf8"),
+  readFile(path.join(root, "reader-share.js"), "utf8"),
   readFile(path.join(root, "tools/index.html"), "utf8"),
   readFile(path.join(root, "embeds/index.html"), "utf8"),
   readFile(path.join(root, "embeds/embeds.js"), "utf8"),
@@ -181,6 +183,42 @@ for (const [name, page, pathname] of [
   assert.equal((page.match(/class="subscribe-direct-fallback"/g) || []).length, 1, `${name} should expose one hosted signup fallback`);
   assert.match(page, /class="subscribe-direct-fallback">[\s\S]{0,700}?https:\/\/researchaudio\.io\/subscribe\?utm_source=[^&"]+&amp;utm_medium=[^&"]+&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join/, `${name} hosted signup fallback should preserve page attribution`);
 }
+
+for (const [name, page] of [
+  ["tools hub", toolsHtml],
+  ["embed library", embedsHtml],
+  ["voice AI cost per minute guide", voiceCostPerMinuteHtml],
+  ["AI receptionist cost worksheet", aiReceptionistCostHtml],
+  ["7B versus 13B LLM GPU requirements guide", smallGpuGuideHtml],
+  ["70B LLM GPU requirements guide", gpuGuideHtml],
+  ["RTX 3060 12GB local LLM guide", rtx3060GuideHtml],
+  ["RTX 4060 8GB local LLM guide", rtx4060GuideHtml],
+  ["RTX 4060 Ti 16GB local LLM guide", rtx4060Ti16GuideHtml],
+  ["RTX 3090 versus RTX 4090 local LLM comparison", rtx3090Vs4090GuideHtml],
+  ["RTX 4090 local LLM guide", rtx4090GuideHtml],
+  ["RTX 5060 Ti comparison", rtx5060TiComparisonGuideHtml],
+  ["RTX 5080 local LLM guide", rtx5080GuideHtml],
+  ["RTX 5090 local LLM guide", rtx5090GuideHtml],
+  ["Qwen2.5 GPU requirements guide", qwenGuideHtml],
+  ["Qwen3 GPU requirements guide", qwen3GuideHtml],
+  ["gpt-oss hardware requirements guide", gptOssGuideHtml],
+  ["DeepSeek V4 Flash GPU requirements guide", deepseekV4GuideHtml],
+  ["GLM-5.2 GPU requirements guide", glm52GuideHtml],
+  ["Kimi K3 GPU requirements guide", kimiK3GuideHtml],
+  ["Gemma 4 GPU requirements guide", gemma4GuideHtml],
+  ["DiffusionGemma GPU requirements guide", diffusionGemmaGuideHtml],
+]) {
+  assert.match(page, /<script type="module" src="\.\.\/reader-share\.js"><\/script>/, `${name} should load the reader sharing loop`);
+}
+
+assert.match(readerShareJs, /source: "reader_share"/);
+assert.match(readerShareJs, /content: `\$\{slug\}_shared_guide`/);
+assert.match(readerShareJs, /navigator\.share/);
+assert.match(readerShareJs, /querySelector\("\.subscribe-block"\)/);
+assert.match(readerShareJs, /insertAdjacentElement\("beforebegin", section\)/);
+assert.match(readerShareJs, /href="#subscribe"/);
+assert.match(labCss, /\.reader-share-loop/);
+assert.match(labCss, /\.reader-share-button/);
 
 for (const [name, page, title, source, calculatorPath, questions] of [
   ["voice AI cost per minute guide", voiceCostPerMinuteHtml, "Voice AI Cost per Minute: Formula &amp; Calculator", "voice_ai_cost_per_minute", "voice-ai-cost-calculator", [
@@ -1571,6 +1609,16 @@ assert.match(toolsHtml, /fable-playbook/);
 
 assert.match(starterHtml, /<title>AI Evidence Starter Kit: 4 Free Evaluation Tools \| ResearchAudio<\/title>/);
 assert.match(starterHtml, /rel="canonical"/);
+
+const readerShareUrl = buildReaderShareUrl(
+  "https://tools.researchaudio.io/qwen3-gpu-requirements/?utm_source=old#subscribe",
+  "qwen3-gpu-requirements",
+);
+assert.equal(readerShareUrl.searchParams.get("utm_source"), "reader_share");
+assert.equal(readerShareUrl.searchParams.get("utm_medium"), "referral");
+assert.equal(readerShareUrl.searchParams.get("utm_campaign"), "ai_evidence_lab");
+assert.equal(readerShareUrl.searchParams.get("utm_content"), "qwen3-gpu-requirements_shared_guide");
+assert.equal(readerShareUrl.hash, "");
 
 const sharedCostUrl = buildAttributedShareUrl(
   "https://tools.researchaudio.io/ai-cost-calculator/?utm_source=old#result",
