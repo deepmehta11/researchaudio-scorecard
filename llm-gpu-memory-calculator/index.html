@@ -4,14 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>LLM GPU Memory Calculator (VRAM &amp; GPU Count) | ResearchAudio</title>
-    <meta name="description" content="Estimate LLM model-weight VRAM, inference headroom, usable memory per GPU, and the minimum GPU count from model parameters and quantization." />
+    <meta name="description" content="Estimate LLM weight and KV-cache VRAM, runtime headroom, usable memory per GPU, and minimum GPU count from model architecture, context, concurrency, and quantization." />
     <meta name="theme-color" content="#eaf2f0" />
     <meta name="robots" content="index,follow,max-image-preview:large" />
     <link rel="canonical" href="https://tools.researchaudio.io/llm-gpu-memory-calculator/" />
     <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Will this LLM fit in GPU memory?" />
-    <meta property="og:description" content="A free VRAM and minimum-GPU estimator for LLM inference planning." />
+    <meta property="og:description" content="A free weight, KV-cache, and minimum-GPU estimator for LLM inference planning." />
     <meta property="og:url" content="https://tools.researchaudio.io/llm-gpu-memory-calculator/" />
     <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -28,7 +28,7 @@
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "Any",
         "url": "https://tools.researchaudio.io/llm-gpu-memory-calculator/",
-        "description": "A free calculator for estimating LLM model-weight memory, inference headroom, usable VRAM, and minimum GPU count.",
+        "description": "A free calculator for estimating LLM model-weight memory, architecture-aware KV cache, inference headroom, usable VRAM, and minimum GPU count.",
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
         "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
       }
@@ -67,7 +67,7 @@
             "name": "Does this calculator include KV cache memory?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Not explicitly. Use the configurable inference-headroom input for an early estimate, then validate the chosen model, context length, batch size, concurrency, and serving runtime with a deployment-specific profiler."
+              "text": "Yes, when you provide layer count, key-value heads, head dimension, context length, concurrent sequences, and KV precision. Leave those fields at zero for a weight-plus-headroom floor, and validate either result with the exact serving runtime."
             }
           }
         ]
@@ -93,11 +93,11 @@
         <div>
           <p class="eyebrow">Instrument 09 / GPU fit</p>
           <h1 id="hero-title">Find out if the model fits before renting the GPUs.</h1>
-          <p class="hero-deck">Turn parameter count, weight precision, inference headroom, and usable VRAM into a transparent minimum-GPU estimate.</p>
+          <p class="hero-deck">Turn parameter count, weight precision, architecture-aware KV cache, runtime headroom, and usable VRAM into a transparent minimum-GPU estimate.</p>
         </div>
         <aside class="lab-index" aria-label="GPU memory model scope">
           <span>Planning inputs</span>
-          <strong>06</strong>
+          <strong>12</strong>
           <p>Vendor-neutral by design. Enter the actual VRAM available to the hardware and runtime you are evaluating.</p>
         </aside>
       </section>
@@ -113,6 +113,7 @@
 
         <div class="calculator-layout">
           <form class="input-panel" id="gpu-memory-form">
+            <p class="input-section-label">Weights</p>
             <label class="input-card" for="parameter-count">
               <span class="field-copy"><strong>Model parameters</strong><small>Use the total parameter count, not active MoE parameters.</small></span>
               <span class="number-field suffix"><span>B</span><input id="parameter-count" name="parameterBillions" type="number" min="0" max="10000" step="0.1" value="70" inputmode="decimal" /></span>
@@ -128,8 +129,40 @@
                 </select>
               </span>
             </label>
+            <p class="input-section-label">Optional KV cache</p>
+            <label class="input-card" for="model-layers">
+              <span class="field-copy"><strong>Transformer layers</strong><small>Use zero to omit explicit KV-cache memory.</small></span>
+              <span class="number-field suffix"><span>layers</span><input id="model-layers" name="layers" type="number" min="0" max="10000" step="1" value="0" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="kv-heads">
+              <span class="field-copy"><strong>Key-value heads</strong><small>Use KV heads, not total attention heads, for grouped-query attention.</small></span>
+              <span class="number-field suffix"><span>heads</span><input id="kv-heads" name="kvHeads" type="number" min="0" max="10000" step="1" value="0" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="head-dimension">
+              <span class="field-copy"><strong>Head dimension</strong><small>Per-head key or value dimension from the model configuration.</small></span>
+              <span class="number-field suffix"><span>dim</span><input id="head-dimension" name="headDimension" type="number" min="0" max="65536" step="1" value="0" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="context-tokens">
+              <span class="field-copy"><strong>Cached context</strong><small>Maximum cached tokens per live sequence.</small></span>
+              <span class="number-field suffix"><span>tokens</span><input id="context-tokens" name="contextTokens" type="number" min="0" max="10000000" step="128" value="0" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="concurrent-sequences">
+              <span class="field-copy"><strong>Concurrent sequences</strong><small>Simultaneous sequences holding a full KV cache.</small></span>
+              <span class="number-field suffix"><span>seq</span><input id="concurrent-sequences" name="concurrentSequences" type="number" min="1" max="100000" step="1" value="1" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="kv-cache-bits">
+              <span class="field-copy"><strong>KV-cache precision</strong><small>Bytes stored for every cached key and value element.</small></span>
+              <span class="select-field">
+                <select id="kv-cache-bits" name="kvCacheBits">
+                  <option value="32">FP32 · 32-bit</option>
+                  <option value="16" selected>FP16 / BF16 · 16-bit</option>
+                  <option value="8">FP8 / INT8 · 8-bit</option>
+                </select>
+              </span>
+            </label>
+            <p class="input-section-label">Runtime and hardware</p>
             <label class="input-card" for="inference-headroom">
-              <span class="field-copy"><strong>Inference headroom</strong><small>Planning allowance for runtime overhead, activations, and KV cache.</small></span>
+              <span class="field-copy"><strong>Runtime headroom</strong><small>Planning allowance for activations, kernels, workspace, and format overhead.</small></span>
               <span class="number-field suffix"><span>%</span><input id="inference-headroom" name="inferenceHeadroom" type="number" min="0" max="300" step="1" value="20" inputmode="decimal" /></span>
             </label>
             <label class="input-card" for="vram-per-gpu">
@@ -152,6 +185,7 @@
             <p class="result-label" id="result-title">Minimum GPUs at the stated usable VRAM</p>
             <div class="result-grid">
               <div><span>Weight memory</span><strong id="weight-memory">0 GiB</strong></div>
+              <div><span>KV cache</span><strong id="kv-cache-memory">Not included</strong></div>
               <div><span>Planning target</span><strong id="planning-target">0 GiB</strong></div>
               <div><span>Usable / GPU</span><strong id="usable-per-gpu">0 GiB</strong></div>
               <div><span>Available capacity</span><strong id="available-capacity">0 GiB</strong></div>
@@ -163,7 +197,7 @@
             <button class="secondary-button" id="reset-gpu-memory" type="button">Restore 70B example</button>
             <p class="share-status" id="share-status" role="status"></p>
             <div class="result-join">
-              <span>Daily evidence brief · 52,000+ readers</span>
+              <span>Daily evidence brief · 51,000+ readers</span>
               <a href="https://researchaudio.io/subscribe?utm_source=llm_gpu_memory_calculator&amp;utm_medium=tool_result&amp;utm_campaign=ai_evidence_lab&amp;utm_content=result_join">Get the next infrastructure teardown →</a>
             </div>
           </aside>
@@ -184,7 +218,8 @@
         </div>
         <div class="method-copy">
           <p><strong>Weight memory</strong> is total parameters multiplied by bits per parameter, divided by eight, then converted from bytes to GiB. It deliberately uses total parameters for sparse models because inactive experts still have to be stored unless the deployment explicitly offloads them.</p>
-          <p><strong>Planning target</strong> adds the headroom you choose. Hugging Face's model memory estimator describes weight loading as a floor and notes that inference can require additional memory. Use measured runtime data instead of the default once you have it.</p>
+          <p><strong>KV-cache memory</strong> is <code>2 × layers × KV heads × head dimension × context tokens × concurrent sequences × bytes per KV element</code>. The factor of two stores keys and values. Sliding-window, chunked, quantized, offloaded, or shared-prefix caches need runtime-specific treatment.</p>
+          <p><strong>Planning target</strong> adds the runtime headroom you choose after weights and any explicit KV cache. Hugging Face's model memory estimator describes weight loading as a floor and notes that inference can require additional memory. Use measured runtime data instead of the default once you have it.</p>
           <p><strong>Minimum GPUs</strong> divides the planning target by usable VRAM per GPU and rounds up. This capacity check does not promise throughput, latency, interconnect efficiency, or compatibility with a particular tensor-parallel configuration.</p>
           <p>Quantized formats can include scales, metadata, and higher-precision modules. The calculator therefore treats bit width as a planning input, not a guarantee that every 4-bit or 8-bit artifact occupies exactly the same amount of memory.</p>
         </div>
@@ -195,8 +230,10 @@
           <p class="eyebrow">GPU sizing guide</p>
           <h2 id="gpu-guide-title">Four questions before you call the model deployable.</h2>
           <p>Memory fit is necessary, but it is only the first gate. Validate the exact model artifact, context window, batch profile, serving runtime, and hardware topology.</p>
+          <a class="guide-link" href="../70b-llm-gpu-requirements/?utm_source=llm_gpu_memory_calculator&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=70b_gpu_guide">Compare 70B INT4, INT8, and FP16 scenarios →</a>
           <a class="guide-link" href="https://researchaudio.io/p/understanding-gpu-architecture-technical-deep-dive-from-fundamentals-to-modern-design?utm_source=llm_gpu_memory_calculator&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=guide_link">Read ResearchAudio's GPU architecture guide →</a>
           <a class="guide-link" href="https://huggingface.co/docs/accelerate/en/usage_guides/model_size_estimator">Check the Hugging Face model memory estimator →</a>
+          <a class="guide-link" href="https://huggingface.co/docs/transformers/en/kv_cache">Review current Transformers KV-cache strategies →</a>
           <a class="guide-link" href="https://huggingface.co/docs/transformers/main_classes/quantization">Review current Transformers quantization support →</a>
         </div>
         <div class="faq-list">
@@ -214,7 +251,7 @@
           </article>
           <article class="faq-item">
             <h3>Does this calculator include KV cache memory?</h3>
-            <p>Not explicitly. Use inference headroom for early planning, then profile the exact architecture, context length, batch size, concurrency, and runtime before reserving hardware.</p>
+            <p>Yes, when you provide layers, KV heads, head dimension, context length, concurrent sequences, and KV precision. Leave the architecture fields at zero for a weight-plus-headroom floor.</p>
           </article>
         </div>
       </section>

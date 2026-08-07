@@ -1031,6 +1031,10 @@ h2 {
   background: var(--yellow);
 }
 
+.resource-grid .resource-card:nth-child(3) {
+  background: var(--blue-soft);
+}
+
 .formula-copy code {
   display: inline-block;
   max-width: 100%;

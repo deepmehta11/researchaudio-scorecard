@@ -1,6 +1,6 @@
 # ResearchAudio Evidence Lab
 
-An evergreen acquisition ecosystem for ResearchAudio. Ten browser-local tools and three practical field guides turn AI launch claims, token budgets, voice latency and outcome economics, GPU sizing, cache economics, workflow economics, agent reliability, automation business cases, and Codex configuration into concrete inspections before inviting visitors into the daily briefing.
+An evergreen acquisition ecosystem for ResearchAudio. Ten browser-local tools and four practical field guides turn AI launch claims, token budgets, voice latency and outcome economics, GPU sizing, cache economics, workflow economics, agent reliability, automation business cases, and Codex configuration into concrete inspections before inviting visitors into the daily briefing.
 
 Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain connected to the Beehiiv publication at `https://researchaudio.io/`.
 
@@ -17,7 +17,8 @@ Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain con
 - `/voice-ai-cost-calculator/` — loaded cost per AI-resolved call after platform, telephony, STT, TTS, LLM, fixed fees, and human handoffs.
 - `/voice-ai-cost-per-minute/` — crawlable field note with the full stack-rate formula and editable sensitivity scenarios.
 - `/ai-receptionist-cost/` — crawlable monthly worksheet with after-hours, appointment, and high-volume call scenarios.
-- `/llm-gpu-memory-calculator/` — model-weight VRAM, configurable headroom, usable memory, and minimum GPU count.
+- `/70b-llm-gpu-requirements/` — crawlable INT4, INT8, and FP16 guide with explicit 32K KV-cache scenarios.
+- `/llm-gpu-memory-calculator/` — model-weight VRAM, optional architecture-aware KV cache, runtime headroom, usable memory, and minimum GPU count.
 - `/evidence-starter-kit/` — post-signup activation, four-tool progress, referral reward explanation, and attributed sharing.
 - `/tools/` — crawlable, interlinked Evidence Lab hub.
 

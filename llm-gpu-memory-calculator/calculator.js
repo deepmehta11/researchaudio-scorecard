@@ -3,10 +3,22 @@ import { buildAttributedShareUrl, restoreSharedNumbers } from "../share-state.js
 const DEFAULTS = {
   parameterBillions: 70,
   bitsPerParameter: 4,
+  layers: 0,
+  kvHeads: 0,
+  headDimension: 0,
+  contextTokens: 0,
+  concurrentSequences: 1,
+  kvCacheBits: 16,
   inferenceHeadroom: 20,
   vramPerGpu: 24,
   usableVramPercent: 90,
   availableGpus: 2,
+};
+
+const KV_PRECISION_LABELS = {
+  8: "8-bit KV",
+  16: "16-bit KV",
+  32: "32-bit KV",
 };
 
 const PRECISION_LABELS = {
@@ -31,9 +43,20 @@ function supportedBits(value) {
   return Object.hasOwn(PRECISION_LABELS, bits) ? bits : DEFAULTS.bitsPerParameter;
 }
 
+function supportedKvBits(value) {
+  const bits = Number(value);
+  return Object.hasOwn(KV_PRECISION_LABELS, bits) ? bits : DEFAULTS.kvCacheBits;
+}
+
 export function calculateGpuMemory({
   parameterBillions,
   bitsPerParameter,
+  layers,
+  kvHeads,
+  headDimension,
+  contextTokens,
+  concurrentSequences,
+  kvCacheBits,
   inferenceHeadroom,
   vramPerGpu,
   usableVramPercent,
@@ -41,12 +64,26 @@ export function calculateGpuMemory({
 }) {
   const parameters = nonNegative(parameterBillions) * 1_000_000_000;
   const bits = supportedBits(bitsPerParameter);
+  const layerCount = Math.floor(nonNegative(layers));
+  const keyValueHeads = Math.floor(nonNegative(kvHeads));
+  const keyValueHeadDimension = Math.floor(nonNegative(headDimension));
+  const sequenceLength = Math.floor(nonNegative(contextTokens));
+  const sequences = Math.max(1, Math.floor(nonNegative(concurrentSequences)));
+  const cacheBits = supportedKvBits(kvCacheBits);
+  const kvInputs = [layerCount, keyValueHeads, keyValueHeadDimension, sequenceLength];
+  const hasKvCacheInputs = kvInputs.every((value) => value > 0);
+  const hasPartialKvCacheInputs = !hasKvCacheInputs && kvInputs.some((value) => value > 0);
   const headroomRate = Math.min(3, nonNegative(inferenceHeadroom) / 100);
   const gpuVram = nonNegative(vramPerGpu);
   const usableRate = boundedPercentage(usableVramPercent, 90);
   const gpuCount = Math.floor(nonNegative(availableGpus));
   const weightMemoryGiB = (parameters * bits / 8) / (1024 ** 3);
-  const planningTargetGiB = weightMemoryGiB * (1 + headroomRate);
+  const kvCacheMemoryGiB = hasKvCacheInputs
+    ? (2 * layerCount * keyValueHeads * keyValueHeadDimension * sequenceLength * sequences * (cacheBits / 8)) / (1024 ** 3)
+    : 0;
+  const memorySubtotalGiB = weightMemoryGiB + kvCacheMemoryGiB;
+  const runtimeHeadroomGiB = memorySubtotalGiB * headroomRate;
+  const planningTargetGiB = memorySubtotalGiB + runtimeHeadroomGiB;
   const usablePerGpuGiB = gpuVram * usableRate;
   const minimumGpus = planningTargetGiB > 0 && usablePerGpuGiB > 0
     ? Math.ceil(planningTargetGiB / usablePerGpuGiB)
@@ -61,11 +98,23 @@ export function calculateGpuMemory({
     parameterBillions: parameters / 1_000_000_000,
     bits,
     precisionLabel: PRECISION_LABELS[bits],
+    layerCount,
+    keyValueHeads,
+    keyValueHeadDimension,
+    sequenceLength,
+    sequences,
+    cacheBits,
+    cachePrecisionLabel: KV_PRECISION_LABELS[cacheBits],
+    hasKvCacheInputs,
+    hasPartialKvCacheInputs,
     headroomRate,
     gpuVram,
     usableRate,
     gpuCount,
     weightMemoryGiB,
+    kvCacheMemoryGiB,
+    memorySubtotalGiB,
+    runtimeHeadroomGiB,
     planningTargetGiB,
     usablePerGpuGiB,
     minimumGpus,
@@ -87,12 +136,14 @@ function statusFor(result) {
 function noteFor(result) {
   if (result.planningTargetGiB === 0) return "Add a model parameter count to create a GPU memory estimate.";
   if (result.usablePerGpuGiB === 0) return "Add usable VRAM per GPU to calculate a minimum device count.";
+  if (result.hasPartialKvCacheInputs) return "Complete layers, KV heads, head dimension, and context length to include the KV cache.";
   if (result.headroomRate < 0.1) return "This plan leaves less than 10% inference headroom. Validate runtime allocations and KV cache before deployment.";
   if (!result.fitsAvailable) {
     const missing = Math.max(0, result.minimumGpus - result.gpuCount);
     return "This estimate needs " + missing + " more GPU" + (missing === 1 ? "" : "s") + " at the stated usable VRAM.";
   }
-  return "The capacity estimate fits. Benchmark the exact artifact, context length, concurrency, and serving runtime before reserving hardware.";
+  if (!result.hasKvCacheInputs) return "The weight-plus-headroom floor fits. Add the optional KV inputs before treating it as a serving-memory estimate.";
+  return "This plan includes " + gib(result.kvCacheMemoryGiB) + " of KV cache. Benchmark the exact artifact and runtime before reserving hardware.";
 }
 
 const form = typeof document === "undefined" ? null : document.querySelector("#gpu-memory-form");
@@ -103,6 +154,7 @@ if (form) {
     minimum: document.querySelector("#minimum-gpus"),
     status: document.querySelector("#gpu-memory-status"),
     weights: document.querySelector("#weight-memory"),
+    cache: document.querySelector("#kv-cache-memory"),
     planning: document.querySelector("#planning-target"),
     usable: document.querySelector("#usable-per-gpu"),
     capacity: document.querySelector("#available-capacity"),
@@ -120,12 +172,16 @@ if (form) {
   if (!Object.hasOwn(PRECISION_LABELS, Number(fields.bitsPerParameter.value))) {
     fields.bitsPerParameter.value = DEFAULTS.bitsPerParameter;
   }
+  if (!Object.hasOwn(KV_PRECISION_LABELS, Number(fields.kvCacheBits.value))) {
+    fields.kvCacheBits.value = DEFAULTS.kvCacheBits;
+  }
 
   function update() {
     const result = calculateGpuMemory(readInputs());
     output.minimum.textContent = new Intl.NumberFormat("en-US").format(result.minimumGpus);
     output.status.textContent = statusFor(result);
     output.weights.textContent = gib(result.weightMemoryGiB);
+    output.cache.textContent = result.hasKvCacheInputs ? gib(result.kvCacheMemoryGiB) : "Not included";
     output.planning.textContent = gib(result.planningTargetGiB);
     output.usable.textContent = gib(result.usablePerGpuGiB);
     output.capacity.textContent = gib(result.availableCapacityGiB);

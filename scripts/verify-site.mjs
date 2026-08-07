@@ -18,7 +18,7 @@ const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const brandedToolsOrigin = "https://tools.researchaudio.io";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, gpuGuideHtml, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -32,6 +32,7 @@ const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llm
   readFile(path.join(root, "llm-api-cost-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "llm-gpu-memory-calculator/index.html"), "utf8"),
   readFile(path.join(root, "llm-gpu-memory-calculator/calculator.js"), "utf8"),
+  readFile(path.join(root, "70b-llm-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "prompt-caching-calculator/index.html"), "utf8"),
   readFile(path.join(root, "prompt-caching-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "codex-config-generator/index.html"), "utf8"),
@@ -70,6 +71,7 @@ assert.match(html, /prompt-caching-calculator/);
 assert.match(html, /codex-config-generator/);
 assert.match(html, /voice-ai-latency-calculator/);
 assert.match(html, /voice-ai-cost-calculator/);
+assert.match(html, /llm-gpu-memory-calculator/);
 assert.doesNotMatch(html, /TODO|PLACEHOLDER|example\.com/);
 
 assert.match(css, /@media \(max-width: 620px\)/);
@@ -96,6 +98,7 @@ for (const [name, page, pathname] of [
   ["voice AI cost calculator", voiceCostHtml, "/voice-ai-cost-calculator/"],
   ["voice AI cost per minute guide", voiceCostPerMinuteHtml, "/voice-ai-cost-per-minute/"],
   ["AI receptionist cost worksheet", aiReceptionistCostHtml, "/ai-receptionist-cost/"],
+  ["70B LLM GPU requirements guide", gpuGuideHtml, "/70b-llm-gpu-requirements/"],
   ["starter kit", starterHtml, "/evidence-starter-kit/"],
   ["Fable 5 cost playbook", fablePlaybookHtml, "/fable-playbook/"],
 ]) {
@@ -105,18 +108,24 @@ for (const [name, page, pathname] of [
   assert.doesNotMatch(page, retiredGitHubPagesPath, `${name} still exposes the retired GitHub Pages path`);
 }
 
-for (const [name, page, title, source, questions] of [
-  ["voice AI cost per minute guide", voiceCostPerMinuteHtml, "Voice AI Cost per Minute: Formula &amp; Calculator", "voice_ai_cost_per_minute", [
+for (const [name, page, title, source, calculatorPath, questions] of [
+  ["voice AI cost per minute guide", voiceCostPerMinuteHtml, "Voice AI Cost per Minute: Formula &amp; Calculator", "voice_ai_cost_per_minute", "voice-ai-cost-calculator", [
     "How do you calculate voice AI cost per minute?",
     "Is cost per minute enough to compare voice AI systems?",
     "Which voice AI costs are usually missed?",
     "How do you convert voice AI cost per minute into cost per resolved call?",
   ]],
-  ["AI receptionist cost worksheet", aiReceptionistCostHtml, "AI Receptionist Cost: Monthly Worksheet &amp; Calculator", "ai_receptionist_cost", [
+  ["AI receptionist cost worksheet", aiReceptionistCostHtml, "AI Receptionist Cost: Monthly Worksheet &amp; Calculator", "ai_receptionist_cost", "voice-ai-cost-calculator", [
     "How much does an AI receptionist cost?",
     "How should an AI receptionist be compared with a human receptionist?",
     "What counts as an AI receptionist resolution?",
     "Which data should be collected during an AI receptionist pilot?",
+  ]],
+  ["70B LLM GPU requirements guide", gpuGuideHtml, "70B LLM GPU Requirements: INT4, INT8 &amp; FP16", "70b_llm_gpu_requirements", "llm-gpu-memory-calculator", [
+    "How much VRAM does a 70B model need at 4-bit precision?",
+    "Can a 70B model run on one 48 GB GPU?",
+    "How much VRAM do 70B FP16 weights require?",
+    "Why is a model file smaller than the serving-memory requirement?",
   ]],
 ]) {
   assert.match(page, new RegExp(`<title>${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} \\| ResearchAudio<\\/title>`), `${name} title missing`);
@@ -127,7 +136,7 @@ for (const [name, page, title, source, questions] of [
   assert.match(page, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/, `${name} Beehiiv form missing`);
   assert.match(page, /subscribe-forms\.beehiiv\.com\/attribution\.js/, `${name} attribution missing`);
   assert.equal((page.match(/class="scenario-card/g) || []).length, 3, `${name} should contain three editable scenarios`);
-  assert.match(page, /voice-ai-cost-calculator\/\?callsPerMonth=/, `${name} scenario should open the calculator with state`);
+  assert.match(page, new RegExp(`${calculatorPath}\\/\\?[a-zA-Z]+=`), `${name} scenario should open the calculator with state`);
   assert.doesNotMatch(page, /TODO|PLACEHOLDER|example\.com/, `${name} contains placeholder copy`);
   for (const question of questions) {
     const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -152,7 +161,7 @@ for (const [name, page] of [
   assert.match(page, /https:\/\/researchaudio\.io\/subscribe\?utm_source=/, `${name} direct subscribe CTA missing`);
   assert.match(page, /utm_campaign=ai_evidence_lab/, `${name} acquisition campaign missing`);
   assert.match(page, /utm_content=(header_join|hero_join|result_join)/, `${name} CTA placement attribution missing`);
-  assert.match(page, /52,000\+/, `${name} subscriber proof missing`);
+  assert.match(page, /51,000\+/, `${name} subscriber proof missing`);
 }
 
 for (const [name, page, title] of [
@@ -351,6 +360,8 @@ const defaultGpuMemory = calculateGpuMemory({
   availableGpus: 2,
 });
 assert.ok(Math.abs(defaultGpuMemory.weightMemoryGiB - 32.5962901115) < 0.000001);
+assert.equal(defaultGpuMemory.kvCacheMemoryGiB, 0);
+assert.equal(defaultGpuMemory.hasKvCacheInputs, false);
 assert.ok(Math.abs(defaultGpuMemory.planningTargetGiB - 39.1155481339) < 0.000001);
 assert.ok(Math.abs(defaultGpuMemory.usablePerGpuGiB - 21.6) < 0.000001);
 assert.equal(defaultGpuMemory.minimumGpus, 2);
@@ -376,9 +387,39 @@ const emptyGpuMemory = calculateGpuMemory({
 assert.equal(emptyGpuMemory.weightMemoryGiB, 0);
 assert.equal(emptyGpuMemory.minimumGpus, 0);
 assert.equal(emptyGpuMemory.bits, 4);
+const contextAwareGpuMemory = calculateGpuMemory({
+  parameterBillions: 70,
+  bitsPerParameter: 4,
+  layers: 80,
+  kvHeads: 8,
+  headDimension: 128,
+  contextTokens: 32768,
+  concurrentSequences: 1,
+  kvCacheBits: 16,
+  inferenceHeadroom: 20,
+  vramPerGpu: 48,
+  usableVramPercent: 90,
+  availableGpus: 2,
+});
+assert.equal(contextAwareGpuMemory.kvCacheMemoryGiB, 10);
+assert.ok(Math.abs(contextAwareGpuMemory.planningTargetGiB - 51.1155481339) < 0.000001);
+assert.equal(contextAwareGpuMemory.minimumGpus, 2);
+assert.equal(contextAwareGpuMemory.fitsAvailable, true);
+assert.match(gpuMemoryHtml, /name="layers"/);
+assert.match(gpuMemoryHtml, /name="kvHeads"/);
+assert.match(gpuMemoryHtml, /name="headDimension"/);
+assert.match(gpuMemoryHtml, /name="contextTokens"/);
+assert.match(gpuMemoryHtml, /name="concurrentSequences"/);
+assert.match(gpuMemoryHtml, /name="kvCacheBits"/);
+assert.match(gpuMemoryHtml, /70b-llm-gpu-requirements/);
+assert.match(gpuGuideHtml, /51\.1 GiB/);
+assert.match(gpuGuideHtml, /90\.2 GiB/);
+assert.match(gpuGuideHtml, /168\.5 GiB/);
+assert.match(gpuGuideHtml, /huggingface\.co\/docs\/transformers\/en\/kv_cache/);
 assert.match(gpuMemoryJs, /source: "gpu_memory_share"/);
 assert.match(gpuMemoryJs, /content: "shared_gpu_memory_plan"/);
 assert.match(gpuMemoryHtml, /huggingface\.co\/docs\/accelerate\/en\/usage_guides\/model_size_estimator/);
+assert.match(gpuMemoryHtml, /huggingface\.co\/docs\/transformers\/en\/kv_cache/);
 assert.match(gpuMemoryHtml, /understanding-gpu-architecture-technical-deep-dive/);
 assert.match(toolsHtml, /llm-gpu-memory-calculator/);
 assert.equal((toolsHtml.match(/class="tool-card"/g) || []).length, 10, "tools hub should contain ten instruments");
@@ -569,7 +610,8 @@ assert.match(voiceCostHtml, /elevenlabs\.io\/pricing/);
 assert.match(toolsHtml, /voice-ai-cost-calculator/);
 assert.match(toolsHtml, /voice-ai-cost-per-minute/);
 assert.match(toolsHtml, /ai-receptionist-cost/);
-assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 2, "tools hub should contain two voice economics field notes");
+assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 3, "tools hub should contain three search field notes");
+assert.match(toolsHtml, /70b-llm-gpu-requirements/);
 assert.match(voiceLatencyHtml, /voice-ai-cost-per-minute/);
 assert.match(labCss, /\.resource-section/);
 assert.match(labCss, /\.resource-grid/);
@@ -625,7 +667,7 @@ assert.deepEqual(
 );
 assert.match(starterHtml, /application\/ld\+json/);
 assert.match(starterHtml, /social-card\.png/);
-assert.match(starterHtml, /52,000\+/);
+assert.match(starterHtml, /51,000\+/);
 assert.match(starterHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=evidence_starter_kit/);
 assert.equal((starterHtml.match(/data-step=/g) || []).length, 4, "starter kit should contain four progress steps");
 assert.match(starterHtml, /Three confirmed referrals unlock the AI Launch Evidence Checklist PDF automatically/);
@@ -636,9 +678,9 @@ assert.match(starterJs, /utm_campaign", "ai_evidence_lab"/);
 assert.match(starterJs, /utm_medium"\) === "onboarding"/);
 assert.doesNotMatch(starterHtml, /TODO|PLACEHOLDER|example\.com/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 15, "sitemap should contain all fifteen crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 16, "sitemap should contain all sixteen crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 15, "sitemap should publish fifteen URL locations");
+assert.equal(sitemapUrls.length, 16, "sitemap should publish sixteen URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -655,6 +697,7 @@ assert.match(llms, /AI Evidence Starter Kit/);
 assert.match(llms, /The Fable 5 Cost Playbook/);
 assert.match(llms, /Voice AI Cost per Minute/);
 assert.match(llms, /AI Receptionist Cost Worksheet/);
+assert.match(llms, /70B LLM GPU Requirements/);
 assert.deepEqual([...socialCard.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], "social card should be a PNG");
 assert.equal(publishedKey.trim(), indexNowKey, "public IndexNow key must match the submission script");
 assert.match(indexNowScript, /https:\/\/api\.indexnow\.org\/indexnow/);
@@ -669,4 +712,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 10 tools, 1 activation kit, 3 field guides, 15 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 10 tools, 1 activation kit, 4 field guides, 16 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

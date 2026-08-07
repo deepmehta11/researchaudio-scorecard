@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>70B LLM GPU Requirements: INT4, INT8 &amp; FP16 | ResearchAudio</title>
+    <meta name="description" content="Calculate 70B LLM GPU requirements across INT4, INT8, and FP16 with transparent weight, KV-cache, runtime-headroom, usable-VRAM, and GPU-count math." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/70b-llm-gpu-requirements/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="A 70B model does not have one VRAM number" />
+    <meta property="og:description" content="Compare INT4, INT8, and FP16 through one transparent 70B serving-memory example, then edit every assumption." />
+    <meta property="og:url" content="https://tools.researchaudio.io/70b-llm-gpu-requirements/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "70B LLM GPU Requirements: INT4, INT8 and FP16",
+        "description": "A transparent 70B inference-memory worksheet covering weights, architecture-aware KV cache, runtime headroom, usable VRAM, and minimum GPU count.",
+        "datePublished": "2026-08-06",
+        "dateModified": "2026-08-06",
+        "mainEntityOfPage": "https://tools.researchaudio.io/70b-llm-gpu-requirements/",
+        "author": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How much VRAM does a 70B model need at 4-bit precision?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Seventy billion parameters at exactly four bits require about 32.6 GiB for raw weights. A serving deployment needs more for format overhead, runtime allocations, activations, and KV cache. In the illustrative 32K-context example on this page, the planning target is 51.1 GiB." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can a 70B model run on one 48 GB GPU?",
+            "acceptedAnswer": { "@type": "Answer", "text": "A simple 4-bit weight floor can fit within 48 GB, but that does not prove the serving workload fits. In this page's illustrative architecture with a 32K 16-bit KV cache, 20 percent runtime headroom, and 90 percent usable VRAM, the estimate needs two 48 GiB GPUs." }
+          },
+          {
+            "@type": "Question",
+            "name": "How much VRAM do 70B FP16 weights require?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Seventy billion parameters multiplied by two bytes per parameter is about 130.4 GiB for weights alone. KV cache and runtime overhead increase the serving requirement." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is a model file smaller than the serving-memory requirement?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Serving also allocates KV cache, activations, kernels, workspace, and framework state. Quantized files may include scales, metadata, and higher-precision modules, so file size is only one input." }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#scenarios">Skip to the 70B GPU scenarios</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=70b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=70b_llm_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=70b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=70b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">LLM infrastructure / 70B worksheet</p>
+          <h1 id="hero-title">70B does not have one VRAM number.</h1>
+          <p class="hero-deck">Weight precision sets the floor. Architecture, cached context, concurrency, runtime headroom, and actually usable memory decide whether the serving workload fits.</p>
+          <a class="hero-join-link" href="../llm-gpu-memory-calculator/?parameterBillions=70&amp;bitsPerParameter=4&amp;layers=80&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=48&amp;usableVramPercent=90&amp;availableGpus=2&amp;utm_source=70b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_70b_int4">Open the editable 70B model →</a>
+        </div>
+        <aside class="lab-index" aria-label="70B scenario scope">
+          <span>Precision scenarios</span>
+          <strong>03</strong>
+          <p>One illustrative architecture, held constant across INT4, INT8, and FP16. Replace every architecture and hardware input for the exact model you plan to serve.</p>
+        </aside>
+      </section>
+
+      <section class="method-section" aria-labelledby="floor-title">
+        <div>
+          <p class="eyebrow">The weight floor</p>
+          <h2 id="floor-title">Start with bytes. Do not stop there.</h2>
+        </div>
+        <div class="method-copy formula-copy">
+          <p><strong>INT4 weights</strong><br /><code>70B × 4 bits ÷ 8 = 35 GB = 32.6 GiB</code></p>
+          <p><strong>INT8 weights</strong><br /><code>70B × 8 bits ÷ 8 = 70 GB = 65.2 GiB</code></p>
+          <p><strong>FP16 weights</strong><br /><code>70B × 16 bits ÷ 8 = 140 GB = 130.4 GiB</code></p>
+          <p><strong>Serving target</strong><br /><code>(weights + explicit KV cache) × (1 + runtime headroom)</code></p>
+        </div>
+      </section>
+
+      <section class="scenario-section" id="scenarios" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">Illustrative 32K serving profile</p>
+          <h2 id="scenario-title">Hold the architecture constant. Change the weights.</h2>
+          <p>Each editable scenario uses 80 layers, eight KV heads, 128 dimensions per head, 32,768 cached tokens, one concurrent sequence, 16-bit KV cache, 20% runtime headroom, and 90% usable VRAM. Those are example inputs—not properties of every 70B model.</p>
+        </div>
+        <div class="scenario-grid guide-scenario-grid">
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=70&amp;bitsPerParameter=4&amp;layers=80&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=48&amp;usableVramPercent=90&amp;availableGpus=2&amp;utm_source=70b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=int4_32k_scenario">
+            <span>INT4 · 2 × 48 GiB</span>
+            <strong>51.1 GiB</strong>
+            <small>32.6 weights + 10.0 KV + headroom →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=70&amp;bitsPerParameter=8&amp;layers=80&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=80&amp;usableVramPercent=90&amp;availableGpus=2&amp;utm_source=70b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=int8_32k_scenario">
+            <span>INT8 · 2 × 80 GiB</span>
+            <strong>90.2 GiB</strong>
+            <small>65.2 weights + 10.0 KV + headroom →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=70&amp;bitsPerParameter=16&amp;layers=80&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=80&amp;usableVramPercent=90&amp;availableGpus=3&amp;utm_source=70b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=fp16_32k_scenario">
+            <span>FP16 · 3 × 80 GiB</span>
+            <strong>168.5 GiB</strong>
+            <small>130.4 weights + 10.0 KV + headroom →</small>
+          </a>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="70B deployment boundaries">
+        <p class="eyebrow">Deployment boundaries</p>
+        <p><strong>Fit is not throughput.</strong><br />Enough capacity does not prove useful tokens per second.</p>
+        <p><strong>One sequence is not a service.</strong><br />KV cache grows linearly with full concurrent caches.</p>
+        <p><strong>Topology matters.</strong><br />The GPU count must match a supported parallel configuration and interconnect.</p>
+      </section>
+
+      <section class="guide-section" aria-labelledby="guide-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Read the estimate</p>
+          <h2 id="guide-title">Change the architecture before changing the hardware.</h2>
+          <p>Copy layer count, KV heads, and head dimension from the exact model configuration. Set the cached context and concurrent sequences from the serving target, then enter the memory you can actually allocate on each device.</p>
+          <a class="guide-link" href="../llm-gpu-memory-calculator/?utm_source=70b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=blank_gpu_calculator">Open the LLM GPU memory calculator →</a>
+          <a class="guide-link" href="https://researchaudio.io/p/understanding-gpu-architecture-technical-deep-dive-from-fundamentals-to-modern-design?utm_source=70b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpu_architecture_guide">Read ResearchAudio's GPU architecture guide →</a>
+          <a class="guide-link" href="https://huggingface.co/docs/transformers/en/kv_cache">Check current Transformers cache strategies →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item">
+            <h3>How much VRAM does a 70B model need at 4-bit precision?</h3>
+            <p>Exactly four bits per parameter is about 32.6 GiB for raw 70B weights. The illustrative 32K-context serving profile on this page reaches 51.1 GiB after explicit KV cache and 20% runtime headroom.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Can a 70B model run on one 48 GB GPU?</h3>
+            <p>A 4-bit weight floor can fit, but the serving workload may not. With this page's explicit 32K KV cache, headroom, and 90% usable-memory assumption, the estimate needs two 48 GiB GPUs.</p>
+          </article>
+          <article class="faq-item">
+            <h3>How much VRAM do 70B FP16 weights require?</h3>
+            <p>Seventy billion parameters at two bytes each is about 130.4 GiB for weights alone. KV cache and runtime allocations increase the serving requirement.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Why is a model file smaller than the serving-memory requirement?</h3>
+            <p>Serving also allocates KV cache, activations, kernels, workspace, and framework state. Quantized files may include scales, metadata, and higher-precision modules.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Infrastructure without the benchmark theatre</p>
+          <h2 id="subscribe-title">Get the next AI systems teardown.</h2>
+          <p>ResearchAudio turns model releases, hardware claims, and serving constraints into practical decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=70b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../llm-gpu-memory-calculator/">GPU memory calculator</a>
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=70b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>
