@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Voice AI Cost per Minute: Formula &amp; Calculator | ResearchAudio</title>
+    <meta name="description" content="Calculate voice AI cost per minute across platform, telephony, STT, TTS, and LLM fees, then convert it into monthly cost and cost per resolved call." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/voice-ai-cost-per-minute/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Voice AI cost per minute is five meters, not one" />
+    <meta property="og:description" content="Use the complete formula, three transparent scenarios, and a free outcome-level calculator." />
+    <meta property="og:url" content="https://tools.researchaudio.io/voice-ai-cost-per-minute/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "Voice AI Cost per Minute: Formula and Calculator",
+        "description": "A vendor-neutral method for calculating voice AI cost per minute, monthly operating cost, and loaded cost per resolved call.",
+        "datePublished": "2026-08-06",
+        "dateModified": "2026-08-06",
+        "mainEntityOfPage": "https://tools.researchaudio.io/voice-ai-cost-per-minute/",
+        "author": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do you calculate voice AI cost per minute?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Add the per-minute platform, telephony, speech-to-text, text-to-speech, and language-model rates. Keep fixed subscriptions separate, because they change effective cost per minute as usage changes." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is cost per minute enough to compare voice AI systems?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. Cost per minute describes usage, not successful outcomes. Include fixed fees, the share of calls resolved correctly, and human work created by unresolved calls." }
+          },
+          {
+            "@type": "Question",
+            "name": "Which voice AI costs are usually missed?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Teams often miss phone-number fees, minimum commitments, silence and hold time, failed calls, retries, call transfers, post-call work, monitoring, and human escalation." }
+          },
+          {
+            "@type": "Question",
+            "name": "How do you convert voice AI cost per minute into cost per resolved call?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Add monthly voice AI spend and human handoff cost, then divide by the number of calls the AI resolved correctly without a person." }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#formula">Skip to the cost formula</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=voice_ai_cost_per_minute&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=voice_ai_cost_per_minute&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=voice_ai_cost_per_minute&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=voice_ai_cost_per_minute&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Voice AI economics / field note</p>
+          <h1 id="hero-title">One minute. Five meters.</h1>
+          <p class="hero-deck">Voice AI cost per minute is the sum of platform, transport, transcription, synthesis, and model usage. The useful business metric starts one level deeper: loaded cost per correctly resolved call.</p>
+          <a class="hero-join-link" href="../voice-ai-cost-calculator/?utm_source=voice_ai_cost_per_minute&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_calculator">Open the full calculator →</a>
+        </div>
+        <aside class="lab-index" aria-label="Voice AI cost formula summary">
+          <span>Core usage meters</span>
+          <strong>5</strong>
+          <p>Every number below is illustrative. Replace it with current invoices or provider quotes before making a purchase decision.</p>
+        </aside>
+      </section>
+
+      <section class="method-section" id="formula" aria-labelledby="formula-title">
+        <div>
+          <p class="eyebrow">The complete formula</p>
+          <h2 id="formula-title">Move from a rate card to an outcome.</h2>
+        </div>
+        <div class="method-copy formula-copy">
+          <p><strong>1. Stack cost / minute</strong><br /><code>platform + telephony + STT + TTS + LLM</code></p>
+          <p><strong>2. Monthly AI spend</strong><br /><code>(calls × minutes × stack rate) + fixed fees</code></p>
+          <p><strong>3. Human handoff cost</strong><br /><code>unresolved calls × handoff minutes × hourly cost ÷ 60</code></p>
+          <p><strong>4. Loaded cost / resolution</strong><br /><code>(AI spend + handoffs) ÷ AI-resolved calls</code></p>
+        </div>
+      </section>
+
+      <section class="scenario-section" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">Illustrative sensitivity test</p>
+          <h2 id="scenario-title">The cheapest minute does not always win.</h2>
+          <p>Each scenario holds volume and outcomes constant at 5,000 four-minute calls, 70% resolution, $200 fixed fees, and six minutes of $30/hour human work for every unresolved call. Only the example stack rate changes.</p>
+        </div>
+        <div class="scenario-grid guide-scenario-grid">
+          <a class="scenario-card" href="../voice-ai-cost-calculator/?callsPerMonth=5000&amp;minutesPerCall=4&amp;platformPerMinute=.02&amp;telephonyPerMinute=.014&amp;sttPerMinute=.006&amp;ttsPerMinute=.015&amp;llmPerMinute=.005&amp;fixedMonthlyCost=200&amp;resolutionRate=70&amp;handoffMinutes=6&amp;humanHourlyCost=30&amp;humanCostPerCall=4&amp;utm_source=voice_ai_cost_per_minute&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=lean_scenario">
+            <span>Illustrative lean stack</span>
+            <strong>$0.060/min</strong>
+            <small>$1.69 loaded / resolution →</small>
+          </a>
+          <a class="scenario-card is-base" href="../voice-ai-cost-calculator/?callsPerMonth=5000&amp;minutesPerCall=4&amp;platformPerMinute=.05&amp;telephonyPerMinute=.014&amp;sttPerMinute=.006&amp;ttsPerMinute=.03&amp;llmPerMinute=.005&amp;fixedMonthlyCost=200&amp;resolutionRate=70&amp;handoffMinutes=6&amp;humanHourlyCost=30&amp;humanCostPerCall=4&amp;utm_source=voice_ai_cost_per_minute&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=base_scenario">
+            <span>Illustrative base stack</span>
+            <strong>$0.105/min</strong>
+            <small>$1.94 loaded / resolution →</small>
+          </a>
+          <a class="scenario-card" href="../voice-ai-cost-calculator/?callsPerMonth=5000&amp;minutesPerCall=4&amp;platformPerMinute=.10&amp;telephonyPerMinute=.014&amp;sttPerMinute=.006&amp;ttsPerMinute=.07&amp;llmPerMinute=.01&amp;fixedMonthlyCost=200&amp;resolutionRate=70&amp;handoffMinutes=6&amp;humanHourlyCost=30&amp;humanCostPerCall=4&amp;utm_source=voice_ai_cost_per_minute&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=robust_scenario">
+            <span>Illustrative robust stack</span>
+            <strong>$0.200/min</strong>
+            <small>$2.49 loaded / resolution →</small>
+          </a>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="Voice AI cost decisions">
+        <p class="eyebrow">Decision rules</p>
+        <p><strong>Separate fixed and variable.</strong><br />A subscription changes effective per-minute cost at every volume.</p>
+        <p><strong>Measure real resolution.</strong><br />Transfers, repeats, and incorrect completion are not automated outcomes.</p>
+        <p><strong>Count cleanup.</strong><br />Human escalation belongs in the operating cost, not in a footnote.</p>
+      </section>
+
+      <section class="guide-section" aria-labelledby="guide-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Build the input sheet</p>
+          <h2 id="guide-title">Collect evidence before comparing stacks.</h2>
+          <p>Export connected minutes and call outcomes for one narrow workflow. Match every provider charge to the same month, region, transport, and plan. Then price unresolved calls from observed handling time.</p>
+          <a class="guide-link" href="../voice-ai-cost-calculator/?utm_source=voice_ai_cost_per_minute&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=guide_calculator">Calculate the loaded outcome cost →</a>
+          <a class="guide-link" href="../ai-receptionist-cost/?utm_source=voice_ai_cost_per_minute&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=receptionist_worksheet">Use the AI receptionist worksheet →</a>
+          <a class="guide-link" href="../voice-ai-latency-calculator/?utm_source=voice_ai_cost_per_minute&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latency_calculator">Test the same stack's latency →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item">
+            <h3>How do you calculate voice AI cost per minute?</h3>
+            <p>Add the per-minute platform, telephony, STT, TTS, and LLM rates. Keep subscriptions and other fixed fees separate so volume does not hide them.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Is cost per minute enough to compare voice AI systems?</h3>
+            <p>No. A usage rate ignores fixed fees, resolution quality, transfers, repeat contacts, and human cleanup. Compare loaded cost per correctly resolved call.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Which voice AI costs are usually missed?</h3>
+            <p>Include phone numbers, minimum commitments, silence and hold time, retries, failed calls, monitoring, transfers, post-call work, and human escalation.</p>
+          </article>
+          <article class="faq-item">
+            <h3>How do you convert voice AI cost per minute into cost per resolved call?</h3>
+            <p>Add monthly AI spend and human handoff cost, then divide by calls the AI resolved correctly without a person.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Voice systems without the sales deck</p>
+          <h2 id="subscribe-title">Get the next evidence-led teardown.</h2>
+          <p>ResearchAudio turns architecture, pricing, and outcome claims into practical decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=voice_ai_cost_per_minute&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../voice-ai-cost-calculator/">Voice cost calculator</a>
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=voice_ai_cost_per_minute&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>

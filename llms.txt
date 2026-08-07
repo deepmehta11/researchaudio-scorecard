@@ -31,6 +31,10 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
 
 - The Fable 5 Cost Playbook: https://tools.researchaudio.io/fable-playbook/
   A free 10-page July 2026 field guide to model routing, effort controls, prompt caching, context discipline, batch execution, and spend caps.
+- Voice AI Cost per Minute: https://tools.researchaudio.io/voice-ai-cost-per-minute/
+  A vendor-neutral formula for stack cost per minute, monthly AI spend, human handoffs, and loaded cost per resolved call.
+- AI Receptionist Cost Worksheet: https://tools.researchaudio.io/ai-receptionist-cost/
+  Three editable call-handling scenarios plus a measurement checklist for comparing AI and human outcome cost.
 
 ## Publisher
 

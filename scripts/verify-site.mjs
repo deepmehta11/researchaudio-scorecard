@@ -18,7 +18,7 @@ const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const brandedToolsOrigin = "https://tools.researchaudio.io";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -40,6 +40,8 @@ const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llm
   readFile(path.join(root, "voice-ai-latency-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "voice-ai-cost-calculator/index.html"), "utf8"),
   readFile(path.join(root, "voice-ai-cost-calculator/calculator.js"), "utf8"),
+  readFile(path.join(root, "voice-ai-cost-per-minute/index.html"), "utf8"),
+  readFile(path.join(root, "ai-receptionist-cost/index.html"), "utf8"),
   readFile(path.join(root, "evidence-starter-kit/index.html"), "utf8"),
   readFile(path.join(root, "evidence-starter-kit/starter.js"), "utf8"),
   readFile(path.join(root, "fable-playbook/index.html"), "utf8"),
@@ -92,6 +94,8 @@ for (const [name, page, pathname] of [
   ["Codex config generator", codexConfigHtml, "/codex-config-generator/"],
   ["voice AI latency calculator", voiceLatencyHtml, "/voice-ai-latency-calculator/"],
   ["voice AI cost calculator", voiceCostHtml, "/voice-ai-cost-calculator/"],
+  ["voice AI cost per minute guide", voiceCostPerMinuteHtml, "/voice-ai-cost-per-minute/"],
+  ["AI receptionist cost worksheet", aiReceptionistCostHtml, "/ai-receptionist-cost/"],
   ["starter kit", starterHtml, "/evidence-starter-kit/"],
   ["Fable 5 cost playbook", fablePlaybookHtml, "/fable-playbook/"],
 ]) {
@@ -99,6 +103,37 @@ for (const [name, page, pathname] of [
   assert.ok(canonical, `${name} canonical missing`);
   assert.equal(canonical[1], `${brandedToolsOrigin}${pathname}`, `${name} canonical should use the ResearchAudio tools domain`);
   assert.doesNotMatch(page, retiredGitHubPagesPath, `${name} still exposes the retired GitHub Pages path`);
+}
+
+for (const [name, page, title, source, questions] of [
+  ["voice AI cost per minute guide", voiceCostPerMinuteHtml, "Voice AI Cost per Minute: Formula &amp; Calculator", "voice_ai_cost_per_minute", [
+    "How do you calculate voice AI cost per minute?",
+    "Is cost per minute enough to compare voice AI systems?",
+    "Which voice AI costs are usually missed?",
+    "How do you convert voice AI cost per minute into cost per resolved call?",
+  ]],
+  ["AI receptionist cost worksheet", aiReceptionistCostHtml, "AI Receptionist Cost: Monthly Worksheet &amp; Calculator", "ai_receptionist_cost", [
+    "How much does an AI receptionist cost?",
+    "How should an AI receptionist be compared with a human receptionist?",
+    "What counts as an AI receptionist resolution?",
+    "Which data should be collected during an AI receptionist pilot?",
+  ]],
+]) {
+  assert.match(page, new RegExp(`<title>${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} \\| ResearchAudio<\\/title>`), `${name} title missing`);
+  assert.equal((page.match(/"@type": "TechArticle"/g) || []).length, 1, `${name} should have one TechArticle schema`);
+  assert.equal((page.match(/"@type": "FAQPage"/g) || []).length, 1, `${name} should have one FAQPage schema`);
+  assert.doesNotThrow(() => parseStructuredData(page), `${name} structured data must be valid JSON`);
+  assert.match(page, new RegExp(`https:\\/\\/researchaudio\\.io\\/subscribe\\?utm_source=${source}&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab`), `${name} direct subscribe attribution missing`);
+  assert.match(page, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/, `${name} Beehiiv form missing`);
+  assert.match(page, /subscribe-forms\.beehiiv\.com\/attribution\.js/, `${name} attribution missing`);
+  assert.equal((page.match(/class="scenario-card/g) || []).length, 3, `${name} should contain three editable scenarios`);
+  assert.match(page, /voice-ai-cost-calculator\/\?callsPerMonth=/, `${name} scenario should open the calculator with state`);
+  assert.doesNotMatch(page, /TODO|PLACEHOLDER|example\.com/, `${name} contains placeholder copy`);
+  for (const question of questions) {
+    const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    assert.match(page, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `${name} visible FAQ question missing: ${question}`);
+    assert.match(page, new RegExp(`"name": "${escapedQuestion}"`), `${name} FAQ schema question missing: ${question}`);
+  }
 }
 
 for (const [name, page] of [
@@ -471,6 +506,42 @@ assert.equal(defaultVoiceCost.loadedMonthlyCost, 6800);
 assert.ok(Math.abs(defaultVoiceCost.costPerResolvedCall - (6800 / 3500)) < 0.000001);
 assert.equal(defaultVoiceCost.monthlySavings, 13200);
 assert.ok(Math.abs(defaultVoiceCost.breakEvenResolutionRate - (3.46 / 7)) < 0.000001);
+const leanVoiceCost = calculateVoiceAiCost({
+  callsPerMonth: 5000,
+  minutesPerCall: 4,
+  platformPerMinute: 0.02,
+  telephonyPerMinute: 0.014,
+  sttPerMinute: 0.006,
+  ttsPerMinute: 0.015,
+  llmPerMinute: 0.005,
+  fixedMonthlyCost: 200,
+  resolutionRate: 70,
+  handoffMinutes: 6,
+  humanHourlyCost: 30,
+  humanCostPerCall: 4,
+});
+assert.ok(Math.abs(leanVoiceCost.costPerResolvedCall - (5900 / 3500)) < 0.000001);
+assert.match(voiceCostPerMinuteHtml, /\$1\.69 loaded \/ resolution/);
+assert.match(voiceCostPerMinuteHtml, /\$1\.94 loaded \/ resolution/);
+assert.match(voiceCostPerMinuteHtml, /\$2\.49 loaded \/ resolution/);
+const afterHoursReceptionist = calculateVoiceAiCost({
+  callsPerMonth: 400,
+  minutesPerCall: 2.5,
+  platformPerMinute: 0.05,
+  telephonyPerMinute: 0.014,
+  sttPerMinute: 0.006,
+  ttsPerMinute: 0.03,
+  llmPerMinute: 0.005,
+  fixedMonthlyCost: 100,
+  resolutionRate: 60,
+  handoffMinutes: 5,
+  humanHourlyCost: 30,
+  humanCostPerCall: 5,
+});
+assert.equal(afterHoursReceptionist.loadedMonthlyCost, 605);
+assert.match(aiReceptionistCostHtml, /\$605\/mo/);
+assert.match(aiReceptionistCostHtml, /\$1,365\/mo/);
+assert.match(aiReceptionistCostHtml, /\$6,800\/mo/);
 const zeroResolutionVoiceCost = calculateVoiceAiCost({
   callsPerMonth: 100,
   minutesPerCall: 3,
@@ -491,9 +562,19 @@ assert.equal(zeroResolutionVoiceCost.costPerResolvedCall, null);
 assert.match(voiceCostJs, /source: "voice_cost_share"/);
 assert.match(voiceCostJs, /content: "shared_voice_cost_result"/);
 assert.match(voiceCostHtml, /voice-ai-latency-calculator/);
+assert.match(voiceCostHtml, /voice-ai-cost-per-minute/);
+assert.match(voiceCostHtml, /ai-receptionist-cost/);
 assert.match(voiceCostHtml, /twilio\.com\/en-us\/voice\/pricing\/us/);
 assert.match(voiceCostHtml, /elevenlabs\.io\/pricing/);
 assert.match(toolsHtml, /voice-ai-cost-calculator/);
+assert.match(toolsHtml, /voice-ai-cost-per-minute/);
+assert.match(toolsHtml, /ai-receptionist-cost/);
+assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 2, "tools hub should contain two voice economics field notes");
+assert.match(voiceLatencyHtml, /voice-ai-cost-per-minute/);
+assert.match(labCss, /\.resource-section/);
+assert.match(labCss, /\.resource-grid/);
+assert.match(labCss, /\.formula-copy/);
+assert.match(labCss, /\.guide-scenario-grid/);
 
 assert.match(fablePlaybookHtml, /<title>Fable 5 Cost Playbook \(10-Move PDF\) \| ResearchAudio<\/title>/);
 assert.match(fablePlaybookHtml, /fable5-cost-playbook\.pdf/);
@@ -555,9 +636,9 @@ assert.match(starterJs, /utm_campaign", "ai_evidence_lab"/);
 assert.match(starterJs, /utm_medium"\) === "onboarding"/);
 assert.doesNotMatch(starterHtml, /TODO|PLACEHOLDER|example\.com/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 13, "sitemap should contain all thirteen crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 15, "sitemap should contain all fifteen crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 13, "sitemap should publish thirteen URL locations");
+assert.equal(sitemapUrls.length, 15, "sitemap should publish fifteen URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -572,6 +653,8 @@ assert.match(llms, /Voice AI Latency Calculator/);
 assert.match(llms, /AI Voice Agent Cost Calculator/);
 assert.match(llms, /AI Evidence Starter Kit/);
 assert.match(llms, /The Fable 5 Cost Playbook/);
+assert.match(llms, /Voice AI Cost per Minute/);
+assert.match(llms, /AI Receptionist Cost Worksheet/);
 assert.deepEqual([...socialCard.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], "social card should be a PNG");
 assert.equal(publishedKey.trim(), indexNowKey, "public IndexNow key must match the submission script");
 assert.match(indexNowScript, /https:\/\/api\.indexnow\.org\/indexnow/);
@@ -586,4 +669,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 10 tools, 1 activation kit, 1 field guide, 13 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 10 tools, 1 activation kit, 3 field guides, 15 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
