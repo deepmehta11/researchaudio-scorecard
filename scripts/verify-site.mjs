@@ -1111,6 +1111,7 @@ assert.match(embedModeJs, /className = "tool-distribution"/);
 assert.match(embedModeJs, /utm_content", "embed_this_tool"/);
 assert.match(embedModeJs, /libraryUrl\.hash = `embed-\$\{tool\}`/);
 assert.match(embedsHtml, /<title>Embed Free AI Tools on Your Website \| ResearchAudio<\/title>/);
+assert.match(embedsHtml, /href="https:\/\/researchaudio\.io\/p\/free-ai-tools-to-embed\?utm_source=embed_library&amp;utm_medium=organic_tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=publisher_guide"/);
 assert.equal((embedsHtml.match(/data-widget-url=/g) || []).length, 14, "embed library should offer fourteen widgets");
 assert.equal((embedsHtml.match(/data-copy-embed/g) || []).length, 14, "every widget should expose a copy action");
 assert.doesNotThrow(() => parseStructuredData(embedsHtml), "embed library structured data must be valid JSON");
