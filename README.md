@@ -1,6 +1,6 @@
 # ResearchAudio Evidence Lab
 
-An evergreen acquisition ecosystem for ResearchAudio. Eleven browser-local tools and four practical field guides turn AI launch claims, token budgets, voice latency and outcome economics, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability, automation business cases, and Codex configuration into concrete inspections before inviting visitors into the daily briefing.
+An evergreen acquisition ecosystem for ResearchAudio. Eleven browser-local tools, four practical field guides, and a self-serve embed library turn AI launch claims, token budgets, voice latency and outcome economics, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability, automation business cases, and Codex configuration into concrete inspections before inviting visitors into the daily briefing.
 
 Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain connected to the Beehiiv publication at `https://researchaudio.io/`.
 
@@ -22,6 +22,7 @@ Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain con
 - `/llm-gpu-memory-calculator/` — model-weight VRAM, optional architecture-aware KV cache, runtime headroom, usable memory, and minimum GPU count.
 - `/evidence-starter-kit/` — post-signup activation, four-tool progress, referral reward explanation, and attributed sharing.
 - `/tools/` — crawlable, interlinked Evidence Lab hub.
+- `/embeds/` — copy-ready, source-attributed iframe widgets for publishers who want a working calculator inside an article, documentation page, or resource library.
 
 Every instrument uses the dedicated Beehiiv acquisition form and keeps user inputs in the browser.
 
@@ -54,4 +55,5 @@ Then open `http://127.0.0.1:4173`.
 3. Link it near the first decision table in every relevant ResearchAudio web post.
 4. Publish one result card per issue on LinkedIn, X, Reddit, and relevant engineering communities.
 5. Redirect new Evidence Lab subscribers into the starter kit, then use its attributed share action and three-referral reward to compound distribution.
-6. Review Beehiiv source and campaign breakdowns weekly. Keep only channels that produce active subscribers, not raw clicks.
+6. Offer the embed library to technical publishers; each widget keeps a visible ResearchAudio credit and rewrites signup links to the publisher-specific `embed_*` source.
+7. Review Beehiiv source and campaign breakdowns weekly. Keep only channels that produce active subscribers, not raw clicks.

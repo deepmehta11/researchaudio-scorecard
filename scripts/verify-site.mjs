@@ -19,12 +19,15 @@ const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const brandedToolsOrigin = "https://tools.researchaudio.io";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, toolsHtml, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, kvCacheHtml, kvCacheJs, gpuGuideHtml, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, kvCacheHtml, kvCacheJs, gpuGuideHtml, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
   readFile(path.join(root, "lab.css"), "utf8"),
+  readFile(path.join(root, "embed-mode.js"), "utf8"),
   readFile(path.join(root, "tools/index.html"), "utf8"),
+  readFile(path.join(root, "embeds/index.html"), "utf8"),
+  readFile(path.join(root, "embeds/embeds.js"), "utf8"),
   readFile(path.join(root, "ai-cost-calculator/index.html"), "utf8"),
   readFile(path.join(root, "agent-loop-diagnostic/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-roi-calculator/index.html"), "utf8"),
@@ -91,6 +94,7 @@ assert.match(js, /min: 7,[\s\S]*title: "Evidence-complete"/);
 for (const [name, page, pathname] of [
   ["scorecard", html, "/"],
   ["hub", toolsHtml, "/tools/"],
+  ["embed library", embedsHtml, "/embeds/"],
   ["cost calculator", costHtml, "/ai-cost-calculator/"],
   ["loop diagnostic", loopHtml, "/agent-loop-diagnostic/"],
   ["agent ROI calculator", roiHtml, "/ai-agent-roi-calculator/"],
@@ -272,6 +276,8 @@ assert.match(labCss, /\.guide-section/);
 assert.match(labCss, /\.faq-item/);
 assert.match(labCss, /\.config-output/);
 assert.match(labCss, /\.subscribe-form-shell > div/);
+assert.match(labCss, /\.embed-library/);
+assert.match(labCss, /html\.embed-mode/);
 assert.match(css, /\.result-join/);
 assert.equal((loopHtml.match(/type="checkbox"/g) || []).length, 10, "expected ten loop controls");
 assert.equal(controls.length, 10, "diagnostic logic and markup should share ten controls");
@@ -747,9 +753,33 @@ assert.match(starterJs, /utm_campaign", "ai_evidence_lab"/);
 assert.match(starterJs, /utm_medium"\) === "onboarding"/);
 assert.doesNotMatch(starterHtml, /TODO|PLACEHOLDER|example\.com/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 17, "sitemap should contain all seventeen crawlable pages");
+for (const [name, page] of [
+  ["AI agent ROI", roiHtml],
+  ["LLM API cost", llmCostHtml],
+  ["LLM GPU memory", gpuMemoryHtml],
+  ["LLM KV cache", kvCacheHtml],
+  ["voice AI cost", voiceCostHtml],
+]) {
+  assert.match(page, /<script src="\.\.\/embed-mode\.js"><\/script>/, `${name} calculator should support embed mode`);
+}
+assert.match(embedModeJs, /parameters\.get\("embed"\) === "1"/);
+assert.match(embedModeJs, /utm_medium", "embedded_tool"/);
+assert.match(embedModeJs, /utm_campaign", "ai_evidence_lab"/);
+assert.match(embedModeJs, /target = "_blank"/);
+assert.match(embedsHtml, /<title>Embed Free AI Calculators on Your Website \| ResearchAudio<\/title>/);
+assert.equal((embedsHtml.match(/data-widget-url=/g) || []).length, 5, "embed library should offer five widgets");
+assert.equal((embedsHtml.match(/data-copy-embed/g) || []).length, 5, "every widget should expose a copy action");
+assert.match(embedsHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
+assert.match(embedsHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
+assert.match(embedsJs, /utm_source/);
+assert.match(embedsJs, /utm_medium/);
+assert.match(embedsJs, /utm_campaign/);
+assert.match(embedsJs, /navigator\.clipboard\.writeText/);
+assert.match(toolsHtml, /href="\.\.\/embeds\/\?utm_source=evidence_lab/);
+
+assert.equal((sitemap.match(/<url>/g) || []).length, 18, "sitemap should contain all eighteen crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 17, "sitemap should publish seventeen URL locations");
+assert.equal(sitemapUrls.length, 18, "sitemap should publish eighteen URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -764,6 +794,7 @@ assert.match(llms, /Codex CLI config\.toml Generator/);
 assert.match(llms, /Voice AI Latency Calculator/);
 assert.match(llms, /AI Voice Agent Cost Calculator/);
 assert.match(llms, /AI Evidence Starter Kit/);
+assert.match(llms, /Embeddable AI Calculators/);
 assert.match(llms, /The Fable 5 Cost Playbook/);
 assert.match(llms, /Voice AI Cost per Minute/);
 assert.match(llms, /AI Receptionist Cost Worksheet/);
@@ -782,4 +813,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 11 tools, 1 activation kit, 4 field guides, 17 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 11 tools, 1 activation kit, 1 embed library, 4 field guides, 18 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

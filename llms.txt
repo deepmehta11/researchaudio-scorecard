@@ -28,6 +28,8 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Calculates exact KV-cache memory per token, sequence, context window, and concurrent request, plus GQA savings and full-context capacity.
 - AI Evidence Starter Kit: https://tools.researchaudio.io/evidence-starter-kit/
   A guided four-step path through the Evidence Lab with browser-local progress and an attributed share action.
+- Embeddable AI Calculators: https://tools.researchaudio.io/embeds/
+  Generates copy-ready, source-attributed iframe widgets for five browser-local calculators: LLM API cost, GPU memory, KV cache, voice AI cost, and AI agent ROI.
 
 ## Field guides
 
