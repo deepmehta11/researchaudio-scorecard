@@ -41,6 +41,8 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Three editable call-handling scenarios plus a measurement checklist for comparing AI and human outcome cost.
 - 70B LLM GPU Requirements: https://tools.researchaudio.io/70b-llm-gpu-requirements/
   Compares INT4, INT8, and FP16 through explicit weight, KV-cache, runtime-headroom, and usable-VRAM assumptions.
+- Qwen2.5 GPU Requirements: https://tools.researchaudio.io/qwen2-5-gpu-requirements/
+  Compares Qwen2.5 7B, 32B, and 72B across INT4, INT8, and BF16 with official architecture inputs, exact 32K KV-cache math, and 128K context scenarios.
 
 ## Publisher
 

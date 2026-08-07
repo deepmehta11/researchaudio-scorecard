@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Qwen2.5 GPU Requirements: 7B, 32B &amp; 72B VRAM | ResearchAudio</title>
+    <meta name="description" content="Compare Qwen2.5 7B, 32B, and 72B GPU memory across INT4, INT8, and BF16 with exact 32K KV-cache math and editable VRAM scenarios." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/qwen2-5-gpu-requirements/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Qwen2.5 GPU memory changes by model, precision, and context" />
+    <meta property="og:description" content="Nine transparent 32K serving estimates for Qwen2.5 7B, 32B, and 72B, plus the 128K KV-cache trap." />
+    <meta property="og:url" content="https://tools.researchaudio.io/qwen2-5-gpu-requirements/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "Qwen2.5 GPU Requirements: 7B, 32B and 72B VRAM",
+        "description": "A transparent Qwen2.5 inference-memory worksheet covering weights, architecture-aware KV cache, runtime headroom, usable VRAM, and minimum GPU count.",
+        "datePublished": "2026-08-06",
+        "dateModified": "2026-08-06",
+        "mainEntityOfPage": "https://tools.researchaudio.io/qwen2-5-gpu-requirements/",
+        "author": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How much GPU memory does Qwen2.5 7B need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Qwen2.5 7B has 7.61 billion parameters. At 4-bit precision its raw weight floor is about 3.54 GiB. With one 32K BF16 KV cache and 20 percent runtime headroom, this page's planning estimate is 6.35 GiB." }
+          },
+          {
+            "@type": "Question",
+            "name": "How much GPU memory does Qwen2.5 32B need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Qwen2.5 32B has 32.5 billion parameters. At 4-bit precision its raw weight floor is about 15.13 GiB. With an 8 GiB 32K BF16 KV cache and 20 percent runtime headroom, this page's planning estimate is 27.76 GiB." }
+          },
+          {
+            "@type": "Question",
+            "name": "How much GPU memory does Qwen2.5 72B need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Qwen2.5 72B has 72.7 billion parameters. At 4-bit precision its raw weight floor is about 33.85 GiB. With a 10 GiB 32K BF16 KV cache and 20 percent runtime headroom, this page's planning estimate is 52.62 GiB." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why does 128K context change Qwen2.5 VRAM requirements?",
+            "acceptedAnswer": { "@type": "Answer", "text": "KV-cache memory grows linearly with cached context. Moving from 32K to 128K multiplies the cache by four: about 7 GiB for Qwen2.5 7B, 32 GiB for 32B, and 40 GiB for 72B for one full BF16 cache." }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#qwen-scenarios">Skip to the Qwen2.5 GPU scenarios</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=qwen2_5_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=qwen2_5_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=qwen2_5_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=qwen2_5_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Qwen2.5 / deployment worksheet</p>
+          <h1 id="hero-title">Three model sizes. Nine different memory floors.</h1>
+          <p class="hero-deck">Compare Qwen2.5 7B, 32B, and 72B across INT4, INT8, and BF16—then include the exact grouped-query KV cache before choosing a GPU.</p>
+          <a class="hero-join-link" href="../llm-gpu-memory-calculator/?parameterBillions=32.5&amp;bitsPerParameter=4&amp;layers=64&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=48&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=qwen2_5_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_qwen_32b">Open the editable 32B model →</a>
+        </div>
+        <aside class="lab-index" aria-label="Qwen2.5 scenario scope">
+          <span>Serving estimates</span>
+          <strong>09</strong>
+          <p>Three model sizes × three weight precisions. Every scenario uses one full 32K BF16 KV cache, 20% runtime headroom, and 90% usable GPU memory.</p>
+        </aside>
+      </section>
+
+      <section class="scenario-section" id="qwen-scenarios" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">Quick answer / INT4 at 32K</p>
+          <h2 id="scenario-title">The 32B checkpoint crosses the 24 GiB line.</h2>
+          <p>These are capacity estimates—not throughput benchmarks. They use the official Qwen2.5 parameter and architecture counts, one concurrent sequence, an exact BF16 KV cache, and explicit headroom.</p>
+        </div>
+        <div class="scenario-grid guide-scenario-grid">
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=7.61&amp;bitsPerParameter=4&amp;layers=28&amp;kvHeads=4&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=16&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=qwen2_5_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen_7b_int4_32k">
+            <span>Qwen2.5 7B · 1 × 16 GiB</span>
+            <strong>6.35 GiB</strong>
+            <small>3.54 weights + 1.75 KV + headroom →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=32.5&amp;bitsPerParameter=4&amp;layers=64&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=48&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=qwen2_5_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen_32b_int4_32k">
+            <span>Qwen2.5 32B · 1 × 48 GiB</span>
+            <strong>27.76 GiB</strong>
+            <small>15.13 weights + 8.00 KV + headroom →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=72.7&amp;bitsPerParameter=4&amp;layers=80&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=48&amp;usableVramPercent=90&amp;availableGpus=2&amp;utm_source=qwen2_5_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen_72b_int4_32k">
+            <span>Qwen2.5 72B · 2 × 48 GiB</span>
+            <strong>52.62 GiB</strong>
+            <small>33.85 weights + 10.00 KV + headroom →</small>
+          </a>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="matrix-title">
+        <div class="comparison-heading">
+          <div>
+            <p class="eyebrow">32K serving matrix</p>
+            <h2 id="matrix-title">Precision changes the weights. Architecture fixes the cache.</h2>
+          </div>
+          <p>Planning target = (raw weight floor + one full 32K BF16 KV cache) × 1.20 runtime headroom. GPU examples reserve only 90% of listed VRAM.</p>
+        </div>
+        <p class="comparison-scroll-hint">Swipe the matrix horizontally →</p>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead>
+              <tr><th scope="col">Model</th><th scope="col">Architecture</th><th scope="col">INT4 target</th><th scope="col">INT8 target</th><th scope="col">BF16 target</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Qwen2.5 7B</th><td>28L · 4 KVH · 128D</td><td>6.35 GiB<br /><small>1 × 16 GiB</small></td><td>10.60 GiB<br /><small>1 × 16 GiB</small></td><td>19.11 GiB<br /><small>1 × 24 GiB</small></td></tr>
+              <tr><th scope="row">Qwen2.5 32B</th><td>64L · 8 KVH · 128D</td><td>27.76 GiB<br /><small>1 × 48 GiB</small></td><td>45.92 GiB<br /><small>1 × 80 GiB</small></td><td>82.24 GiB<br /><small>2 × 48 GiB</small></td></tr>
+              <tr><th scope="row">Qwen2.5 72B</th><td>80L · 8 KVH · 128D</td><td>52.62 GiB<br /><small>2 × 48 GiB</small></td><td>93.25 GiB<br /><small>2 × 80 GiB</small></td><td>174.50 GiB<br /><small>3 × 80 GiB</small></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">Quantized artifacts usually add scales, metadata, and some higher-precision modules, so an exact checkpoint can exceed the mathematical bit-per-parameter floor. Benchmark the artifact and serving runtime before reserving hardware.</p>
+      </section>
+
+      <section class="principle-strip" aria-label="Qwen2.5 deployment boundaries">
+        <p class="eyebrow">Read the estimate</p>
+        <p><strong>Capacity is not speed.</strong><br />A model that fits can still miss the latency or throughput target.</p>
+        <p><strong>Concurrency multiplies cache.</strong><br />Every fully allocated sequence repeats the KV-cache budget.</p>
+        <p><strong>Topology is real.</strong><br />Multi-GPU capacity works only with supported sharding and enough interconnect bandwidth.</p>
+      </section>
+
+      <section class="method-section" aria-labelledby="context-title">
+        <div>
+          <p class="eyebrow">The 128K context trap</p>
+          <h2 id="context-title">Four times the context means four times the KV cache.</h2>
+        </div>
+        <div class="method-copy formula-copy">
+          <p><strong>Qwen2.5 7B</strong><br /><code>1.75 GiB at 32K → 7 GiB at 128K</code></p>
+          <p><strong>Qwen2.5 32B</strong><br /><code>8 GiB at 32K → 32 GiB at 128K</code></p>
+          <p><strong>Qwen2.5 72B</strong><br /><code>10 GiB at 32K → 40 GiB at 128K</code></p>
+          <p>The official model cards describe 128K support, while the published configuration uses 32,768 positions by default and documents YaRN for longer inputs. Treat the configured context, serving engine, and cache policy as deployment inputs—not a marketing constant.</p>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="sources-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Primary-source inputs</p>
+          <h2 id="sources-title">Copy the architecture. Then edit the workload.</h2>
+          <p>The page uses total parameter counts from the official model cards and layer, KV-head, and head-dimension values from the official configurations. It does not use a third-party VRAM table as an input.</p>
+          <a class="guide-link" href="../llm-gpu-memory-calculator/?utm_source=qwen2_5_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=blank_gpu_calculator">Open the GPU memory calculator →</a>
+          <a class="guide-link" href="../kv-cache-calculator/?utm_source=qwen2_5_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=kv_cache_calculator">Open the KV-cache calculator →</a>
+          <a class="guide-link" href="https://huggingface.co/Qwen/Qwen2.5-7B-Instruct">Official Qwen2.5 7B model card →</a>
+          <a class="guide-link" href="https://huggingface.co/Qwen/Qwen2.5-32B-Instruct">Official Qwen2.5 32B model card →</a>
+          <a class="guide-link" href="https://huggingface.co/Qwen/Qwen2.5-72B-Instruct">Official Qwen2.5 72B model card →</a>
+          <a class="guide-link" href="https://qwen.readthedocs.io/en/v2.5/benchmark/speed_benchmark.html">Official Qwen2.5 speed and memory benchmark →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>How much GPU memory does Qwen2.5 7B need?</h3><p>The 7.61B checkpoint has a 3.54 GiB INT4 weight floor. This page's one-sequence 32K planning target is 6.35 GiB after the exact 1.75 GiB KV cache and 20% runtime headroom.</p></article>
+          <article class="faq-item"><h3>How much GPU memory does Qwen2.5 32B need?</h3><p>The 32.5B checkpoint has a 15.13 GiB INT4 weight floor. Its 32K BF16 KV cache is 8 GiB, producing a 27.76 GiB planning target with 20% runtime headroom.</p></article>
+          <article class="faq-item"><h3>How much GPU memory does Qwen2.5 72B need?</h3><p>The 72.7B checkpoint has a 33.85 GiB INT4 weight floor. Its 32K BF16 KV cache is 10 GiB, producing a 52.62 GiB planning target with 20% runtime headroom.</p></article>
+          <article class="faq-item"><h3>Why does 128K context change Qwen2.5 VRAM requirements?</h3><p>KV-cache memory grows linearly with context. At one full BF16 cache, moving from 32K to 128K raises the 7B cache from 1.75 to 7 GiB, the 32B cache from 8 to 32 GiB, and the 72B cache from 10 to 40 GiB.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Infrastructure without the benchmark theatre</p>
+          <h2 id="subscribe-title">Get the next model deployment teardown.</h2>
+          <p>ResearchAudio turns model releases, hardware claims, and serving constraints into practical decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=qwen2_5_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../llm-gpu-memory-calculator/">GPU memory calculator</a>
+        <a href="../70b-llm-gpu-requirements/">70B guide</a>
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=qwen2_5_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>
