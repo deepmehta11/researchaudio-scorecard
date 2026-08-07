@@ -49,6 +49,8 @@ Every main-branch deployment also verifies the site and submits all sitemap URLs
 - Stage gates: first 10 attributable organic signups, then a stable page-level conversion rate, then 25 per day, then 100 per day. Page launches and visits do not count as subscriber outcomes.
 - Source contract: every distributed URL must include `utm_source`, `utm_medium`, `utm_campaign=ai_evidence_lab`, and a meaningful `utm_content` value.
 - Subscriber system of record: Beehiiv publication `ResearchAudio` and form `AI Launch Evidence Scorecard — web acquisition`.
+- Traffic source of truth: Cloudflare Web Analytics uses the same privacy-first site tag on `researchaudio.io` and `tools.researchaudio.io` to report page views and referrers. It does not replace Beehiiv conversion attribution.
+- Weekly funnel review: compare tool page views and referrers in Cloudflare with new active Beehiiv subscriptions attributed to `ai_evidence_lab`; optimize pages with qualified traffic and no signup conversion before adding more pages.
 
 ## Local verification
 

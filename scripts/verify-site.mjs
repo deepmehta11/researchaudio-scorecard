@@ -23,6 +23,7 @@ import { buildAttributedShareUrl, parseSharedChecklist, parseSharedNumbers } fro
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const brandedToolsOrigin = "https://tools.researchaudio.io";
+const cloudflareWebAnalyticsToken = "c20a9e29828c471c92ed7c2284901e05";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
 const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
@@ -152,6 +153,9 @@ for (const [name, page, pathname] of [
   assert.ok(canonical, `${name} canonical missing`);
   assert.equal(canonical[1], `${brandedToolsOrigin}${pathname}`, `${name} canonical should use the ResearchAudio tools domain`);
   assert.doesNotMatch(page, retiredGitHubPagesPath, `${name} still exposes the retired GitHub Pages path`);
+  assert.equal((page.match(/static\.cloudflareinsights\.com\/beacon\.min\.js/g) || []).length, 1, `${name} should load one Cloudflare Web Analytics beacon`);
+  assert.equal((page.match(/data-cf-beacon=/g) || []).length, 1, `${name} should configure one Cloudflare Web Analytics beacon`);
+  assert.match(page, new RegExp(`data-cf-beacon='[^']*${cloudflareWebAnalyticsToken}[^']*'`), `${name} should use the ResearchAudio Web Analytics site tag`);
 }
 
 for (const [name, page, title, source, calculatorPath, questions] of [
