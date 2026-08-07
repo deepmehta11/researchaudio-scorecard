@@ -251,6 +251,8 @@ for (const [name, page] of [
   ["cost calculator", costHtml],
   ["loop diagnostic", loopHtml],
   ["AI task fit diagnostic", taskFitHtml],
+  ["AI agent security checklist", securityGuideHtml],
+  ["AI benchmark audit checklist", benchmarkGuideHtml],
   ["agent ROI calculator", roiHtml],
   ["LLM API cost calculator", llmCostHtml],
   ["LLM GPU memory calculator", gpuMemoryHtml],
@@ -265,6 +267,25 @@ for (const [name, page] of [
   assert.match(page, /utm_campaign=ai_evidence_lab/, `${name} acquisition campaign missing`);
   assert.match(page, /utm_content=(header_join|hero_join|result_join)/, `${name} CTA placement attribution missing`);
   assert.match(page, /51,000\+/, `${name} subscriber proof missing`);
+}
+
+for (const [name, page] of [
+  ["scorecard", html],
+  ["cost calculator", costHtml],
+  ["loop diagnostic", loopHtml],
+  ["AI task fit diagnostic", taskFitHtml],
+  ["agent ROI calculator", roiHtml],
+  ["LLM API cost calculator", llmCostHtml],
+  ["LLM GPU memory calculator", gpuMemoryHtml],
+  ["LLM KV cache calculator", kvCacheHtml],
+  ["prompt caching calculator", promptCacheHtml],
+  ["Codex config generator", codexConfigHtml],
+  ["Codex exec command builder", codexExecHtml],
+  ["voice AI latency calculator", voiceLatencyHtml],
+  ["voice AI cost calculator", voiceCostHtml],
+]) {
+  assert.match(page, /class="result-join"[\s\S]*?href="#subscribe"/, `${name} result CTA must keep visitors on the page`);
+  assert.match(page, /<section class="subscribe-(?:block|section)" id="subscribe"/, `${name} inline subscribe destination missing`);
 }
 
 for (const [name, page, title] of [
@@ -839,7 +860,7 @@ assert.equal((codexExecHtml.match(/"@type": "WebApplication"/g) || []).length, 1
 assert.equal((codexExecHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "Codex exec builder should have FAQ schema");
 assert.doesNotThrow(() => parseStructuredData(codexExecHtml), "Codex exec builder structured data must be valid JSON");
 assert.match(codexExecHtml, /github\.com\/openai\/codex\/blob\/main\/codex-rs\/exec\/src\/cli\.rs/);
-assert.match(codexExecHtml, /utm_source=codex_exec_builder&amp;utm_medium=tool_result&amp;utm_campaign=ai_evidence_lab/);
+assert.match(codexExecHtml, /utm_source=codex_exec_builder&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab/);
 assert.match(codexExecHtml, /--skip-git-repo-check/);
 assert.match(codexExecHtml, /--output-schema/);
 assert.match(codexExecHtml, /--output-last-message/);
