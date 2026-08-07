@@ -400,6 +400,8 @@ assert.match(labCss, /\.config-output/);
 assert.match(labCss, /\.subscribe-form-shell > div/);
 assert.match(labCss, /\.embed-library/);
 assert.match(labCss, /html\.embed-mode/);
+assert.match(labCss, /\.tool-distribution/);
+assert.match(labCss, /\.embed-card:target/);
 assert.match(css, /\.result-join/);
 assert.equal((loopHtml.match(/type="checkbox"/g) || []).length, 10, "expected ten loop controls");
 assert.equal(controls.length, 10, "diagnostic logic and markup should share ten controls");
@@ -1105,6 +1107,9 @@ assert.match(embedModeJs, /parameters\.get\("embed"\) === "1"/);
 assert.match(embedModeJs, /utm_medium", "embedded_tool"/);
 assert.match(embedModeJs, /utm_campaign", "ai_evidence_lab"/);
 assert.match(embedModeJs, /target = "_blank"/);
+assert.match(embedModeJs, /className = "tool-distribution"/);
+assert.match(embedModeJs, /utm_content", "embed_this_tool"/);
+assert.match(embedModeJs, /libraryUrl\.hash = `embed-\$\{tool\}`/);
 assert.match(embedsHtml, /<title>Embed Free AI Tools on Your Website \| ResearchAudio<\/title>/);
 assert.equal((embedsHtml.match(/data-widget-url=/g) || []).length, 14, "embed library should offer fourteen widgets");
 assert.equal((embedsHtml.match(/data-copy-embed/g) || []).length, 14, "every widget should expose a copy action");
@@ -1128,7 +1133,7 @@ for (const pathName of [
   "prompt-caching-calculator",
   "voice-ai-latency-calculator",
 ]) {
-  assert.match(embedsHtml, new RegExp(`data-widget-url="https:\\/\\/tools\\.researchaudio\\.io\\/${pathName}\\/"`), `embed library should include ${pathName}`);
+  assert.match(embedsHtml, new RegExp(`id="embed-${pathName}" data-widget-url="https:\\/\\/tools\\.researchaudio\\.io\\/${pathName}\\/"`), `embed library should deep-link to ${pathName}`);
 }
 assert.match(embedsHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
 assert.match(embedsHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);

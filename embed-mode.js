@@ -1,5 +1,13 @@
 const parameters = new URLSearchParams(window.location.search);
 const isEmbedded = parameters.get("embed") === "1";
+const tool = window.location.pathname.split("/").filter(Boolean).at(-1) || "evidence_tool";
+const onReady = (callback) => {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", callback, { once: true });
+    return;
+  }
+  callback();
+};
 
 if (isEmbedded) {
   document.documentElement.classList.add("embed-mode");
@@ -10,9 +18,8 @@ if (isEmbedded) {
   };
 
   const source = normalizeSource(parameters.get("utm_source"));
-  const tool = window.location.pathname.split("/").filter(Boolean).at(-1) || "evidence_tool";
 
-  document.addEventListener("DOMContentLoaded", () => {
+  onReady(() => {
     document.querySelectorAll('a[href^="https://researchaudio.io/subscribe"]').forEach((link) => {
       const url = new URL(link.href);
       url.searchParams.set("utm_source", source);
@@ -41,5 +48,29 @@ if (isEmbedded) {
       <a class="embed-open" href="${fullToolUrl.toString()}" target="_blank" rel="noopener noreferrer">Open full tool ↗</a>
     `;
     document.body.prepend(attribution);
+  });
+} else {
+  onReady(() => {
+    const intro = document.querySelector(".instrument-shell .instrument-intro");
+    if (!intro || document.querySelector(".tool-distribution")) return;
+
+    const libraryUrl = new URL("/embeds/", window.location.origin);
+    libraryUrl.searchParams.set("utm_source", tool);
+    libraryUrl.searchParams.set("utm_medium", "internal");
+    libraryUrl.searchParams.set("utm_campaign", "ai_evidence_lab");
+    libraryUrl.searchParams.set("utm_content", "embed_this_tool");
+    libraryUrl.hash = `embed-${tool}`;
+
+    const distribution = document.createElement("aside");
+    distribution.className = "tool-distribution";
+    distribution.setAttribute("aria-label", "Embed this free tool on another website");
+    distribution.innerHTML = `
+      <div>
+        <span>Publish this instrument</span>
+        <p>Put this working tool inside an article, documentation page, course, or resource library. It is free to embed and visitor inputs stay in the browser.</p>
+      </div>
+      <a href="${libraryUrl.toString()}">Get this tool’s embed code →</a>
+    `;
+    intro.insertAdjacentElement("afterend", distribution);
   });
 }

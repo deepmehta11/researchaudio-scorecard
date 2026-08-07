@@ -356,6 +356,49 @@ h2 {
   color: var(--muted);
 }
 
+.tool-distribution {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 28px;
+  align-items: center;
+  margin: -14px 0 48px;
+  padding: 20px 22px;
+  background: var(--blue-soft);
+  border: 2px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--yellow);
+}
+
+.tool-distribution span {
+  color: var(--blue);
+  font: 600 0.7rem/1.35 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tool-distribution p {
+  max-width: 760px;
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.tool-distribution a {
+  padding: 12px 14px;
+  color: var(--white);
+  background: var(--ink);
+  border: 2px solid var(--ink);
+  font: 700 0.72rem/1.35 var(--mono);
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.tool-distribution a:hover,
+.tool-distribution a:focus-visible {
+  color: var(--ink);
+  background: var(--yellow);
+}
+
 .calculator-layout,
 .diagnostic-layout {
   display: grid;
@@ -1611,6 +1654,11 @@ h2 {
   border-bottom: 2px solid var(--ink);
 }
 
+.embed-card:target {
+  outline: 6px solid var(--yellow);
+  outline-offset: 8px;
+}
+
 .embed-card-copy {
   display: grid;
   gap: 16px;
@@ -1882,6 +1930,10 @@ h2 {
   .embed-preview-section,
   .embed-faq,
   .embed-terms {
+    grid-template-columns: 1fr;
+  }
+
+  .tool-distribution {
     grid-template-columns: 1fr;
   }
 
