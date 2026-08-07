@@ -684,6 +684,13 @@ h2 {
   background: var(--yellow);
 }
 
+.action-button[href] {
+  display: block;
+  box-sizing: border-box;
+  text-align: center;
+  text-decoration: none;
+}
+
 .action-button:disabled {
   color: #78908d;
   background: transparent;

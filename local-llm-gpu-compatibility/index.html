@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Local LLM GPU Compatibility Checker | ResearchAudio</title>
+    <meta name="description" content="Check whether 7B, 13B, 32B, or 70B LLM weights fit common 8 GB to 141 GB GPU profiles at INT4, INT8, or FP16, then add context and KV cache." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/local-llm-gpu-compatibility/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Can your GPU run the local LLM?" />
+    <meta property="og:description" content="Compare model size, precision, GPU memory, usable capacity, and runtime reserve before downloading the checkpoint." />
+    <meta property="og:url" content="https://tools.researchaudio.io/local-llm-gpu-compatibility/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script src="../embed-mode.js"></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Local LLM GPU Compatibility Checker",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "url": "https://tools.researchaudio.io/local-llm-gpu-compatibility/",
+        "description": "A browser-local checker for comparing common LLM weight sizes and precisions with 8 GB to 141 GB GPU memory profiles.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do I know if my GPU can run a local LLM?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Compare the model weight memory, runtime headroom, KV cache, and usable GPU memory. A weight-only fit is the first gate, not proof that the full context, concurrency, runtime, or target speed will fit." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can a 24 GB GPU run a 70B LLM?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Not as a fully GPU-resident 70B INT4 deployment under this page's default 20 percent headroom and 90 percent usable-memory assumptions. The weight-plus-headroom target is about 39.12 GiB before KV cache. CPU offload or a different artifact changes the boundary and performance." }
+          },
+          {
+            "@type": "Question",
+            "name": "How much VRAM do 7B and 13B models need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "With 20 percent headroom and no KV cache, the planning floors are about 3.91, 7.82, and 15.65 GiB for a 7B model at INT4, INT8, and FP16, and 7.26, 14.53, and 29.06 GiB for a 13B model." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why does a memory fit not guarantee fast local inference?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Capacity and speed are different constraints. Delivered tokens per second also depend on memory bandwidth, compute support, runtime kernels, quantization format, CPU offload, context, batching, and multi-GPU communication." }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#compatibility-checker">Skip to the compatibility checker</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=local_llm_gpu_compatibility&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=local_llm_gpu_compatibility&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=local_llm_gpu_compatibility&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=local_llm_gpu_compatibility&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Instrument 15 / local inference</p>
+          <h1 id="hero-title">Can your GPU run the local LLM?</h1>
+          <p class="hero-deck">Choose a model size, weight format, and real GPU memory profile. Get the transparent weight-floor fit first, then add architecture and context before calling the deployment viable.</p>
+          <a class="hero-join-link" href="#compatibility-checker">Check the hardware →</a>
+        </div>
+        <aside class="lab-index" aria-label="Compatibility checker coverage">
+          <span>GPU profiles</span>
+          <strong>8</strong>
+          <p>From 8 GB consumer cards to 141 GB H200 capacity, with editable reserve and multi-GPU count.</p>
+        </aside>
+      </section>
+
+      <section class="instrument-shell" id="compatibility-checker" aria-labelledby="checker-title">
+        <div class="instrument-intro">
+          <div>
+            <p class="eyebrow">First gate / weight floor</p>
+            <h2 id="checker-title">Check the checkpoint before the download.</h2>
+          </div>
+          <p>Every calculation stays in this browser. This first pass excludes KV cache; the result links into the architecture-aware calculator with your selections preserved.</p>
+        </div>
+
+        <div class="calculator-layout">
+          <form class="input-panel" id="compatibility-form">
+            <label class="input-card" for="parameter-count">
+              <span class="field-copy"><strong>Model size</strong><small>Total parameters stored, not active MoE parameters.</small></span>
+              <span class="select-field">
+                <select id="parameter-count" name="parameterBillions">
+                  <option value="7">7B parameters</option>
+                  <option value="13" selected>13B parameters</option>
+                  <option value="32">32B parameters</option>
+                  <option value="70">70B parameters</option>
+                </select>
+              </span>
+            </label>
+            <label class="input-card" for="weight-bits">
+              <span class="field-copy"><strong>Weight precision</strong><small>Planning bit width before artifact-specific metadata.</small></span>
+              <span class="select-field">
+                <select id="weight-bits" name="bitsPerParameter">
+                  <option value="4" selected>INT4 · 4-bit</option>
+                  <option value="8">INT8 · 8-bit</option>
+                  <option value="16">FP16 / BF16 · 16-bit</option>
+                </select>
+              </span>
+            </label>
+            <label class="input-card" for="gpu-profile">
+              <span class="field-copy"><strong>GPU memory profile</strong><small>Capacity per device; vendor and runtime support still matter.</small></span>
+              <span class="select-field">
+                <select id="gpu-profile" name="vramPerGpu">
+                  <option value="8">8 GB GPU</option>
+                  <option value="12">RTX 3060 · 12 GB</option>
+                  <option value="16">16 GB GPU</option>
+                  <option value="24" selected>RTX 4090 · 24 GB</option>
+                  <option value="32">RTX 5090 · 32 GB</option>
+                  <option value="48">RTX 6000 Ada · 48 GB</option>
+                  <option value="80">A100 / H100 · 80 GB</option>
+                  <option value="141">H200 · 141 GB</option>
+                </select>
+              </span>
+            </label>
+            <label class="input-card" for="available-gpus">
+              <span class="field-copy"><strong>GPU count</strong><small>Aggregate capacity only; topology can restrict real sharding.</small></span>
+              <span class="number-field suffix"><span>GPU</span><input id="available-gpus" name="availableGpus" type="number" min="1" max="32" step="1" value="1" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="headroom">
+              <span class="field-copy"><strong>Runtime headroom</strong><small>Reserve for activations, kernels, workspace, and format overhead.</small></span>
+              <span class="select-field">
+                <select id="headroom" name="inferenceHeadroom">
+                  <option value="10">10%</option>
+                  <option value="20" selected>20%</option>
+                  <option value="30">30%</option>
+                </select>
+              </span>
+            </label>
+            <label class="input-card" for="usable-vram">
+              <span class="field-copy"><strong>Usable GPU memory</strong><small>Leave space for the runtime and fragmentation.</small></span>
+              <span class="select-field">
+                <select id="usable-vram" name="usableVramPercent">
+                  <option value="80">80%</option>
+                  <option value="90" selected>90%</option>
+                  <option value="95">95%</option>
+                </select>
+              </span>
+            </label>
+          </form>
+
+          <aside class="result-console" aria-live="polite" aria-labelledby="result-title">
+            <div class="tool-status"><span>Weight-floor fit</span><b id="compatibility-status">FITS FLOOR</b></div>
+            <p class="primary-result"><span id="minimum-gpus">1</span><small> GPU minimum</small></p>
+            <p class="result-label" id="result-title">Minimum devices at the selected usable capacity</p>
+            <div class="result-grid">
+              <div><span>Weight memory</span><strong id="compatibility-weights">0 GiB</strong></div>
+              <div><span>Planning target</span><strong id="compatibility-target">0 GiB</strong></div>
+              <div><span>Usable / GPU</span><strong id="compatibility-usable">0 GiB</strong></div>
+              <div><span>Available capacity</span><strong id="compatibility-capacity">0 GiB</strong></div>
+              <div><span>Capacity margin</span><strong id="compatibility-margin">0 GiB</strong></div>
+              <div><span>Hardware profile</span><strong id="compatibility-profile">24 GB profile</strong></div>
+            </div>
+            <p class="result-note" id="compatibility-note">Choose a model and GPU profile.</p>
+            <a class="action-button" id="open-full-calculator" href="../llm-gpu-memory-calculator/">Add context and architecture →</a>
+            <button class="secondary-button" id="share-compatibility" type="button">Share this fit check</button>
+            <button class="secondary-button" id="reset-compatibility" type="button">Restore 13B / 24 GB example</button>
+            <p class="share-status" id="share-status" role="status"></p>
+            <div class="result-join">
+              <span>Daily evidence brief · 51,000+ readers</span>
+              <a href="https://researchaudio.io/subscribe?utm_source=local_llm_gpu_compatibility&amp;utm_medium=tool_result&amp;utm_campaign=ai_evidence_lab&amp;utm_content=result_join">Get the next infrastructure teardown →</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="Compatibility checker boundaries">
+        <p class="eyebrow">Interpret the result</p>
+        <p><strong>Fit starts with weights.</strong><br />Quantized artifacts add metadata and sometimes preserve layers at higher precision.</p>
+        <p><strong>Context is separate.</strong><br />KV cache depends on layers, KV heads, head dimension, sequence length, and concurrency.</p>
+        <p><strong>Capacity is not speed.</strong><br />Bandwidth, kernels, offload, and interconnect decide delivered tokens per second.</p>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="matrix-title">
+        <div class="comparison-heading">
+          <div>
+            <p class="eyebrow">Static planning matrix</p>
+            <h2 id="matrix-title">Model size × precision × first viable profile.</h2>
+          </div>
+          <p>Each cell adds 20% runtime headroom, assumes 90% usable GPU memory, and excludes KV cache. “First profile” means the smallest capacity option on this page that clears the arithmetic floor.</p>
+        </div>
+        <p class="comparison-scroll-hint">Swipe the matrix horizontally →</p>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead><tr><th>Model</th><th>INT4</th><th>INT8</th><th>FP16 / BF16</th></tr></thead>
+            <tbody>
+              <tr><th>7B</th><td><strong>3.91 GiB</strong><small>8 GB profile</small></td><td><strong>7.82 GiB</strong><small>12 GB profile</small></td><td><strong>15.65 GiB</strong><small>24 GB profile</small></td></tr>
+              <tr><th>13B</th><td><strong>7.26 GiB</strong><small>12 GB profile</small></td><td><strong>14.53 GiB</strong><small>24 GB profile</small></td><td><strong>29.06 GiB</strong><small>48 GB profile</small></td></tr>
+              <tr><th>32B</th><td><strong>17.88 GiB</strong><small>24 GB profile</small></td><td><strong>35.76 GiB</strong><small>48 GB profile</small></td><td><strong>71.53 GiB</strong><small>80 GB profile</small></td></tr>
+              <tr><th>70B</th><td><strong>39.12 GiB</strong><small>48 GB profile</small></td><td><strong>78.23 GiB</strong><small>141 GB profile</small></td><td><strong>156.46 GiB</strong><small>Multi-GPU only</small></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">A GPU profile clearing this table can still fail after the exact checkpoint size, KV cache, runtime workspace, unsupported quantization kernels, or tensor-parallel constraints are included.</p>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="hardware-title">
+        <div class="comparison-heading">
+          <div>
+            <p class="eyebrow">Capacity references</p>
+            <h2 id="hardware-title">The presets use published GPU memory, not guessed capacity.</h2>
+          </div>
+          <p>The branded examples are capacity anchors. Board-partner variants and runtime support can differ, so confirm the exact card and software stack before buying or renting hardware.</p>
+        </div>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead><tr><th>Profile</th><th>Reference hardware</th><th>Usable at 90%</th></tr></thead>
+            <tbody>
+              <tr><th>8 GB</th><td>Generic consumer GPU profile</td><td>7.2 GiB</td></tr>
+              <tr><th>12 GB</th><td><a href="https://nvidianews.nvidia.com/_gallery/download_pdf/5ffddd19ed6ae56d364215c2/">NVIDIA GeForce RTX 3060</a></td><td>10.8 GiB</td></tr>
+              <tr><th>16 GB</th><td>Generic consumer or workstation profile</td><td>14.4 GiB</td></tr>
+              <tr><th>24 GB</th><td><a href="https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4090/">NVIDIA GeForce RTX 4090</a></td><td>21.6 GiB</td></tr>
+              <tr><th>32 GB</th><td><a href="https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/">NVIDIA GeForce RTX 5090</a></td><td>28.8 GiB</td></tr>
+              <tr><th>48 GB</th><td><a href="https://www.nvidia.com/en-us/products/workstations/rtx-6000/">NVIDIA RTX 6000 Ada</a></td><td>43.2 GiB</td></tr>
+              <tr><th>80 GB</th><td><a href="https://www.nvidia.com/en-us/data-center/a100/">NVIDIA A100 80GB</a> / <a href="https://www.nvidia.com/en-us/data-center/h100/">H100 SXM</a></td><td>72 GiB</td></tr>
+              <tr><th>141 GB</th><td><a href="https://www.nvidia.com/en-eu/data-center/h200/">NVIDIA H200</a></td><td>126.9 GiB</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="method-section" aria-labelledby="method-title">
+        <div>
+          <p class="eyebrow">Transparent method</p>
+          <h2 id="method-title">What “fits” means here—and what it does not.</h2>
+        </div>
+        <div class="method-copy">
+          <p><strong>Weight memory</strong> is total parameters × bits per parameter ÷ eight, converted to GiB. The checker adds the runtime headroom you select, then compares that target with the selected fraction of GPU memory.</p>
+          <p><strong>Minimum GPUs</strong> is an aggregate capacity division rounded up. It does not promise that the runtime supports the required tensor, pipeline, or expert parallel layout.</p>
+          <p><strong>KV cache is deliberately excluded</strong> because parameter count alone cannot reveal it. Open the full calculator and provide the exact layer count, KV heads, head dimension, context, concurrency, and cache precision.</p>
+          <p><strong>CPU or unified-memory offload</strong> can make a larger artifact runnable, but changes latency and throughput. This checker answers the narrower fully GPU-resident capacity question first.</p>
+          <a class="guide-link" href="../llm-gpu-memory-calculator/?utm_source=local_llm_gpu_compatibility&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=full_gpu_calculator">Open the architecture-aware GPU memory calculator →</a>
+          <a class="guide-link" href="../7b-vs-13b-llm-gpu-requirements/?utm_source=local_llm_gpu_compatibility&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=7b_13b_guide">See 7B and 13B 32K-cache examples →</a>
+          <a class="guide-link" href="../70b-llm-gpu-requirements/?utm_source=local_llm_gpu_compatibility&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=70b_guide">See a 70B architecture-aware worksheet →</a>
+          <a class="guide-link" href="https://huggingface.co/docs/accelerate/en/usage_guides/model_size_estimator/">Review the Hugging Face model memory estimator →</a>
+          <a class="guide-link" href="https://huggingface.co/docs/transformers/en/kv_cache">Review Transformers KV-cache strategies →</a>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="faq-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Local LLM compatibility FAQ</p>
+          <h2 id="faq-title">Capacity questions before the runtime benchmark.</h2>
+          <p>Use these answers as arithmetic boundaries. Validate the exact artifact and runtime before treating a profile as a hardware recommendation.</p>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>How do I know if my GPU can run a local LLM?</h3><p>Compare the model's weight memory, runtime headroom, KV cache, and usable GPU memory. This checker answers the weight-floor gate; the full calculator adds the architecture and context inputs.</p></article>
+          <article class="faq-item"><h3>Can a 24 GB GPU run a 70B LLM?</h3><p>Not as a fully GPU-resident 70B INT4 deployment under the default assumptions here. The weight-plus-20%-headroom target is about 39.12 GiB before KV cache. CPU offload or a different artifact changes the boundary and performance.</p></article>
+          <article class="faq-item"><h3>How much VRAM do 7B and 13B models need?</h3><p>With 20% headroom and no KV cache, 7B planning floors are 3.91, 7.82, and 15.65 GiB at INT4, INT8, and FP16. The 13B floors are 7.26, 14.53, and 29.06 GiB.</p></article>
+          <article class="faq-item"><h3>Why does a memory fit not guarantee fast local inference?</h3><p>Capacity and speed are different constraints. Tokens per second also depend on memory bandwidth, compute support, runtime kernels, quantization format, offload, context, batching, and multi-GPU communication.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Infrastructure without benchmark theatre</p>
+          <h2 id="subscribe-title">Get the next model deployment teardown.</h2>
+          <p>ResearchAudio turns model releases, hardware claims, and serving constraints into practical decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=local_llm_gpu_compatibility&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../llm-gpu-memory-calculator/">GPU memory calculator</a>
+        <a href="../kv-cache-calculator/">KV-cache calculator</a>
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=local_llm_gpu_compatibility&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script type="module" src="./checker.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>

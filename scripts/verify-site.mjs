@@ -10,6 +10,7 @@ import { classifyBenchmarkAudit, controls as benchmarkControls } from "../ai-ben
 import { calculateAgentRoi, classifyAgentRoi } from "../ai-agent-roi-calculator/calculator.js";
 import { calculateLlmApiCost } from "../llm-api-cost-calculator/calculator.js";
 import { calculateGpuMemory } from "../llm-gpu-memory-calculator/calculator.js";
+import { calculateCompatibility } from "../local-llm-gpu-compatibility/checker.js";
 import { calculateKvCache, MODEL_PRESETS } from "../kv-cache-calculator/calculator.js";
 import { calculatePromptCacheSavings } from "../prompt-caching-calculator/calculator.js";
 import { buildCodexConfig, normalizeFallbackFiles, normalizeMaxBytes } from "../codex-config-generator/generator.js";
@@ -23,7 +24,7 @@ const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const brandedToolsOrigin = "https://tools.researchaudio.io";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -42,6 +43,8 @@ const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, cost
   readFile(path.join(root, "llm-api-cost-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "llm-gpu-memory-calculator/index.html"), "utf8"),
   readFile(path.join(root, "llm-gpu-memory-calculator/calculator.js"), "utf8"),
+  readFile(path.join(root, "local-llm-gpu-compatibility/index.html"), "utf8"),
+  readFile(path.join(root, "local-llm-gpu-compatibility/checker.js"), "utf8"),
   readFile(path.join(root, "kv-cache-calculator/index.html"), "utf8"),
   readFile(path.join(root, "kv-cache-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "7b-vs-13b-llm-gpu-requirements/index.html"), "utf8"),
@@ -118,6 +121,7 @@ for (const [name, page, pathname] of [
   ["agent ROI calculator", roiHtml, "/ai-agent-roi-calculator/"],
   ["LLM API cost calculator", llmCostHtml, "/llm-api-cost-calculator/"],
   ["LLM GPU memory calculator", gpuMemoryHtml, "/llm-gpu-memory-calculator/"],
+  ["local LLM GPU compatibility checker", compatibilityHtml, "/local-llm-gpu-compatibility/"],
   ["LLM KV cache calculator", kvCacheHtml, "/kv-cache-calculator/"],
   ["prompt caching calculator", promptCacheHtml, "/prompt-caching-calculator/"],
   ["Codex config generator", codexConfigHtml, "/codex-config-generator/"],
@@ -776,6 +780,82 @@ assert.match(toolsHtml, /llm-gpu-memory-calculator/);
 assert.match(gpuMemoryHtml, /kv-cache-calculator/);
 assert.match(gpuGuideHtml, /kv-cache-calculator/);
 
+const defaultCompatibility = calculateCompatibility({
+  parameterBillions: 13,
+  bitsPerParameter: 4,
+  vramPerGpu: 24,
+  availableGpus: 1,
+  inferenceHeadroom: 20,
+  usableVramPercent: 90,
+});
+assert.equal(Number(defaultCompatibility.planningTargetGiB.toFixed(2)), 7.26);
+assert.equal(defaultCompatibility.minimumGpus, 1);
+assert.equal(defaultCompatibility.fitsAvailable, true);
+const shortCompatibility = calculateCompatibility({
+  parameterBillions: 70,
+  bitsPerParameter: 4,
+  vramPerGpu: 24,
+  availableGpus: 1,
+  inferenceHeadroom: 20,
+  usableVramPercent: 90,
+});
+assert.equal(Number(shortCompatibility.planningTargetGiB.toFixed(2)), 39.12);
+assert.equal(shortCompatibility.minimumGpus, 2);
+assert.equal(shortCompatibility.fitsAvailable, false);
+const edgeCompatibility = calculateCompatibility({
+  parameterBillions: 32,
+  bitsPerParameter: 16,
+  vramPerGpu: 80,
+  availableGpus: 1,
+  inferenceHeadroom: 20,
+  usableVramPercent: 90,
+});
+assert.equal(Number(edgeCompatibility.planningTargetGiB.toFixed(2)), 71.53);
+assert.equal(edgeCompatibility.minimumGpus, 1);
+assert.equal(edgeCompatibility.fitsAvailable, true);
+const multiGpuCompatibility = calculateCompatibility({
+  parameterBillions: 70,
+  bitsPerParameter: 16,
+  vramPerGpu: 80,
+  availableGpus: 1,
+  inferenceHeadroom: 20,
+  usableVramPercent: 90,
+});
+assert.equal(Number(multiGpuCompatibility.planningTargetGiB.toFixed(2)), 156.46);
+assert.equal(multiGpuCompatibility.minimumGpus, 3);
+assert.equal(multiGpuCompatibility.fitsAvailable, false);
+assert.match(compatibilityHtml, /<title>Local LLM GPU Compatibility Checker \| ResearchAudio<\/title>/);
+assert.equal((compatibilityHtml.match(/"@type": "WebApplication"/g) || []).length, 1, "compatibility checker should have one WebApplication schema");
+assert.equal((compatibilityHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "compatibility checker should have one FAQ schema");
+assert.doesNotThrow(() => parseStructuredData(compatibilityHtml), "compatibility checker structured data must be valid JSON");
+assert.match(compatibilityHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=local_llm_gpu_compatibility&amp;utm_medium=(tool|tool_result)&amp;utm_campaign=ai_evidence_lab/);
+assert.match(compatibilityHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
+assert.match(compatibilityHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
+assert.match(compatibilityHtml, /name="parameterBillions"/);
+assert.match(compatibilityHtml, /name="bitsPerParameter"/);
+assert.match(compatibilityHtml, /name="vramPerGpu"/);
+assert.match(compatibilityHtml, /name="availableGpus"/);
+assert.match(compatibilityHtml, /3\.91 GiB/);
+assert.match(compatibilityHtml, /39\.12 GiB/);
+assert.match(compatibilityHtml, /156\.46 GiB/);
+assert.match(compatibilityHtml, /nvidia\.com\/en-us\/geforce\/graphics-cards\/40-series\/rtx-4090/);
+assert.match(compatibilityHtml, /nvidia\.com\/en-us\/geforce\/graphics-cards\/50-series\/rtx-5090/);
+assert.match(compatibilityHtml, /nvidia\.com\/en-us\/products\/workstations\/rtx-6000/);
+assert.match(compatibilityHtml, /nvidia\.com\/en-eu\/data-center\/h200/);
+assert.match(compatibilityJs, /local_llm_gpu_compatibility_share/);
+assert.match(compatibilityJs, /add_context_and_architecture/);
+assert.match(toolsHtml, /local-llm-gpu-compatibility/);
+for (const question of [
+  "How do I know if my GPU can run a local LLM?",
+  "Can a 24 GB GPU run a 70B LLM?",
+  "How much VRAM do 7B and 13B models need?",
+  "Why does a memory fit not guarantee fast local inference?",
+]) {
+  const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  assert.match(compatibilityHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `compatibility FAQ question missing: ${question}`);
+  assert.match(compatibilityHtml, new RegExp(`"name": "${escapedQuestion}"`), `compatibility FAQ schema question missing: ${question}`);
+}
+
 const defaultKvCache = calculateKvCache({
   layers: 28,
   attentionHeads: 28,
@@ -829,7 +909,7 @@ assert.match(kvCacheHtml, /Qwen2\.5 32B/);
 assert.match(kvCacheHtml, /Qwen2\.5 72B/);
 assert.equal((kvCacheHtml.match(/class="scenario-card/g) || []).length, 3, "KV-cache calculator should contain three sourced scenarios");
 assert.match(toolsHtml, /kv-cache-calculator/);
-assert.equal((toolsHtml.match(/class="tool-card"/g) || []).length, 14, "tools hub should contain fourteen instruments");
+assert.equal((toolsHtml.match(/class="tool-card"/g) || []).length, 15, "tools hub should contain fifteen instruments");
 
 const defaultPromptCache = calculatePromptCacheSavings({
   requestsPerMonth: 100000,
@@ -1145,6 +1225,7 @@ for (const [name, page] of [
   ["AI agent ROI", roiHtml],
   ["LLM API cost", llmCostHtml],
   ["LLM GPU memory", gpuMemoryHtml],
+  ["local LLM GPU compatibility", compatibilityHtml],
   ["LLM KV cache", kvCacheHtml],
   ["prompt caching", promptCacheHtml],
   ["Codex config", codexConfigHtml],
@@ -1165,17 +1246,18 @@ assert.match(embedModeJs, /utm_content", "embed_this_tool"/);
 assert.match(embedModeJs, /libraryUrl\.hash = `embed-\$\{tool\}`/);
 assert.match(embedsHtml, /<title>Embed Free AI Tools on Your Website \| ResearchAudio<\/title>/);
 assert.match(embedsHtml, /href="https:\/\/researchaudio\.io\/p\/free-ai-tools-to-embed\?utm_source=embed_library&amp;utm_medium=organic_tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=publisher_guide"/);
-assert.equal((embedsHtml.match(/data-widget-url=/g) || []).length, 14, "embed library should offer fourteen widgets");
-assert.equal((embedsHtml.match(/data-copy-embed/g) || []).length, 14, "every widget should expose a copy action");
+assert.equal((embedsHtml.match(/data-widget-url=/g) || []).length, 15, "embed library should offer fifteen widgets");
+assert.equal((embedsHtml.match(/data-copy-embed/g) || []).length, 15, "every widget should expose a copy action");
 assert.doesNotThrow(() => parseStructuredData(embedsHtml), "embed library structured data must be valid JSON");
-assert.equal((embedsHtml.match(/"@type": "ListItem"/g) || []).length, 14, "embed library schema should enumerate fourteen widgets");
-assert.equal((embedsHtml.match(/"@type": "WebApplication"/g) || []).length, 14, "every embedded tool should have WebApplication schema");
+assert.equal((embedsHtml.match(/"@type": "ListItem"/g) || []).length, 15, "embed library schema should enumerate fifteen widgets");
+assert.equal((embedsHtml.match(/"@type": "WebApplication"/g) || []).length, 15, "every embedded tool should have WebApplication schema");
 assert.equal((embedsHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "embed library should have FAQ schema");
 for (const pathName of [
   "ai-benchmark-audit-checklist",
   "ai-agent-security-checklist",
   "llm-api-cost-calculator",
   "llm-gpu-memory-calculator",
+  "local-llm-gpu-compatibility",
   "kv-cache-calculator",
   "voice-ai-cost-calculator",
   "ai-agent-roi-calculator",
@@ -1227,9 +1309,9 @@ assert.match(qwen3GuideHtml, /14\.27 GiB/);
 assert.match(qwen3GuideHtml, /27\.93 GiB/);
 assert.match(qwen3GuideHtml, /20\.64 GiB/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 26, "sitemap should contain all twenty-six crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 27, "sitemap should contain all twenty-seven crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 26, "sitemap should publish twenty-six URL locations");
+assert.equal(sitemapUrls.length, 27, "sitemap should publish twenty-seven URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -1238,6 +1320,7 @@ assert.match(llms, /AI Agent Loop Diagnostic/);
 assert.match(llms, /AI Agent ROI Calculator/);
 assert.match(llms, /LLM API Cost Calculator/);
 assert.match(llms, /LLM GPU Memory Calculator/);
+assert.match(llms, /Local LLM GPU Compatibility Checker/);
 assert.match(llms, /LLM KV Cache Calculator/);
 assert.match(llms, /Prompt Caching Cost Calculator/);
 assert.match(llms, /Codex CLI config\.toml Generator/);
@@ -1270,4 +1353,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 14 tools, 1 activation kit, 1 embed library, 9 field guides, 26 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 15 tools, 1 activation kit, 1 embed library, 9 field guides, 27 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
