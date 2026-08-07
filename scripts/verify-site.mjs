@@ -23,7 +23,7 @@ const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const brandedToolsOrigin = "https://tools.researchaudio.io";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, kvCacheHtml, kvCacheJs, gpuGuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -44,6 +44,7 @@ const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, cost
   readFile(path.join(root, "llm-gpu-memory-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "kv-cache-calculator/index.html"), "utf8"),
   readFile(path.join(root, "kv-cache-calculator/calculator.js"), "utf8"),
+  readFile(path.join(root, "7b-vs-13b-llm-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "70b-llm-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "qwen2-5-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "qwen3-gpu-requirements/index.html"), "utf8"),
@@ -125,6 +126,7 @@ for (const [name, page, pathname] of [
   ["voice AI cost calculator", voiceCostHtml, "/voice-ai-cost-calculator/"],
   ["voice AI cost per minute guide", voiceCostPerMinuteHtml, "/voice-ai-cost-per-minute/"],
   ["AI receptionist cost worksheet", aiReceptionistCostHtml, "/ai-receptionist-cost/"],
+  ["7B versus 13B LLM GPU requirements guide", smallGpuGuideHtml, "/7b-vs-13b-llm-gpu-requirements/"],
   ["70B LLM GPU requirements guide", gpuGuideHtml, "/70b-llm-gpu-requirements/"],
   ["Qwen2.5 GPU requirements guide", qwenGuideHtml, "/qwen2-5-gpu-requirements/"],
   ["Qwen3 GPU requirements guide", qwen3GuideHtml, "/qwen3-gpu-requirements/"],
@@ -181,6 +183,30 @@ for (const [name, page, title, source, calculatorPath, questions] of [
     assert.match(page, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `${name} visible FAQ question missing: ${question}`);
     assert.match(page, new RegExp(`"name": "${escapedQuestion}"`), `${name} FAQ schema question missing: ${question}`);
   }
+}
+
+assert.match(smallGpuGuideHtml, /<title>7B vs 13B LLM GPU Requirements: INT4, INT8 &amp; FP16 \| ResearchAudio<\/title>/);
+assert.equal((smallGpuGuideHtml.match(/"@type": "TechArticle"/g) || []).length, 1, "7B versus 13B guide should have one TechArticle schema");
+assert.equal((smallGpuGuideHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "7B versus 13B guide should have one FAQPage schema");
+assert.doesNotThrow(() => parseStructuredData(smallGpuGuideHtml), "7B versus 13B guide structured data must be valid JSON");
+assert.match(smallGpuGuideHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=7b_13b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab/);
+assert.match(smallGpuGuideHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
+assert.match(smallGpuGuideHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
+assert.equal((smallGpuGuideHtml.match(/class="scenario-card/g) || []).length, 6, "7B versus 13B guide should contain six editable scenarios");
+assert.match(smallGpuGuideHtml, /8\.71 GiB/);
+assert.match(smallGpuGuideHtml, /13\.26 GiB/);
+assert.match(smallGpuGuideHtml, /23\.11 GiB/);
+assert.match(smallGpuGuideHtml, /37\.26 GiB/);
+assert.doesNotMatch(smallGpuGuideHtml, /TODO|PLACEHOLDER|example\.com/);
+for (const question of [
+  "How much VRAM does a 7B LLM need?",
+  "How much VRAM does a 13B LLM need?",
+  "Can a 7B model run on an 8 GB GPU?",
+  "Why can two 13B models need different amounts of VRAM?",
+]) {
+  const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  assert.match(smallGpuGuideHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `7B versus 13B visible FAQ question missing: ${question}`);
+  assert.match(smallGpuGuideHtml, new RegExp(`"name": "${escapedQuestion}"`), `7B versus 13B FAQ schema question missing: ${question}`);
 }
 
 assert.match(gptOssGuideHtml, /<title>gpt-oss 20B &amp; 120B Hardware Requirements \| ResearchAudio<\/title>/);
@@ -619,6 +645,32 @@ assert.equal(contextAwareGpuMemory.kvCacheMemoryGiB, 10);
 assert.ok(Math.abs(contextAwareGpuMemory.planningTargetGiB - 51.1155481339) < 0.000001);
 assert.equal(contextAwareGpuMemory.minimumGpus, 2);
 assert.equal(contextAwareGpuMemory.fitsAvailable, true);
+for (const scenario of [
+  { name: "7B GQA INT4", parameters: 7, layers: 32, kvHeads: 8, target: 8.71 },
+  { name: "7B GQA INT8", parameters: 7, layers: 32, kvHeads: 8, bits: 8, target: 12.62 },
+  { name: "7B GQA FP16", parameters: 7, layers: 32, kvHeads: 8, bits: 16, target: 20.45 },
+  { name: "13B GQA INT4", parameters: 13, layers: 40, kvHeads: 8, target: 13.26 },
+  { name: "13B GQA INT8", parameters: 13, layers: 40, kvHeads: 8, bits: 8, target: 20.53 },
+  { name: "13B GQA FP16", parameters: 13, layers: 40, kvHeads: 8, bits: 16, target: 35.06 },
+  { name: "7B MHA INT4", parameters: 7, layers: 32, kvHeads: 32, target: 23.11 },
+  { name: "13B MHA INT4", parameters: 13, layers: 40, kvHeads: 40, target: 37.26 },
+]) {
+  const result = calculateGpuMemory({
+    parameterBillions: scenario.parameters,
+    bitsPerParameter: scenario.bits || 4,
+    layers: scenario.layers,
+    kvHeads: scenario.kvHeads,
+    headDimension: 128,
+    contextTokens: 32768,
+    concurrentSequences: 1,
+    kvCacheBits: 16,
+    inferenceHeadroom: 20,
+    vramPerGpu: 48,
+    usableVramPercent: 90,
+    availableGpus: 1,
+  });
+  assert.equal(Number(result.planningTargetGiB.toFixed(2)), scenario.target, `${scenario.name} target should match the guide`);
+}
 const gptOss20b4k = calculateGpuMemory({
   parameterBillions: 20.91,
   bitsPerParameter: 4.25,
@@ -1003,7 +1055,8 @@ assert.match(voiceCostHtml, /elevenlabs\.io\/pricing/);
 assert.match(toolsHtml, /voice-ai-cost-calculator/);
 assert.match(toolsHtml, /voice-ai-cost-per-minute/);
 assert.match(toolsHtml, /ai-receptionist-cost/);
-assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 7, "tools hub should contain seven search field notes");
+assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 8, "tools hub should contain eight search field notes");
+assert.match(toolsHtml, /7b-vs-13b-llm-gpu-requirements/);
 assert.match(toolsHtml, /70b-llm-gpu-requirements/);
 assert.match(toolsHtml, /qwen2-5-gpu-requirements/);
 assert.match(toolsHtml, /qwen3-gpu-requirements/);
@@ -1157,6 +1210,9 @@ assert.match(embedsJs, /utm_campaign/);
 assert.match(embedsJs, /navigator\.clipboard\.writeText/);
 assert.match(toolsHtml, /href="\.\.\/embeds\/\?utm_source=evidence_lab/);
 
+assert.match(toolsHtml, /7B vs 13B LLM GPU requirements/);
+assert.match(gpuMemoryHtml, /7b-vs-13b-llm-gpu-requirements/);
+assert.match(gpuGuideHtml, /7b-vs-13b-llm-gpu-requirements/);
 assert.match(toolsHtml, /Qwen2\.5 GPU requirements/);
 assert.match(qwenGuideHtml, /Official Qwen2\.5 7B model card/);
 assert.match(qwenGuideHtml, /Official Qwen2\.5 32B model card/);
@@ -1171,9 +1227,9 @@ assert.match(qwen3GuideHtml, /14\.27 GiB/);
 assert.match(qwen3GuideHtml, /27\.93 GiB/);
 assert.match(qwen3GuideHtml, /20\.64 GiB/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 25, "sitemap should contain all twenty-five crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 26, "sitemap should contain all twenty-six crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 25, "sitemap should publish twenty-five URL locations");
+assert.equal(sitemapUrls.length, 26, "sitemap should publish twenty-six URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -1193,6 +1249,7 @@ assert.match(llms, /Embeddable AI Tools/);
 assert.match(llms, /The Fable 5 Cost Playbook/);
 assert.match(llms, /Voice AI Cost per Minute/);
 assert.match(llms, /AI Receptionist Cost Worksheet/);
+assert.match(llms, /7B vs 13B LLM GPU Requirements/);
 assert.match(llms, /70B LLM GPU Requirements/);
 assert.match(llms, /Qwen2\.5 GPU Requirements/);
 assert.match(llms, /Qwen3 GPU Requirements/);
@@ -1213,4 +1270,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 14 tools, 1 activation kit, 1 embed library, 8 field guides, 25 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 14 tools, 1 activation kit, 1 embed library, 9 field guides, 26 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

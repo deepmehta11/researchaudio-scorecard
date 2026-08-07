@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>7B vs 13B LLM GPU Requirements: INT4, INT8 &amp; FP16 | ResearchAudio</title>
+    <meta name="description" content="Compare 7B and 13B LLM GPU requirements across INT4, INT8, and FP16 with transparent weight floors, 32K KV-cache examples, runtime headroom, and editable GPU plans." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/7b-vs-13b-llm-gpu-requirements/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="7B vs 13B: the weight floor is not the serving target" />
+    <meta property="og:description" content="Compare six precision scenarios, then see how GQA versus MHA changes a full 32K KV cache." />
+    <meta property="og:url" content="https://tools.researchaudio.io/7b-vs-13b-llm-gpu-requirements/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "7B vs 13B LLM GPU Requirements: INT4, INT8 and FP16",
+        "description": "A transparent 7B and 13B inference-memory worksheet covering weight floors, architecture-aware KV cache, runtime headroom, usable VRAM, and editable GPU plans.",
+        "datePublished": "2026-08-07",
+        "dateModified": "2026-08-07",
+        "mainEntityOfPage": "https://tools.researchaudio.io/7b-vs-13b-llm-gpu-requirements/",
+        "author": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How much VRAM does a 7B LLM need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Seven billion parameters require about 3.26 GiB at exactly four bits, 6.52 GiB at eight bits, or 13.04 GiB at sixteen bits for raw weights. The illustrative 32K GQA serving profiles on this page reach 8.71, 12.62, and 20.45 GiB after an explicit four GiB KV cache and 20 percent runtime headroom." }
+          },
+          {
+            "@type": "Question",
+            "name": "How much VRAM does a 13B LLM need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Thirteen billion parameters require about 6.05 GiB at exactly four bits, 12.11 GiB at eight bits, or 24.21 GiB at sixteen bits for raw weights. The illustrative 32K GQA serving profiles on this page reach 13.26, 20.53, and 35.06 GiB after an explicit five GiB KV cache and 20 percent runtime headroom." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can a 7B model run on an 8 GB GPU?",
+            "acceptedAnswer": { "@type": "Answer", "text": "A four-bit 7B weight floor is about 3.26 GiB, so some short-context, lean-runtime, or partially offloaded workloads can fit. The full 32K GQA example on this page plans for 8.71 GiB and therefore does not fit when only 90 percent of an eight GiB GPU is usable." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why can two 13B models need different amounts of VRAM?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The same parameter count fixes only the raw weight floor. Layer count, KV-head count, head dimension, cached context, concurrency, quantization format, and serving runtime can change the total. In this page's 13B examples, replacing eight GQA KV heads with forty MHA KV heads raises the 32K cache from five GiB to twenty-five GiB." }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#scenarios">Skip to the GPU scenarios</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=7b_13b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=7b_13b_llm_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=7b_13b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=7b_13b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">LLM infrastructure / 7B versus 13B</p>
+          <h1 id="hero-title">The model size sets the floor. The cache decides the fit.</h1>
+          <p class="hero-deck">Compare 7B and 13B weight memory at INT4, INT8, and FP16, then include architecture, 32K cached context, runtime headroom, and actually usable GPU memory.</p>
+          <a class="hero-join-link" href="../llm-gpu-memory-calculator/?parameterBillions=13&amp;bitsPerParameter=4&amp;layers=40&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=16&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=7b_13b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_13b_int4">Open the editable 13B model →</a>
+        </div>
+        <aside class="lab-index" aria-label="Scenario scope">
+          <span>Editable profiles</span>
+          <strong>06</strong>
+          <p>Two parameter counts × three weight precisions. The architecture is an illustrative GQA profile, not a property shared by every 7B or 13B checkpoint.</p>
+        </aside>
+      </section>
+
+      <section class="method-section" aria-labelledby="floor-title">
+        <div>
+          <p class="eyebrow">Raw weight floors</p>
+          <h2 id="floor-title">The arithmetic is exact. The deployment is not.</h2>
+        </div>
+        <div class="method-copy formula-copy">
+          <p><strong>7B</strong><br /><code>INT4 3.26 · INT8 6.52 · FP16 13.04 GiB</code></p>
+          <p><strong>13B</strong><br /><code>INT4 6.05 · INT8 12.11 · FP16 24.21 GiB</code></p>
+          <p><strong>KV cache</strong><br /><code>2 × layers × KV heads × head dim × tokens × bytes</code></p>
+          <p><strong>Planning target</strong><br /><code>(weights + explicit KV cache) × 1.20 headroom</code></p>
+        </div>
+      </section>
+
+      <section class="scenario-section" id="scenarios" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">Illustrative 32K GQA profiles</p>
+          <h2 id="scenario-title">Hold the cache policy constant. Change the weights.</h2>
+          <p>The 7B examples use 32 layers and the 13B examples use 40 layers. Both use eight KV heads, 128 dimensions per head, one full 32,768-token sequence, 16-bit KV cache, 20% runtime headroom, and 90% usable VRAM. Replace those inputs with the exact model configuration and workload.</p>
+        </div>
+        <div class="scenario-grid guide-scenario-grid">
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=7&amp;bitsPerParameter=4&amp;layers=32&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=12&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=7b_13b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=7b_int4_32k">
+            <span>7B INT4 · 1 × 12 GiB</span>
+            <strong>8.71 GiB</strong>
+            <small>3.26 weights + 4.00 KV + headroom →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=7&amp;bitsPerParameter=8&amp;layers=32&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=16&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=7b_13b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=7b_int8_32k">
+            <span>7B INT8 · 1 × 16 GiB</span>
+            <strong>12.62 GiB</strong>
+            <small>6.52 weights + 4.00 KV + headroom →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=7&amp;bitsPerParameter=16&amp;layers=32&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=7b_13b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=7b_fp16_32k">
+            <span>7B FP16 · 1 × 24 GiB</span>
+            <strong>20.45 GiB</strong>
+            <small>13.04 weights + 4.00 KV + headroom →</small>
+          </a>
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=13&amp;bitsPerParameter=4&amp;layers=40&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=16&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=7b_13b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=13b_int4_32k">
+            <span>13B INT4 · 1 × 16 GiB</span>
+            <strong>13.26 GiB</strong>
+            <small>6.05 weights + 5.00 KV + headroom →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=13&amp;bitsPerParameter=8&amp;layers=40&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=7b_13b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=13b_int8_32k">
+            <span>13B INT8 · 1 × 24 GiB</span>
+            <strong>20.53 GiB</strong>
+            <small>12.11 weights + 5.00 KV + headroom →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=13&amp;bitsPerParameter=16&amp;layers=40&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=48&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=7b_13b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=13b_fp16_32k">
+            <span>13B FP16 · 1 × 48 GiB</span>
+            <strong>35.06 GiB</strong>
+            <small>24.21 weights + 5.00 KV + headroom →</small>
+          </a>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="cache-title">
+        <div class="comparison-heading">
+          <div>
+            <p class="eyebrow">The architecture trap</p>
+            <h2 id="cache-title">GQA and MHA can change the answer before concurrency starts.</h2>
+          </div>
+          <p>Both comparisons keep model size, INT4 weights, 32K context, 16-bit cache, and 20% headroom constant. Only the number of KV heads changes.</p>
+        </div>
+        <p class="comparison-scroll-hint">Swipe the matrix horizontally →</p>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead><tr><th scope="col">Profile</th><th scope="col">GQA example</th><th scope="col">MHA example</th><th scope="col">Difference</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">7B · 32 layers</th><td>8 KV heads · 4 GiB cache<br /><strong>8.71 GiB target</strong></td><td>32 KV heads · 16 GiB cache<br /><strong>23.11 GiB target</strong></td><td>+14.40 GiB</td></tr>
+              <tr><th scope="row">13B · 40 layers</th><td>8 KV heads · 5 GiB cache<br /><strong>13.26 GiB target</strong></td><td>40 KV heads · 25 GiB cache<br /><strong>37.26 GiB target</strong></td><td>+24.00 GiB</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">These are architecture examples, not universal 7B or 13B specifications. Read <code>num_hidden_layers</code>, <code>num_key_value_heads</code>, and head dimension from the exact configuration before reserving a GPU.</p>
+      </section>
+
+      <section class="principle-strip" aria-label="Deployment boundaries">
+        <p class="eyebrow">Do not collapse the decision</p>
+        <p><strong>Fit is not speed.</strong><br />Capacity does not prove useful latency or tokens per second.</p>
+        <p><strong>Context is allocated memory.</strong><br />A longer or fuller cache can erase the saving from quantized weights.</p>
+        <p><strong>Concurrency repeats cache.</strong><br />Every fully allocated sequence multiplies the KV-cache budget.</p>
+      </section>
+
+      <section class="guide-section" aria-labelledby="guide-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Build the exact plan</p>
+          <h2 id="guide-title">Use the checkpoint and workload, not the label.</h2>
+          <p>Enter the exact parameter count or checkpoint size, then copy the layer count, KV heads, and head dimension from the model configuration. Set cached context and concurrent sequences from the serving target—not the advertised maximum context window.</p>
+          <a class="guide-link" href="../llm-gpu-memory-calculator/?utm_source=7b_13b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=blank_gpu_calculator">Open the LLM GPU memory calculator →</a>
+          <a class="guide-link" href="../kv-cache-calculator/?utm_source=7b_13b_llm_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=kv_cache_calculator">Calculate GQA, MHA, context, and concurrency directly →</a>
+          <a class="guide-link" href="../70b-llm-gpu-requirements/?utm_source=7b_13b_llm_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=70b_guide">Compare the 70B deployment boundary →</a>
+          <a class="guide-link" href="https://huggingface.co/docs/accelerate/en/usage_guides/model_size_estimator">Check the Hugging Face model memory estimator →</a>
+          <a class="guide-link" href="https://huggingface.co/docs/transformers/en/kv_cache">Review current Transformers KV-cache strategies →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>How much VRAM does a 7B LLM need?</h3><p>The raw floor is 3.26 GiB at INT4, 6.52 GiB at INT8, or 13.04 GiB at FP16. This page's one-sequence 32K GQA examples plan for 8.71, 12.62, and 20.45 GiB after cache and headroom.</p></article>
+          <article class="faq-item"><h3>How much VRAM does a 13B LLM need?</h3><p>The raw floor is 6.05 GiB at INT4, 12.11 GiB at INT8, or 24.21 GiB at FP16. This page's one-sequence 32K GQA examples plan for 13.26, 20.53, and 35.06 GiB after cache and headroom.</p></article>
+          <article class="faq-item"><h3>Can a 7B model run on an 8 GB GPU?</h3><p>The INT4 weights can fit mathematically, but this page's full 32K GQA profile does not fit in 7.2 GiB of usable capacity. A shorter cache, leaner runtime, lower cache precision, or CPU offload can change the result.</p></article>
+          <article class="faq-item"><h3>Why can two 13B models need different amounts of VRAM?</h3><p>Parameter count fixes only the weight floor. In the examples above, changing from eight GQA KV heads to forty MHA KV heads raises the 32K cache from 5 to 25 GiB before concurrency.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Infrastructure without the benchmark theatre</p>
+          <h2 id="subscribe-title">Get the next model deployment teardown.</h2>
+          <p>ResearchAudio turns model releases, hardware claims, and serving constraints into practical decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=7b_13b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../llm-gpu-memory-calculator/">GPU memory calculator</a>
+        <a href="../70b-llm-gpu-requirements/">70B guide</a>
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=7b_13b_llm_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>

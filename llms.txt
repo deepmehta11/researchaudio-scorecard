@@ -43,6 +43,8 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   A vendor-neutral formula for stack cost per minute, monthly AI spend, human handoffs, and loaded cost per resolved call.
 - AI Receptionist Cost Worksheet: https://tools.researchaudio.io/ai-receptionist-cost/
   Three editable call-handling scenarios plus a measurement checklist for comparing AI and human outcome cost.
+- 7B vs 13B LLM GPU Requirements: https://tools.researchaudio.io/7b-vs-13b-llm-gpu-requirements/
+  Compares INT4, INT8, and FP16 weight floors with explicit 32K GQA and MHA KV-cache examples, runtime headroom, and editable GPU plans.
 - 70B LLM GPU Requirements: https://tools.researchaudio.io/70b-llm-gpu-requirements/
   Compares INT4, INT8, and FP16 through explicit weight, KV-cache, runtime-headroom, and usable-VRAM assumptions.
 - Qwen2.5 GPU Requirements: https://tools.researchaudio.io/qwen2-5-gpu-requirements/
