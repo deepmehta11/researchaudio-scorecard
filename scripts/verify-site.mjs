@@ -281,7 +281,7 @@ for (const question of [
   assert.match(qwen3GuideHtml, new RegExp(`"name": "${escapedQuestion}"`), `Qwen3 FAQ schema question missing: ${question}`);
 }
 
-assert.match(deepseekV4GuideHtml, /<title>DeepSeek V4 Flash GPU Requirements &amp; VRAM \| ResearchAudio<\/title>/);
+assert.match(deepseekV4GuideHtml, /<title>DeepSeek V4 Flash 0731 GPU Requirements \| ResearchAudio<\/title>/);
 assert.equal((deepseekV4GuideHtml.match(/"@type": "TechArticle"/g) || []).length, 1, "DeepSeek V4 guide should have one TechArticle schema");
 assert.equal((deepseekV4GuideHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "DeepSeek V4 guide should have one FAQPage schema");
 assert.doesNotThrow(() => parseStructuredData(deepseekV4GuideHtml), "DeepSeek V4 guide structured data must be valid JSON");
@@ -292,17 +292,19 @@ assert.match(deepseekV4GuideHtml, /utm_content=direct_join/);
 assert.match(deepseekV4GuideHtml, /subscribe-direct-fallback/);
 assert.equal((deepseekV4GuideHtml.match(/class="scenario-card/g) || []).length, 4, "DeepSeek V4 guide should contain four editable scenarios");
 assert.match(deepseekV4GuideHtml, /parameterBillions=284/);
-assert.match(deepseekV4GuideHtml, /checkpointGiB=148\.66/);
+assert.match(deepseekV4GuideHtml, /checkpointGiB=155\.43/);
 assert.match(deepseekV4GuideHtml, /contextTokens=1048576/);
-assert.match(deepseekV4GuideHtml, /159,617,149,040 bytes/);
-assert.match(deepseekV4GuideHtml, /huggingface\.co\/deepseek-ai\/DeepSeek-V4-Flash/);
+assert.match(deepseekV4GuideHtml, /166,886,535,336 bytes/);
+assert.match(deepseekV4GuideHtml, /huggingface\.co\/deepseek-ai\/DeepSeek-V4-Flash-0731/);
 assert.match(deepseekV4GuideHtml, /arxiv\.org\/abs\/2606\.19348/);
+assert.match(deepseekV4GuideHtml, /DSpark speculative-decoding module/);
 assert.doesNotMatch(deepseekV4GuideHtml, /TODO|PLACEHOLDER|example\.com/);
 for (const question of [
   "How much GPU memory does DeepSeek V4 Flash need?",
   "Can DeepSeek V4 Flash run on two 80 GB GPUs?",
-  "Why does a 13B-active model need the full 148.66 GiB checkpoint?",
+  "Why does a 13B-active model need the full 155.43 GiB checkpoint?",
   "How does the one-million-token context affect DeepSeek V4 Flash VRAM?",
+  "What changed in DeepSeek V4 Flash 0731?",
 ]) {
   const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   assert.match(deepseekV4GuideHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `DeepSeek V4 visible FAQ question missing: ${question}`);
@@ -794,15 +796,15 @@ for (const scenario of [
   assert.equal(Number(result.planningTargetGiB.toFixed(2)), scenario.target, `Qwen3 ${scenario.name} target should match the guide`);
 }
 for (const scenario of [
-  { context: 32768, headroom: 10, target: 166.48 },
-  { context: 131072, headroom: 20, target: 191.29 },
-  { context: 393216, headroom: 20, target: 217.09 },
-  { context: 1048576, headroom: 20, target: 281.59 },
+  { context: 32768, headroom: 10, target: 173.93 },
+  { context: 131072, headroom: 20, target: 199.42 },
+  { context: 393216, headroom: 20, target: 225.22 },
+  { context: 1048576, headroom: 20, target: 289.72 },
 ]) {
   const result = calculateGpuMemory({
     parameterBillions: 284,
     bitsPerParameter: 4,
-    checkpointGiB: 148.66,
+    checkpointGiB: 155.43,
     layers: 43,
     kvHeads: 1,
     headDimension: 512,
@@ -1429,10 +1431,10 @@ assert.match(qwen3GuideHtml, /14\.27 GiB/);
 assert.match(qwen3GuideHtml, /27\.93 GiB/);
 assert.match(qwen3GuideHtml, /20\.64 GiB/);
 assert.match(toolsHtml, /DeepSeek V4 Flash GPU requirements/);
-assert.match(deepseekV4GuideHtml, /166\.48 GiB/);
-assert.match(deepseekV4GuideHtml, /191\.29 GiB/);
-assert.match(deepseekV4GuideHtml, /217\.09 GiB/);
-assert.match(deepseekV4GuideHtml, /281\.59 GiB/);
+assert.match(deepseekV4GuideHtml, /173\.93 GiB/);
+assert.match(deepseekV4GuideHtml, /199\.42 GiB/);
+assert.match(deepseekV4GuideHtml, /225\.22 GiB/);
+assert.match(deepseekV4GuideHtml, /289\.72 GiB/);
 
 assert.equal((sitemap.match(/<url>/g) || []).length, 29, "sitemap should contain all twenty-nine crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
