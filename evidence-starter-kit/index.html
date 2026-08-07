@@ -41,7 +41,7 @@
       <nav class="lab-nav" aria-label="Primary navigation">
         <a href="../tools/?utm_source=evidence_starter_kit&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab">All tools</a>
         <a class="briefings-link" href="https://researchaudio.io/?utm_source=evidence_starter_kit&amp;utm_medium=activation&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
-        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=evidence_starter_kit&amp;utm_medium=activation&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+        <a class="join-link" href="#subscribe">Join free</a>
       </nav>
     </header>
 
@@ -57,6 +57,20 @@
           <strong>20</strong>
           <p>Minutes. No login. No uploaded data. Each test ends with a concrete next inspection.</p>
         </aside>
+      </section>
+
+      <section class="activation-strip onboarding-loop" id="onboarding-loop" aria-labelledby="onboarding-title" hidden>
+        <div>
+          <p class="eyebrow">You are subscribed</p>
+          <h2 id="onboarding-title">Bring one teammate into the lab.</h2>
+          <p>Share the four-test sequence with the person making your next AI adoption decision. They can use every tool free, then join from the page if the work earns their trust.</p>
+        </div>
+        <div class="starter-actions" data-share-panel>
+          <span class="instrument-code">One useful introduction</span>
+          <button class="action-button" type="button" data-share-kit data-share-content="onboarding_prompt">Share with one teammate</button>
+          <p class="share-status" role="status"></p>
+          <p>The shared link is campaign-tagged so referred visits and signups can be measured without collecting extra personal data.</p>
+        </div>
       </section>
 
       <section class="starter-section" aria-labelledby="sequence-title">
@@ -109,10 +123,10 @@
           <h2 id="share-title">Pass the lab to one teammate.</h2>
           <p>A useful result travels further than a newsletter pitch. Share the four-test sequence with the person making the next AI adoption decision.</p>
         </div>
-        <div class="starter-actions">
-          <button class="action-button" id="share-kit" type="button">Share the starter kit</button>
-          <p class="share-status" id="share-status" role="status"></p>
-          <p><strong>Reader reward:</strong> your personal referral link appears in ResearchAudio emails. Three confirmed referrals unlock the AI Launch Evidence Checklist PDF automatically.</p>
+        <div class="starter-actions" data-share-panel>
+          <button class="action-button" type="button" data-share-kit data-share-content="starter_kit">Share the starter kit</button>
+          <p class="share-status" role="status"></p>
+          <p>The recipient can use every tool without an account, then join ResearchAudio directly from this page.</p>
         </div>
       </section>
 
@@ -122,10 +136,9 @@
           <h2 id="join-title">Get the evidence behind the next AI launch.</h2>
           <p>ResearchAudio traces primary sources, costs, limitations, and adoption questions for engineers and builders.</p>
         </div>
-        <div class="starter-join-card">
-          <span>Daily evidence brief · 51,000+ readers</span>
-          <a href="https://researchaudio.io/subscribe?utm_source=evidence_starter_kit&amp;utm_medium=activation&amp;utm_campaign=ai_evidence_lab&amp;utm_content=final_join">Join ResearchAudio free →</a>
-          <small>Already subscribed? Your first briefing and personal referral link will arrive by email.</small>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=evidence_starter_kit&amp;utm_medium=activation&amp;utm_campaign=ai_evidence_lab&amp;utm_content=final_join">Subscribe directly on ResearchAudio.</a></p></noscript>
         </div>
       </section>
     </main>

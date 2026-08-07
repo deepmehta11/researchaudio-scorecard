@@ -1063,13 +1063,20 @@ assert.match(starterHtml, /application\/ld\+json/);
 assert.match(starterHtml, /social-card\.png/);
 assert.match(starterHtml, /51,000\+/);
 assert.match(starterHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=evidence_starter_kit/);
+assert.match(starterHtml, /class="join-link" href="#subscribe"/);
+assert.match(starterHtml, /id="onboarding-loop"[\s\S]*?hidden/);
+assert.match(starterHtml, /data-share-content="onboarding_prompt"/);
+assert.match(starterHtml, /subscribe-forms\.beehiiv\.com\/v3\/loader\.js/);
+assert.match(starterHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
 assert.equal((starterHtml.match(/data-step=/g) || []).length, 4, "starter kit should contain four progress steps");
-assert.match(starterHtml, /Three confirmed referrals unlock the AI Launch Evidence Checklist PDF automatically/);
 assert.match(starterJs, /researchaudio_evidence_starter_progress_v1/);
 assert.match(starterJs, /utm_source", "evidence_starter_share"/);
 assert.match(starterJs, /utm_medium", "referral"/);
 assert.match(starterJs, /utm_campaign", "ai_evidence_lab"/);
 assert.match(starterJs, /utm_medium"\) === "onboarding"/);
+assert.match(starterJs, /querySelector\("#onboarding-loop"\)\.hidden = false/);
+assert.match(starterJs, /querySelector\("#subscribe"\)\.hidden = true/);
+assert.match(starterJs, /querySelectorAll\("\[data-share-kit\]"\)/);
 assert.doesNotMatch(starterHtml, /TODO|PLACEHOLDER|example\.com/);
 
 for (const [name, page] of [

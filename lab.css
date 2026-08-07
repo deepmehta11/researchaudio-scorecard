@@ -1021,6 +1021,20 @@ h2 {
   border-top: 2px solid var(--ink);
 }
 
+.onboarding-loop[hidden],
+.subscribe-block[hidden] {
+  display: none;
+}
+
+.onboarding-loop {
+  padding-top: 72px;
+  padding-bottom: 72px;
+}
+
+.onboarding-loop .starter-actions > span {
+  color: var(--yellow);
+}
+
 .resource-section {
   padding: 96px 0;
   border-top: 2px solid var(--ink);
