@@ -40,6 +40,8 @@ Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain con
 
 Every instrument uses the dedicated Beehiiv acquisition form and keeps user inputs in the browser.
 
+Every acquisition page also exposes a page-attributed hosted signup fallback above the embed, so visitors can still join when third-party form loading is delayed or blocked.
+
 Every result share is restorable: the recipient opens the sender's exact score, diagnosis, budget, or business case with referral UTMs intact instead of landing on a blank default tool.
 
 Every main-branch deployment also verifies the site and submits all sitemap URLs to the IndexNow global endpoint after the public ownership key is available. IndexNow speeds discovery by participating search engines; it does not guarantee crawling, indexing, or rankings.

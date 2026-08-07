@@ -162,6 +162,8 @@ for (const [name, page, pathname] of [
   assert.equal((page.match(/static\.cloudflareinsights\.com\/beacon\.min\.js/g) || []).length, 1, `${name} should load one Cloudflare Web Analytics beacon`);
   assert.equal((page.match(/data-cf-beacon=/g) || []).length, 1, `${name} should configure one Cloudflare Web Analytics beacon`);
   assert.match(page, new RegExp(`data-cf-beacon='[^']*${cloudflareWebAnalyticsToken}[^']*'`), `${name} should use the ResearchAudio Web Analytics site tag`);
+  assert.equal((page.match(/class="subscribe-direct-fallback"/g) || []).length, 1, `${name} should expose one hosted signup fallback`);
+  assert.match(page, /class="subscribe-direct-fallback">[\s\S]{0,700}?https:\/\/researchaudio\.io\/subscribe\?utm_source=[^&"]+&amp;utm_medium=[^&"]+&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join/, `${name} hosted signup fallback should preserve page attribution`);
 }
 
 for (const [name, page, title, source, calculatorPath, questions] of [
@@ -653,7 +655,7 @@ assert.doesNotThrow(() => parseStructuredData(securityGuideHtml), "security guid
 assert.match(securityGuideHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
 assert.match(securityGuideHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
 assert.match(securityGuideHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=ai_agent_security_checklist&amp;utm_medium=(organic_guide|tool_result)&amp;utm_campaign=ai_evidence_lab/);
-assert.match(securityGuideHtml, /utm_content=subscribe_fallback/);
+assert.match(securityGuideHtml, /utm_content=direct_join/);
 assert.match(securityGuideHtml, /genai\.owasp\.org/);
 assert.match(securityGuideHtml, /code\.claude\.com\/docs\/en\/security/);
 assert.match(securityGuideHtml, /airc\.nist\.gov/);
@@ -674,7 +676,7 @@ assert.doesNotThrow(() => parseStructuredData(benchmarkGuideHtml), "benchmark au
 assert.match(benchmarkGuideHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
 assert.match(benchmarkGuideHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
 assert.match(benchmarkGuideHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=ai_benchmark_audit_checklist&amp;utm_medium=(organic_guide|tool_result)&amp;utm_campaign=ai_evidence_lab/);
-assert.match(benchmarkGuideHtml, /utm_content=subscribe_fallback/);
+assert.match(benchmarkGuideHtml, /utm_content=direct_join/);
 assert.match(benchmarkGuideHtml, /developers\.openai\.com\/api\/docs\/guides\/evaluation-best-practices/);
 assert.match(benchmarkGuideHtml, /platform\.claude\.com\/docs\/en\/test-and-evaluate\/develop-tests/);
 assert.match(benchmarkGuideHtml, /metr\.org\/blog\/2026-1-29-time-horizon-1-1/);
