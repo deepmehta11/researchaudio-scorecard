@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DeepSeek V4 Flash GPU Requirements &amp; VRAM | ResearchAudio</title>
+    <meta name="description" content="Size DeepSeek V4 Flash from its official 148.66 GiB checkpoint, 284B total parameters, 13B active parameters, and editable 32K-to-1M context scenarios." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/deepseek-v4-flash-gpu-requirements/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="DeepSeek V4 Flash: the 148.66 GiB checkpoint behind the 13B-active claim" />
+    <meta property="og:description" content="Separate resident weights, active MoE parameters, context allocation, runtime reserve, and usable GPU memory before choosing hardware." />
+    <meta property="og:url" content="https://tools.researchaudio.io/deepseek-v4-flash-gpu-requirements/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "DeepSeek V4 Flash GPU Requirements and VRAM Planning",
+        "description": "A primary-source deployment worksheet covering the official DeepSeek V4 Flash checkpoint, total and active parameters, context allocation, runtime headroom, usable VRAM, and editable GPU plans.",
+        "datePublished": "2026-08-07",
+        "dateModified": "2026-08-07",
+        "mainEntityOfPage": "https://tools.researchaudio.io/deepseek-v4-flash-gpu-requirements/",
+        "author": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How much GPU memory does DeepSeek V4 Flash need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The official DeepSeek V4 Flash repository contains 46 safetensors files totaling 148.66 GiB. Two 80 GiB-class GPUs provide only 144 GiB when 90 percent of listed memory is usable, so three 80 GiB-class GPUs are the first practical all-GPU planning tier before measuring the exact runtime." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can DeepSeek V4 Flash run on two 80 GB GPUs?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Not as a straightforward full-checkpoint GPU-resident plan with a 10 percent reserve. The official artifact is 148.66 GiB, while two 80 GiB-class GPUs at 90 percent usable memory expose 144 GiB before KV cache and runtime allocations. CPU or system-memory offload changes the question from capacity to measured latency." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why does a 13B-active model need the full 148.66 GiB checkpoint?",
+            "acceptedAnswer": { "@type": "Answer", "text": "DeepSeek V4 Flash is a mixture-of-experts model with 284 billion total parameters and about 13 billion activated per token. Routing lowers per-token compute, but the deployed checkpoint still contains the inactive experts, embeddings, attention layers, routing weights, and quantization metadata." }
+          },
+          {
+            "@type": "Question",
+            "name": "How does the one-million-token context affect DeepSeek V4 Flash VRAM?",
+            "acceptedAnswer": { "@type": "Answer", "text": "DeepSeek officially supports one million tokens and uses hybrid compressed attention. A portable calculator built from the exposed 43 layers, one KV head, and 512 head dimension produces an 86 GiB dense-cache comparison at one million tokens, but that is not a claim about DeepSeek's optimized HCA runtime allocation. Benchmark the exact engine and cache format." }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#deepseek-v4-scenarios">Skip to the DeepSeek V4 GPU scenarios</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=deepseek_v4_flash_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=deepseek_v4_flash_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=deepseek_v4_flash_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=deepseek_v4_flash_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">DeepSeek V4 Flash / deployment worksheet</p>
+          <h1 id="hero-title">13B active. 148.66 GiB resident.</h1>
+          <p class="hero-deck">Start with DeepSeek's official 284B-total, 13B-active mixed FP4/FP8 release. Then add context, runtime reserve, and usable GPU memory before treating “active parameters” as a hardware requirement.</p>
+          <a class="hero-join-link" href="../llm-gpu-memory-calculator/?parameterBillions=284&amp;bitsPerParameter=4&amp;checkpointGiB=148.66&amp;layers=43&amp;kvHeads=1&amp;headDimension=512&amp;contextTokens=131072&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=80&amp;usableVramPercent=90&amp;availableGpus=3&amp;utm_source=deepseek_v4_flash_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_128k_plan">Open the editable 128K plan →</a>
+        </div>
+        <aside class="lab-index" aria-label="DeepSeek V4 Flash hardware scope">
+          <span>Official weight files</span>
+          <strong>46</strong>
+          <p>159,617,149,040 bytes across the release safetensors: 148.66 GiB before cache, runtime workspace, and serving reserve.</p>
+        </aside>
+      </section>
+
+      <section class="scenario-section" id="deepseek-v4-scenarios" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">Quick answer / official artifact</p>
+          <h2 id="scenario-title">Three 80 GiB-class GPUs are the first clean planning tier.</h2>
+          <p>Two devices at 90% usable memory expose 144 GiB—less than the 148.66 GiB artifact itself. These editable profiles keep the exact checkpoint override and vary only the cached context and runtime reserve.</p>
+        </div>
+        <div class="scenario-grid guide-scenario-grid">
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=284&amp;bitsPerParameter=4&amp;checkpointGiB=148.66&amp;layers=43&amp;kvHeads=1&amp;headDimension=512&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=10&amp;vramPerGpu=80&amp;usableVramPercent=90&amp;availableGpus=3&amp;utm_source=deepseek_v4_flash_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=32k_scenario">
+            <span>32K comparison · 3 × 80 GiB</span>
+            <strong>166.48 GiB</strong>
+            <small>148.66 checkpoint + 2.69 cache + 10% reserve →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=284&amp;bitsPerParameter=4&amp;checkpointGiB=148.66&amp;layers=43&amp;kvHeads=1&amp;headDimension=512&amp;contextTokens=131072&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=80&amp;usableVramPercent=90&amp;availableGpus=3&amp;utm_source=deepseek_v4_flash_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=128k_scenario">
+            <span>128K comparison · 3 × 80 GiB</span>
+            <strong>191.29 GiB</strong>
+            <small>148.66 checkpoint + 10.75 cache + 20% reserve →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=284&amp;bitsPerParameter=4&amp;checkpointGiB=148.66&amp;layers=43&amp;kvHeads=1&amp;headDimension=512&amp;contextTokens=393216&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=80&amp;usableVramPercent=90&amp;availableGpus=4&amp;utm_source=deepseek_v4_flash_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=384k_scenario">
+            <span>384K comparison · 4 × 80 GiB</span>
+            <strong>217.09 GiB</strong>
+            <small>148.66 checkpoint + 32.25 cache + 20% reserve →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=284&amp;bitsPerParameter=4&amp;checkpointGiB=148.66&amp;layers=43&amp;kvHeads=1&amp;headDimension=512&amp;contextTokens=1048576&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=80&amp;usableVramPercent=90&amp;availableGpus=4&amp;utm_source=deepseek_v4_flash_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=1m_scenario">
+            <span>1M comparison · 4 × 80 GiB</span>
+            <strong>281.59 GiB</strong>
+            <small>148.66 checkpoint + 86.00 cache + 20% reserve →</small>
+          </a>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="matrix-title">
+        <div class="comparison-heading">
+          <div>
+            <p class="eyebrow">Claim vs deployment input</p>
+            <h2 id="matrix-title">Active parameters describe compute. The files describe residency.</h2>
+          </div>
+          <p>DeepSeek publishes the model shape and precision mix. The official repository exposes the actual artifact size. Runtime workspace, cache policy, tensor parallelism, quantized kernels, and offload determine what happens after the files load.</p>
+        </div>
+        <p class="comparison-scroll-hint">Swipe the matrix horizontally →</p>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead>
+              <tr><th scope="col">Input</th><th scope="col">Official value</th><th scope="col">What it changes</th><th scope="col">What it does not prove</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Total parameters</th><td>284B</td><td>Checkpoint and resident-weight scale</td><td>Per-token compute</td></tr>
+              <tr><th scope="row">Activated parameters</th><td>13B</td><td>MoE work routed per token</td><td>Weight memory to load</td></tr>
+              <tr><th scope="row">Released precision</th><td>FP4 experts + mostly FP8 elsewhere</td><td>Artifact size and supported kernels</td><td>Runtime overhead</td></tr>
+              <tr><th scope="row">Official checkpoint</th><td>148.66 GiB</td><td>Exact downloadable weight floor</td><td>Cache, workspace, or latency</td></tr>
+              <tr><th scope="row">Maximum context</th><td>1,048,576 tokens</td><td>Possible context boundary</td><td>Preallocated cache policy</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">The artifact total was calculated from the 46 safetensors file sizes in DeepSeek's official Hugging Face repository on August 7, 2026. Recheck the repository if DeepSeek revises the release.</p>
+      </section>
+
+      <section class="principle-strip" aria-label="DeepSeek V4 Flash deployment boundaries">
+        <p class="eyebrow">Read the estimate</p>
+        <p><strong>Active is not resident.</strong><br />MoE routing reduces work per token without deleting inactive experts from the artifact.</p>
+        <p><strong>Capacity is not speed.</strong><br />CPU or unified-memory offload can make a model load while missing the latency target.</p>
+        <p><strong>Context is an allocation.</strong><br />One-million-token support does not mean every server reserves a full 1M cache.</p>
+      </section>
+
+      <section class="method-section" aria-labelledby="context-title">
+        <div>
+          <p class="eyebrow">Context comparison boundary</p>
+          <h2 id="context-title">DeepSeek's hybrid attention is not a standard dense KV cache.</h2>
+        </div>
+        <div class="method-copy formula-copy">
+          <p><strong>Official architecture</strong><br /><code>43 layers · 1 KV head · 512 head dimension</code></p>
+          <p><strong>Official context</strong><br /><code>1,048,576 tokens · hybrid HCA + CSA</code></p>
+          <p><strong>Portable comparison only</strong><br />The editable calculator applies the standard dense-cache formula to the exposed dimensions so context profiles are comparable. It does not reproduce DeepSeek's compressed-attention runtime.</p>
+          <p>DeepSeek reports that V4-Pro's one-million-token KV cache is 10% of DeepSeek-V3.2 under its optimized architecture. That first-party relative claim is evidence that a generic dense-cache estimate and the production HCA allocation are different measurements.</p>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="sources-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Primary-source inputs</p>
+          <h2 id="sources-title">Use the exact artifact. Measure the exact runtime.</h2>
+          <p>Total and active parameters, precision mix, context support, architecture, and local inference instructions come from DeepSeek. File sizes come from the official model repository—not a third-party VRAM table.</p>
+          <a class="guide-link" href="../llm-gpu-memory-calculator/?utm_source=deepseek_v4_flash_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=blank_gpu_calculator">Open the GPU memory calculator →</a>
+          <a class="guide-link" href="../kv-cache-calculator/?utm_source=deepseek_v4_flash_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=kv_cache_calculator">Open the KV-cache calculator →</a>
+          <a class="guide-link" href="../gpt-oss-hardware-requirements/?utm_source=deepseek_v4_flash_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpt_oss_guide">Compare gpt-oss hardware requirements →</a>
+          <a class="guide-link" href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash">Official DeepSeek V4 Flash model card →</a>
+          <a class="guide-link" href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/main/config.json">Official DeepSeek V4 Flash configuration →</a>
+          <a class="guide-link" href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/tree/main">Official checkpoint file inventory →</a>
+          <a class="guide-link" href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/main/inference/README.md">Official local inference instructions →</a>
+          <a class="guide-link" href="https://arxiv.org/abs/2606.19348">DeepSeek V4 technical report →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>How much GPU memory does DeepSeek V4 Flash need?</h3><p>The official mixed FP4/FP8 artifact is 148.66 GiB before cache and runtime workspace. At 90% usable memory, two 80 GiB-class GPUs expose only 144 GiB, so three are the first clean all-GPU planning tier.</p></article>
+          <article class="faq-item"><h3>Can DeepSeek V4 Flash run on two 80 GB GPUs?</h3><p>Not as a straightforward full-checkpoint GPU-resident plan with sensible reserve. Offload can change whether the model loads, but then measured throughput and latency—not nominal VRAM alone—decide whether the deployment works.</p></article>
+          <article class="faq-item"><h3>Why does a 13B-active model need the full 148.66 GiB checkpoint?</h3><p>Thirteen billion describes the experts activated for a token. The released artifact still contains 284 billion total parameters plus attention, routing, embeddings, and quantization metadata.</p></article>
+          <article class="faq-item"><h3>How does the one-million-token context affect DeepSeek V4 Flash VRAM?</h3><p>The official model supports one million tokens through hybrid compressed attention. The calculator profiles are transparent dense-cache comparisons, not measured HCA allocations; validate the exact runtime, cache format, and concurrency.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Deployment math without the launch theatre</p>
+          <h2 id="subscribe-title">Get the next model and infrastructure teardown.</h2>
+          <p>ResearchAudio turns model releases, hardware claims, and serving constraints into practical decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <p class="subscribe-direct-fallback"><strong>Prefer the hosted signup page?</strong><a href="https://researchaudio.io/subscribe?utm_source=deepseek_v4_flash_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join">Join ResearchAudio free →</a></p>
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=deepseek_v4_flash_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../llm-gpu-memory-calculator/">GPU memory calculator</a>
+        <a href="../gpt-oss-hardware-requirements/">gpt-oss guide</a>
+        <a href="../qwen3-gpu-requirements/">Qwen3 guide</a>
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=deepseek_v4_flash_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>

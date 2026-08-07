@@ -55,6 +55,8 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Compares Qwen2.5 7B, 32B, and 72B across INT4, INT8, and BF16 with official architecture inputs, exact 32K KV-cache math, and 128K context scenarios.
 - Qwen3 GPU Requirements: https://tools.researchaudio.io/qwen3-gpu-requirements/
   Compares Qwen3 8B, 14B, 32B, and 30B-A3B across INT4, INT8, and BF16 with exact cache math, dense-versus-MoE boundaries, and Qwen's first-party memory benchmarks.
+- DeepSeek V4 Flash GPU Requirements: https://tools.researchaudio.io/deepseek-v4-flash-gpu-requirements/
+  Sizes the official 148.66 GiB mixed FP4 and FP8 artifact, separates 284B total from 13B active parameters, and opens editable 32K, 128K, 384K, and 1M deployment comparisons.
 - gpt-oss Hardware Requirements: https://tools.researchaudio.io/gpt-oss-hardware-requirements/
   Compares gpt-oss-20b and gpt-oss-120b using official checkpoint sizes, MXFP4 weight math, architecture-aware KV-cache estimates, and editable 4K and 128K deployment scenarios.
 - AI Agent Security Checklist: https://tools.researchaudio.io/ai-agent-security-checklist/

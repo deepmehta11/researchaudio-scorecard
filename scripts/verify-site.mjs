@@ -25,7 +25,7 @@ const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const brandedToolsOrigin = "https://tools.researchaudio.io";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -55,6 +55,7 @@ const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, cost
   readFile(path.join(root, "qwen2-5-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "qwen3-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "gpt-oss-hardware-requirements/index.html"), "utf8"),
+  readFile(path.join(root, "deepseek-v4-flash-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-security-checklist/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-security-checklist/checklist.js"), "utf8"),
   readFile(path.join(root, "ai-benchmark-audit-checklist/index.html"), "utf8"),
@@ -139,6 +140,7 @@ for (const [name, page, pathname] of [
   ["Qwen2.5 GPU requirements guide", qwenGuideHtml, "/qwen2-5-gpu-requirements/"],
   ["Qwen3 GPU requirements guide", qwen3GuideHtml, "/qwen3-gpu-requirements/"],
   ["gpt-oss hardware requirements guide", gptOssGuideHtml, "/gpt-oss-hardware-requirements/"],
+  ["DeepSeek V4 Flash GPU requirements guide", deepseekV4GuideHtml, "/deepseek-v4-flash-gpu-requirements/"],
   ["AI agent security checklist", securityGuideHtml, "/ai-agent-security-checklist/"],
   ["AI benchmark audit checklist", benchmarkGuideHtml, "/ai-benchmark-audit-checklist/"],
   ["starter kit", starterHtml, "/evidence-starter-kit/"],
@@ -277,6 +279,34 @@ for (const question of [
   const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   assert.match(qwen3GuideHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `Qwen3 visible FAQ question missing: ${question}`);
   assert.match(qwen3GuideHtml, new RegExp(`"name": "${escapedQuestion}"`), `Qwen3 FAQ schema question missing: ${question}`);
+}
+
+assert.match(deepseekV4GuideHtml, /<title>DeepSeek V4 Flash GPU Requirements &amp; VRAM \| ResearchAudio<\/title>/);
+assert.equal((deepseekV4GuideHtml.match(/"@type": "TechArticle"/g) || []).length, 1, "DeepSeek V4 guide should have one TechArticle schema");
+assert.equal((deepseekV4GuideHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "DeepSeek V4 guide should have one FAQPage schema");
+assert.doesNotThrow(() => parseStructuredData(deepseekV4GuideHtml), "DeepSeek V4 guide structured data must be valid JSON");
+assert.match(deepseekV4GuideHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=deepseek_v4_flash_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab/);
+assert.match(deepseekV4GuideHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
+assert.match(deepseekV4GuideHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
+assert.match(deepseekV4GuideHtml, /utm_content=direct_join/);
+assert.match(deepseekV4GuideHtml, /subscribe-direct-fallback/);
+assert.equal((deepseekV4GuideHtml.match(/class="scenario-card/g) || []).length, 4, "DeepSeek V4 guide should contain four editable scenarios");
+assert.match(deepseekV4GuideHtml, /parameterBillions=284/);
+assert.match(deepseekV4GuideHtml, /checkpointGiB=148\.66/);
+assert.match(deepseekV4GuideHtml, /contextTokens=1048576/);
+assert.match(deepseekV4GuideHtml, /159,617,149,040 bytes/);
+assert.match(deepseekV4GuideHtml, /huggingface\.co\/deepseek-ai\/DeepSeek-V4-Flash/);
+assert.match(deepseekV4GuideHtml, /arxiv\.org\/abs\/2606\.19348/);
+assert.doesNotMatch(deepseekV4GuideHtml, /TODO|PLACEHOLDER|example\.com/);
+for (const question of [
+  "How much GPU memory does DeepSeek V4 Flash need?",
+  "Can DeepSeek V4 Flash run on two 80 GB GPUs?",
+  "Why does a 13B-active model need the full 148.66 GiB checkpoint?",
+  "How does the one-million-token context affect DeepSeek V4 Flash VRAM?",
+]) {
+  const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  assert.match(deepseekV4GuideHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `DeepSeek V4 visible FAQ question missing: ${question}`);
+  assert.match(deepseekV4GuideHtml, new RegExp(`"name": "${escapedQuestion}"`), `DeepSeek V4 FAQ schema question missing: ${question}`);
 }
 
 for (const [name, page] of [
@@ -763,6 +793,29 @@ for (const scenario of [
   });
   assert.equal(Number(result.planningTargetGiB.toFixed(2)), scenario.target, `Qwen3 ${scenario.name} target should match the guide`);
 }
+for (const scenario of [
+  { context: 32768, headroom: 10, target: 166.48 },
+  { context: 131072, headroom: 20, target: 191.29 },
+  { context: 393216, headroom: 20, target: 217.09 },
+  { context: 1048576, headroom: 20, target: 281.59 },
+]) {
+  const result = calculateGpuMemory({
+    parameterBillions: 284,
+    bitsPerParameter: 4,
+    checkpointGiB: 148.66,
+    layers: 43,
+    kvHeads: 1,
+    headDimension: 512,
+    contextTokens: scenario.context,
+    concurrentSequences: 1,
+    kvCacheBits: 16,
+    inferenceHeadroom: scenario.headroom,
+    vramPerGpu: 80,
+    usableVramPercent: 90,
+    availableGpus: 4,
+  });
+  assert.equal(Number(result.planningTargetGiB.toFixed(2)), scenario.target, `DeepSeek V4 ${scenario.context}-token target should match the guide`);
+}
 assert.match(gpuMemoryHtml, /name="layers"/);
 assert.match(gpuMemoryHtml, /name="kvHeads"/);
 assert.match(gpuMemoryHtml, /name="headDimension"/);
@@ -771,6 +824,7 @@ assert.match(gpuMemoryHtml, /name="concurrentSequences"/);
 assert.match(gpuMemoryHtml, /name="kvCacheBits"/);
 assert.match(gpuMemoryHtml, /70b-llm-gpu-requirements/);
 assert.match(gpuMemoryHtml, /qwen3-gpu-requirements/);
+assert.match(gpuMemoryHtml, /deepseek-v4-flash-gpu-requirements/);
 assert.match(gpuGuideHtml, /51\.1 GiB/);
 assert.match(gpuGuideHtml, /90\.2 GiB/);
 assert.match(gpuGuideHtml, /168\.5 GiB/);
@@ -1198,11 +1252,12 @@ assert.match(voiceCostHtml, /elevenlabs\.io\/pricing/);
 assert.match(toolsHtml, /voice-ai-cost-calculator/);
 assert.match(toolsHtml, /voice-ai-cost-per-minute/);
 assert.match(toolsHtml, /ai-receptionist-cost/);
-assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 8, "tools hub should contain eight search field notes");
+assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 9, "tools hub should contain nine search field notes");
 assert.match(toolsHtml, /7b-vs-13b-llm-gpu-requirements/);
 assert.match(toolsHtml, /70b-llm-gpu-requirements/);
 assert.match(toolsHtml, /qwen2-5-gpu-requirements/);
 assert.match(toolsHtml, /qwen3-gpu-requirements/);
+assert.match(toolsHtml, /deepseek-v4-flash-gpu-requirements/);
 assert.match(toolsHtml, /gpt-oss-hardware-requirements/);
 assert.match(toolsHtml, /ai-agent-security-checklist/);
 assert.match(toolsHtml, /ai-benchmark-audit-checklist/);
@@ -1373,10 +1428,15 @@ assert.match(qwen3GuideHtml, /9\.98 GiB/);
 assert.match(qwen3GuideHtml, /14\.27 GiB/);
 assert.match(qwen3GuideHtml, /27\.93 GiB/);
 assert.match(qwen3GuideHtml, /20\.64 GiB/);
+assert.match(toolsHtml, /DeepSeek V4 Flash GPU requirements/);
+assert.match(deepseekV4GuideHtml, /166\.48 GiB/);
+assert.match(deepseekV4GuideHtml, /191\.29 GiB/);
+assert.match(deepseekV4GuideHtml, /217\.09 GiB/);
+assert.match(deepseekV4GuideHtml, /281\.59 GiB/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 28, "sitemap should contain all twenty-eight crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 29, "sitemap should contain all twenty-nine crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 28, "sitemap should publish twenty-eight URL locations");
+assert.equal(sitemapUrls.length, 29, "sitemap should publish twenty-nine URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -1402,6 +1462,7 @@ assert.match(llms, /7B vs 13B LLM GPU Requirements/);
 assert.match(llms, /70B LLM GPU Requirements/);
 assert.match(llms, /Qwen2\.5 GPU Requirements/);
 assert.match(llms, /Qwen3 GPU Requirements/);
+assert.match(llms, /DeepSeek V4 Flash GPU Requirements/);
 assert.match(llms, /AI Agent Security Checklist/);
 assert.match(llms, /AI Benchmark Audit Checklist/);
 assert.match(llms, /AI Task Fit Diagnostic/);
@@ -1419,4 +1480,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 16 tools, 1 activation kit, 1 embed library, 9 field guides, 28 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 16 tools, 1 activation kit, 1 embed library, 9 field guides, 29 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
