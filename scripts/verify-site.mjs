@@ -854,10 +854,27 @@ assert.match(embedModeJs, /target = "_blank"/);
 assert.match(embedsHtml, /<title>Embed Free AI Tools on Your Website \| ResearchAudio<\/title>/);
 assert.equal((embedsHtml.match(/data-widget-url=/g) || []).length, 7, "embed library should offer seven widgets");
 assert.equal((embedsHtml.match(/data-copy-embed/g) || []).length, 7, "every widget should expose a copy action");
+assert.doesNotThrow(() => parseStructuredData(embedsHtml), "embed library structured data must be valid JSON");
+assert.equal((embedsHtml.match(/"@type": "ListItem"/g) || []).length, 7, "embed library schema should enumerate seven widgets");
+assert.equal((embedsHtml.match(/"@type": "WebApplication"/g) || []).length, 7, "every embedded tool should have WebApplication schema");
+assert.equal((embedsHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "embed library should have FAQ schema");
 assert.match(embedsHtml, /data-widget-url="https:\/\/tools\.researchaudio\.io\/ai-benchmark-audit-checklist\/"/);
 assert.match(embedsHtml, /data-widget-url="https:\/\/tools\.researchaudio\.io\/ai-agent-security-checklist\/"/);
 assert.match(embedsHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
 assert.match(embedsHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
+for (const platform of ["WordPress", "Webflow", "Ghost", "Beehiiv", "Static HTML"]) {
+  assert.match(embedsHtml, new RegExp(`<li>${platform}<\\/li>`), `embed library should name ${platform} compatibility`);
+}
+for (const question of [
+  "How do I embed an AI calculator on my website?",
+  "Which website platforms support the AI tool embeds?",
+  "Do embedded ResearchAudio tools collect visitor inputs?",
+  "Can I embed the AI tools for free?",
+]) {
+  const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  assert.match(embedsHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `embed library FAQ question missing: ${question}`);
+  assert.match(embedsHtml, new RegExp(`"name": "${escapedQuestion}"`), `embed library FAQ schema question missing: ${question}`);
+}
 assert.match(embedsJs, /utm_source/);
 assert.match(embedsJs, /utm_medium/);
 assert.match(embedsJs, /utm_campaign/);
