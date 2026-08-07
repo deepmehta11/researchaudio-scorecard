@@ -43,6 +43,8 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Compares INT4, INT8, and FP16 through explicit weight, KV-cache, runtime-headroom, and usable-VRAM assumptions.
 - Qwen2.5 GPU Requirements: https://tools.researchaudio.io/qwen2-5-gpu-requirements/
   Compares Qwen2.5 7B, 32B, and 72B across INT4, INT8, and BF16 with official architecture inputs, exact 32K KV-cache math, and 128K context scenarios.
+- AI Agent Security Checklist: https://tools.researchaudio.io/ai-agent-security-checklist/
+  A browser-local 12-point control review for goal hijacking, least privilege, approval gates, sandboxing, untrusted input, tool and MCP provenance, secrets, validation, resource limits, audit trails, shutdown, and recovery.
 
 ## Publisher
 

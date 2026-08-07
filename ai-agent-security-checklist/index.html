@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Agent Security Checklist: 12 Controls | ResearchAudio</title>
+    <meta name="description" content="Run a free 12-point AI agent security checklist for goal hijacking, tool permissions, sandboxing, secrets, MCP supply chain, audit logs, and incident recovery." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/ai-agent-security-checklist/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="AI agents need an authority boundary, not just a system prompt" />
+    <meta property="og:description" content="Twelve evidence checks for agent permissions, sandboxing, untrusted input, tool use, secrets, logging, shutdown, and recovery." />
+    <meta property="og:url" content="https://tools.researchaudio.io/ai-agent-security-checklist/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "AI Agent Security Checklist",
+        "applicationCategory": "SecurityApplication",
+        "operatingSystem": "Any",
+        "url": "https://tools.researchaudio.io/ai-agent-security-checklist/",
+        "description": "A browser-local 12-point security checklist for AI agents and coding agents.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What belongs in an AI agent security checklist?",
+            "acceptedAnswer": { "@type": "Answer", "text": "An AI agent security review should cover instruction boundaries, least privilege, approval gates, filesystem and network isolation, untrusted input, tool and MCP provenance, secrets, output validation, resource limits, audit trails, shutdown, and incident recovery." }
+          },
+          {
+            "@type": "Question",
+            "name": "How should AI agent tool permissions be configured?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Start with no authority, allow only the tools and resources required for the task, scope credentials narrowly, and require a separate approval for irreversible or high-impact actions." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does sandboxing prevent AI agent prompt injection?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. Sandboxing reduces the impact of a compromised action by isolating files and network access, but teams still need permission controls, untrusted-input handling, output validation, and monitoring." }
+          },
+          {
+            "@type": "Question",
+            "name": "What should an AI agent audit log contain?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Retain the initiating identity, instructions, retrieved context, permission decisions, tool inputs and outputs, state changes, validation results, resource use, and final stop reason with enough integrity to reconstruct an incident." }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#security-checklist">Skip to the security checklist</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=ai_agent_security_checklist&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=ai_agent_security_checklist&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=ai_agent_security_checklist&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=ai_agent_security_checklist&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Agent security / evidence checklist</p>
+          <h1 id="hero-title">An agent is only as safe as the authority around it.</h1>
+          <p class="hero-deck">Check twelve controls across goal integrity, tool access, isolation, untrusted content, credentials, auditability, shutdown, and recovery before an agent can touch production systems.</p>
+          <a class="hero-join-link" href="#security-checklist">Run the free security check →</a>
+        </div>
+        <aside class="lab-index" aria-label="Checklist scope">
+          <span>Security controls</span>
+          <strong>12</strong>
+          <p>Count only controls that are enforced and evidenced today. A policy slide or planned guardrail does not reduce runtime authority.</p>
+        </aside>
+      </section>
+
+      <section class="instrument-shell" id="security-checklist" aria-labelledby="security-title">
+        <div class="instrument-intro">
+          <div>
+            <p class="eyebrow">Inspect one agent path</p>
+            <h2 id="security-title">Which controls survive a hostile instruction?</h2>
+          </div>
+          <p>This is a triage worksheet, not a penetration test or compliance certification. Verify each answer against configuration, tests, and logs.</p>
+        </div>
+
+        <div class="diagnostic-layout">
+          <form class="diagnostic-list" id="security-form">
+            <label class="diagnostic-card" for="check-goal"><input id="check-goal" name="goal" type="checkbox" /><span class="diagnostic-index">G1</span><span class="diagnostic-copy"><strong>Goals and instructions have a trusted boundary</strong><span>Retrieved content, tool output, and user data cannot silently redefine the agent's objective or policy.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-privilege"><input id="check-privilege" name="privilege" type="checkbox" /><span class="diagnostic-index">P2</span><span class="diagnostic-copy"><strong>Every identity uses least privilege</strong><span>The agent, operator, and each tool receive only the resources and actions required for the current task.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-approval"><input id="check-approval" name="approval" type="checkbox" /><span class="diagnostic-index">A3</span><span class="diagnostic-copy"><strong>Irreversible actions require a separate gate</strong><span>Payments, publishing, deletion, deployment, credential changes, and external messages need explicit approval or deterministic policy.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-sandbox"><input id="check-sandbox" name="sandbox" type="checkbox" /><span class="diagnostic-index">S4</span><span class="diagnostic-copy"><strong>Filesystem and network access are isolated</strong><span>The runtime has a narrow working boundary, an outbound allowlist, and no ambient access to unrelated systems.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-input"><input id="check-input" name="input" type="checkbox" /><span class="diagnostic-index">I5</span><span class="diagnostic-copy"><strong>External content is treated as untrusted</strong><span>Web pages, documents, issues, emails, and tool responses stay data unless trusted policy explicitly promotes them.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-supply"><input id="check-supply" name="supply" type="checkbox" /><span class="diagnostic-index">M6</span><span class="diagnostic-copy"><strong>Tools, MCP servers, and plugins have provenance</strong><span>Owners, versions, permissions, update paths, and revocation procedures are recorded and reviewed.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-secrets"><input id="check-secrets" name="secrets" type="checkbox" /><span class="diagnostic-index">K7</span><span class="diagnostic-copy"><strong>Credentials are scoped and kept out of context</strong><span>Short-lived secrets are injected only where needed and are redacted from prompts, traces, artifacts, and error output.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-validation"><input id="check-validation" name="validation" type="checkbox" /><span class="diagnostic-index">V8</span><span class="diagnostic-copy"><strong>Tool inputs and outputs are validated</strong><span>Schemas, allowlists, postconditions, and independent checks gate the next action instead of trusting model narration.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-budget"><input id="check-budget" name="budget" type="checkbox" /><span class="diagnostic-index">B9</span><span class="diagnostic-copy"><strong>Time, spend, retries, and concurrency are capped</strong><span>Resource exhaustion and runaway delegation terminate deterministically before they become an incident.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-trace"><input id="check-trace" name="trace" type="checkbox" /><span class="diagnostic-index">L10</span><span class="diagnostic-copy"><strong>The authority trail is retained</strong><span>Operators can reconstruct identity, instructions, approvals, context, tool calls, mutations, validation, and stop reason.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-stop"><input id="check-stop" name="stop" type="checkbox" /><span class="diagnostic-index">X11</span><span class="diagnostic-copy"><strong>A tested kill switch removes authority</strong><span>Operators can cancel the run, revoke credentials, stop child agents, and prove that work does not continue elsewhere.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-recovery"><input id="check-recovery" name="recovery" type="checkbox" /><span class="diagnostic-index">R12</span><span class="diagnostic-copy"><strong>Recovery clears poisoned state</strong><span>The incident plan covers rollback, memory and context invalidation, credential rotation, evidence preservation, and safe restart.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+          </form>
+
+          <aside class="result-console" aria-live="polite" aria-labelledby="security-result-title">
+            <div class="tool-status"><span>Control state</span><b id="security-status">OPEN</b></div>
+            <p class="primary-result"><span id="security-score">0</span><small>/ 12</small></p>
+            <p class="result-label">Enforced controls</p>
+            <h3 id="security-result-title">Open authority</h3>
+            <p class="result-note" id="security-summary">The agent can act without enough evidence that hostile input or tool misuse will be contained.</p>
+            <div class="result-grid"><div><span>Next missing control</span><strong id="security-next">Separate trusted goals from untrusted content.</strong></div><div><span>Exposure band</span><strong id="security-risk">Critical</strong></div></div>
+            <button class="action-button" id="share-security" type="button" disabled>Share this exact checklist</button>
+            <button class="secondary-button" id="reset-security" type="button">Reset all checks</button>
+            <p class="share-status" id="share-status" role="status"></p>
+            <div class="result-join">
+              <span>Evidence-led AI briefings · 51,000+ readers</span>
+              <a href="https://researchaudio.io/subscribe?utm_source=ai_agent_security_checklist&amp;utm_medium=tool_result&amp;utm_campaign=ai_evidence_lab&amp;utm_content=result_join">Get the next agent security teardown →</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="Security checklist interpretation">
+        <p class="eyebrow">Exposure model</p>
+        <p><strong>0–3: open.</strong><br />Authority can escape the intended task with little resistance.</p>
+        <p><strong>4–7: partial.</strong><br />Individual controls exist, but a chained failure can still cross boundaries.</p>
+        <p><strong>8–12: guarded.</strong><br />Defense-in-depth is visible; prove it with adversarial tests and incident drills.</p>
+      </section>
+
+      <section class="guide-section" aria-labelledby="security-guide-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Primary-source guide</p>
+          <h2 id="security-guide-title">Permissions reduce authority. Isolation reduces blast radius.</h2>
+          <p>OWASP's agentic guidance separates risks such as goal hijacking, tool misuse, identity abuse, supply-chain compromise, code execution, and memory poisoning. Anthropic's current Claude Code guidance adds concrete controls: permission gates, filesystem and network sandboxing, trust verification, fail-closed command matching, scoped credentials, audit logging, and project-specific settings.</p>
+          <p>No single control is sufficient. A sandbox cannot decide whether an instruction is trustworthy, and a permission prompt cannot repair leaked credentials or poisoned memory.</p>
+          <a class="guide-link" href="https://genai.owasp.org/2025/12/09/owasp-genai-security-project-releases-top-10-risks-and-mitigations-for-agentic-ai-security/">OWASP Top 10 for Agentic Applications 2026 →</a>
+          <a class="guide-link" href="https://genai.owasp.org/resource/securing-agentic-applications-guide-1-0/">OWASP guide to securing agentic applications →</a>
+          <a class="guide-link" href="https://code.claude.com/docs/en/security">Anthropic Claude Code security guidance →</a>
+          <a class="guide-link" href="https://airc.nist.gov/">NIST AI Resource Center →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>What belongs in an AI agent security checklist?</h3><p>Review goal integrity, identity and least privilege, irreversible-action approvals, isolation, untrusted input, tool provenance, credentials, validation, resource limits, logs, shutdown, and recovery. Tie every checked control to configuration, a test, or a trace.</p></article>
+          <article class="faq-item"><h3>How should AI agent tool permissions be configured?</h3><p>Begin with no authority, then allow the smallest action and resource set required by the task. Keep high-impact actions behind a separate gate and use narrowly scoped, short-lived credentials.</p></article>
+          <article class="faq-item"><h3>Does sandboxing prevent AI agent prompt injection?</h3><p>No. Isolation limits what a compromised action can reach. It still needs trusted-instruction boundaries, permission checks, output validation, resource caps, and monitoring around it.</p></article>
+          <article class="faq-item"><h3>What should an AI agent audit log contain?</h3><p>Record initiating identity, instructions, retrieved context, permission decisions, tool inputs and outputs, state changes, validation results, resource use, and the final stop reason. Protect the trail so an incident can be reconstructed.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Agent evidence, not security theatre</p>
+          <h2 id="subscribe-title">Get the next failure mode before it becomes an incident.</h2>
+          <p>ResearchAudio turns primary sources, attack paths, permissions, and operational limits into practical decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <a class="hero-join-link" href="https://researchaudio.io/subscribe?utm_source=ai_agent_security_checklist&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=subscribe_fallback">Open the full signup page →</a>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=ai_agent_security_checklist&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../agent-loop-diagnostic/">Agent loop diagnostic</a>
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=ai_agent_security_checklist&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script type="module" src="checklist.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>
