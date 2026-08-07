@@ -11,6 +11,7 @@ import { calculateAgentRoi, classifyAgentRoi } from "../ai-agent-roi-calculator/
 import { calculateLlmApiCost } from "../llm-api-cost-calculator/calculator.js";
 import { calculateGpuMemory } from "../llm-gpu-memory-calculator/calculator.js";
 import { calculateCompatibility } from "../local-llm-gpu-compatibility/checker.js";
+import { calculateModelFinder } from "../what-llm-can-i-run/finder.js";
 import { calculateKvCache, MODEL_PRESETS } from "../kv-cache-calculator/calculator.js";
 import { calculatePromptCacheSavings } from "../prompt-caching-calculator/calculator.js";
 import { buildCodexConfig, normalizeFallbackFiles, normalizeMaxBytes } from "../codex-config-generator/generator.js";
@@ -24,7 +25,7 @@ const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const brandedToolsOrigin = "https://tools.researchaudio.io";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -45,6 +46,8 @@ const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, cost
   readFile(path.join(root, "llm-gpu-memory-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "local-llm-gpu-compatibility/index.html"), "utf8"),
   readFile(path.join(root, "local-llm-gpu-compatibility/checker.js"), "utf8"),
+  readFile(path.join(root, "what-llm-can-i-run/index.html"), "utf8"),
+  readFile(path.join(root, "what-llm-can-i-run/finder.js"), "utf8"),
   readFile(path.join(root, "kv-cache-calculator/index.html"), "utf8"),
   readFile(path.join(root, "kv-cache-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "7b-vs-13b-llm-gpu-requirements/index.html"), "utf8"),
@@ -122,6 +125,7 @@ for (const [name, page, pathname] of [
   ["LLM API cost calculator", llmCostHtml, "/llm-api-cost-calculator/"],
   ["LLM GPU memory calculator", gpuMemoryHtml, "/llm-gpu-memory-calculator/"],
   ["local LLM GPU compatibility checker", compatibilityHtml, "/local-llm-gpu-compatibility/"],
+  ["hardware-first LLM model finder", finderHtml, "/what-llm-can-i-run/"],
   ["LLM KV cache calculator", kvCacheHtml, "/kv-cache-calculator/"],
   ["prompt caching calculator", promptCacheHtml, "/prompt-caching-calculator/"],
   ["Codex config generator", codexConfigHtml, "/codex-config-generator/"],
@@ -856,6 +860,65 @@ for (const question of [
   assert.match(compatibilityHtml, new RegExp(`"name": "${escapedQuestion}"`), `compatibility FAQ schema question missing: ${question}`);
 }
 
+const defaultModelFinder = calculateModelFinder({
+  vramPerGpu: 12,
+  availableGpus: 1,
+  bitsPerParameter: 4,
+  inferenceHeadroom: 20,
+  usableVramPercent: 90,
+});
+assert.equal(Number(defaultModelFinder.maximumParameterBillions.toFixed(1)), 19.3);
+assert.equal(defaultModelFinder.recommended.parameterBillions, 14);
+assert.equal(defaultModelFinder.next.parameterBillions, 20);
+assert.deepEqual(defaultModelFinder.fittingTiers.map((tier) => tier.parameterBillions), [3, 7, 8, 13, 14]);
+const twentyFourGbModelFinder = calculateModelFinder({
+  vramPerGpu: 24,
+  availableGpus: 1,
+  bitsPerParameter: 4,
+  inferenceHeadroom: 20,
+  usableVramPercent: 90,
+});
+assert.equal(Number(twentyFourGbModelFinder.maximumParameterBillions.toFixed(1)), 38.7);
+assert.equal(twentyFourGbModelFinder.recommended.parameterBillions, 32);
+const multiGpuModelFinder = calculateModelFinder({
+  vramPerGpu: 24,
+  availableGpus: 2,
+  bitsPerParameter: 4,
+  inferenceHeadroom: 20,
+  usableVramPercent: 90,
+});
+assert.equal(Number(multiGpuModelFinder.maximumParameterBillions.toFixed(1)), 77.3);
+assert.equal(multiGpuModelFinder.recommended.parameterBillions, 70);
+assert.match(finderHtml, /<title>What LLM Can I Run on My GPU\? VRAM Model Finder \| ResearchAudio<\/title>/);
+assert.equal((finderHtml.match(/"@type": "WebApplication"/g) || []).length, 1, "model finder should have one WebApplication schema");
+assert.equal((finderHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "model finder should have one FAQ schema");
+assert.doesNotThrow(() => parseStructuredData(finderHtml), "model finder structured data must be valid JSON");
+assert.match(finderHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=what_llm_can_i_run&amp;utm_medium=(tool|tool_result)&amp;utm_campaign=ai_evidence_lab/);
+assert.match(finderHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
+assert.match(finderHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
+assert.match(finderHtml, /name="vramPerGpu"/);
+assert.match(finderHtml, /name="availableGpus"/);
+assert.match(finderHtml, /name="bitsPerParameter"/);
+assert.match(finderHtml, /8 GB/);
+assert.match(finderHtml, /12 GB/);
+assert.match(finderHtml, /16 GB/);
+assert.match(finderHtml, /24 GB/);
+assert.match(finderHtml, /38\.7B ceiling/);
+assert.match(finderHtml, /227\.1B ceiling/);
+assert.match(finderJs, /what_llm_can_i_run_share/);
+assert.match(finderJs, /add_context_and_architecture/);
+assert.match(toolsHtml, /what-llm-can-i-run/);
+for (const question of [
+  "What LLM can I run with 8 GB of VRAM?",
+  "What LLM can I run with 12 GB of VRAM?",
+  "What LLM can I run with 24 GB of VRAM?",
+  "Why can a model fail even when its weights fit in VRAM?",
+]) {
+  const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  assert.match(finderHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `model finder FAQ question missing: ${question}`);
+  assert.match(finderHtml, new RegExp(`"name": "${escapedQuestion}"`), `model finder FAQ schema question missing: ${question}`);
+}
+
 const defaultKvCache = calculateKvCache({
   layers: 28,
   attentionHeads: 28,
@@ -909,7 +972,7 @@ assert.match(kvCacheHtml, /Qwen2\.5 32B/);
 assert.match(kvCacheHtml, /Qwen2\.5 72B/);
 assert.equal((kvCacheHtml.match(/class="scenario-card/g) || []).length, 3, "KV-cache calculator should contain three sourced scenarios");
 assert.match(toolsHtml, /kv-cache-calculator/);
-assert.equal((toolsHtml.match(/class="tool-card"/g) || []).length, 15, "tools hub should contain fifteen instruments");
+assert.equal((toolsHtml.match(/class="tool-card"/g) || []).length, 16, "tools hub should contain sixteen instruments");
 
 const defaultPromptCache = calculatePromptCacheSavings({
   requestsPerMonth: 100000,
@@ -1226,6 +1289,7 @@ for (const [name, page] of [
   ["LLM API cost", llmCostHtml],
   ["LLM GPU memory", gpuMemoryHtml],
   ["local LLM GPU compatibility", compatibilityHtml],
+  ["hardware-first LLM model finder", finderHtml],
   ["LLM KV cache", kvCacheHtml],
   ["prompt caching", promptCacheHtml],
   ["Codex config", codexConfigHtml],
@@ -1246,11 +1310,11 @@ assert.match(embedModeJs, /utm_content", "embed_this_tool"/);
 assert.match(embedModeJs, /libraryUrl\.hash = `embed-\$\{tool\}`/);
 assert.match(embedsHtml, /<title>Embed Free AI Tools on Your Website \| ResearchAudio<\/title>/);
 assert.match(embedsHtml, /href="https:\/\/researchaudio\.io\/p\/free-ai-tools-to-embed\?utm_source=embed_library&amp;utm_medium=organic_tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=publisher_guide"/);
-assert.equal((embedsHtml.match(/data-widget-url=/g) || []).length, 15, "embed library should offer fifteen widgets");
-assert.equal((embedsHtml.match(/data-copy-embed/g) || []).length, 15, "every widget should expose a copy action");
+assert.equal((embedsHtml.match(/data-widget-url=/g) || []).length, 16, "embed library should offer sixteen widgets");
+assert.equal((embedsHtml.match(/data-copy-embed/g) || []).length, 16, "every widget should expose a copy action");
 assert.doesNotThrow(() => parseStructuredData(embedsHtml), "embed library structured data must be valid JSON");
-assert.equal((embedsHtml.match(/"@type": "ListItem"/g) || []).length, 15, "embed library schema should enumerate fifteen widgets");
-assert.equal((embedsHtml.match(/"@type": "WebApplication"/g) || []).length, 15, "every embedded tool should have WebApplication schema");
+assert.equal((embedsHtml.match(/"@type": "ListItem"/g) || []).length, 16, "embed library schema should enumerate sixteen widgets");
+assert.equal((embedsHtml.match(/"@type": "WebApplication"/g) || []).length, 16, "every embedded tool should have WebApplication schema");
 assert.equal((embedsHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "embed library should have FAQ schema");
 for (const pathName of [
   "ai-benchmark-audit-checklist",
@@ -1258,6 +1322,7 @@ for (const pathName of [
   "llm-api-cost-calculator",
   "llm-gpu-memory-calculator",
   "local-llm-gpu-compatibility",
+  "what-llm-can-i-run",
   "kv-cache-calculator",
   "voice-ai-cost-calculator",
   "ai-agent-roi-calculator",
@@ -1309,9 +1374,9 @@ assert.match(qwen3GuideHtml, /14\.27 GiB/);
 assert.match(qwen3GuideHtml, /27\.93 GiB/);
 assert.match(qwen3GuideHtml, /20\.64 GiB/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 27, "sitemap should contain all twenty-seven crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 28, "sitemap should contain all twenty-eight crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 27, "sitemap should publish twenty-seven URL locations");
+assert.equal(sitemapUrls.length, 28, "sitemap should publish twenty-eight URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -1321,6 +1386,7 @@ assert.match(llms, /AI Agent ROI Calculator/);
 assert.match(llms, /LLM API Cost Calculator/);
 assert.match(llms, /LLM GPU Memory Calculator/);
 assert.match(llms, /Local LLM GPU Compatibility Checker/);
+assert.match(llms, /What LLM Can I Run on My GPU\?/);
 assert.match(llms, /LLM KV Cache Calculator/);
 assert.match(llms, /Prompt Caching Cost Calculator/);
 assert.match(llms, /Codex CLI config\.toml Generator/);
@@ -1353,4 +1419,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 15 tools, 1 activation kit, 1 embed library, 9 field guides, 27 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 16 tools, 1 activation kit, 1 embed library, 9 field guides, 28 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

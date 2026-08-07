@@ -30,6 +30,8 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Estimates model-weight VRAM, optional architecture-aware KV cache, runtime headroom, usable memory per GPU, and minimum GPU count.
 - Local LLM GPU Compatibility Checker: https://tools.researchaudio.io/local-llm-gpu-compatibility/
   Checks 7B, 13B, 32B, and 70B weight floors against common 8 GB to 141 GB GPU profiles before handing the selected state to the architecture-aware calculator.
+- What LLM Can I Run on My GPU?: https://tools.researchaudio.io/what-llm-can-i-run/
+  Starts with available GPU memory and returns the largest listed model-size tier below a transparent INT4, INT8, or FP16 weight-floor ceiling.
 - LLM KV Cache Calculator: https://tools.researchaudio.io/kv-cache-calculator/
   Calculates exact KV-cache memory per token, sequence, context window, and concurrent request, plus GQA savings and full-context capacity.
 - AI Evidence Starter Kit: https://tools.researchaudio.io/evidence-starter-kit/

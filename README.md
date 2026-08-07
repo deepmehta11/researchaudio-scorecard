@@ -1,6 +1,6 @@
 # ResearchAudio Evidence Lab
 
-An evergreen acquisition ecosystem for ResearchAudio. Fifteen browser-local tools, nine practical field guides, and a self-serve embed library turn AI task framing, benchmark and launch claims, token budgets, voice latency and outcome economics, local LLM compatibility, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability and security, automation business cases, and Codex workflows into concrete inspections before inviting visitors into the daily briefing.
+An evergreen acquisition ecosystem for ResearchAudio. Sixteen browser-local tools, nine practical field guides, and a self-serve embed library turn AI task framing, benchmark and launch claims, token budgets, voice latency and outcome economics, hardware-first local LLM discovery, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability and security, automation business cases, and Codex workflows into concrete inspections before inviting visitors into the daily briefing.
 
 Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain connected to the Beehiiv publication at `https://researchaudio.io/`.
 
@@ -28,9 +28,10 @@ Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain con
 - `/ai-benchmark-audit-checklist/` — interactive 12-point reproducibility review grounded in current OpenAI, Anthropic, METR, and Terminal-Bench primary sources.
 - `/llm-gpu-memory-calculator/` — model-weight VRAM, optional architecture-aware KV cache, runtime headroom, usable memory, and minimum GPU count.
 - `/local-llm-gpu-compatibility/` — browser-local 7B, 13B, 32B, and 70B weight-floor fit checks across common 8 GB to 141 GB GPU profiles, with preserved state into the architecture-aware calculator.
+- `/what-llm-can-i-run/` — browser-local inverse model finder that starts with 8 GB to 141 GB of available VRAM and returns the largest listed INT4, INT8, or FP16 parameter tier below a conservative arithmetic ceiling.
 - `/evidence-starter-kit/` — post-signup activation, four-tool progress, referral reward explanation, and attributed sharing.
 - `/tools/` — crawlable, interlinked Evidence Lab hub.
-- `/embeds/` — copy-ready, source-attributed iframe widgets plus a self-serve installation guide for WordPress, Webflow, Ghost, Beehiiv, and static sites. Every tool page deep-links publishers to its exact widget, and the library publishes a fifteen-tool application index with matching FAQ schema for search discovery.
+- `/embeds/` — copy-ready, source-attributed iframe widgets plus a self-serve installation guide for WordPress, Webflow, Ghost, Beehiiv, and static sites. Every tool page deep-links publishers to its exact widget, and the library publishes a sixteen-tool application index with matching FAQ schema for search discovery.
 
 Every instrument uses the dedicated Beehiiv acquisition form and keeps user inputs in the browser.
 
@@ -63,5 +64,5 @@ Then open `http://127.0.0.1:4173`.
 3. Link it near the first decision table in every relevant ResearchAudio web post.
 4. Publish one result card per issue on LinkedIn, X, Reddit, and relevant engineering communities.
 5. Redirect new Evidence Lab subscribers into the starter kit, then use its attributed share action and three-referral reward to compound distribution.
-6. Offer the fifteen-widget embed library to technical publishers; each tool keeps a visible ResearchAudio credit and rewrites signup links to the publisher-specific `embed_*` source.
+6. Offer the sixteen-widget embed library to technical publishers; each tool keeps a visible ResearchAudio credit and rewrites signup links to the publisher-specific `embed_*` source.
 7. Review Beehiiv source and campaign breakdowns weekly. Keep only channels that produce active subscribers, not raw clicks.

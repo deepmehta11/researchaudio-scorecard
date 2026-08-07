@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>What LLM Can I Run on My GPU? VRAM Model Finder | ResearchAudio</title>
+    <meta name="description" content="Choose 8, 12, 16, 24, 32, 48, 80, or 141 GB of GPU memory to find the largest standard LLM parameter tier that clears a conservative INT4, INT8, or FP16 weight floor." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/what-llm-can-i-run/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What LLM can your GPU run?" />
+    <meta property="og:description" content="Start with the VRAM you already own. See the largest standard model-size floor it clears, then add architecture and context." />
+    <meta property="og:url" content="https://tools.researchaudio.io/what-llm-can-i-run/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script src="../embed-mode.js"></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "What LLM Can I Run on My GPU?",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "url": "https://tools.researchaudio.io/what-llm-can-i-run/",
+        "description": "A browser-local finder that converts available GPU memory, GPU count, precision, usable-memory reserve, and runtime headroom into a conservative model-size weight floor.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What LLM can I run with 8 GB of VRAM?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Under this page's default 20 percent runtime headroom and 90 percent usable-memory reserve, one 8 GB GPU clears the weight floor for an 8B tier at INT4, a 3B tier at INT8, or a 3B tier at FP16. Exact artifacts, context, runtime overhead, and speed can change the result." }
+          },
+          {
+            "@type": "Question",
+            "name": "What LLM can I run with 12 GB of VRAM?",
+            "acceptedAnswer": { "@type": "Answer", "text": "With the default reserve, one 12 GB GPU clears the weight floor for a 14B tier at INT4, an 8B tier at INT8, or a 3B tier at FP16. Add exact architecture and context before downloading a checkpoint." }
+          },
+          {
+            "@type": "Question",
+            "name": "What LLM can I run with 24 GB of VRAM?",
+            "acceptedAnswer": { "@type": "Answer", "text": "With the default reserve, one 24 GB GPU clears the weight floor for a 32B tier at INT4, a 14B tier at INT8, or an 8B tier at FP16. This is a capacity floor rather than a speed or software-support guarantee." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why can a model fail even when its weights fit in VRAM?",
+            "acceptedAnswer": { "@type": "Answer", "text": "A runnable deployment also needs memory for KV cache, activations, runtime workspace, quantization metadata, and fragmentation. It also depends on supported kernels, model architecture, context length, batching, and multi-GPU topology." }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#model-finder">Skip to the model finder</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=what_llm_can_i_run&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=what_llm_can_i_run&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=what_llm_can_i_run&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=what_llm_can_i_run&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Instrument 16 / hardware-first model fit</p>
+          <h1 id="hero-title">What LLM can I run on my GPU?</h1>
+          <p class="hero-deck">Start with the VRAM you already own. Find the largest standard model-size tier that clears a conservative weight floor, then add the exact architecture and context before downloading the checkpoint.</p>
+          <a class="hero-join-link" href="#model-finder">Find the model-size floor →</a>
+        </div>
+        <aside class="lab-index" aria-label="Model finder coverage">
+          <span>VRAM profiles</span>
+          <strong>8</strong>
+          <p>From 8 GB consumer cards to 141 GB accelerators, across INT4, INT8, and FP16 planning widths.</p>
+        </aside>
+      </section>
+
+      <section class="instrument-shell" id="model-finder" aria-labelledby="finder-title">
+        <div class="instrument-intro">
+          <div>
+            <p class="eyebrow">First answer / capacity floor</p>
+            <h2 id="finder-title">Turn available VRAM into a model-size ceiling.</h2>
+          </div>
+          <p>The calculation stays in this browser. It answers the fully GPU-resident weight question first and deliberately excludes KV cache, artifact metadata, and speed.</p>
+        </div>
+
+        <div class="calculator-layout">
+          <form class="input-panel" id="model-finder-form">
+            <label class="input-card" for="gpu-vram">
+              <span class="field-copy"><strong>GPU memory</strong><small>Capacity per device; choose the VRAM you have.</small></span>
+              <span class="select-field">
+                <select id="gpu-vram" name="vramPerGpu">
+                  <option value="8">8 GB GPU</option>
+                  <option value="12" selected>12 GB GPU</option>
+                  <option value="16">16 GB GPU</option>
+                  <option value="24">24 GB GPU</option>
+                  <option value="32">32 GB GPU</option>
+                  <option value="48">48 GB GPU</option>
+                  <option value="80">80 GB GPU</option>
+                  <option value="141">141 GB GPU</option>
+                </select>
+              </span>
+            </label>
+            <label class="input-card" for="gpu-count">
+              <span class="field-copy"><strong>GPU count</strong><small>Aggregate capacity only; topology can limit real sharding.</small></span>
+              <span class="number-field suffix"><span>GPU</span><input id="gpu-count" name="availableGpus" type="number" min="1" max="32" step="1" value="1" inputmode="numeric" /></span>
+            </label>
+            <label class="input-card" for="precision">
+              <span class="field-copy"><strong>Weight precision</strong><small>Planning bit width before artifact-specific metadata.</small></span>
+              <span class="select-field">
+                <select id="precision" name="bitsPerParameter">
+                  <option value="4" selected>INT4 · 4-bit</option>
+                  <option value="8">INT8 · 8-bit</option>
+                  <option value="16">FP16 / BF16 · 16-bit</option>
+                </select>
+              </span>
+            </label>
+            <label class="input-card" for="finder-headroom">
+              <span class="field-copy"><strong>Runtime headroom</strong><small>Reserve for activations, kernels, workspace, and format overhead.</small></span>
+              <span class="select-field">
+                <select id="finder-headroom" name="inferenceHeadroom">
+                  <option value="10">10%</option>
+                  <option value="20" selected>20%</option>
+                  <option value="30">30%</option>
+                </select>
+              </span>
+            </label>
+            <label class="input-card" for="finder-usable-vram">
+              <span class="field-copy"><strong>Usable GPU memory</strong><small>Leave room for the driver, runtime, and fragmentation.</small></span>
+              <span class="select-field">
+                <select id="finder-usable-vram" name="usableVramPercent">
+                  <option value="80">80%</option>
+                  <option value="90" selected>90%</option>
+                  <option value="95">95%</option>
+                </select>
+              </span>
+            </label>
+          </form>
+
+          <aside class="result-console" aria-live="polite" aria-labelledby="finder-result-title">
+            <div class="tool-status"><span>Largest listed tier</span><b id="finder-status">UP TO 14B FLOOR</b></div>
+            <p class="primary-result"><span id="finder-tier">14</span><small>B parameters</small></p>
+            <p class="result-label" id="finder-result-title">Largest standard tier below the arithmetic ceiling</p>
+            <div class="result-grid">
+              <div><span>Arithmetic ceiling</span><strong id="finder-ceiling">19.3B</strong></div>
+              <div><span>Usable capacity</span><strong id="finder-capacity">10.8 GiB</strong></div>
+              <div><span>Tier planning target</span><strong id="finder-target">7.82 GiB</strong></div>
+              <div><span>Capacity margin</span><strong id="finder-margin">+2.98 GiB</strong></div>
+              <div><span>Next listed tier</span><strong id="finder-next">20B</strong></div>
+              <div><span>Hardware profile</span><strong id="finder-profile">1 × 12 GB GPU profile</strong></div>
+            </div>
+            <p class="result-note"><strong>Listed floors that fit:</strong> <span id="finder-fit-list">3B · 7B · 8B · 13B · 14B</span></p>
+            <p class="result-note" id="finder-note">Choose your hardware and reserve.</p>
+            <a class="action-button" id="open-model-calculator" href="../llm-gpu-memory-calculator/">Add exact context and architecture →</a>
+            <button class="secondary-button" id="share-finder" type="button">Share this hardware result</button>
+            <button class="secondary-button" id="reset-finder" type="button">Restore 12 GB / INT4 example</button>
+            <p class="share-status" id="share-status" role="status"></p>
+            <div class="result-join">
+              <span>ResearchAudio evidence brief · 51,000+ readers</span>
+              <a href="https://researchaudio.io/subscribe?utm_source=what_llm_can_i_run&amp;utm_medium=tool_result&amp;utm_campaign=ai_evidence_lab&amp;utm_content=result_join">Get the next local-AI teardown →</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="Model finder boundaries">
+        <p class="eyebrow">Read the answer correctly</p>
+        <p><strong>Tier, not recommendation.</strong><br />A parameter class clearing the floor does not name the best model for your task.</p>
+        <p><strong>Weights, not full runtime.</strong><br />KV cache, activations, workspace, metadata, and fragmentation still consume memory.</p>
+        <p><strong>Capacity, not speed.</strong><br />Bandwidth, kernels, offload, and interconnect decide delivered performance.</p>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="vram-table-title">
+        <div class="comparison-heading">
+          <div>
+            <p class="eyebrow">VRAM-first planning table</p>
+            <h2 id="vram-table-title">What model-size floor fits 8, 12, 16, or 24 GB?</h2>
+          </div>
+          <p>Each cell is the largest listed tier below the arithmetic ceiling with 20% runtime headroom, 90% usable memory, one GPU, and no KV cache. The small number is the ceiling before rounding down to a standard tier.</p>
+        </div>
+        <p class="comparison-scroll-hint">Swipe the matrix horizontally →</p>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead><tr><th>VRAM profile</th><th>INT4</th><th>INT8</th><th>FP16 / BF16</th></tr></thead>
+            <tbody>
+              <tr><th>8 GB</th><td><strong>8B tier</strong><small>12.9B ceiling</small></td><td><strong>3B tier</strong><small>6.4B ceiling</small></td><td><strong>3B tier</strong><small>3.2B ceiling</small></td></tr>
+              <tr><th>12 GB</th><td><strong>14B tier</strong><small>19.3B ceiling</small></td><td><strong>8B tier</strong><small>9.7B ceiling</small></td><td><strong>3B tier</strong><small>4.8B ceiling</small></td></tr>
+              <tr><th>16 GB</th><td><strong>20B tier</strong><small>25.8B ceiling</small></td><td><strong>8B tier</strong><small>12.9B ceiling</small></td><td><strong>3B tier</strong><small>6.4B ceiling</small></td></tr>
+              <tr><th>24 GB</th><td><strong>32B tier</strong><small>38.7B ceiling</small></td><td><strong>14B tier</strong><small>19.3B ceiling</small></td><td><strong>8B tier</strong><small>9.7B ceiling</small></td></tr>
+              <tr><th>32 GB</th><td><strong>32B tier</strong><small>51.5B ceiling</small></td><td><strong>20B tier</strong><small>25.8B ceiling</small></td><td><strong>8B tier</strong><small>12.9B ceiling</small></td></tr>
+              <tr><th>48 GB</th><td><strong>70B tier</strong><small>77.3B ceiling</small></td><td><strong>32B tier</strong><small>38.7B ceiling</small></td><td><strong>14B tier</strong><small>19.3B ceiling</small></td></tr>
+              <tr><th>80 GB</th><td><strong>120B tier</strong><small>128.8B ceiling</small></td><td><strong>32B tier</strong><small>64.4B ceiling</small></td><td><strong>32B tier</strong><small>32.2B ceiling</small></td></tr>
+              <tr><th>141 GB</th><td><strong>120B+ tier</strong><small>227.1B ceiling</small></td><td><strong>70B tier</strong><small>113.5B ceiling</small></td><td><strong>32B tier</strong><small>56.8B ceiling</small></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">The table uses ideal bit-width arithmetic. A real quantized artifact can be larger because tensors, metadata, embeddings, or selected layers may use different precision.</p>
+      </section>
+
+      <section class="method-section" aria-labelledby="method-title">
+        <div>
+          <p class="eyebrow">Transparent method</p>
+          <h2 id="method-title">The result is a first gate, not a runtime promise.</h2>
+        </div>
+        <div class="method-copy">
+          <p><strong>Usable capacity</strong> is GPU memory × GPU count × the usable-memory percentage you select.</p>
+          <p><strong>Weight capacity</strong> divides usable capacity by one plus the selected runtime headroom. The remaining GiB are converted into parameters at the chosen bit width.</p>
+          <p><strong>Largest listed tier</strong> rounds down to one of the common planning sizes on this page: 3B, 7B, 8B, 13B, 14B, 20B, 27B, 32B, 70B, or 120B.</p>
+          <p><strong>Exact deployment memory</strong> needs checkpoint size, layer count, KV heads, head dimension, context length, concurrency, and cache precision. The result button carries your selected tier and hardware into that worksheet.</p>
+          <p><strong>Multi-GPU capacity</strong> is summed for the floor only. The model and serving runtime must support a workable tensor, pipeline, or expert-parallel layout.</p>
+          <p><strong>Named models</strong> vary inside a tier. Use the primary-source worksheets for <a href="../qwen3-gpu-requirements/?utm_source=what_llm_can_i_run&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_guide">Qwen3 8B, 14B, and 32B</a>, <a href="../gpt-oss-hardware-requirements/?utm_source=what_llm_can_i_run&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpt_oss_guide">gpt-oss 20B and 120B</a>, or the <a href="../70b-llm-gpu-requirements/?utm_source=what_llm_can_i_run&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=70b_guide">70B worksheet</a>.</p>
+          <a class="guide-link" href="../local-llm-gpu-compatibility/?utm_source=what_llm_can_i_run&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=model_first_checker">Know the model instead? Check a model against your GPU →</a>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="hardware-title">
+        <div class="comparison-heading">
+          <div>
+            <p class="eyebrow">Capacity references</p>
+            <h2 id="hardware-title">Verify the exact card before using a preset.</h2>
+          </div>
+          <p>The finder is vendor-neutral. These first-party hardware pages are capacity anchors for common profiles; board variants and software support can differ.</p>
+        </div>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead><tr><th>Profile</th><th>First-party reference</th><th>Usable at 90%</th></tr></thead>
+            <tbody>
+              <tr><th>12 GB</th><td><a href="https://nvidianews.nvidia.com/_gallery/download_pdf/5ffddd19ed6ae56d364215c2/">NVIDIA GeForce RTX 3060</a></td><td>10.8 GiB</td></tr>
+              <tr><th>24 GB</th><td><a href="https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4090/">NVIDIA GeForce RTX 4090</a></td><td>21.6 GiB</td></tr>
+              <tr><th>32 GB</th><td><a href="https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/">NVIDIA GeForce RTX 5090</a></td><td>28.8 GiB</td></tr>
+              <tr><th>48 GB</th><td><a href="https://www.nvidia.com/en-us/products/workstations/rtx-6000/">NVIDIA RTX 6000 Ada</a></td><td>43.2 GiB</td></tr>
+              <tr><th>80 GB</th><td><a href="https://www.nvidia.com/en-us/data-center/a100/">NVIDIA A100 80GB</a> / <a href="https://www.nvidia.com/en-us/data-center/h100/">H100 SXM</a></td><td>72 GiB</td></tr>
+              <tr><th>141 GB</th><td><a href="https://www.nvidia.com/en-eu/data-center/h200/">NVIDIA H200</a></td><td>126.9 GiB</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="faq-title">
+        <div class="guide-intro">
+          <p class="eyebrow">GPU model-fit FAQ</p>
+          <h2 id="faq-title">The questions behind “will it run?”</h2>
+          <p>The fast answer is a capacity floor. The deployment answer comes from the exact artifact, context, runtime, and performance target.</p>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>What LLM can I run with 8 GB of VRAM?</h3><p>At the default reserve, one 8 GB GPU clears an 8B INT4, 3B INT8, or 3B FP16 weight floor. The exact checkpoint and context can still exceed that budget.</p></article>
+          <article class="faq-item"><h3>What LLM can I run with 12 GB of VRAM?</h3><p>At the default reserve, one 12 GB GPU clears a 14B INT4, 8B INT8, or 3B FP16 weight floor. Use the exact architecture calculator before downloading a model.</p></article>
+          <article class="faq-item"><h3>What LLM can I run with 24 GB of VRAM?</h3><p>At the default reserve, one 24 GB GPU clears a 32B INT4, 14B INT8, or 8B FP16 weight floor. This does not guarantee speed, kernel support, or a desired context window.</p></article>
+          <article class="faq-item"><h3>Why can a model fail even when its weights fit in VRAM?</h3><p>Serving also needs KV cache, activations, workspace, metadata, and fragmentation reserve. Context, batching, quantization format, supported kernels, and topology can change the boundary.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Evidence before the download</p>
+          <h2 id="subscribe-title">Get the next infrastructure teardown.</h2>
+          <p>ResearchAudio traces architecture, measured constraints, primary sources, and the gap between “fits” and “works.”</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=what_llm_can_i_run&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=what_llm_can_i_run&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script type="module" src="finder.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>
