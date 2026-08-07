@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DiffusionGemma GPU Requirements: BF16, NVFP4 &amp; 256K | ResearchAudio</title>
+    <meta name="description" content="Size DiffusionGemma 26B A4B from its official 48.10 GiB BF16 and 17.53 GiB NVIDIA NVFP4 checkpoints, then separate weight fit from 256K context memory." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/diffusiongemma-gpu-requirements/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="DiffusionGemma GPU requirements: BF16, NVFP4, and 256K context" />
+    <meta property="og:description" content="Use exact Google and NVIDIA checkpoint files, editable GPU plans, and explicit context boundaries for DiffusionGemma 26B A4B." />
+    <meta property="og:url" content="https://tools.researchaudio.io/diffusiongemma-gpu-requirements/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "DiffusionGemma 26B A4B GPU Requirements for BF16, NVFP4, and 256K Context",
+        "description": "A primary-source deployment worksheet covering DiffusionGemma's exact Google BF16 and NVIDIA NVFP4 checkpoint sizes, 25.2B total and 3.8B active parameters, and context-memory boundaries.",
+        "datePublished": "2026-08-07",
+        "dateModified": "2026-08-07",
+        "mainEntityOfPage": "https://tools.researchaudio.io/diffusiongemma-gpu-requirements/",
+        "author": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How much GPU memory does DiffusionGemma need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Google's official BF16 checkpoint contains 11 safetensors files totaling 51,647,701,024 bytes, or 48.10 GiB. NVIDIA's official NVFP4 checkpoint contains two safetensors files totaling 18,823,855,888 bytes, or 17.53 GiB. Both require additional runtime and context memory." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can DiffusionGemma run on a 24 GB GPU?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The 17.53 GiB NVIDIA NVFP4 files plus a generic 20 percent reserve total about 21.04 GiB. That clears 90 percent of a 24 GiB device by only about 0.56 GiB before context state, so it is a tight arithmetic fit rather than a supported deployment claim. NVIDIA names the 32 GB RTX 5090 for prototyping." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can DiffusionGemma BF16 run on one 48 GB GPU?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No straightforward full-GPU plan fits the official 48.10 GiB checkpoint on a nominal 48 GiB device before runtime workspace or cache. With a generic 20 percent reserve, the target is about 57.72 GiB, so an 80 GiB-class card provides a more credible single-device planning floor." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does DiffusionGemma only store its 3.8B active parameters?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. DiffusionGemma has 25.2B total parameters and 3.8B active parameters. Sparse activation reduces per-token compute, but the full expert checkpoint still needs storage and routing." }
+          },
+          {
+            "@type": "Question",
+            "name": "How does 256K context affect DiffusionGemma GPU memory?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The official model card lists context up to 256K tokens. DiffusionGemma uses an encoder-decoder block-diffusion design with an encoder KV cache and bidirectional decoder canvases, so context memory should be measured in the selected runtime rather than inferred from a generic dense decoder-only formula." }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#diffusiongemma-scenarios">Skip to the DiffusionGemma GPU scenarios</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=diffusiongemma_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=diffusiongemma_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=diffusiongemma_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=diffusiongemma_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">DiffusionGemma 26B A4B / checkpoint worksheet</p>
+          <h1 id="hero-title">48.10 GiB at BF16. 17.53 GiB at NVFP4.</h1>
+          <p class="hero-deck">DiffusionGemma activates 3.8B of 25.2B parameters, but the full expert checkpoint still has to reside somewhere. Start with the exact files, then budget the encoder cache, decoder canvases, runtime workspace, and concurrency.</p>
+          <a class="hero-join-link" href="../llm-gpu-memory-calculator/?parameterBillions=25.2&amp;bitsPerParameter=4&amp;checkpointGiB=17.53&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=8&amp;inferenceHeadroom=20&amp;vramPerGpu=32&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=diffusiongemma_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_nvfp4_5090_plan">Open the editable RTX 5090 NVFP4 plan →</a>
+        </div>
+        <aside class="lab-index" aria-label="DiffusionGemma checkpoint scope">
+          <span>Official BF16 files</span>
+          <strong>48.10 GiB</strong>
+          <p>51,647,701,024 bytes across 11 files before runtime workspace, encoder cache, decoder canvases, and serving reserve.</p>
+        </aside>
+      </section>
+
+      <section class="scenario-section" id="diffusiongemma-scenarios" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">Quick answer / artifact floors</p>
+          <h2 id="scenario-title">A 24 GB NVFP4 fit is tight. A 48 GB BF16 fit is short.</h2>
+          <p>These plans use exact official artifact totals and a visible generic reserve. They do not claim that every kernel, context length, or runtime supports the resulting device.</p>
+        </div>
+        <div class="scenario-grid guide-scenario-grid">
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=25.2&amp;bitsPerParameter=4&amp;checkpointGiB=17.53&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=8&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=diffusiongemma_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=nvfp4_24gb_tight_fit">
+            <span>NVFP4 · 24 GiB card</span>
+            <strong>0.56 GiB margin</strong>
+            <small>Artifact + 20% reserve vs 90% usable; cache excluded →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=25.2&amp;bitsPerParameter=4&amp;checkpointGiB=17.53&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=8&amp;inferenceHeadroom=20&amp;vramPerGpu=32&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=diffusiongemma_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=nvfp4_5090_plan">
+            <span>NVFP4 · RTX 5090</span>
+            <strong>7.76 GiB margin</strong>
+            <small>NVIDIA-named prototyping hardware; measure context →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=25.2&amp;bitsPerParameter=16&amp;checkpointGiB=48.10&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=0&amp;vramPerGpu=48&amp;usableVramPercent=100&amp;availableGpus=1&amp;utm_source=diffusiongemma_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=bf16_48gb_shortfall">
+            <span>BF16 · 48 GiB card</span>
+            <strong>SHORT 0.10 GiB</strong>
+            <small>Files alone exceed the nominal device before runtime →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=25.2&amp;bitsPerParameter=16&amp;checkpointGiB=48.10&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=80&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=diffusiongemma_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=bf16_80gb_plan">
+            <span>BF16 · 80 GiB card</span>
+            <strong>57.72 GiB target</strong>
+            <small>Exact files + 20% reserve; 256K state excluded →</small>
+          </a>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="matrix-title">
+        <div class="comparison-heading">
+          <div>
+            <p class="eyebrow">Official files vs runtime</p>
+            <h2 id="matrix-title">The quantized checkpoint changes the floor, not the architecture.</h2>
+          </div>
+          <p>Google's model card defines the architecture and BF16 checkpoint. NVIDIA's model card defines its optimized NVFP4 release and supported format. The arithmetic below keeps file fit separate from serving fit.</p>
+        </div>
+        <p class="comparison-scroll-hint">Swipe the matrix horizontally →</p>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead>
+              <tr><th scope="col">Input</th><th scope="col">Official value</th><th scope="col">What it changes</th><th scope="col">What it does not prove</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Google BF16 checkpoint</th><td>48.10 GiB · 11 files</td><td>Resident-weight floor</td><td>Runtime or 256K capacity</td></tr>
+              <tr><th scope="row">NVIDIA NVFP4 checkpoint</th><td>17.53 GiB · 2 files</td><td>Quantized artifact floor</td><td>Kernel support on every GPU</td></tr>
+              <tr><th scope="row">Total / active</th><td>25.2B / 3.8B parameters</td><td>Storage vs per-step compute</td><td>3.8B-size memory usage</td></tr>
+              <tr><th scope="row">Generation</th><td>256-token diffusion canvases</td><td>Parallel token refinement</td><td>Decoder-only KV-cache behavior</td></tr>
+              <tr><th scope="row">Context</th><td>Up to 256K tokens</td><td>Maximum advertised prompt window</td><td>Full-window concurrency</td></tr>
+              <tr><th scope="row">NVIDIA prototyping</th><td>RTX 5090 or DGX Spark</td><td>Named first-party starting points</td><td>A universal minimum GPU</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">Artifact totals were calculated from the official Google and NVIDIA Hugging Face repositories on August 7, 2026. Recheck the inventories after checkpoint revisions.</p>
+      </section>
+
+      <section class="principle-strip" aria-label="DiffusionGemma deployment boundaries">
+        <p class="eyebrow">Read the estimate</p>
+        <p><strong>Active is not resident.</strong><br />3.8B active parameters reduce compute, but all 25.2B weights remain part of the checkpoint.</p>
+        <p><strong>NVFP4 is format plus hardware.</strong><br />A small artifact does not guarantee compatible kernels or good throughput on every GPU.</p>
+        <p><strong>256K is runtime state.</strong><br />The encoder cache and decoder canvases must be measured under the chosen concurrency.</p>
+      </section>
+
+      <section class="method-section" aria-labelledby="context-title">
+        <div>
+          <p class="eyebrow">Context and cache boundary</p>
+          <h2 id="context-title">Diffusion generation changes which cache math is safe.</h2>
+        </div>
+        <div class="method-copy formula-copy">
+          <p><strong>Official architecture</strong><br /><code>25.2B total · 3.8B active · 30 layers</code></p>
+          <p><strong>Generation unit</strong><br /><code>256-token canvas · bidirectional attention</code></p>
+          <p><strong>Context</strong><br /><code>up to 256K · encoder KV cache</code></p>
+          <p>The calculator links hold context at zero because a generic decoder-only cache formula would create false precision. Profile the selected Transformers, NeMo AutoModel, NIM, or other supported runtime at the intended prompt length and batch size.</p>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="sources-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Primary-source inputs</p>
+          <h2 id="sources-title">Start with Google and NVIDIA's exact releases.</h2>
+          <p>Architecture, context, and the BF16 files come from Google's model card and repository. NVFP4 file size and supported format come from NVIDIA's official optimized checkpoint and technical release.</p>
+          <a class="guide-link" href="../llm-gpu-memory-calculator/?utm_source=diffusiongemma_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=blank_gpu_calculator">Open the GPU memory calculator →</a>
+          <a class="guide-link" href="../gemma-4-gpu-requirements/?utm_source=diffusiongemma_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gemma_4_guide">Compare the Gemma 4 family →</a>
+          <a class="guide-link" href="../what-llm-can-i-run/?utm_source=diffusiongemma_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=model_finder">Find models for your GPU budget →</a>
+          <a class="guide-link" href="https://huggingface.co/google/diffusiongemma-26B-A4B-it">Official Google model card →</a>
+          <a class="guide-link" href="https://huggingface.co/google/diffusiongemma-26B-A4B-it/tree/main">Official Google BF16 checkpoint →</a>
+          <a class="guide-link" href="https://huggingface.co/nvidia/diffusiongemma-26B-A4B-it-NVFP4">Official NVIDIA NVFP4 checkpoint →</a>
+          <a class="guide-link" href="https://developer.nvidia.com/blog/?p=118345">NVIDIA deployment overview →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>How much GPU memory does DiffusionGemma need?</h3><p>The Google BF16 files total 48.10 GiB. NVIDIA's NVFP4 files total 17.53 GiB. Both need additional runtime and context memory.</p></article>
+          <article class="faq-item"><h3>Can DiffusionGemma run on a 24 GB GPU?</h3><p>The NVFP4 artifact plus a generic 20% reserve leaves only about 0.56 GiB inside a 90%-usable 24 GiB plan before context state. Treat that as tight arithmetic, not a supported topology.</p></article>
+          <article class="faq-item"><h3>Can DiffusionGemma BF16 run on one 48 GB GPU?</h3><p>The 48.10 GiB files already exceed a nominal 48 GiB device. A generic 20% reserve moves the planning target to 57.72 GiB before context state.</p></article>
+          <article class="faq-item"><h3>Does DiffusionGemma only store its 3.8B active parameters?</h3><p>No. The model has 25.2B total parameters. Sparse activation reduces per-step compute, not the storage required for the full expert checkpoint.</p></article>
+          <article class="faq-item"><h3>How does 256K context affect DiffusionGemma GPU memory?</h3><p>The model uses an encoder KV cache and bidirectional diffusion canvases. Measure full-window memory in the chosen runtime instead of applying a generic decoder-only formula.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Deployment math without the launch theatre</p>
+          <h2 id="subscribe-title">Get the next model and infrastructure teardown.</h2>
+          <p>ResearchAudio turns model releases, hardware claims, and serving constraints into practical decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <p class="subscribe-direct-fallback"><strong>Prefer the hosted signup page?</strong><a href="https://researchaudio.io/subscribe?utm_source=diffusiongemma_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join">Join ResearchAudio free →</a></p>
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=diffusiongemma_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../llm-gpu-memory-calculator/">GPU memory calculator</a>
+        <a href="../gemma-4-gpu-requirements/">Gemma 4 guide</a>
+        <a href="../gpt-oss-hardware-requirements/">gpt-oss guide</a>
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=diffusiongemma_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"c20a9e29828c471c92ed7c2284901e05","spa":false}'></script>
+  </body>
+</html>

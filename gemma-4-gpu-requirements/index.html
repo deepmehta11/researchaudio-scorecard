@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gemma 4 GPU Requirements: E2B, E4B, 12B, 26B &amp; 31B | ResearchAudio</title>
+    <meta name="description" content="Compare official Gemma 4 GPU memory requirements for E2B, E4B, 12B, 26B A4B, and 31B at BF16, SFP8, and Q4_0, with exact 12B checkpoint checks." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/gemma-4-gpu-requirements/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Gemma 4 GPU requirements: E2B through 31B" />
+    <meta property="og:description" content="Use Google's official inference-memory table, exact 12B checkpoint files, and editable GPU plans without confusing model weights with production capacity." />
+    <meta property="og:url" content="https://tools.researchaudio.io/gemma-4-gpu-requirements/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "Gemma 4 GPU Requirements for E2B, E4B, 12B, 26B A4B, and 31B",
+        "description": "A primary-source Gemma 4 deployment worksheet covering Google's official BF16, SFP8, and Q4_0 inference-memory table, exact 12B checkpoint sizes, and practical GPU-fit boundaries.",
+        "datePublished": "2026-08-07",
+        "dateModified": "2026-08-07",
+        "mainEntityOfPage": "https://tools.researchaudio.io/gemma-4-gpu-requirements/",
+        "author": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How much GPU memory does Gemma 4 12B need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Google lists approximately 26.7 GB at BF16, 13.4 GB at SFP8, and 6.7 GB at Q4_0. The official BF16 Hugging Face checkpoint is 23,919,549,408 bytes, or 22.28 GiB, before runtime memory and context state." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can Gemma 4 12B run on an 8 GB GPU?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The official Q4_0 planning figure is 6.7 GB and the official QAT Q4_0 GGUF files total 6.66 GiB. An 8 GB card leaves very little room for runtime workspace, context memory, and platform differences, so treat it as a tight loading experiment rather than a production recommendation." }
+          },
+          {
+            "@type": "Question",
+            "name": "How much GPU memory does Gemma 4 26B A4B need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Google lists approximately 57.7 GB at BF16, 28.8 GB at SFP8, and 14.4 GB at Q4_0. Although only about 4B parameters are active per token, all expert weights still need resident storage." }
+          },
+          {
+            "@type": "Question",
+            "name": "How much GPU memory does Gemma 4 31B need?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Google lists approximately 69.9 GB at BF16, 34.9 GB at SFP8, and 17.5 GB at Q4_0. Those are inference-loading estimates; long context and concurrency need additional memory." }
+          },
+          {
+            "@type": "Question",
+            "name": "Do Gemma 4 memory estimates include KV cache?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Google describes its table as approximate memory required to load the model with 20 percent overhead. It is not a guarantee that a specific context length, batch size, multimodal input, or concurrent workload fits. Measure cache and runtime allocations in the chosen serving stack." }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#gemma-4-scenarios">Skip to the Gemma 4 GPU scenarios</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=gemma_4_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=gemma_4_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=gemma_4_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=gemma_4_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Gemma 4 / official memory worksheet</p>
+          <h1 id="hero-title">6.7 GB for 12B Q4. 69.9 GB for 31B BF16.</h1>
+          <p class="hero-deck">Google publishes one inference-memory table for the full Gemma 4 family. Use it as the loading baseline, then add context, concurrency, multimodal inputs, and runtime-specific reserve.</p>
+          <a class="hero-join-link" href="../llm-gpu-memory-calculator/?parameterBillions=11.95&amp;bitsPerParameter=4&amp;checkpointGiB=6.66&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=16&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=gemma_4_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_12b_q4_plan">Open the editable Gemma 4 12B Q4 plan →</a>
+        </div>
+        <aside class="lab-index" aria-label="Gemma 4 12B checkpoint scope">
+          <span>Official 12B BF16 files</span>
+          <strong>22.28 GiB</strong>
+          <p>23,919,549,408 bytes before runtime workspace, context memory, and serving reserve.</p>
+        </aside>
+      </section>
+
+      <section class="scenario-section" id="gemma-4-scenarios" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">Quick answer / official loading estimates</p>
+          <h2 id="scenario-title">The 12B model spans consumer GPUs. The 31B model does not at BF16.</h2>
+          <p>Google's values are approximate inference memory, not raw parameter arithmetic. The editable links preserve the published checkpoint or family estimate as the starting input so the runtime reserve stays visible.</p>
+        </div>
+        <div class="scenario-grid guide-scenario-grid">
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=11.95&amp;bitsPerParameter=4&amp;checkpointGiB=6.66&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=8&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=gemma_4_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=12b_q4_8gb_tight_fit">
+            <span>12B · Q4_0 · 8 GB card</span>
+            <strong>TIGHT FIT</strong>
+            <small>6.66 GiB artifact before cache and runtime variance →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=11.95&amp;bitsPerParameter=4&amp;checkpointGiB=6.66&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=16&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=gemma_4_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=12b_q4_16gb_plan">
+            <span>12B · Q4_0 · 16 GB card</span>
+            <strong>ROOM TO MEASURE</strong>
+            <small>Artifact plus a visible generic runtime reserve →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=11.95&amp;bitsPerParameter=16&amp;checkpointGiB=22.28&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=32&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=gemma_4_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=12b_bf16_32gb_plan">
+            <span>12B · BF16 · 32 GB card</span>
+            <strong>26.74 GiB + cache</strong>
+            <small>Exact files plus 20% reserve; context excluded →</small>
+          </a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=30.7&amp;bitsPerParameter=4&amp;checkpointGiB=17.5&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=gemma_4_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=31b_q4_24gb_plan">
+            <span>31B · Q4_0 · 24 GB card</span>
+            <strong>17.5 GB baseline</strong>
+            <small>Published loading estimate; validate the runtime →</small>
+          </a>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="matrix-title">
+        <div class="comparison-heading">
+          <div>
+            <p class="eyebrow">Official Gemma 4 inference table</p>
+            <h2 id="matrix-title">Five sizes. Three precisions. One loading baseline.</h2>
+          </div>
+          <p>Google says the table includes approximately 20% overhead for model loading. Treat every value as a first gate, then verify the exact runtime, context, batch size, modalities, and concurrency.</p>
+        </div>
+        <p class="comparison-scroll-hint">Swipe the matrix horizontally →</p>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead>
+              <tr><th scope="col">Gemma 4 model</th><th scope="col">BF16</th><th scope="col">SFP8</th><th scope="col">Q4_0</th><th scope="col">Deployment boundary</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">E2B</th><td>11.4 GB</td><td>5.7 GB</td><td>2.9 GB</td><td>PLE makes total storage larger than 2.3B effective parameters imply</td></tr>
+              <tr><th scope="row">E4B</th><td>17.9 GB</td><td>8.9 GB</td><td>4.5 GB</td><td>8B parameters with embeddings, 4.5B effective</td></tr>
+              <tr><th scope="row">12B</th><td>26.7 GB</td><td>13.4 GB</td><td>6.7 GB</td><td>Dense 11.95B; official BF16 files total 22.28 GiB</td></tr>
+              <tr><th scope="row">26B A4B</th><td>57.7 GB</td><td>28.8 GB</td><td>14.4 GB</td><td>All 25.2B weights reside even though 3.8B activate</td></tr>
+              <tr><th scope="row">31B</th><td>69.9 GB</td><td>34.9 GB</td><td>17.5 GB</td><td>Dense 30.7B; long context still adds state</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">Source: Google AI for Developers, “Gemma 4 model overview,” retrieved August 7, 2026. Values may change with inference tool and environment.</p>
+      </section>
+
+      <section class="principle-strip" aria-label="Gemma 4 memory boundaries">
+        <p class="eyebrow">Read the estimate</p>
+        <p><strong>Effective is not resident.</strong><br />E-model embeddings and MoE experts still consume memory even when fewer parameters drive each token.</p>
+        <p><strong>Loading is not serving.</strong><br />Context, batch size, multimodal encoders, kernels, and fragmentation can move the fit.</p>
+        <p><strong>Eight gigabytes is a test.</strong><br />The 12B Q4 artifact can be tight enough that runtime choice decides whether it loads.</p>
+      </section>
+
+      <section class="method-section" aria-labelledby="artifact-title">
+        <div>
+          <p class="eyebrow">12B artifact cross-check</p>
+          <h2 id="artifact-title">The official files explain the published 12B floor.</h2>
+        </div>
+        <div class="method-copy formula-copy">
+          <p><strong>BF16 checkpoint</strong><br /><code>23,919,549,408 bytes · 22.28 GiB</code></p>
+          <p><strong>QAT Q4_0 GGUF</strong><br /><code>7,150,994,912 bytes · 6.66 GiB</code></p>
+          <p><strong>Google loading estimates</strong><br /><code>26.7 GB BF16 · 6.7 GB Q4_0</code></p>
+          <p>The BF16 file total plus a 20% reserve is 26.73 GiB, closely matching Google's 26.7 loading estimate. The Q4_0 GGUF artifact itself is already 6.66 GiB, so an 8 GB device should be treated as a tight experiment, not guaranteed capacity.</p>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="sources-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Primary-source inputs</p>
+          <h2 id="sources-title">Start with Google's table and exact model files.</h2>
+          <p>The family matrix and overhead note come from Google AI for Developers. Architecture and file totals come from Google's official Hugging Face repositories.</p>
+          <a class="guide-link" href="../llm-gpu-memory-calculator/?utm_source=gemma_4_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=blank_gpu_calculator">Open the GPU memory calculator →</a>
+          <a class="guide-link" href="../diffusiongemma-gpu-requirements/?utm_source=gemma_4_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=diffusiongemma_guide">Compare DiffusionGemma hardware →</a>
+          <a class="guide-link" href="../what-llm-can-i-run/?utm_source=gemma_4_gpu_requirements&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=model_finder">Find models for your GPU budget →</a>
+          <a class="guide-link" href="https://ai.google.dev/gemma/docs/core">Official Gemma 4 model overview →</a>
+          <a class="guide-link" href="https://huggingface.co/google/gemma-4-12B">Official Gemma 4 12B model card →</a>
+          <a class="guide-link" href="https://huggingface.co/google/gemma-4-12B-it/tree/main">Official 12B BF16 checkpoint →</a>
+          <a class="guide-link" href="https://huggingface.co/google/gemma-4-12B-it-qat-q4_0-gguf/tree/main">Official 12B QAT Q4_0 files →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>How much GPU memory does Gemma 4 12B need?</h3><p>Google lists about 26.7 GB at BF16, 13.4 GB at SFP8, and 6.7 GB at Q4_0. The official BF16 files total 22.28 GiB before runtime and context state.</p></article>
+          <article class="faq-item"><h3>Can Gemma 4 12B run on an 8 GB GPU?</h3><p>The official QAT Q4_0 GGUF files total 6.66 GiB. That leaves little margin on an 8 GB card, so runtime, context length, offload behavior, and fragmentation decide whether the workload is usable.</p></article>
+          <article class="faq-item"><h3>How much GPU memory does Gemma 4 26B A4B need?</h3><p>Google lists 57.7 GB at BF16, 28.8 GB at SFP8, and 14.4 GB at Q4_0. Active parameters reduce compute, not the storage required for all expert weights.</p></article>
+          <article class="faq-item"><h3>How much GPU memory does Gemma 4 31B need?</h3><p>Google lists 69.9 GB at BF16, 34.9 GB at SFP8, and 17.5 GB at Q4_0 before workload-specific validation.</p></article>
+          <article class="faq-item"><h3>Do Gemma 4 memory estimates include KV cache?</h3><p>The table is a model-loading estimate with approximate overhead. It does not guarantee a particular context length, modality mix, batch size, or concurrency level.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Deployment math without the launch theatre</p>
+          <h2 id="subscribe-title">Get the next model and infrastructure teardown.</h2>
+          <p>ResearchAudio turns model releases, hardware claims, and serving constraints into practical decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <p class="subscribe-direct-fallback"><strong>Prefer the hosted signup page?</strong><a href="https://researchaudio.io/subscribe?utm_source=gemma_4_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join">Join ResearchAudio free →</a></p>
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=gemma_4_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../llm-gpu-memory-calculator/">GPU memory calculator</a>
+        <a href="../diffusiongemma-gpu-requirements/">DiffusionGemma guide</a>
+        <a href="../qwen3-gpu-requirements/">Qwen3 guide</a>
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=gemma_4_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"c20a9e29828c471c92ed7c2284901e05","spa":false}'></script>
+  </body>
+</html>

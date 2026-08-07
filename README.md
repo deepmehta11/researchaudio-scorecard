@@ -1,6 +1,6 @@
 # ResearchAudio Evidence Lab
 
-An evergreen acquisition ecosystem for ResearchAudio. Sixteen browser-local tools, ten practical field guides, and a self-serve embed library turn AI task framing, benchmark and launch claims, token budgets, voice latency and outcome economics, hardware-first local LLM discovery, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability and security, automation business cases, and Codex workflows into concrete inspections before inviting visitors into the daily briefing.
+An evergreen acquisition ecosystem for ResearchAudio. Sixteen browser-local tools, twelve practical field guides, and a self-serve embed library turn AI task framing, benchmark and launch claims, token budgets, voice latency and outcome economics, hardware-first local LLM discovery, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability and security, automation business cases, and Codex workflows into concrete inspections before inviting visitors into the daily briefing.
 
 Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain connected to the Beehiiv publication at `https://researchaudio.io/`.
 
@@ -26,6 +26,9 @@ Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain con
 - `/gpt-oss-hardware-requirements/` — primary-source gpt-oss-20b and gpt-oss-120b GPU memory guide with MXFP4, checkpoint, 4K, and 128K scenarios.
 - `/deepseek-v4-flash-gpu-requirements/` — primary-source DeepSeek V4 Flash 0731 guide with the exact mixed-precision artifact and editable 32K-to-1M deployment comparisons.
 - `/glm-5-2-gpu-requirements/` — primary-source GLM-5.2 guide with exact FP8 and BF16 artifact totals plus supported 8xH200 and 8xB200 deployment tiers.
+- `/kimi-k3-gpu-requirements/` — primary-source Kimi K3 guide with the exact 1,453.74 GiB MXFP4 artifact, an 8xH200 shortfall, a 12xH200 raw floor, and Moonshot's 64-plus-accelerator serving recommendation.
+- `/gemma-4-gpu-requirements/` — primary-source Gemma 4 family matrix for E2B, E4B, 12B, 26B A4B, and 31B across BF16, SFP8, and Q4_0, with exact 12B checkpoint checks.
+- `/diffusiongemma-gpu-requirements/` — primary-source DiffusionGemma 26B A4B guide with exact 48.10 GiB BF16 and 17.53 GiB NVIDIA NVFP4 artifacts plus explicit 256K context boundaries.
 - `/ai-agent-security-checklist/` — interactive 12-point control review grounded in current OWASP, Anthropic, and NIST primary guidance.
 - `/ai-benchmark-audit-checklist/` — interactive 12-point reproducibility review grounded in current OpenAI, Anthropic, METR, and Terminal-Bench primary sources.
 - `/llm-gpu-memory-calculator/` — model-weight VRAM, optional architecture-aware KV cache, runtime headroom, usable memory, and minimum GPU count.

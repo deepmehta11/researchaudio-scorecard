@@ -61,6 +61,10 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Sizes the official 703.74 GiB FP8 artifact, proves why eight 80 GiB GPUs are short, and separates the supported 8xH200 baseline, 8xB200 full-context recipe, and 1,403.19 GiB BF16 artifact.
 - Kimi K3 GPU Requirements: https://tools.researchaudio.io/kimi-k3-gpu-requirements/
   Sizes the official 1,453.74 GiB MXFP4 artifact, proves why eight H200-class GPUs are short, and separates the 12xH200 raw weight floor from Moonshot's 64-plus-accelerator serving recommendation.
+- Gemma 4 GPU Requirements: https://tools.researchaudio.io/gemma-4-gpu-requirements/
+  Compares Google's official E2B, E4B, 12B, 26B A4B, and 31B inference-memory estimates at BF16, SFP8, and Q4_0, then cross-checks the exact 12B BF16 and QAT Q4_0 files.
+- DiffusionGemma GPU Requirements: https://tools.researchaudio.io/diffusiongemma-gpu-requirements/
+  Sizes the official 48.10 GiB Google BF16 and 17.53 GiB NVIDIA NVFP4 checkpoints, separates 25.2B resident from 3.8B active parameters, and keeps 256K context outside the weight-only claim.
 - gpt-oss Hardware Requirements: https://tools.researchaudio.io/gpt-oss-hardware-requirements/
   Compares gpt-oss-20b and gpt-oss-120b using official checkpoint sizes, MXFP4 weight math, architecture-aware KV-cache estimates, and editable 4K and 128K deployment scenarios.
 - AI Agent Security Checklist: https://tools.researchaudio.io/ai-agent-security-checklist/

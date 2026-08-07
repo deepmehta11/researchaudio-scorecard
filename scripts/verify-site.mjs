@@ -26,7 +26,7 @@ const brandedToolsOrigin = "https://tools.researchaudio.io";
 const cloudflareWebAnalyticsToken = "c20a9e29828c471c92ed7c2284901e05";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, kimiK3GuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, kimiK3GuideHtml, gemma4GuideHtml, diffusionGemmaGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -59,6 +59,8 @@ const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, cost
   readFile(path.join(root, "deepseek-v4-flash-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "glm-5-2-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "kimi-k3-gpu-requirements/index.html"), "utf8"),
+  readFile(path.join(root, "gemma-4-gpu-requirements/index.html"), "utf8"),
+  readFile(path.join(root, "diffusiongemma-gpu-requirements/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-security-checklist/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-security-checklist/checklist.js"), "utf8"),
   readFile(path.join(root, "ai-benchmark-audit-checklist/index.html"), "utf8"),
@@ -146,6 +148,8 @@ for (const [name, page, pathname] of [
   ["DeepSeek V4 Flash GPU requirements guide", deepseekV4GuideHtml, "/deepseek-v4-flash-gpu-requirements/"],
   ["GLM-5.2 GPU requirements guide", glm52GuideHtml, "/glm-5-2-gpu-requirements/"],
   ["Kimi K3 GPU requirements guide", kimiK3GuideHtml, "/kimi-k3-gpu-requirements/"],
+  ["Gemma 4 GPU requirements guide", gemma4GuideHtml, "/gemma-4-gpu-requirements/"],
+  ["DiffusionGemma GPU requirements guide", diffusionGemmaGuideHtml, "/diffusiongemma-gpu-requirements/"],
   ["AI agent security checklist", securityGuideHtml, "/ai-agent-security-checklist/"],
   ["AI benchmark audit checklist", benchmarkGuideHtml, "/ai-benchmark-audit-checklist/"],
   ["starter kit", starterHtml, "/evidence-starter-kit/"],
@@ -375,6 +379,64 @@ for (const question of [
   const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   assert.match(kimiK3GuideHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `Kimi K3 visible FAQ question missing: ${question}`);
   assert.match(kimiK3GuideHtml, new RegExp(`"name": "${escapedQuestion}"`), `Kimi K3 FAQ schema question missing: ${question}`);
+}
+
+assert.match(gemma4GuideHtml, /<title>Gemma 4 GPU Requirements: E2B, E4B, 12B, 26B &amp; 31B \| ResearchAudio<\/title>/);
+assert.equal((gemma4GuideHtml.match(/"@type": "TechArticle"/g) || []).length, 1, "Gemma 4 guide should have one TechArticle schema");
+assert.equal((gemma4GuideHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "Gemma 4 guide should have one FAQPage schema");
+assert.doesNotThrow(() => parseStructuredData(gemma4GuideHtml), "Gemma 4 guide structured data must be valid JSON");
+assert.match(gemma4GuideHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=gemma_4_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab/);
+assert.match(gemma4GuideHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
+assert.match(gemma4GuideHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
+assert.match(gemma4GuideHtml, /utm_content=direct_join/);
+assert.match(gemma4GuideHtml, /subscribe-direct-fallback/);
+assert.equal((gemma4GuideHtml.match(/class="scenario-card/g) || []).length, 4, "Gemma 4 guide should contain four deployment scenarios");
+assert.match(gemma4GuideHtml, /checkpointGiB=6\.66/);
+assert.match(gemma4GuideHtml, /checkpointGiB=22\.28/);
+assert.match(gemma4GuideHtml, /23,919,549,408 bytes/);
+assert.match(gemma4GuideHtml, /7,150,994,912 bytes/);
+assert.match(gemma4GuideHtml, /ai\.google\.dev\/gemma\/docs\/core/);
+assert.match(gemma4GuideHtml, /huggingface\.co\/google\/gemma-4-12B/);
+assert.doesNotMatch(gemma4GuideHtml, /TODO|PLACEHOLDER|example\.com/);
+for (const question of [
+  "How much GPU memory does Gemma 4 12B need?",
+  "Can Gemma 4 12B run on an 8 GB GPU?",
+  "How much GPU memory does Gemma 4 26B A4B need?",
+  "How much GPU memory does Gemma 4 31B need?",
+  "Do Gemma 4 memory estimates include KV cache?",
+]) {
+  const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  assert.match(gemma4GuideHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `Gemma 4 visible FAQ question missing: ${question}`);
+  assert.match(gemma4GuideHtml, new RegExp(`"name": "${escapedQuestion}"`), `Gemma 4 FAQ schema question missing: ${question}`);
+}
+
+assert.match(diffusionGemmaGuideHtml, /<title>DiffusionGemma GPU Requirements: BF16, NVFP4 &amp; 256K \| ResearchAudio<\/title>/);
+assert.equal((diffusionGemmaGuideHtml.match(/"@type": "TechArticle"/g) || []).length, 1, "DiffusionGemma guide should have one TechArticle schema");
+assert.equal((diffusionGemmaGuideHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "DiffusionGemma guide should have one FAQPage schema");
+assert.doesNotThrow(() => parseStructuredData(diffusionGemmaGuideHtml), "DiffusionGemma guide structured data must be valid JSON");
+assert.match(diffusionGemmaGuideHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=diffusiongemma_gpu_requirements&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab/);
+assert.match(diffusionGemmaGuideHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
+assert.match(diffusionGemmaGuideHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
+assert.match(diffusionGemmaGuideHtml, /utm_content=direct_join/);
+assert.match(diffusionGemmaGuideHtml, /subscribe-direct-fallback/);
+assert.equal((diffusionGemmaGuideHtml.match(/class="scenario-card/g) || []).length, 4, "DiffusionGemma guide should contain four deployment scenarios");
+assert.match(diffusionGemmaGuideHtml, /checkpointGiB=17\.53/);
+assert.match(diffusionGemmaGuideHtml, /checkpointGiB=48\.10/);
+assert.match(diffusionGemmaGuideHtml, /51,647,701,024 bytes/);
+assert.match(diffusionGemmaGuideHtml, /18,823,855,888 bytes/);
+assert.match(diffusionGemmaGuideHtml, /huggingface\.co\/google\/diffusiongemma-26B-A4B-it/);
+assert.match(diffusionGemmaGuideHtml, /huggingface\.co\/nvidia\/diffusiongemma-26B-A4B-it-NVFP4/);
+assert.doesNotMatch(diffusionGemmaGuideHtml, /TODO|PLACEHOLDER|example\.com/);
+for (const question of [
+  "How much GPU memory does DiffusionGemma need?",
+  "Can DiffusionGemma run on a 24 GB GPU?",
+  "Can DiffusionGemma BF16 run on one 48 GB GPU?",
+  "Does DiffusionGemma only store its 3.8B active parameters?",
+  "How does 256K context affect DiffusionGemma GPU memory?",
+]) {
+  const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  assert.match(diffusionGemmaGuideHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `DiffusionGemma visible FAQ question missing: ${question}`);
+  assert.match(diffusionGemmaGuideHtml, new RegExp(`"name": "${escapedQuestion}"`), `DiffusionGemma FAQ schema question missing: ${question}`);
 }
 
 for (const [name, page] of [
@@ -1370,13 +1432,15 @@ assert.match(voiceCostHtml, /elevenlabs\.io\/pricing/);
 assert.match(toolsHtml, /voice-ai-cost-calculator/);
 assert.match(toolsHtml, /voice-ai-cost-per-minute/);
 assert.match(toolsHtml, /ai-receptionist-cost/);
-assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 11, "tools hub should contain eleven search field notes");
+assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 13, "tools hub should contain thirteen search field notes");
 assert.match(toolsHtml, /7b-vs-13b-llm-gpu-requirements/);
 assert.match(toolsHtml, /70b-llm-gpu-requirements/);
 assert.match(toolsHtml, /qwen2-5-gpu-requirements/);
 assert.match(toolsHtml, /qwen3-gpu-requirements/);
 assert.match(toolsHtml, /deepseek-v4-flash-gpu-requirements/);
 assert.match(toolsHtml, /kimi-k3-gpu-requirements/);
+assert.match(toolsHtml, /gemma-4-gpu-requirements/);
+assert.match(toolsHtml, /diffusiongemma-gpu-requirements/);
 assert.match(toolsHtml, /gpt-oss-hardware-requirements/);
 assert.match(toolsHtml, /ai-agent-security-checklist/);
 assert.match(toolsHtml, /ai-benchmark-audit-checklist/);
@@ -1561,10 +1625,18 @@ assert.match(toolsHtml, /Kimi K3 GPU requirements/);
 assert.match(kimiK3GuideHtml, /SHORT 438\.54 GiB/);
 assert.match(kimiK3GuideHtml, /69\.06 GiB remains/);
 assert.match(kimiK3GuideHtml, /1,744\.49 GiB target/);
+assert.match(toolsHtml, /Gemma 4 GPU requirements/);
+assert.match(gemma4GuideHtml, /6\.7 GB for 12B Q4/);
+assert.match(gemma4GuideHtml, /22\.28 GiB/);
+assert.match(gemma4GuideHtml, /69\.9 GB/);
+assert.match(toolsHtml, /DiffusionGemma GPU requirements/);
+assert.match(diffusionGemmaGuideHtml, /48\.10 GiB at BF16/);
+assert.match(diffusionGemmaGuideHtml, /17\.53 GiB at NVFP4/);
+assert.match(diffusionGemmaGuideHtml, /0\.56 GiB margin/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 31, "sitemap should contain all thirty-one crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 33, "sitemap should contain all thirty-three crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 31, "sitemap should publish thirty-one URL locations");
+assert.equal(sitemapUrls.length, 33, "sitemap should publish thirty-three URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -1584,6 +1656,8 @@ assert.match(llms, /AI Voice Agent Cost Calculator/);
 assert.match(llms, /AI Evidence Starter Kit/);
 assert.match(llms, /Embeddable AI Tools/);
 assert.match(llms, /Kimi K3 GPU Requirements/);
+assert.match(llms, /Gemma 4 GPU Requirements/);
+assert.match(llms, /DiffusionGemma GPU Requirements/);
 assert.match(llms, /The Fable 5 Cost Playbook/);
 assert.match(llms, /Voice AI Cost per Minute/);
 assert.match(llms, /AI Receptionist Cost Worksheet/);
@@ -1610,4 +1684,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 16 tools, 1 activation kit, 1 embed library, 11 field guides, 31 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 16 tools, 1 activation kit, 1 embed library, 13 search field notes, 33 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

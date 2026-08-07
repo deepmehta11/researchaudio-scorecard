@@ -4,13 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Free AI Evaluation Tools for Builders | ResearchAudio</title>
-    <meta name="description" content="Sixteen free AI evaluation tools plus ten practical field guides for auditing task fit, benchmarks, evidence, local LLM model fit, GPU and KV-cache memory, voice economics, latency, LLM spend, agent loops, ROI, and Codex workflows." />
+    <meta name="description" content="Sixteen free AI evaluation tools plus twelve practical field guides for auditing task fit, benchmarks, evidence, local LLM model fit, GPU and KV-cache memory, voice economics, latency, LLM spend, agent loops, ROI, and Codex workflows." />
     <meta name="theme-color" content="#eaf2f0" />
     <link rel="canonical" href="https://tools.researchaudio.io/tools/" />
     <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="ResearchAudio Evidence Lab" />
-    <meta property="og:description" content="Sixteen free instruments and ten practical field guides for making better AI and agent-engineering decisions." />
+    <meta property="og:description" content="Sixteen free instruments and twelve practical field guides for making better AI and agent-engineering decisions." />
     <meta property="og:url" content="https://tools.researchaudio.io/tools/" />
     <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -54,6 +54,8 @@
           { "@type": "TechArticle", "name": "DeepSeek V4 Flash GPU Requirements", "url": "https://tools.researchaudio.io/deepseek-v4-flash-gpu-requirements/" },
           { "@type": "TechArticle", "name": "GLM-5.2 GPU Requirements", "url": "https://tools.researchaudio.io/glm-5-2-gpu-requirements/" },
           { "@type": "TechArticle", "name": "Kimi K3 GPU Requirements", "url": "https://tools.researchaudio.io/kimi-k3-gpu-requirements/" },
+          { "@type": "TechArticle", "name": "Gemma 4 GPU Requirements", "url": "https://tools.researchaudio.io/gemma-4-gpu-requirements/" },
+          { "@type": "TechArticle", "name": "DiffusionGemma GPU Requirements", "url": "https://tools.researchaudio.io/diffusiongemma-gpu-requirements/" },
           { "@type": "TechArticle", "name": "gpt-oss Hardware Requirements", "url": "https://tools.researchaudio.io/gpt-oss-hardware-requirements/" },
           { "@type": "WebApplication", "name": "AI Agent Security Checklist", "url": "https://tools.researchaudio.io/ai-agent-security-checklist/" }
         ]
@@ -197,7 +199,7 @@
             <p class="eyebrow">Search field notes</p>
             <h2 id="voice-economics-title">Start with the simple metric. Finish with the system.</h2>
           </div>
-          <p>Ten vendor-neutral worksheets turn security, voice-pricing, and GPU-sizing questions into explicit controls and assumptions.</p>
+          <p>Primary-source worksheets turn security, voice-pricing, and GPU-sizing questions into explicit controls and assumptions.</p>
         </div>
         <div class="resource-grid">
           <a class="resource-card" href="../voice-ai-cost-per-minute/?utm_source=evidence_lab&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=voice_cost_per_minute_guide">
@@ -253,6 +255,18 @@
             <h2>Kimi K3 GPU requirements</h2>
             <p>Start with the official 1,453.74 GiB MXFP4 artifact, then separate the 8×H200 shortfall, 12×H200 raw floor, and Moonshot's 64-plus-accelerator recommendation.</p>
             <b>Size Kimi K3 →</b>
+          </a>
+          <a class="resource-card" href="../gemma-4-gpu-requirements/?utm_source=evidence_lab&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gemma_4_gpu_guide">
+            <span class="instrument-code">Field note / current family</span>
+            <h2>Gemma 4 GPU requirements</h2>
+            <p>Compare Google's E2B, E4B, 12B, 26B A4B, and 31B loading estimates across BF16, SFP8, and Q4_0, then inspect the exact 12B files.</p>
+            <b>Size the Gemma 4 family →</b>
+          </a>
+          <a class="resource-card" href="../diffusiongemma-gpu-requirements/?utm_source=evidence_lab&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=diffusiongemma_gpu_guide">
+            <span class="instrument-code">Field note / current model</span>
+            <h2>DiffusionGemma GPU requirements</h2>
+            <p>Start with the exact 48.10 GiB BF16 and 17.53 GiB NVIDIA NVFP4 artifacts, then keep 256K context outside the weight-only claim.</p>
+            <b>Size DiffusionGemma →</b>
           </a>
           <a class="resource-card" href="../gpt-oss-hardware-requirements/?utm_source=evidence_lab&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpt_oss_hardware_guide">
             <span class="instrument-code">Field note / open weights</span>
