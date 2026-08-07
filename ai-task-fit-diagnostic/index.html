@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Task Fit Diagnostic: Error Signal Checklist | ResearchAudio</title>
+    <meta name="description" content="Check whether an AI or agent task has a clear target, usable error signal, timely feedback, test coverage, bounded actions, and human ownership of premises." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/ai-task-fit-diagnostic/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Does your AI task have an error signal?" />
+    <meta property="og:description" content="Eight checks reveal whether an AI workflow can correct itself—or is being asked to invent the target." />
+    <meta property="og:url" content="https://tools.researchaudio.io/ai-task-fit-diagnostic/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "AI Task Fit Diagnostic",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "url": "https://tools.researchaudio.io/ai-task-fit-diagnostic/",
+        "description": "A browser-local eight-point diagnostic for checking whether an AI task has a target, error signal, feedback loop, and bounded execution.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is an error signal in an AI system?",
+            "acceptedAnswer": { "@type": "Answer", "text": "An error signal is observable feedback that measures the gap between a system's output and a defined target. It lets a model, agent, evaluator, or operator decide whether to continue, correct, retry, or stop." }
+          },
+          {
+            "@type": "Question",
+            "name": "What makes a task suitable for an AI agent?",
+            "acceptedAnswer": { "@type": "Answer", "text": "A suitable task has a defined end state, trusted evidence, a reliable judge, timely feedback, representative failure cases, bounded actions, and an owner for assumptions the system cannot safely invent." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can an LLM choose the goal for an open-ended task?",
+            "acceptedAnswer": { "@type": "Answer", "text": "An LLM can propose goals, but proposals are not proof that the goal is correct. When success criteria or premises are genuinely open, keep a human accountable for selecting and validating them." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is this AI task-fit score a benchmark?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. It is a task-framing triage tool. It does not measure model intelligence or guarantee production performance; use real trials and inspectable evidence before increasing autonomy." }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#diagnostic">Skip to the diagnostic</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=ai_task_fit_diagnostic&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=ai_task_fit_diagnostic&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=ai_task_fit_diagnostic&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=ai_task_fit_diagnostic&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Instrument 13 / task framing</p>
+          <h1 id="hero-title">Does your AI task have an error signal?</h1>
+          <p class="hero-deck">Eight checks separate work an AI system can execute against a target from work that still requires a human to invent the target.</p>
+        </div>
+        <aside class="lab-index" aria-label="Diagnostic scope">
+          <span>Task-fit controls</span>
+          <strong>8</strong>
+          <p>Run this against one concrete workflow. Check only what exists now—not what the roadmap promises.</p>
+        </aside>
+      </section>
+
+      <section class="instrument-shell" id="diagnostic" aria-labelledby="diagnostic-title">
+        <div class="instrument-intro">
+          <div>
+            <p class="eyebrow">Inspect one task</p>
+            <h2 id="diagnostic-title">Can the system tell when it is wrong?</h2>
+          </div>
+          <p>A strong model cannot optimize against a target that nobody has defined. Check each statement that is already true for the workflow.</p>
+        </div>
+
+        <div class="diagnostic-layout">
+          <form class="diagnostic-list" id="task-fit-form">
+            <label class="diagnostic-card" for="check-target"><input id="check-target" name="target" type="checkbox" /><span class="diagnostic-index">T1</span><span class="diagnostic-copy"><strong>The desired end state is explicit</strong><span>A human can describe success before seeing the model output.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-evidence"><input id="check-evidence" name="evidence" type="checkbox" /><span class="diagnostic-index">E2</span><span class="diagnostic-copy"><strong>Trusted evidence is available</strong><span>The workflow can inspect a source, dataset, environment, or observation that is not generated by the model itself.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-judge"><input id="check-judge" name="judge" type="checkbox" /><span class="diagnostic-index">J3</span><span class="diagnostic-copy"><strong>Correctness has an independent judge</strong><span>A test, schema, measurement, or reviewer can reject a plausible but wrong result.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-cadence"><input id="check-cadence" name="cadence" type="checkbox" /><span class="diagnostic-index">F4</span><span class="diagnostic-copy"><strong>Feedback arrives in time to correct</strong><span>The signal is available before the next costly or irreversible action.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-coverage"><input id="check-coverage" name="coverage" type="checkbox" /><span class="diagnostic-index">C5</span><span class="diagnostic-copy"><strong>Failure and edge cases are represented</strong><span>The evaluation includes the cases that would make the workflow unsafe, expensive, or misleading.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-intervention"><input id="check-intervention" name="intervention" type="checkbox" /><span class="diagnostic-index">I6</span><span class="diagnostic-copy"><strong>The workflow can test an idea</strong><span>It can run a safe experiment or tool action instead of only producing another explanation.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-bounds"><input id="check-bounds" name="bounds" type="checkbox" /><span class="diagnostic-index">B7</span><span class="diagnostic-copy"><strong>Actions and resources are bounded</strong><span>Tools, permissions, data, time, attempts, and spend have explicit limits.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+            <label class="diagnostic-card" for="check-premises"><input id="check-premises" name="premises" type="checkbox" /><span class="diagnostic-index">P8</span><span class="diagnostic-copy"><strong>A human owns premise changes</strong><span>The system may propose a new goal or assumption, but a named person is accountable for accepting it.</span></span><span class="diagnostic-indicator" aria-hidden="true"></span></label>
+          </form>
+
+          <aside class="result-console" aria-live="polite" aria-labelledby="task-fit-result-title">
+            <div class="tool-status"><span>Task state</span><b id="task-fit-status">NO TARGET</b></div>
+            <p class="primary-result"><span id="task-fit-score">0</span><small>/ 8</small></p>
+            <p class="result-label">Verified framing controls</p>
+            <h3 id="task-fit-result-title">The task still needs a jump</h3>
+            <p class="result-note" id="task-fit-summary">The workflow is being asked to invent what success means. Keep premise selection with a human, or redesign the task around an explicit target.</p>
+            <div class="result-grid"><div><span>Next missing control</span><strong id="task-fit-next">Name the desired end state before choosing a model or agent.</strong></div><div><span>Deployment risk</span><strong id="task-fit-risk">Very high</strong></div></div>
+            <button class="action-button" id="share-task-fit" type="button" disabled>Share this exact diagnosis</button>
+            <button class="secondary-button" id="reset-task-fit" type="button">Reset all checks</button>
+            <p class="share-status" id="share-status" role="status"></p>
+            <div class="result-join">
+              <span>Daily evidence brief · 51,000+ readers</span>
+              <a href="https://researchaudio.io/subscribe?utm_source=ai_task_fit_diagnostic&amp;utm_medium=tool_result&amp;utm_campaign=ai_evidence_lab&amp;utm_content=result_join">Get the next teardown →</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="Task-fit interpretation">
+        <p class="eyebrow">Decision model</p>
+        <p><strong>No target: human jump.</strong><br />The workflow is being asked to choose the premise, not execute against one.</p>
+        <p><strong>No judge or cadence: weak signal.</strong><br />The system cannot correct itself reliably.</p>
+        <p><strong>Target + signal + bounds: execution-ready.</strong><br />Start small and verify the trace before increasing autonomy.</p>
+      </section>
+
+      <section class="guide-section" aria-labelledby="task-fit-guide-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Task-framing guide</p>
+          <h2 id="task-fit-guide-title">A model can optimize only after the target exists.</h2>
+          <p>This diagnostic applies one practical lesson from Tom Zahavy’s position paper: current systems are strongest where a target, test, proof, or metric already exists. The checklist does not claim that open-ended discovery is impossible; it shows where a workflow still depends on human premise selection.</p>
+          <a class="guide-link" href="https://researchaudio.io/p/einstein-had-no-error-signal?utm_source=ai_task_fit_diagnostic&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=source_briefing">Read the ResearchAudio analysis: Einstein Had No Error Signal →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>What is an error signal in an AI system?</h3><p>It is observable feedback that measures the gap between an output and a defined target. A useful signal tells the workflow whether to continue, correct, retry, or stop.</p></article>
+          <article class="faq-item"><h3>What makes a task suitable for an AI agent?</h3><p>A suitable task has an explicit end state, trusted evidence, an independent judge, timely feedback, representative failure cases, bounded actions, and clear ownership of assumptions.</p></article>
+          <article class="faq-item"><h3>Can an LLM choose the goal for an open-ended task?</h3><p>It can propose goals, but a proposal is not proof that the goal is correct. Keep a human accountable when the success criteria or premises must be invented.</p></article>
+          <article class="faq-item"><h3>Is this AI task-fit score a benchmark?</h3><p>No. It is a framing aid, not a measure of model intelligence or a guarantee of production performance. Verify the design with real trials and inspectable evidence.</p></article>
+        </div>
+      </section>
+
+      <section class="source-section" aria-labelledby="sources-title">
+        <p class="eyebrow">Primary source</p>
+        <h2 id="sources-title">Read the argument behind the diagnostic.</h2>
+        <p>This worksheet is an applied interpretation of the task-framing problem, not a claim made verbatim by the paper.</p>
+        <ul class="source-list">
+          <li><a href="https://www.tomzahavy.com/files/llms-cant-jump.pdf">Tom Zahavy, “LLMs can’t jump” (position paper)</a></li>
+          <li><a href="https://www.tomzahavy.com/projects/llms-cant-jump">Author’s project page and summary</a></li>
+          <li><a href="https://icml.cc/virtual/2026/poster/67091">ICML 2026 conference listing</a></li>
+        </ul>
+      </section>
+
+      <section class="subscribe-block" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">One claim, checked</p>
+          <h2 id="subscribe-title">Get the evidence behind the next AI headline.</h2>
+          <p>ResearchAudio traces primary sources, constraints, and missing evidence for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=ai_task_fit_diagnostic&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links"><a href="../agent-loop-diagnostic/">Agent loop diagnostic</a><a href="../ai-benchmark-audit-checklist/">Benchmark audit</a></div>
+    </footer>
+    <script type="module" src="diagnostic.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  </body>
+</html>

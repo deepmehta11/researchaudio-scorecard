@@ -10,6 +10,8 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Calculates AI workflow cost after retries, failure probability, and human review.
 - AI Agent Loop Diagnostic: https://tools.researchaudio.io/agent-loop-diagnostic/
   Ten checks for termination, validation, recovery, tracing, budgets, and human escalation.
+- AI Task Fit Diagnostic: https://tools.researchaudio.io/ai-task-fit-diagnostic/
+  Eight checks for target clarity, independent judging, timely error signals, safe intervention, bounded execution, and human ownership of premise changes.
 - AI Agent ROI Calculator: https://tools.researchaudio.io/ai-agent-roi-calculator/
   Stress-tests automation ROI after failed tasks, human review, usage cost, recurring cost, and implementation payback.
 - LLM API Cost Calculator: https://tools.researchaudio.io/llm-api-cost-calculator/

@@ -1,6 +1,6 @@
 # ResearchAudio Evidence Lab
 
-An evergreen acquisition ecosystem for ResearchAudio. Twelve browser-local tools, six practical field guides, and a self-serve embed library turn AI benchmark and launch claims, token budgets, voice latency and outcome economics, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability and security, automation business cases, and Codex configuration into concrete inspections before inviting visitors into the daily briefing.
+An evergreen acquisition ecosystem for ResearchAudio. Thirteen browser-local tools, six practical field guides, and a self-serve embed library turn AI task framing, benchmark and launch claims, token budgets, voice latency and outcome economics, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability and security, automation business cases, and Codex configuration into concrete inspections before inviting visitors into the daily briefing.
 
 Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain connected to the Beehiiv publication at `https://researchaudio.io/`.
 
@@ -9,6 +9,7 @@ Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain con
 - `/` — AI Launch Evidence Scorecard: seven gates for decision-ready launch evidence.
 - `/ai-cost-calculator/` — retry-adjusted cost per successful AI task.
 - `/agent-loop-diagnostic/` — ten production guardrails for agent loops.
+- `/ai-task-fit-diagnostic/` — eight checks for whether an AI workflow has a defined target, usable error signal, bounded execution, and human ownership of premise changes.
 - `/ai-agent-roi-calculator/` — AI agent ROI after failure, human review, recurring cost, and implementation payback.
 - `/llm-api-cost-calculator/` — monthly LLM API budget after input/output tokens, caching, retries, and attached usage costs.
 - `/prompt-caching-calculator/` — cache-read and cache-write economics with a break-even hit-rate calculation.

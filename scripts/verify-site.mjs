@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { calculateCost } from "../ai-cost-calculator/calculator.js";
 import { classifyLoop, controls } from "../agent-loop-diagnostic/diagnostic.js";
+import { classifyTask, controls as taskFitControls } from "../ai-task-fit-diagnostic/diagnostic.js";
 import { classifyAgentSecurity, controls as securityControls } from "../ai-agent-security-checklist/checklist.js";
 import { classifyBenchmarkAudit, controls as benchmarkControls } from "../ai-benchmark-audit-checklist/checklist.js";
 import { calculateAgentRoi, classifyAgentRoi } from "../ai-agent-roi-calculator/calculator.js";
@@ -21,7 +22,7 @@ const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
 const brandedToolsOrigin = "https://tools.researchaudio.io";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, kvCacheHtml, kvCacheJs, gpuGuideHtml, qwenGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, kvCacheHtml, kvCacheJs, gpuGuideHtml, qwenGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -32,6 +33,8 @@ const [html, css, js, labCss, embedModeJs, toolsHtml, embedsHtml, embedsJs, cost
   readFile(path.join(root, "embeds/embeds.js"), "utf8"),
   readFile(path.join(root, "ai-cost-calculator/index.html"), "utf8"),
   readFile(path.join(root, "agent-loop-diagnostic/index.html"), "utf8"),
+  readFile(path.join(root, "ai-task-fit-diagnostic/index.html"), "utf8"),
+  readFile(path.join(root, "ai-task-fit-diagnostic/diagnostic.js"), "utf8"),
   readFile(path.join(root, "ai-agent-roi-calculator/index.html"), "utf8"),
   readFile(path.join(root, "ai-agent-roi-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "llm-api-cost-calculator/index.html"), "utf8"),
@@ -104,6 +107,7 @@ for (const [name, page, pathname] of [
   ["embed library", embedsHtml, "/embeds/"],
   ["cost calculator", costHtml, "/ai-cost-calculator/"],
   ["loop diagnostic", loopHtml, "/agent-loop-diagnostic/"],
+  ["AI task fit diagnostic", taskFitHtml, "/ai-task-fit-diagnostic/"],
   ["agent ROI calculator", roiHtml, "/ai-agent-roi-calculator/"],
   ["LLM API cost calculator", llmCostHtml, "/llm-api-cost-calculator/"],
   ["LLM GPU memory calculator", gpuMemoryHtml, "/llm-gpu-memory-calculator/"],
@@ -175,6 +179,7 @@ for (const [name, page] of [
   ["hub", toolsHtml],
   ["cost calculator", costHtml],
   ["loop diagnostic", loopHtml],
+  ["AI task fit diagnostic", taskFitHtml],
   ["agent ROI calculator", roiHtml],
   ["LLM API cost calculator", llmCostHtml],
   ["LLM GPU memory calculator", gpuMemoryHtml],
@@ -194,6 +199,7 @@ for (const [name, page, title] of [
   ["hub", toolsHtml, "Free AI Evaluation Tools for Builders"],
   ["cost calculator", costHtml, "AI Cost per Successful Task Calculator"],
   ["loop diagnostic", loopHtml, "AI Agent Loop Diagnostic Checklist"],
+  ["AI task fit diagnostic", taskFitHtml, "AI Task Fit Diagnostic: Error Signal Checklist"],
   ["agent ROI calculator", roiHtml, "AI Agent ROI Calculator with Failure & Review"],
   ["LLM API cost calculator", llmCostHtml, "LLM API Cost Calculator (Input &amp; Output Tokens)"],
   ["LLM GPU memory calculator", gpuMemoryHtml, "LLM GPU Memory Calculator (VRAM &amp; GPU Count)"],
@@ -297,6 +303,34 @@ assert.match(labCss, /html\.embed-mode/);
 assert.match(css, /\.result-join/);
 assert.equal((loopHtml.match(/type="checkbox"/g) || []).length, 10, "expected ten loop controls");
 assert.equal(controls.length, 10, "diagnostic logic and markup should share ten controls");
+assert.equal((taskFitHtml.match(/type="checkbox"/g) || []).length, 8, "task-fit diagnostic should render eight controls");
+assert.equal(taskFitControls.length, 8, "task-fit logic and markup should share eight controls");
+assert.equal(classifyTask([]).status, "NO TARGET");
+assert.equal(classifyTask(["target", "judge"]).status, "WEAK SIGNAL");
+assert.equal(classifyTask(["target", "judge", "cadence", "evidence"]).status, "FRAGILE");
+assert.equal(classifyTask(["target", "judge", "cadence", "evidence", "coverage"]).status, "EXPOSED");
+assert.equal(classifyTask(taskFitControls.map((control) => control.name)).status, "READY");
+assert.match(taskFitJs, /source: "task_fit_diagnostic_share"/);
+assert.match(taskFitJs, /content: `shared_task_fit_\$\{selected\.length\}`/);
+assert.equal((taskFitHtml.match(/"@type": "WebApplication"/g) || []).length, 1, "task-fit diagnostic should have WebApplication schema");
+assert.equal((taskFitHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "task-fit diagnostic should have FAQ schema");
+assert.doesNotThrow(() => parseStructuredData(taskFitHtml), "task-fit structured data must be valid JSON");
+assert.match(taskFitHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
+assert.match(taskFitHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
+assert.match(taskFitHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=ai_task_fit_diagnostic&amp;utm_medium=(organic_guide|tool_result)&amp;utm_campaign=ai_evidence_lab/);
+assert.match(taskFitHtml, /researchaudio\.io\/p\/einstein-had-no-error-signal\?utm_source=ai_task_fit_diagnostic/);
+assert.match(taskFitHtml, /tomzahavy\.com\/files\/llms-cant-jump\.pdf/);
+for (const question of [
+  "What is an error signal in an AI system?",
+  "What makes a task suitable for an AI agent?",
+  "Can an LLM choose the goal for an open-ended task?",
+  "Is this AI task-fit score a benchmark?",
+]) {
+  const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  assert.match(taskFitHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `task-fit visible FAQ question missing: ${question}`);
+  assert.match(taskFitHtml, new RegExp(`"name": "${escapedQuestion}"`), `task-fit FAQ schema question missing: ${question}`);
+}
+assert.doesNotMatch(taskFitHtml, /TODO|PLACEHOLDER|example\.com/);
 
 const certain = calculateCost({ modelCost: 1, successRate: 100, maxAttempts: 4, reviewMinutes: 0, hourlyCost: 0 });
 assert.equal(certain.costPerSuccess, 1, "certain success should cost one attempt");
@@ -577,7 +611,7 @@ assert.match(kvCacheHtml, /Qwen2\.5 32B/);
 assert.match(kvCacheHtml, /Qwen2\.5 72B/);
 assert.equal((kvCacheHtml.match(/class="scenario-card/g) || []).length, 3, "KV-cache calculator should contain three sourced scenarios");
 assert.match(toolsHtml, /kv-cache-calculator/);
-assert.equal((toolsHtml.match(/class="tool-card"/g) || []).length, 12, "tools hub should contain twelve instruments");
+assert.equal((toolsHtml.match(/class="tool-card"/g) || []).length, 13, "tools hub should contain thirteen instruments");
 
 const defaultPromptCache = calculatePromptCacheSavings({
   requestsPerMonth: 100000,
@@ -770,6 +804,7 @@ assert.match(toolsHtml, /70b-llm-gpu-requirements/);
 assert.match(toolsHtml, /qwen2-5-gpu-requirements/);
 assert.match(toolsHtml, /ai-agent-security-checklist/);
 assert.match(toolsHtml, /ai-benchmark-audit-checklist/);
+assert.match(toolsHtml, /ai-task-fit-diagnostic/);
 assert.match(voiceLatencyHtml, /voice-ai-cost-per-minute/);
 assert.match(labCss, /\.resource-section/);
 assert.match(labCss, /\.resource-grid/);
@@ -889,9 +924,9 @@ assert.match(qwenGuideHtml, /6\.35 GiB/);
 assert.match(qwenGuideHtml, /27\.76 GiB/);
 assert.match(qwenGuideHtml, /52\.62 GiB/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 21, "sitemap should contain all twenty-one crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 22, "sitemap should contain all twenty-two crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 21, "sitemap should publish twenty-one URL locations");
+assert.equal(sitemapUrls.length, 22, "sitemap should publish twenty-two URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
@@ -914,6 +949,7 @@ assert.match(llms, /70B LLM GPU Requirements/);
 assert.match(llms, /Qwen2\.5 GPU Requirements/);
 assert.match(llms, /AI Agent Security Checklist/);
 assert.match(llms, /AI Benchmark Audit Checklist/);
+assert.match(llms, /AI Task Fit Diagnostic/);
 assert.deepEqual([...socialCard.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], "social card should be a PNG");
 assert.equal(publishedKey.trim(), indexNowKey, "public IndexNow key must match the submission script");
 assert.match(indexNowScript, /https:\/\/api\.indexnow\.org\/indexnow/);
@@ -928,4 +964,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 12 tools, 1 activation kit, 1 embed library, 6 field guides, 21 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 13 tools, 1 activation kit, 1 embed library, 6 field guides, 22 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
