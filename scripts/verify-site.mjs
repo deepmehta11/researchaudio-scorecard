@@ -27,7 +27,7 @@ const brandedToolsOrigin = "https://tools.researchaudio.io";
 const cloudflareWebAnalyticsToken = "c20a9e29828c471c92ed7c2284901e05";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, readerShareJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, rtx3060GuideHtml, rtx4060GuideHtml, rtx4060Ti16GuideHtml, rtx3090Vs4090GuideHtml, rtx4090GuideHtml, rtx5060TiComparisonGuideHtml, rtx5080GuideHtml, rtx5090GuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, kimiK3GuideHtml, gemma4GuideHtml, diffusionGemmaGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, acquisitionHtml, starterHtml, starterJs, deploymentPackHtml, deploymentBrief, evidenceChecklist, rolloutGates, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, readerShareJs, toolsHtml, embedsHtml, embedsJs, partnersHtml, partnersJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, rtx3060GuideHtml, rtx4060GuideHtml, rtx4060Ti16GuideHtml, rtx3090Vs4090GuideHtml, rtx4090GuideHtml, rtx5060TiComparisonGuideHtml, rtx5080GuideHtml, rtx5090GuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, kimiK3GuideHtml, gemma4GuideHtml, diffusionGemmaGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, acquisitionHtml, starterHtml, starterJs, deploymentPackHtml, deploymentBrief, evidenceChecklist, rolloutGates, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -37,6 +37,8 @@ const [html, css, js, labCss, embedModeJs, readerShareJs, toolsHtml, embedsHtml,
   readFile(path.join(root, "tools/index.html"), "utf8"),
   readFile(path.join(root, "embeds/index.html"), "utf8"),
   readFile(path.join(root, "embeds/embeds.js"), "utf8"),
+  readFile(path.join(root, "partners/index.html"), "utf8"),
+  readFile(path.join(root, "partners/partners.js"), "utf8"),
   readFile(path.join(root, "ai-cost-calculator/index.html"), "utf8"),
   readFile(path.join(root, "agent-loop-diagnostic/index.html"), "utf8"),
   readFile(path.join(root, "ai-task-fit-diagnostic/index.html"), "utf8"),
@@ -1782,6 +1784,25 @@ assert.match(embedsJs, /utm_medium/);
 assert.match(embedsJs, /utm_campaign/);
 assert.match(embedsJs, /navigator\.clipboard\.writeText/);
 assert.match(toolsHtml, /href="\.\.\/embeds\/\?utm_source=evidence_lab/);
+assert.match(partnersHtml, /<title>Partner With ResearchAudio: Newsletter &amp; AI Tool Kit<\/title>/);
+assert.match(partnersHtml, /<link rel="canonical" href="https:\/\/tools\.researchaudio\.io\/partners\/" \/>/);
+assert.match(partnersHtml, /id="partner-name"/);
+assert.match(partnersHtml, /data-copy-target="magic-link"/);
+assert.match(partnersHtml, /data-copy-target="universal-link"/);
+assert.equal((partnersHtml.match(/data-copy-snippet=/g) || []).length, 3, "partner kit should provide three copy-ready placements");
+assert.equal((partnersHtml.match(/"@type": "Question"/g) || []).length, 3, "partner kit should expose three FAQ answers in schema");
+assert.doesNotThrow(() => parseStructuredData(partnersHtml), "partner-kit structured data must be valid JSON");
+assert.doesNotMatch(partnersHtml, /noindex|nofollow/, "the partner kit must remain crawlable");
+assert.doesNotMatch(partnersHtml, /data-beehiiv-form|subscribe-forms\.beehiiv\.com/, "the publisher kit should not submit a signup form");
+assert.match(partnersHtml, /href="\.\.\/embeds\/\?utm_source=partner_kit/);
+assert.match(partnersJs, /https:\/\/magic\.beehiiv\.com\/v1\/\$\{publicationId\}\?email=\{\{email\}\}/);
+assert.match(partnersJs, /https:\/\/tools\.researchaudio\.io\/ai-evidence-starter-kit\//);
+assert.match(partnersJs, /https:\/\/tools\.researchaudio\.io\/evidence-starter-kit\//);
+assert.match(partnersJs, /utm_medium", "partner_referral"/);
+assert.match(partnersJs, /utm_medium=magic_link/);
+assert.match(partnersJs, /navigator\.clipboard\.writeText/);
+assert.match(toolsHtml, /href="\.\.\/partners\/\?utm_source=evidence_lab/);
+assert.match(embedsHtml, /href="\.\.\/partners\/\?utm_source=embed_library/);
 
 assert.match(toolsHtml, /7B vs 13B LLM GPU requirements/);
 assert.match(gpuMemoryHtml, /7b-vs-13b-llm-gpu-requirements/);
@@ -1822,10 +1843,11 @@ assert.match(diffusionGemmaGuideHtml, /48\.10 GiB at BF16/);
 assert.match(diffusionGemmaGuideHtml, /17\.53 GiB at NVFP4/);
 assert.match(diffusionGemmaGuideHtml, /0\.56 GiB margin/);
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 41, "sitemap should contain all forty-one crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 42, "sitemap should contain all forty-two crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 41, "sitemap should publish forty-one URL locations");
+assert.equal(sitemapUrls.length, 42, "sitemap should publish forty-two URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
+assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/partners/"), "sitemap should publish the partner distribution kit");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
 assert.match(llms, /AI Cost per Successful Task Calculator/);
@@ -1845,6 +1867,8 @@ assert.match(llms, /Free AI Evaluation Starter Kit/);
 assert.match(llms, /https:\/\/tools\.researchaudio\.io\/ai-evidence-starter-kit\//);
 assert.doesNotMatch(llms, /https:\/\/tools\.researchaudio\.io\/evidence-starter-kit\//, "llms.txt should advertise the acquisition gate, not the private activation path");
 assert.match(llms, /Embeddable AI Tools/);
+assert.match(llms, /ResearchAudio Partner Distribution Kit/);
+assert.match(llms, /https:\/\/tools\.researchaudio\.io\/partners\//);
 assert.match(llms, /Kimi K3 GPU Requirements/);
 assert.match(llms, /Gemma 4 GPU Requirements/);
 assert.match(llms, /DiffusionGemma GPU Requirements/);
@@ -1882,4 +1906,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 16 tools, 1 gated acquisition page, 1 private activation kit, 1 private one-referral reward pack, 1 embed library, 21 search field notes, 41 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 16 tools, 1 gated acquisition page, 1 private activation kit, 1 private one-referral reward pack, 1 embed library, 1 partner distribution kit, 21 search field notes, 42 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

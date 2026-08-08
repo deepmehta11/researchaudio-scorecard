@@ -47,6 +47,7 @@ Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain con
 - `/ai-deployment-pack/` — private, noindex one-referral reward with three downloadable decision templates and a seven-day AI deployment sequence.
 - `/tools/` — crawlable, interlinked Evidence Lab hub.
 - `/embeds/` — copy-ready, source-attributed iframe widgets plus a self-serve installation guide for WordPress, Webflow, Ghost, Beehiiv, and static sites. Every tool page deep-links publishers to its exact widget, and the library publishes a sixteen-tool application index with matching FAQ schema for search discovery.
+- `/partners/` — self-serve newsletter distribution kit that generates a publication-attributed Beehiiv Magic Link, a universal signup-gate URL, and three copy-ready partner placements without submitting or storing the publisher name.
 
 Every instrument uses the dedicated Beehiiv acquisition form and keeps user inputs in the browser.
 
@@ -84,4 +85,5 @@ Then open `http://127.0.0.1:4173`.
 4. Publish one result card per issue on LinkedIn, X, Reddit, and relevant engineering communities.
 5. Redirect new Evidence Lab subscribers into the private starter kit, use its attributed share action to send new readers through the signup gate, then deliver the one-referral reward from Beehiiv.
 6. Offer the sixteen-widget embed library to technical publishers; each tool keeps a visible ResearchAudio credit and rewrites signup links to the publisher-specific `embed_*` source.
-7. Review Beehiiv source and campaign breakdowns weekly. Keep only channels that produce active subscribers, not raw clicks.
+7. Give newsletter publishers the partner kit; Beehiiv partners use its one-click Magic Link, while every other platform uses the attributed universal signup link.
+8. Review Beehiiv source and campaign breakdowns weekly. Keep only channels that produce active subscribers, not raw clicks.

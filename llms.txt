@@ -37,7 +37,9 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
 - Free AI Evaluation Starter Kit: https://tools.researchaudio.io/ai-evidence-starter-kit/
   A signup-gated preview of four browser-local tests for launch evidence, operating cost, agent reliability, and automation ROI.
 - Embeddable AI Tools: https://tools.researchaudio.io/embeds/
-  Generates copy-ready, source-attributed iframe widgets for seven browser-local tools: AI benchmark audit, AI agent security, LLM API cost, GPU memory, KV cache, voice AI cost, and AI agent ROI.
+  Generates copy-ready, source-attributed iframe widgets for sixteen browser-local calculators, model finders, diagnostics, builders, and checklists.
+- ResearchAudio Partner Distribution Kit: https://tools.researchaudio.io/partners/
+  Generates a publication-attributed Beehiiv Magic Link, a universal starter-kit URL, and copy-ready newsletter placements for free publisher cross-promotion.
 
 ## Field guides
 
