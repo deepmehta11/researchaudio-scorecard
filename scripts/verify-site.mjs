@@ -27,7 +27,7 @@ const brandedToolsOrigin = "https://tools.researchaudio.io";
 const cloudflareWebAnalyticsToken = "c20a9e29828c471c92ed7c2284901e05";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, readerShareJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, rtx3060GuideHtml, rtx4060GuideHtml, rtx4060Ti16GuideHtml, rtx3090Vs4090GuideHtml, rtx4090GuideHtml, rtx5060TiComparisonGuideHtml, rtx5080GuideHtml, rtx5090GuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, kimiK3GuideHtml, gemma4GuideHtml, diffusionGemmaGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, readerShareJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, rtx3060GuideHtml, rtx4060GuideHtml, rtx4060Ti16GuideHtml, rtx3090Vs4090GuideHtml, rtx4090GuideHtml, rtx5060TiComparisonGuideHtml, rtx5080GuideHtml, rtx5090GuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, kimiK3GuideHtml, gemma4GuideHtml, diffusionGemmaGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, deploymentPackHtml, deploymentBrief, evidenceChecklist, rolloutGates, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -89,6 +89,10 @@ const [html, css, js, labCss, embedModeJs, readerShareJs, toolsHtml, embedsHtml,
   readFile(path.join(root, "ai-receptionist-cost/index.html"), "utf8"),
   readFile(path.join(root, "evidence-starter-kit/index.html"), "utf8"),
   readFile(path.join(root, "evidence-starter-kit/starter.js"), "utf8"),
+  readFile(path.join(root, "ai-deployment-pack/index.html"), "utf8"),
+  readFile(path.join(root, "ai-deployment-pack/deployment-decision-brief.md"), "utf8"),
+  readFile(path.join(root, "ai-deployment-pack/ai-launch-evidence-checklist.md"), "utf8"),
+  readFile(path.join(root, "ai-deployment-pack/production-rollout-gates.md"), "utf8"),
   readFile(path.join(root, "fable-playbook/index.html"), "utf8"),
   readFile(path.join(root, "fable-playbook/playbook.css"), "utf8"),
   readFile(path.join(root, "fable-playbook/fable5-cost-playbook.pdf")),
@@ -1667,6 +1671,24 @@ assert.match(starterJs, /utm_campaign", "ai_evidence_lab"/);
 assert.match(starterJs, /utm_medium"\) === "onboarding"/);
 assert.match(starterJs, /querySelector\("#onboarding-loop"\)\.hidden = false/);
 assert.match(starterJs, /querySelector\("#subscribe"\)\.hidden = true/);
+
+assert.match(deploymentPackHtml, /<title>AI Deployment Decision Pack \| ResearchAudio<\/title>/);
+assert.match(deploymentPackHtml, /<meta name="robots" content="noindex, nofollow" \/>/);
+assert.match(deploymentPackHtml, /<link rel="canonical" href="https:\/\/tools\.researchaudio\.io\/ai-deployment-pack\/" \/>/);
+assert.match(deploymentPackHtml, /One-referral reward \/ private resource/);
+assert.match(deploymentPackHtml, /download href="deployment-decision-brief\.md"/);
+assert.match(deploymentPackHtml, /download href="ai-launch-evidence-checklist\.md"/);
+assert.match(deploymentPackHtml, /download href="production-rollout-gates\.md"/);
+assert.match(deploymentPackHtml, /utm_medium=referral_reward&amp;utm_campaign=ai_evidence_lab/);
+assert.match(deploymentPackHtml, new RegExp(`data-cf-beacon='[^']*${cloudflareWebAnalyticsToken}[^']*'`));
+assert.doesNotMatch(deploymentPackHtml, /data-beehiiv-form|subscribe-forms\.beehiiv\.com/, "the private reward should not ask an existing subscriber to join again");
+assert.doesNotMatch(sitemap, /ai-deployment-pack/, "the private referral reward should stay out of the public sitemap");
+assert.match(deploymentBrief, /Ship when:/);
+assert.match(evidenceChecklist, /Cost is calculated per successful outcome/);
+assert.match(rolloutGates, /Prompt-injection resistance/);
+for (const asset of [deploymentBrief, evidenceChecklist, rolloutGates]) {
+  assert.doesNotMatch(asset, /TODO|PLACEHOLDER|example\.com/);
+}
 assert.match(starterJs, /querySelectorAll\("\[data-share-kit\]"\)/);
 assert.doesNotMatch(starterHtml, /TODO|PLACEHOLDER|example\.com/);
 
@@ -1843,4 +1865,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 16 tools, 1 activation kit, 1 embed library, 21 search field notes, 41 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 16 tools, 1 activation kit, 1 private one-referral reward pack, 1 embed library, 21 search field notes, 41 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
