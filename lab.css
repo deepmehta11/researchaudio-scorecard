@@ -2108,6 +2108,38 @@ h2 {
   font-size: 0.9rem;
 }
 
+.cluster-return {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px 32px;
+  align-items: center;
+  margin: 0 0 72px;
+  padding: 24px 28px;
+  color: var(--white);
+  background: var(--ink);
+  border-left: 7px solid var(--yellow);
+}
+
+.cluster-return p {
+  margin: 0;
+  color: #c1d2cf;
+}
+
+.cluster-return a {
+  color: var(--yellow);
+  font: 700 0.74rem/1.45 var(--mono);
+  text-underline-offset: 5px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 620px) {
+  .cluster-return {
+    grid-template-columns: 1fr;
+    margin-bottom: 52px;
+    padding: 22px;
+  }
+}
+
 @media (max-width: 900px) {
   .lab-hero,
   .lead-magnet-hero,

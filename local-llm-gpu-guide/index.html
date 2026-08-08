@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Local LLM GPU &amp; VRAM Requirements Guide | ResearchAudio</title>
+    <meta name="description" content="Plan local LLM hardware by model size, quantization, context, concurrency, and VRAM tier. Use transparent calculators and GPU-specific fit guides." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/local-llm-gpu-guide/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Local LLM GPU and VRAM requirements, without the one-number shortcut" />
+    <meta property="og:description" content="Start with the weights, add the actual cache and runtime, then test the result against usable—not advertised—GPU memory." />
+    <meta property="og:url" content="https://tools.researchaudio.io/local-llm-gpu-guide/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "TechArticle",
+            "headline": "Local LLM GPU Guide: VRAM and Hardware Requirements",
+            "description": "A decision guide for local LLM inference hardware covering weight memory, quantization, KV cache, context, concurrency, runtime headroom, GPU tiers, and exact model guides.",
+            "datePublished": "2026-08-08",
+            "dateModified": "2026-08-08",
+            "mainEntityOfPage": "https://tools.researchaudio.io/local-llm-gpu-guide/",
+            "author": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" },
+            "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Evidence Lab", "item": "https://tools.researchaudio.io/tools/" },
+              { "@type": "ListItem", "position": 2, "name": "Local LLM GPU Guide", "item": "https://tools.researchaudio.io/local-llm-gpu-guide/" }
+            ]
+          },
+          {
+            "@type": "ItemList",
+            "name": "Local LLM GPU and hardware planning resources",
+            "numberOfItems": 20,
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "url": "https://tools.researchaudio.io/llm-gpu-memory-calculator/" },
+              { "@type": "ListItem", "position": 2, "url": "https://tools.researchaudio.io/kv-cache-calculator/" },
+              { "@type": "ListItem", "position": 3, "url": "https://tools.researchaudio.io/what-llm-can-i-run/" },
+              { "@type": "ListItem", "position": 4, "url": "https://tools.researchaudio.io/local-llm-gpu-compatibility/" },
+              { "@type": "ListItem", "position": 5, "url": "https://tools.researchaudio.io/7b-vs-13b-llm-gpu-requirements/" },
+              { "@type": "ListItem", "position": 6, "url": "https://tools.researchaudio.io/70b-llm-gpu-requirements/" },
+              { "@type": "ListItem", "position": 7, "url": "https://tools.researchaudio.io/rtx-3060-llm-models/" },
+              { "@type": "ListItem", "position": 8, "url": "https://tools.researchaudio.io/rtx-4060-llm-models/" },
+              { "@type": "ListItem", "position": 9, "url": "https://tools.researchaudio.io/rtx-4060-ti-16gb-llm-models/" },
+              { "@type": "ListItem", "position": 10, "url": "https://tools.researchaudio.io/rtx-3090-vs-4090-local-llm/" },
+              { "@type": "ListItem", "position": 11, "url": "https://tools.researchaudio.io/rtx-4090-llm-models/" },
+              { "@type": "ListItem", "position": 12, "url": "https://tools.researchaudio.io/rtx-5060-ti-8gb-vs-16gb-local-llm/" },
+              { "@type": "ListItem", "position": 13, "url": "https://tools.researchaudio.io/rtx-5080-llm-models/" },
+              { "@type": "ListItem", "position": 14, "url": "https://tools.researchaudio.io/rtx-5090-llm-models/" },
+              { "@type": "ListItem", "position": 15, "url": "https://tools.researchaudio.io/qwen3-gpu-requirements/" },
+              { "@type": "ListItem", "position": 16, "url": "https://tools.researchaudio.io/qwen2-5-gpu-requirements/" },
+              { "@type": "ListItem", "position": 17, "url": "https://tools.researchaudio.io/gpt-oss-hardware-requirements/" },
+              { "@type": "ListItem", "position": 18, "url": "https://tools.researchaudio.io/gemma-4-gpu-requirements/" },
+              { "@type": "ListItem", "position": 19, "url": "https://tools.researchaudio.io/deepseek-v4-flash-gpu-requirements/" },
+              { "@type": "ListItem", "position": 20, "url": "https://tools.researchaudio.io/diffusiongemma-gpu-requirements/" }
+            ]
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#quick-answer">Skip to the hardware guide</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=local_llm_gpu_guide&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=local_llm_gpu_guide&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=local_llm_gpu_guide&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Local LLM hardware / decision guide</p>
+          <h1 id="hero-title">Local LLM GPU and VRAM requirements, without the one-number shortcut.</h1>
+          <p class="hero-deck">A model can clear its raw weight floor and still fail at the context window you need. Start with parameters and quantization, add the actual KV cache, concurrency, and runtime headroom, then compare the total with usable GPU memory.</p>
+          <a class="hero-join-link" href="../llm-gpu-memory-calculator/?utm_source=local_llm_gpu_guide&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_calculator">Calculate your exact GPU plan →</a>
+        </div>
+        <aside class="lab-index" aria-label="Guide scope">
+          <span>Decision paths</span>
+          <strong>04</strong>
+          <p>Start from a model, a VRAM budget, a specific GPU, or a released checkpoint. Every path ends at editable memory math.</p>
+        </aside>
+      </section>
+
+      <section class="method-section" id="quick-answer" aria-labelledby="answer-title">
+        <div>
+          <p class="eyebrow">Quick answer</p>
+          <h2 id="answer-title">How much VRAM does a local LLM need?</h2>
+        </div>
+        <div class="method-copy">
+          <p>The honest answer is not a single lookup number. For GPU inference, memory planning begins with the model weights, then adds the key-value cache, runtime allocations, and a safety margin. The GPU must have enough usable capacity for the resulting plan—or the runtime must offload part of the work to slower system memory.</p>
+          <p>A transparent weight floor is <code>parameters × bits per parameter ÷ 8</code>. Seven billion parameters at exactly four bits are about 3.26 GiB. Thirteen billion are about 6.05 GiB. Thirty-two billion are about 14.90 GiB. Seventy billion are about 32.60 GiB. These figures are arithmetic floors, not promises that a packaged checkpoint or live server will fit.</p>
+          <p>Real checkpoints carry metadata and quantization overhead. Live inference needs workspace memory. Long context creates a KV cache whose size depends on layers, KV heads, head dimension, cache precision, tokens, and concurrent sequences. A runtime can also reserve memory before it serves the first request. That is why two models with the same parameter count can cross different hardware boundaries.</p>
+          <p>If you already know the model architecture, use the <a href="../llm-gpu-memory-calculator/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=quick_answer_calculator">LLM GPU memory calculator</a>. If you only know your available memory, use <a href="../what-llm-can-i-run/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=quick_answer_finder">What LLM can I run?</a> to find a starting tier, then refine it with the exact checkpoint.</p>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="model-size-title">
+        <div class="comparison-heading">
+          <div>
+            <p class="eyebrow">Model-size floors</p>
+            <h2 id="model-size-title">Parameters set the floor. Precision changes the first answer.</h2>
+          </div>
+          <p>The table uses exact binary GiB arithmetic for dense weight equivalents. It excludes file-format overhead, KV cache, activations, runtime workspace, and headroom.</p>
+        </div>
+        <p class="comparison-scroll-hint">Swipe the matrix horizontally →</p>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead><tr><th scope="col">Model size</th><th scope="col">INT4 floor</th><th scope="col">INT8 floor</th><th scope="col">FP16 / BF16 floor</th><th scope="col">Next exact check</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">7B</th><td>3.26 GiB</td><td>6.52 GiB</td><td>13.04 GiB</td><td><a href="../7b-vs-13b-llm-gpu-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=table_7b">7B cache scenarios</a></td></tr>
+              <tr><th scope="row">13B</th><td>6.05 GiB</td><td>12.11 GiB</td><td>24.21 GiB</td><td><a href="../7b-vs-13b-llm-gpu-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=table_13b">13B cache scenarios</a></td></tr>
+              <tr><th scope="row">32B</th><td>14.90 GiB</td><td>29.80 GiB</td><td>59.60 GiB</td><td><a href="../qwen3-gpu-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=table_32b">Qwen3 32B architecture</a></td></tr>
+              <tr><th scope="row">70B</th><td>32.60 GiB</td><td>65.19 GiB</td><td>130.39 GiB</td><td><a href="../70b-llm-gpu-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=table_70b">70B serving targets</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">A model described as 20B, 30B, or 120B may be a mixture of experts. Active parameters affect compute, but the resident checkpoint still has to fit somewhere. Use the actual artifact and architecture rather than multiplying the active count.</p>
+      </section>
+
+      <section class="principle-strip" aria-label="Memory planning rules">
+        <p class="eyebrow">Three boundaries</p>
+        <p><strong>Fit is not speed.</strong><br />Enough memory does not prove interactive tokens per second or useful latency.</p>
+        <p><strong>Maximum context is not free.</strong><br />Allocated KV cache can consume the margin left after the weights load.</p>
+        <p><strong>Advertised VRAM is not usable VRAM.</strong><br />The display stack, runtime, and allocator need space too.</p>
+      </section>
+
+      <section class="resource-section" aria-labelledby="start-title">
+        <div class="resource-heading">
+          <div>
+            <p class="eyebrow">Choose your starting point</p>
+            <h2 id="start-title">Four questions, four working instruments.</h2>
+          </div>
+          <p>Do not force every visitor through the same calculator. Start from the information you actually have.</p>
+        </div>
+        <div class="resource-grid">
+          <a class="resource-card" href="../llm-gpu-memory-calculator/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=path_exact_model">
+            <span class="instrument-code">I know the model</span>
+            <h2>Calculate weights, cache, and GPU count</h2>
+            <p>Enter parameters, precision, architecture, context, concurrency, headroom, and usable memory per GPU.</p>
+            <b>Build the exact plan →</b>
+          </a>
+          <a class="resource-card" href="../what-llm-can-i-run/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=path_known_vram">
+            <span class="instrument-code">I know my VRAM</span>
+            <h2>Find the largest model-size floor</h2>
+            <p>Start with 8 to 141 GB of available memory and a precision target, then carry the result into the full calculator.</p>
+            <b>Find a model tier →</b>
+          </a>
+          <a class="resource-card" href="../local-llm-gpu-compatibility/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=path_common_gpu">
+            <span class="instrument-code">I know the GPU class</span>
+            <h2>Compare common hardware profiles</h2>
+            <p>Check standard 8, 12, 16, 24, 32, 48, 80, and 141 GB profiles against model-size floors.</p>
+            <b>Check the hardware →</b>
+          </a>
+          <a class="resource-card" href="../kv-cache-calculator/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=path_context_cache">
+            <span class="instrument-code">Context is the constraint</span>
+            <h2>Calculate KV cache and concurrency</h2>
+            <p>Use layers, KV heads, head dimension, cache precision, tokens, and simultaneous sequences to expose the context bill.</p>
+            <b>Size the cache →</b>
+          </a>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="vram-tier-title">
+        <div class="comparison-heading">
+          <div>
+            <p class="eyebrow">Plan by VRAM tier</p>
+            <h2 id="vram-tier-title">What changes at 8, 12, 16, 24, and 32 GB?</h2>
+          </div>
+          <p>Each tier below is a planning boundary, not a model recommendation. The linked guide shows the exact assumptions and failure edge for a representative consumer GPU.</p>
+        </div>
+        <p class="comparison-scroll-hint">Swipe the matrix horizontally →</p>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead><tr><th scope="col">Advertised VRAM</th><th scope="col">90% planning capacity</th><th scope="col">What the weight floor suggests</th><th scope="col">What can break the fit</th><th scope="col">Hardware guide</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">8 GB</th><td>7.2 GiB</td><td>7B INT4 and some 8B quants</td><td>Long context, large GQA/MHA cache, runtime overhead</td><td><a href="../rtx-4060-llm-models/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=tier_8gb">RTX 4060 8GB</a></td></tr>
+              <tr><th scope="row">12 GB</th><td>10.8 GiB</td><td>More room for 7B/8B; a generic 14B INT4 floor is possible</td><td>A 14B checkpoint plus cache can cross the line</td><td><a href="../rtx-3060-llm-models/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=tier_12gb">RTX 3060 12GB</a></td></tr>
+              <tr><th scope="row">16 GB</th><td>14.4 GiB</td><td>13B/14B INT4 becomes practical on paper</td><td>32K cache can turn a fit into a shortfall</td><td><a href="../rtx-4060-ti-16gb-llm-models/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=tier_16gb">RTX 4060 Ti 16GB</a></td></tr>
+              <tr><th scope="row">24 GB</th><td>21.6 GiB</td><td>32B INT4 weights clear the raw floor</td><td>Architecture and context decide whether the full plan clears it</td><td><a href="../rtx-4090-llm-models/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=tier_24gb">RTX 4090 24GB</a></td></tr>
+              <tr><th scope="row">32 GB</th><td>28.8 GiB</td><td>More 32B and MoE profiles become viable</td><td>70B INT4 weights still exceed one card before cache</td><td><a href="../rtx-5090-llm-models/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=tier_32gb">RTX 5090 32GB</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">The 90% capacity column is a conservative planning convention used by the Evidence Lab calculators, not a universal runtime rule. Change the usable-memory percentage when you have measured data from the target system.</p>
+      </section>
+
+      <section class="resource-section" aria-labelledby="gpu-guides-title">
+        <div class="resource-heading">
+          <div>
+            <p class="eyebrow">GPU-specific decisions</p>
+            <h2 id="gpu-guides-title">VRAM ties cards together. Bandwidth and generation separate them.</h2>
+          </div>
+          <p>Capacity answers whether the plan can fit. It does not answer whether a newer GPU is worth the price for your prompt-processing, decoding, batching, and power target.</p>
+        </div>
+        <div class="resource-grid">
+          <a class="resource-card" href="../rtx-3090-vs-4090-local-llm/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpu_3090_4090">
+            <span class="instrument-code">24 GB / generation comparison</span>
+            <h2>RTX 3090 vs RTX 4090</h2>
+            <p>Both cards have the same one-card capacity ceiling. Compare workload value after separating fit from throughput.</p>
+            <b>Compare the 24 GB cards →</b>
+          </a>
+          <a class="resource-card" href="../rtx-5060-ti-8gb-vs-16gb-local-llm/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpu_5060_ti">
+            <span class="instrument-code">8 GB vs 16 GB / same family</span>
+            <h2>RTX 5060 Ti variant choice</h2>
+            <p>See where doubling VRAM changes exact Qwen3 and gpt-oss planning outcomes rather than merely improving margin.</p>
+            <b>Compare the variants →</b>
+          </a>
+          <a class="resource-card" href="../rtx-5080-llm-models/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpu_5080">
+            <span class="instrument-code">16 GB / current generation</span>
+            <h2>RTX 5080 local LLM boundary</h2>
+            <p>Inspect narrow 14B and gpt-oss-20b scenarios before assuming a current flagship generation means a larger model tier.</p>
+            <b>Inspect the 16 GB boundary →</b>
+          </a>
+          <a class="resource-card" href="../rtx-5090-llm-models/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpu_5090">
+            <span class="instrument-code">32 GB / current generation</span>
+            <h2>RTX 5090 local LLM boundary</h2>
+            <p>Test 32B and long-context gpt-oss profiles, then see why a 70B INT4 weight floor still needs another memory path.</p>
+            <b>Inspect the 32 GB boundary →</b>
+          </a>
+        </div>
+      </section>
+
+      <section class="method-section" aria-labelledby="memory-title">
+        <div>
+          <p class="eyebrow">What consumes memory</p>
+          <h2 id="memory-title">Five inputs decide whether the deployment fits.</h2>
+        </div>
+        <div class="method-copy">
+          <p><strong>1. The checkpoint, not just the parameter label.</strong> A model name is a routing clue. The actual files reveal the resident artifact, precision, tensors, and packaging overhead. For a dense model, parameter math is a useful cross-check. For a mixture-of-experts model, do not confuse the smaller active-parameter count with the larger resident weight set. Read the release artifact before choosing hardware.</p>
+          <p><strong>2. Quantization.</strong> Moving from sixteen-bit to eight-bit or four-bit weights lowers the arithmetic floor. Real formats are not always exactly four or eight bits per parameter because scales, metadata, and mixed-precision tensors add overhead. Quantization can also change output quality and runtime compatibility. Treat precision as both a memory choice and a model-quality experiment.</p>
+          <p><strong>3. KV-cache architecture and precision.</strong> Autoregressive inference stores keys and values for previous tokens. The cache grows with the number of layers, KV heads, head dimension, cached tokens, bytes per element, and concurrent sequences. Grouped-query attention can use fewer KV heads than multi-head attention, producing dramatically different cache totals for models with similar parameter counts. The <a href="../kv-cache-calculator/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=memory_kv_cache">KV-cache calculator</a> exposes every term.</p>
+          <p><strong>4. Runtime headroom and usable capacity.</strong> Model weights and KV cache do not own the whole GPU. Kernels, temporary buffers, graph captures, the display stack, and allocator fragmentation consume memory. Evidence Lab examples often reserve 10% of advertised VRAM and then apply 20% headroom to the weights-plus-cache target. Those are explicit planning defaults; replace them with measured values from the runtime and machine you will operate.</p>
+          <p><strong>5. Concurrency and serving policy.</strong> A personal chat with one active sequence is not the same deployment as an API serving many users. A runtime may preallocate a cache pool or reserve enough blocks for a target concurrency. The cache can therefore become a service-capacity decision, not merely a context-length choice. Enter the simultaneous sequences you intend to support, not the traffic volume you hope never arrives.</p>
+        </div>
+      </section>
+
+      <section class="resource-section" aria-labelledby="model-guides-title">
+        <div class="resource-heading">
+          <div>
+            <p class="eyebrow">Released-model evidence</p>
+            <h2 id="model-guides-title">A family name is still not a deployment plan.</h2>
+          </div>
+          <p>These guides use first-party model configurations, checkpoint sizes, or vendor memory estimates, then keep context and runtime assumptions visible.</p>
+        </div>
+        <div class="resource-grid">
+          <a class="resource-card" href="../qwen3-gpu-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=model_qwen3"><span class="instrument-code">Dense plus MoE</span><h2>Qwen3 GPU requirements</h2><p>Compare 8B, 14B, 32B, and 30B-A3B with exact architecture and cache inputs.</p><b>Inspect Qwen3 →</b></a>
+          <a class="resource-card" href="../qwen2-5-gpu-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=model_qwen25"><span class="instrument-code">7B to 72B</span><h2>Qwen2.5 GPU requirements</h2><p>Compare 7B, 32B, and 72B across precision levels, 32K cache, and 128K context.</p><b>Inspect Qwen2.5 →</b></a>
+          <a class="resource-card" href="../gpt-oss-hardware-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=model_gpt_oss"><span class="instrument-code">20B and 120B MoE</span><h2>gpt-oss hardware requirements</h2><p>Separate official checkpoint size, resident weights, active parameters, and 4K-to-128K cache.</p><b>Inspect gpt-oss →</b></a>
+          <a class="resource-card" href="../gemma-4-gpu-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=model_gemma4"><span class="instrument-code">Official memory estimates</span><h2>Gemma 4 GPU requirements</h2><p>Compare E2B through 31B using Google estimates and exact 12B checkpoint checks.</p><b>Inspect Gemma 4 →</b></a>
+          <a class="resource-card" href="../deepseek-v4-flash-gpu-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=model_deepseek_v4"><span class="instrument-code">284B total / 13B active</span><h2>DeepSeek V4 Flash</h2><p>Keep the 155.43 GiB resident artifact separate from the smaller active path.</p><b>Inspect DeepSeek →</b></a>
+          <a class="resource-card" href="../diffusiongemma-gpu-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=model_diffusiongemma"><span class="instrument-code">Block-diffusion language model</span><h2>DiffusionGemma requirements</h2><p>Compare the official BF16 and NVFP4 checkpoints without hiding the 256K context boundary.</p><b>Inspect DiffusionGemma →</b></a>
+        </div>
+      </section>
+
+      <section class="method-section" aria-labelledby="system-title">
+        <div>
+          <p class="eyebrow">Beyond the GPU</p>
+          <h2 id="system-title">CPU, system RAM, storage, and interconnect still shape the experience.</h2>
+        </div>
+        <div class="method-copy">
+          <p><strong>System RAM is the offload and loading boundary.</strong> When a checkpoint does not fit entirely in VRAM, runtimes such as llama.cpp can keep some layers or tensors in system memory. That can make an otherwise impossible model run, but the data path is now constrained by system-memory bandwidth and transfers between CPU and GPU. Reserve enough RAM for the model data, the operating system, the runtime, and the rest of the workload. A machine that barely holds the checkpoint can spend its time paging rather than generating.</p>
+          <p><strong>The CPU matters differently for full-GPU and hybrid inference.</strong> When the whole model and active cache stay on the GPU, the processor is usually not the main token-generation engine. It still handles tokenization, request routing, sampling, networking, storage, and application code. With partial offload, CPU core performance, memory channels, and RAM bandwidth become much more visible. Plan around the actual runtime split instead of buying a processor from a generic “AI PC” label.</p>
+          <p><strong>Storage changes startup and iteration, not the weight floor.</strong> Model repositories can contain several quantizations, shards, and revisions. Fast NVMe storage reduces download extraction, verification, and model-loading friction, but it does not turn disk capacity into GPU memory. Keep enough free space for the original artifacts, converted formats, temporary files, and a known-good rollback checkpoint. If a model reload is part of the production path, measure cold-start time rather than assuming the storage label is sufficient.</p>
+          <p><strong>Multi-GPU capacity is not perfectly additive.</strong> Tensor or pipeline parallelism can split a model, and simple layer offload can distribute weights, but each runtime has communication costs and may replicate data. Consumer GPUs without a fast peer-to-peer path can spend meaningful time moving tensors through the host. Use the calculator's GPU-count result as a capacity floor, then confirm that the chosen runtime supports the topology and precision. Two 24 GB cards are not automatically one seamless 48 GB accelerator.</p>
+          <p><strong>Apple unified memory needs a separate capacity rule.</strong> Apple Silicon exposes one memory pool to the CPU and GPU, so the relevant number is usable unified memory after macOS and applications—not a dedicated VRAM label. The same weight-plus-cache logic still applies, but the available fraction and runtime implementation differ from a discrete NVIDIA card. Enter the memory you can actually allocate and leave operating-system margin rather than treating the full installed RAM as model capacity.</p>
+          <p><strong>Power and cooling are operating constraints.</strong> A GPU that can load a model may throttle, destabilize, or become uneconomic under sustained serving. Include the card, CPU, memory, fans, power supply losses, and idle periods when comparing a local machine with rented inference. For a personal workstation, noise and heat may matter as much as peak throughput. For a service, measure completed requests per watt and per dollar instead of quoting the GPU's board specification.</p>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="decision-title">
+        <div class="guide-intro">
+          <p class="eyebrow">A repeatable hardware decision</p>
+          <h2 id="decision-title">Use this order before buying or renting GPUs.</h2>
+          <p><strong>Choose the workload.</strong> Define whether this is interactive single-user chat, coding, retrieval, batch processing, or multi-user serving. Record the latency and concurrency target.</p>
+          <p><strong>Choose the exact checkpoint.</strong> Capture the artifact size, parameter count, precision, layer count, KV-head count, head dimension, and supported cache formats from primary sources.</p>
+          <p><strong>Set realistic context.</strong> Do not allocate the model's advertised maximum simply because it exists. Use the context the workload needs, then test the edge separately.</p>
+          <p><strong>Calculate total memory.</strong> Add weight memory, the cache for the chosen context and concurrency, runtime headroom, and any measured workspace. Compare against usable memory, not the number on the GPU box.</p>
+          <p><strong>Test speed after fit.</strong> Measure prompt processing, token generation, time to first token, power, and stability on the exact runtime. Memory capacity determines what can load; bandwidth, compute, kernels, and software maturity determine whether it is useful.</p>
+          <p><strong>Keep an escape path.</strong> If the model barely fits, decide in advance whether to shorten context, quantize cache, reduce concurrency, use CPU offload, split across GPUs, select a smaller checkpoint, or rent a larger accelerator.</p>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>Can an 8 GB GPU run a local LLM?</h3><p>Yes, smaller quantized models can fit. The raw 7B INT4 floor is about 3.26 GiB, but the final answer depends on the packaged checkpoint, context cache, runtime, and usable capacity. The RTX 4060 guide demonstrates where a representative Qwen3 8B plan moves from a short-context fit to a longer-context shortfall.</p></article>
+          <article class="faq-item"><h3>Is 16 GB enough for a 13B or 14B model?</h3><p>Four-bit weights can clear the raw floor, but a full 32K cache and runtime margin can consume the remaining space. Use the exact architecture. A 16 GB label is not proof that every 14B quant will serve the context and concurrency you need.</p></article>
+          <article class="faq-item"><h3>Can a 24 GB GPU run a 70B model?</h3><p>Not fully in GPU memory at the exact four-bit arithmetic floor: 70B INT4 weights alone are about 32.60 GiB. A runtime can offload part of the model to system memory, use a lower-bit quant, or shard across devices, but those are different performance and quality plans.</p></article>
+          <article class="faq-item"><h3>Should I buy the newest GPU?</h3><p>Not from the generation name alone. If two cards have the same VRAM, they may share a model-fit ceiling even when the newer card is much faster. Price the exact workload: memory capacity, memory bandwidth, prompt processing, decoding, supported data types, power, software support, and total system cost.</p></article>
+        </div>
+      </section>
+
+      <section class="method-section" aria-labelledby="sources-title">
+        <div>
+          <p class="eyebrow">Method and primary references</p>
+          <h2 id="sources-title">Every shortcut stays visible.</h2>
+        </div>
+        <div class="method-copy">
+          <p>ResearchAudio calculates dense weight floors directly, labels illustrative inputs, and routes model-specific claims to the exact release evidence used by each guide. This page is a map of the decision system; the linked calculators are where you replace defaults with your own architecture and workload.</p>
+          <p>For model-level inspection, begin with the configuration and weight artifacts published by the model author. The existing guides link directly to the relevant <a href="https://huggingface.co/docs/transformers/en/kv_cache">Hugging Face Transformers cache documentation</a>, <a href="https://docs.vllm.ai/en/latest/configuration/engine_args/">vLLM engine configuration</a>, <a href="https://openai.com/index/introducing-gpt-oss/">OpenAI gpt-oss release</a>, <a href="https://qwenlm.github.io/blog/qwen3/">Qwen3 release</a>, and <a href="https://ai.google.dev/gemma/docs/core/model_card_4">Google Gemma 4 model card</a>. Runtime behavior changes; recheck the current documentation before purchasing hardware.</p>
+          <p>The guide deliberately avoids universal tokens-per-second promises. Speed depends on the exact checkpoint, quantization, prompt length, decode length, batch, runtime version, kernels, operating system, power limit, and hardware. A capacity worksheet should narrow the candidates, not replace a benchmark on the target stack.</p>
+        </div>
+      </section>
+
+      <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">The hardware changes. The decision method should not.</p>
+          <h2 id="subscribe-title">Get the next model and GPU boundary.</h2>
+          <p>ResearchAudio turns model releases, hardware claims, and serving constraints into practical evidence for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <p class="subscribe-direct-fallback"><strong>Prefer the hosted signup page?</strong><a href="https://researchaudio.io/subscribe?utm_source=local_llm_gpu_guide&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join">Join ResearchAudio free →</a></p>
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=local_llm_gpu_guide&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../llm-gpu-memory-calculator/">GPU memory calculator</a>
+        <a href="../what-llm-can-i-run/">Model finder</a>
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=local_llm_gpu_guide&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script type="module" src="../reader-share.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"c20a9e29828c471c92ed7c2284901e05","spa":false}'></script>
+  </body>
+</html>

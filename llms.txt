@@ -43,6 +43,8 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
 
 ## Field guides
 
+- Local LLM GPU and Hardware Guide: https://tools.researchaudio.io/local-llm-gpu-guide/
+  A comprehensive decision path for local LLM inference hardware covering weight floors, quantization, KV cache, context, concurrency, usable VRAM, GPU tiers, and exact released-model guides.
 - The Fable 5 Cost Playbook: https://tools.researchaudio.io/fable-playbook/
   A free 10-page July 2026 field guide to model routing, effort controls, prompt caching, context discipline, batch execution, and spend caps.
 - Voice AI Cost per Minute: https://tools.researchaudio.io/voice-ai-cost-per-minute/
