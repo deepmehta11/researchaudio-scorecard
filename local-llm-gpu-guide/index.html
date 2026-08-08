@@ -44,7 +44,7 @@
           {
             "@type": "ItemList",
             "name": "Local LLM GPU and hardware planning resources",
-            "numberOfItems": 20,
+            "numberOfItems": 22,
             "itemListElement": [
               { "@type": "ListItem", "position": 1, "url": "https://tools.researchaudio.io/llm-gpu-memory-calculator/" },
               { "@type": "ListItem", "position": 2, "url": "https://tools.researchaudio.io/kv-cache-calculator/" },
@@ -65,7 +65,9 @@
               { "@type": "ListItem", "position": 17, "url": "https://tools.researchaudio.io/gpt-oss-hardware-requirements/" },
               { "@type": "ListItem", "position": 18, "url": "https://tools.researchaudio.io/gemma-4-gpu-requirements/" },
               { "@type": "ListItem", "position": 19, "url": "https://tools.researchaudio.io/deepseek-v4-flash-gpu-requirements/" },
-              { "@type": "ListItem", "position": 20, "url": "https://tools.researchaudio.io/diffusiongemma-gpu-requirements/" }
+              { "@type": "ListItem", "position": 20, "url": "https://tools.researchaudio.io/diffusiongemma-gpu-requirements/" },
+              { "@type": "ListItem", "position": 21, "url": "https://tools.researchaudio.io/rtx-4070-super-vs-4070-ti-super-local-llm/" },
+              { "@type": "ListItem", "position": 22, "url": "https://tools.researchaudio.io/mac-mini-m4-local-llm/" }
             ]
           }
         ]
@@ -224,6 +226,18 @@
             <h2>RTX 5060 Ti variant choice</h2>
             <p>See where doubling VRAM changes exact Qwen3 and gpt-oss planning outcomes rather than merely improving margin.</p>
             <b>Compare the variants →</b>
+          </a>
+          <a class="resource-card" href="../rtx-4070-super-vs-4070-ti-super-local-llm/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpu_4070_super_comparison">
+            <span class="instrument-code">12 GB vs 16 GB / buyer comparison</span>
+            <h2>RTX 4070 Super vs 4070 Ti Super</h2>
+            <p>See why four extra gigabytes open a narrow 14B and 20B lane without making the 32B tier fit.</p>
+            <b>Compare the Ada cards →</b>
+          </a>
+          <a class="resource-card" href="../mac-mini-m4-local-llm/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=mac_mini_m4_memory_guide">
+            <span class="instrument-code">16–64 GB / unified memory</span>
+            <h2>Mac mini M4 local LLM memory</h2>
+            <p>Plan against memory shared by macOS, CPU, and GPU instead of treating installed unified memory like dedicated VRAM.</p>
+            <b>Choose the Mac memory tier →</b>
           </a>
           <a class="resource-card" href="../rtx-5080-llm-models/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpu_5080">
             <span class="instrument-code">16 GB / current generation</span>

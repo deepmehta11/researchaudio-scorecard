@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mac mini M4 for Local LLMs: 16GB to 64GB Guide | ResearchAudio</title>
+    <meta name="description" content="Choose a Mac mini M4 or M4 Pro memory configuration for local LLMs. Compare 16GB, 24GB, 32GB, 48GB, and 64GB with transparent model-memory plans." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/mac-mini-m4-local-llm/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Mac mini M4 for local LLMs: choose memory from the model" />
+    <meta property="og:description" content="Apple's unified memory is shared by the CPU, GPU, and operating system. Plan the model against a conservative working budget, not the box label." />
+    <meta property="og:url" content="https://tools.researchaudio.io/mac-mini-m4-local-llm/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "Mac mini M4 for Local LLMs: 16GB to 64GB Memory Guide",
+        "description": "A unified-memory planning guide for Mac mini M4 and M4 Pro configurations with transparent Qwen3, gpt-oss, and dense-model scenarios.",
+        "datePublished": "2026-08-08",
+        "dateModified": "2026-08-08",
+        "mainEntityOfPage": "https://tools.researchaudio.io/mac-mini-m4-local-llm/",
+        "author": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is a 16GB Mac mini M4 enough for local LLMs?",
+            "acceptedAnswer": { "@type": "Answer", "text": "It is a workable starting point for smaller quantized models. Under this page's conservative 75% planning budget, 16GB leaves 12 GiB for the complete model plan. The Qwen3 8B INT4 32K example reaches 9.98 GiB; larger models need more memory, less context, or a smaller artifact." }
+          },
+          {
+            "@type": "Question",
+            "name": "Should I choose 24GB or 32GB unified memory for local LLMs?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Choose 24GB for the shown 14B and short-context 20B plans. Choose 32GB when you want more operating margin, larger context, or concurrent applications. Neither configuration clears the Qwen3 32B INT4 32K plan under this page's conservative reserve." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can a 48GB Mac mini M4 Pro run a 32B local LLM?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The Qwen3 32B INT4 32K example reaches 27.93 GiB and fits within this page's 36 GiB planning budget for a 48GB configuration. That establishes capacity, not tokens-per-second performance." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is unified memory the same as GPU VRAM?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. On Apple silicon, the CPU and GPU share unified memory. MLX arrays live in shared memory and can be used by either device without an explicit transfer, but macOS and other applications also consume the same pool. That is why this guide reserves more memory than the discrete-GPU pages." }
+          }
+        ]
+      }
+    ]
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#scenarios">Skip to the memory scenarios</a>
+    <header class="lab-header" aria-label="ResearchAudio Evidence Lab">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=mac_mini_m4_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark"><span class="wordmark-mark" aria-hidden="true">RA</span><span>ResearchAudio</span></a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=mac_mini_m4_local_llm&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=mac_mini_m4_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=mac_mini_m4_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Apple silicon / unified-memory buyer guide</p>
+          <h1 id="hero-title">Mac mini M4 for local LLMs: choose memory from the model, not the chip name.</h1>
+          <p class="hero-deck">Apple offers the 2024 Mac mini from 16GB to 64GB of unified memory across M4 and M4 Pro configurations. Because macOS, the CPU, and the GPU share that pool, the honest planning question is how much remains for weights, KV cache, and runtime allocations.</p>
+          <a class="hero-join-link" href="../llm-gpu-memory-calculator/?parameterBillions=14.8&amp;bitsPerParameter=4&amp;layers=40&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=75&amp;availableGpus=1&amp;utm_source=mac_mini_m4_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_calculator">Test your model and memory →</a>
+        </div>
+        <aside class="lab-index" aria-label="Unified-memory planning rule">
+          <span>ResearchAudio default</span>
+          <strong>75%</strong>
+          <p>of installed unified memory is treated as a planning budget. It is an editable reserve, not an Apple guarantee or a hard macOS limit.</p>
+        </aside>
+      </section>
+
+      <section class="method-section" aria-labelledby="verdict-title">
+        <div><p class="eyebrow">Fast verdict</p><h2 id="verdict-title">Sixteen starts the journey. Forty-eight changes the model class.</h2></div>
+        <div class="method-copy formula-copy">
+          <p><strong>16GB installed</strong><br /><code>12 GiB planning budget</code></p>
+          <p><strong>24GB installed</strong><br /><code>18 GiB planning budget</code></p>
+          <p><strong>32GB installed</strong><br /><code>24 GiB planning budget</code></p>
+          <p><strong>48GB / 64GB</strong><br /><code>36 / 48 GiB planned</code></p>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="memory-options-title">
+        <div class="comparison-heading"><div><p class="eyebrow">Official configurations</p><h2 id="memory-options-title">M4 and M4 Pro do not offer the same memory ceiling.</h2></div><p>Apple lists the M4 Mac mini with 16GB unified memory, configurable to 24GB or 32GB. The M4 Pro starts at 24GB and can be configured to 48GB or 64GB.</p></div>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead><tr><th scope="col">Configuration</th><th scope="col">Installed unified memory</th><th scope="col">75% planning budget</th><th scope="col">Capacity-oriented use</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">M4 base</th><td>16GB</td><td>12 GiB</td><td>Smaller quantized models and controlled context</td></tr>
+              <tr><th scope="row">M4 configured</th><td>24GB</td><td>18 GiB</td><td>14B INT4 and some short-context 20B plans</td></tr>
+              <tr><th scope="row">M4 configured</th><td>32GB</td><td>24 GiB</td><td>More margin, but not the shown 32B 32K plan</td></tr>
+              <tr><th scope="row">M4 Pro configured</th><td>48GB</td><td>36 GiB</td><td>The shown 32B INT4 32K plan clears the budget</td></tr>
+              <tr><th scope="row">M4 Pro configured</th><td>64GB</td><td>48 GiB</td><td>A dense 70B INT4 weight floor plus headroom clears on paper</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">The table is a memory-capacity map. It does not predict prompt-processing speed, decode speed, thermals, or the quality of a particular quantization.</p>
+      </section>
+
+      <section class="scenario-section" id="scenarios" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">Transparent memory checks</p>
+          <h2 id="scenario-title">Match the configuration to a complete plan.</h2>
+          <p>The linked calculator was designed around GPU memory. Here its single-device capacity field is used only as an editable proxy for installed unified memory, with a stricter 75% usable-memory setting. It does not model macOS memory pressure, swap, or MLX performance.</p>
+        </div>
+        <div class="scenario-grid guide-scenario-grid">
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=8.2&amp;bitsPerParameter=4&amp;layers=36&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=16&amp;usableVramPercent=75&amp;availableGpus=1&amp;utm_source=mac_mini_m4_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_8b_32k_16gb"><span>Qwen3 8B · INT4 · 32K · 16GB</span><strong>9.98 GiB</strong><small>Fits the 12 GiB budget →</small></a>
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=14.8&amp;bitsPerParameter=4&amp;layers=40&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=75&amp;availableGpus=1&amp;utm_source=mac_mini_m4_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_14b_32k_24gb"><span>Qwen3 14B · INT4 · 32K · 24GB</span><strong>14.27 GiB</strong><small>Fits the 18 GiB budget →</small></a>
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=20.91&amp;bitsPerParameter=4.25&amp;checkpointGiB=12.8&amp;layers=24&amp;kvHeads=8&amp;headDimension=64&amp;contextTokens=4096&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=10&amp;vramPerGpu=24&amp;usableVramPercent=75&amp;availableGpus=1&amp;utm_source=mac_mini_m4_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpt_oss_20b_4k_24gb"><span>gpt-oss-20b · MXFP4 · 4K · 24GB</span><strong>14.29 GiB</strong><small>Fits the 18 GiB budget →</small></a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=32.8&amp;bitsPerParameter=4&amp;layers=64&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=32&amp;usableVramPercent=75&amp;availableGpus=1&amp;utm_source=mac_mini_m4_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_32b_32k_32gb"><span>Qwen3 32B · INT4 · 32K · 32GB</span><strong>27.93 GiB</strong><small>Misses the 24 GiB budget →</small></a>
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=32.8&amp;bitsPerParameter=4&amp;layers=64&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=48&amp;usableVramPercent=75&amp;availableGpus=1&amp;utm_source=mac_mini_m4_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_32b_32k_48gb"><span>Qwen3 32B · INT4 · 32K · 48GB</span><strong>27.93 GiB</strong><small>Fits the 36 GiB budget →</small></a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=70&amp;bitsPerParameter=4&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=64&amp;usableVramPercent=75&amp;availableGpus=1&amp;utm_source=mac_mini_m4_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=70b_int4_floor_64gb"><span>70B dense · INT4 floor + 20% · 64GB</span><strong>39.12 GiB</strong><small>Capacity floor only; add the real cache →</small></a>
+        </div>
+      </section>
+
+      <section class="method-section" aria-labelledby="unified-title">
+        <div><p class="eyebrow">Unified memory is different</p><h2 id="unified-title">Do not copy a discrete-GPU VRAM table onto a Mac.</h2></div>
+        <div class="method-copy">
+          <p>On a discrete NVIDIA card, model weights and cache compete inside a dedicated VRAM pool while system RAM remains separate. On Apple silicon, CPU and GPU workloads share unified memory with macOS and every other running application. Installed memory is therefore not an isolated accelerator budget.</p>
+          <p>MLX documents the benefit of this design: arrays live in shared memory and operations can run on the CPU or GPU without an explicit device-to-device transfer. That architectural advantage does not make all installed memory safely available to one model. Browser tabs, development tools, the inference server, and the operating system still need room.</p>
+          <p>This guide uses 75% as a conservative comparison convention. It leaves 4GB on a 16GB machine, 6GB on 24GB, 8GB on 32GB, 12GB on 48GB, and 16GB on 64GB outside the model plan. Your measured safe percentage may differ. Watch memory pressure and swap during the actual workload, then adjust the calculator rather than treating 75% as a platform rule.</p>
+        </div>
+      </section>
+
+      <section class="principle-strip" aria-label="Mac mini M4 local LLM decision boundaries">
+        <p class="eyebrow">Choose the memory first</p>
+        <p><strong>Memory is not upgradeable later.</strong><br />Select the installed pool around the largest model and context you genuinely expect to use.</p>
+        <p><strong>Capacity is not throughput.</strong><br />A plan that fits can still be too slow for interactive work; benchmark the exact runtime.</p>
+        <p><strong>Swap is not free memory.</strong><br />A model surviving with swap does not mean it meets your latency or system-stability target.</p>
+      </section>
+
+      <section class="guide-section" aria-labelledby="sources-title">
+        <div class="guide-intro"><p class="eyebrow">Primary sources and method</p><h2 id="sources-title">Separate Apple's facts from ResearchAudio's planning assumptions.</h2>
+          <p>Apple supplies the available memory configurations and memory bandwidth figures. The MLX project documents the shared-memory execution model. ResearchAudio supplies the editable 75% reserve and scenario arithmetic. No tokens-per-second claim is made because speed depends on the exact chip, model, quantization, runtime, prompt length, and decode settings.</p>
+          <a class="guide-link" href="https://support.apple.com/en-us/121555">Official Apple Mac mini (2024) technical specifications →</a>
+          <a class="guide-link" href="https://github.com/ml-explore/mlx">Official MLX project and unified-memory description →</a>
+          <a class="guide-link" href="../what-llm-can-i-run/?vramPerGpu=24&amp;availableGpus=1&amp;bitsPerParameter=4&amp;inferenceHeadroom=20&amp;usableVramPercent=75&amp;utm_source=mac_mini_m4_local_llm&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=related_model_finder">Start from your installed memory →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>Is a 16GB Mac mini M4 enough for local LLMs?</h3><p>It is a workable starting point for smaller quantized models. The Qwen3 8B INT4 32K example reaches 9.98 GiB and fits the conservative 12 GiB planning budget.</p></article>
+          <article class="faq-item"><h3>Should I choose 24GB or 32GB unified memory for local LLMs?</h3><p>Choose 24GB for the shown 14B and short-context 20B plans. Choose 32GB for more operating margin, context, or concurrent apps. Neither clears the shown 32B 32K plan under the 75% reserve.</p></article>
+          <article class="faq-item"><h3>Can a 48GB Mac mini M4 Pro run a 32B local LLM?</h3><p>The Qwen3 32B INT4 32K plan reaches 27.93 GiB and clears the 36 GiB planning budget. This proves arithmetic capacity, not speed.</p></article>
+          <article class="faq-item"><h3>Is unified memory the same as GPU VRAM?</h3><p>No. Apple silicon shares unified memory across the CPU, GPU, operating system, and applications. This guide therefore uses a larger reserve than its discrete-GPU pages.</p></article>
+        </div>
+      </section>
+
+      <aside class="cluster-return" aria-label="Local LLM hardware guide">
+        <p>Need the full decision path? Connect model size, quantization, cache, discrete VRAM, unified memory, and exact hardware guides.</p>
+        <a href="../local-llm-gpu-guide/?utm_source=mac_mini_m4_local_llm&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=spoke_to_pillar">Open the local LLM GPU guide →</a>
+      </aside>
+
+      <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">
+        <div><p class="eyebrow">Hardware claims, checked</p><h2 id="subscribe-title">Get the next local-AI deployment teardown.</h2><p>ResearchAudio traces exact checkpoints, context, runtime constraints, and the gap between “fits” and “works.”</p></div>
+        <div class="subscribe-form-shell">
+          <p class="subscribe-direct-fallback"><strong>Prefer the hosted signup page?</strong><a href="https://researchaudio.io/subscribe?utm_source=mac_mini_m4_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join">Join ResearchAudio free →</a></p>
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=mac_mini_m4_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links"><a href="../what-llm-can-i-run/">Model finder</a><a href="../llm-gpu-memory-calculator/">Memory calculator</a><a href="../tools/">All tools</a><a href="https://researchaudio.io/?utm_source=mac_mini_m4_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a></div>
+    </footer>
+    <script type="module" src="../reader-share.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"c20a9e29828c471c92ed7c2284901e05","spa":false}'></script>
+  </body>
+</html>

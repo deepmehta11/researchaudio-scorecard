@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RTX 4070 Super vs 4070 Ti Super for Local LLMs | ResearchAudio</title>
+    <meta name="description" content="Compare RTX 4070 Super 12GB vs RTX 4070 Ti Super 16GB for local LLMs. See exact Qwen3 and gpt-oss memory boundaries before buying." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/rtx-4070-super-vs-4070-ti-super-local-llm/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="RTX 4070 Super vs 4070 Ti Super for local LLMs" />
+    <meta property="og:description" content="The 4GB VRAM difference opens a narrow 14B and 20B lane, but it does not make 32B models fit. Inspect the exact boundary." />
+    <meta property="og:url" content="https://tools.researchaudio.io/rtx-4070-super-vs-4070-ti-super-local-llm/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script type="application/ld+json">
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "RTX 4070 Super vs RTX 4070 Ti Super for Local LLMs",
+        "description": "A capacity-first comparison of the RTX 4070 Super 12GB and RTX 4070 Ti Super 16GB with exact Qwen3 and gpt-oss planning scenarios.",
+        "datePublished": "2026-08-08",
+        "dateModified": "2026-08-08",
+        "mainEntityOfPage": "https://tools.researchaudio.io/rtx-4070-super-vs-4070-ti-super-local-llm/",
+        "author": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Which is better for local LLMs, RTX 4070 Super or RTX 4070 Ti Super?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The RTX 4070 Ti Super is the stronger capacity choice because NVIDIA specifies 16GB instead of 12GB. Under this page's reserve, that is 14.4 GiB versus 10.8 GiB of planning capacity. Choose from the exact model and context, then benchmark speed separately." }
+          },
+          {
+            "@type": "Question",
+            "name": "What LLM can an RTX 4070 Super 12GB run?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The Qwen3 8B INT4 32K scenario reaches 9.98 GiB and fits this page's 10.8 GiB planning budget. The Qwen3 14B INT4 32K and gpt-oss-20b MXFP4 4K scenarios exceed it." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can an RTX 4070 Ti Super 16GB run Qwen3 14B?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The Qwen3 14B INT4 32K plan reaches 14.27 GiB, only 0.13 GiB below this page's 14.4 GiB capacity. It is a paper fit that still needs runtime validation." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is 16GB VRAM enough for a 32B local LLM?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Not for the fully resident Qwen3 32B INT4 32K example here, which reaches 27.93 GiB. A 16GB card would need a smaller checkpoint, shorter or lighter cache, CPU offload, or another memory path." }
+          }
+        ]
+      }
+    ]
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#scenarios">Skip to the model scenarios</a>
+    <header class="lab-header" aria-label="ResearchAudio Evidence Lab">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=rtx_4070_super_vs_4070_ti_super_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark"><span class="wordmark-mark" aria-hidden="true">RA</span><span>ResearchAudio</span></a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/?utm_source=rtx_4070_super_vs_4070_ti_super_local_llm&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=rtx_4070_super_vs_4070_ti_super_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=rtx_4070_super_vs_4070_ti_super_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Buyer comparison / 12 GB vs 16 GB</p>
+          <h1 id="hero-title">RTX 4070 Super vs 4070 Ti Super: what 4GB changes for local LLMs.</h1>
+          <p class="hero-deck">NVIDIA specifies 12GB of GDDR6X for the RTX 4070 Super and 16GB for the RTX 4070 Ti Super. That difference does not unlock every larger model: it moves a few exact 14B and 20B plans from a miss to a razor-thin paper fit.</p>
+          <a class="hero-join-link" href="../llm-gpu-memory-calculator/?parameterBillions=14.8&amp;bitsPerParameter=4&amp;layers=40&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=16&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_4070_super_vs_4070_ti_super_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_calculator">Test your exact checkpoint →</a>
+        </div>
+        <aside class="lab-index" aria-label="VRAM planning difference">
+          <span>Usable at 90%</span>
+          <strong>10.8 → 14.4</strong>
+          <p>GiB planning capacity from the 12GB card to the 16GB card. This is a capacity comparison, not a speed benchmark.</p>
+        </aside>
+      </section>
+
+      <section class="method-section" aria-labelledby="verdict-title">
+        <div><p class="eyebrow">Fast verdict</p><h2 id="verdict-title">Buy 16GB for the model boundary, not for a vague “AI-ready” label.</h2></div>
+        <div class="method-copy formula-copy">
+          <p><strong>RTX 4070 Super</strong><br /><code>12GB · 10.8 GiB planned</code></p>
+          <p><strong>RTX 4070 Ti Super</strong><br /><code>16GB · 14.4 GiB planned</code></p>
+          <p><strong>Same architecture</strong><br /><code>Ada Lovelace · GDDR6X</code></p>
+          <p><strong>Capacity gained</strong><br /><code>3.6 GiB after reserve</code></p>
+        </div>
+      </section>
+
+      <section class="scenario-section" id="scenarios" aria-labelledby="scenario-title">
+        <div>
+          <p class="eyebrow">Exact boundary checks</p>
+          <h2 id="scenario-title">The 16GB card opens a narrow middle lane—not the 32B tier.</h2>
+          <p>These plans include weights, an architecture-specific KV cache, and stated runtime headroom. Open any card to edit the checkpoint, context, concurrency, cache precision, reserve, or GPU count.</p>
+        </div>
+        <div class="scenario-grid guide-scenario-grid">
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=8.2&amp;bitsPerParameter=4&amp;layers=36&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=12&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_4070_super_vs_4070_ti_super_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_8b_32k_12gb"><span>Qwen3 8B · INT4 · 32K · 12GB</span><strong>9.98 GiB</strong><small>Fits with 0.82 GiB planned margin →</small></a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=14.8&amp;bitsPerParameter=4&amp;layers=40&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=12&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_4070_super_vs_4070_ti_super_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_14b_32k_12gb"><span>Qwen3 14B · INT4 · 32K · 12GB</span><strong>14.27 GiB</strong><small>Misses by 3.47 GiB →</small></a>
+          <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=14.8&amp;bitsPerParameter=4&amp;layers=40&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=16&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_4070_super_vs_4070_ti_super_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_14b_32k_16gb"><span>Qwen3 14B · INT4 · 32K · 16GB</span><strong>14.27 GiB</strong><small>Paper fit with 0.13 GiB margin →</small></a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=20.91&amp;bitsPerParameter=4.25&amp;checkpointGiB=12.8&amp;layers=24&amp;kvHeads=8&amp;headDimension=64&amp;contextTokens=4096&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=10&amp;vramPerGpu=16&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_4070_super_vs_4070_ti_super_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpt_oss_20b_4k_16gb"><span>gpt-oss-20b · MXFP4 · 4K · 16GB</span><strong>14.29 GiB</strong><small>Paper fit with 0.11 GiB margin →</small></a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=8.2&amp;bitsPerParameter=8&amp;layers=36&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=16&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_4070_super_vs_4070_ti_super_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_8b_int8_32k_16gb"><span>Qwen3 8B · INT8 · 32K · 16GB</span><strong>14.56 GiB</strong><small>Misses by 0.16 GiB →</small></a>
+          <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=32.8&amp;bitsPerParameter=4&amp;layers=64&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=16&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_4070_super_vs_4070_ti_super_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_32b_32k_16gb"><span>Qwen3 32B · INT4 · 32K · 16GB</span><strong>27.93 GiB</strong><small>Needs a different memory path →</small></a>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="decision-title">
+        <div class="comparison-heading"><div><p class="eyebrow">12GB vs 16GB decision</p><h2 id="decision-title">Four extra advertised gigabytes create 3.6 GiB of planned room.</h2></div><p>The Evidence Lab reserves ten percent for the display stack, allocator, and runtime variability. Change that reserve when you have measurements from the exact machine.</p></div>
+        <div class="comparison-table-wrap">
+          <table>
+            <thead><tr><th scope="col">Profile</th><th scope="col">RTX 4070 Super 12GB</th><th scope="col">RTX 4070 Ti Super 16GB</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Usable planning budget</th><td>10.8 GiB</td><td>14.4 GiB</td></tr>
+              <tr><th scope="row">Qwen3 8B INT4 · 32K</th><td>9.98 GiB · fit</td><td>9.98 GiB · more margin</td></tr>
+              <tr><th scope="row">Qwen3 14B INT4 · 32K</th><td>14.27 GiB · miss</td><td>14.27 GiB · paper fit</td></tr>
+              <tr><th scope="row">gpt-oss-20b MXFP4 · 4K</th><td>14.29 GiB · miss</td><td>14.29 GiB · paper fit</td></tr>
+              <tr><th scope="row">Qwen3 32B INT4 · 32K</th><td>27.93 GiB · miss</td><td>27.93 GiB · miss</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">A paper fit is not a promise. Packaged checkpoint overhead, backend allocations, desktop use, parallel requests, and a different cache layout can consume the remaining margin.</p>
+      </section>
+
+      <section class="principle-strip" aria-label="RTX 4070 Super versus RTX 4070 Ti Super decision boundaries">
+        <p class="eyebrow">Capacity before speed</p>
+        <p><strong>Twelve handles the 8B lane.</strong><br />A well-quantized 8B model can retain useful context without offload in the stated scenario.</p>
+        <p><strong>Sixteen opens a middle lane.</strong><br />Some 14B and 20B plans clear the arithmetic boundary with almost no spare room.</p>
+        <p><strong>Neither is a 32B answer.</strong><br />The 32B example needs offload, less context, a smaller artifact, or more memory.</p>
+      </section>
+
+      <section class="guide-section" aria-labelledby="sources-title">
+        <div class="guide-intro"><p class="eyebrow">Primary source and method</p><h2 id="sources-title">Verify the card, then verify the checkpoint.</h2>
+          <p>NVIDIA's family specification lists the RTX 4070 Super with 12GB GDDR6X on a 192-bit interface and the RTX 4070 Ti Super with 16GB GDDR6X on a 256-bit interface. ResearchAudio uses those capacities, exact binary-GiB arithmetic, editable cache inputs, and an explicit reserve. It does not infer LLM speed from gaming figures.</p>
+          <a class="guide-link" href="https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4070-family/">Official NVIDIA RTX 4070 family specifications →</a>
+          <a class="guide-link" href="../rtx-3060-llm-models/?utm_source=rtx_4070_super_vs_4070_ti_super_local_llm&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=related_12gb_guide">Compare another 12GB planning boundary →</a>
+          <a class="guide-link" href="../rtx-4060-ti-16gb-llm-models/?utm_source=rtx_4070_super_vs_4070_ti_super_local_llm&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=related_16gb_guide">Inspect the detailed 16GB boundary →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>Which is better for local LLMs, RTX 4070 Super or RTX 4070 Ti Super?</h3><p>The 16GB RTX 4070 Ti Super is the stronger capacity choice. It supplies 14.4 GiB under this page's reserve versus 10.8 GiB for the 12GB RTX 4070 Super. Benchmark the exact workload before assigning a speed value.</p></article>
+          <article class="faq-item"><h3>What LLM can an RTX 4070 Super 12GB run?</h3><p>The Qwen3 8B INT4 32K plan reaches 9.98 GiB and fits. The shown 14B and gpt-oss-20b plans exceed the default 10.8 GiB budget.</p></article>
+          <article class="faq-item"><h3>Can an RTX 4070 Ti Super 16GB run Qwen3 14B?</h3><p>The stated 32K INT4 plan reaches 14.27 GiB, leaving 0.13 GiB under the default ceiling. Treat that as a paper fit and test the real backend.</p></article>
+          <article class="faq-item"><h3>Is 16GB VRAM enough for a 32B local LLM?</h3><p>Not for the fully resident Qwen3 32B INT4 32K plan shown here. It reaches 27.93 GiB and requires a different memory strategy.</p></article>
+        </div>
+      </section>
+
+      <aside class="cluster-return" aria-label="Local LLM hardware guide">
+        <p>Need the full decision path? Connect model size, quantization, cache, VRAM tier, and exact hardware guides.</p>
+        <a href="../local-llm-gpu-guide/?utm_source=rtx_4070_super_vs_4070_ti_super_local_llm&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=spoke_to_pillar">Open the local LLM GPU guide →</a>
+      </aside>
+
+      <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">
+        <div><p class="eyebrow">Hardware claims, checked</p><h2 id="subscribe-title">Get the next local-AI deployment teardown.</h2><p>ResearchAudio traces exact checkpoints, context, runtime constraints, and the gap between “fits” and “works.”</p></div>
+        <div class="subscribe-form-shell">
+          <p class="subscribe-direct-fallback"><strong>Prefer the hosted signup page?</strong><a href="https://researchaudio.io/subscribe?utm_source=rtx_4070_super_vs_4070_ti_super_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join">Join ResearchAudio free →</a></p>
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=rtx_4070_super_vs_4070_ti_super_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links"><a href="../what-llm-can-i-run/">Model finder</a><a href="../llm-gpu-memory-calculator/">GPU calculator</a><a href="../tools/">All tools</a><a href="https://researchaudio.io/?utm_source=rtx_4070_super_vs_4070_ti_super_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a></div>
+    </footer>
+    <script type="module" src="../reader-share.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"c20a9e29828c471c92ed7c2284901e05","spa":false}'></script>
+  </body>
+</html>

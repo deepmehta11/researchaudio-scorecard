@@ -67,6 +67,10 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Shows what model-size tiers clear a 24 GB card, then tests Qwen3 14B, 30B-A3B, 32B, gpt-oss-20b, and a 70B floor with editable architecture-aware scenarios.
 - RTX 5060 Ti 8GB vs 16GB Local LLM Comparison: https://tools.researchaudio.io/rtx-5060-ti-8gb-vs-16gb-local-llm/
   Compares exact Qwen3 and gpt-oss planning scenarios to show where the 16GB variant's doubled VRAM changes the local-LLM boundary.
+- RTX 4070 Super vs RTX 4070 Ti Super Local LLM Comparison: https://tools.researchaudio.io/rtx-4070-super-vs-4070-ti-super-local-llm/
+  Maps the official 12GB and 16GB capacities to exact Qwen3 and gpt-oss plans, showing the narrow middle lane opened by four extra gigabytes.
+- Mac mini M4 Local LLM Memory Guide: https://tools.researchaudio.io/mac-mini-m4-local-llm/
+  Compares the official 16GB through 64GB M4 and M4 Pro configurations using a conservative shared-system memory budget.
 - RTX 5080 Local LLM Guide: https://tools.researchaudio.io/rtx-5080-llm-models/
   Shows what the 16 GB tier changes, including the narrow Qwen3 14B and short-context gpt-oss-20b planning boundaries.
 - RTX 5090 Local LLM Guide: https://tools.researchaudio.io/rtx-5090-llm-models/

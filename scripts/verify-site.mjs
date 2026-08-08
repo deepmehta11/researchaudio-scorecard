@@ -27,7 +27,7 @@ const brandedToolsOrigin = "https://tools.researchaudio.io";
 const cloudflareWebAnalyticsToken = "c20a9e29828c471c92ed7c2284901e05";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, readerShareJs, conversionLoopJs, toolsHtml, embedsHtml, embedsJs, partnersHtml, partnersJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, localLlmGuideHtml, smallGpuGuideHtml, gpuGuideHtml, rtx3060GuideHtml, rtx4060GuideHtml, rtx4060Ti16GuideHtml, rtx3090Vs4090GuideHtml, rtx4090GuideHtml, rtx5060TiComparisonGuideHtml, rtx5080GuideHtml, rtx5090GuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, kimiK3GuideHtml, gemma4GuideHtml, diffusionGemmaGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, acquisitionHtml, starterHtml, starterJs, deploymentPackHtml, deploymentBrief, evidenceChecklist, rolloutGates, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, readerShareJs, conversionLoopJs, toolsHtml, embedsHtml, embedsJs, partnersHtml, partnersJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, localLlmGuideHtml, smallGpuGuideHtml, gpuGuideHtml, rtx3060GuideHtml, rtx4060GuideHtml, rtx4060Ti16GuideHtml, rtx3090Vs4090GuideHtml, rtx4090GuideHtml, rtx5060TiComparisonGuideHtml, rtx4070SuperComparisonGuideHtml, macMiniM4GuideHtml, rtx5080GuideHtml, rtx5090GuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, kimiK3GuideHtml, gemma4GuideHtml, diffusionGemmaGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, acquisitionHtml, starterHtml, starterJs, deploymentPackHtml, deploymentBrief, evidenceChecklist, rolloutGates, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -65,6 +65,8 @@ const [html, css, js, labCss, embedModeJs, readerShareJs, conversionLoopJs, tool
   readFile(path.join(root, "rtx-3090-vs-4090-local-llm/index.html"), "utf8"),
   readFile(path.join(root, "rtx-4090-llm-models/index.html"), "utf8"),
   readFile(path.join(root, "rtx-5060-ti-8gb-vs-16gb-local-llm/index.html"), "utf8"),
+  readFile(path.join(root, "rtx-4070-super-vs-4070-ti-super-local-llm/index.html"), "utf8"),
+  readFile(path.join(root, "mac-mini-m4-local-llm/index.html"), "utf8"),
   readFile(path.join(root, "rtx-5080-llm-models/index.html"), "utf8"),
   readFile(path.join(root, "rtx-5090-llm-models/index.html"), "utf8"),
   readFile(path.join(root, "qwen2-5-gpu-requirements/index.html"), "utf8"),
@@ -168,6 +170,8 @@ for (const [name, page, pathname] of [
   ["RTX 3090 versus RTX 4090 local LLM comparison", rtx3090Vs4090GuideHtml, "/rtx-3090-vs-4090-local-llm/"],
   ["RTX 4090 local LLM guide", rtx4090GuideHtml, "/rtx-4090-llm-models/"],
   ["RTX 5060 Ti 8GB versus 16GB local LLM comparison", rtx5060TiComparisonGuideHtml, "/rtx-5060-ti-8gb-vs-16gb-local-llm/"],
+  ["RTX 4070 Super versus RTX 4070 Ti Super local LLM comparison", rtx4070SuperComparisonGuideHtml, "/rtx-4070-super-vs-4070-ti-super-local-llm/"],
+  ["Mac mini M4 local LLM memory guide", macMiniM4GuideHtml, "/mac-mini-m4-local-llm/"],
   ["RTX 5080 local LLM guide", rtx5080GuideHtml, "/rtx-5080-llm-models/"],
   ["RTX 5090 local LLM guide", rtx5090GuideHtml, "/rtx-5090-llm-models/"],
   ["Qwen2.5 GPU requirements guide", qwenGuideHtml, "/qwen2-5-gpu-requirements/"],
@@ -207,6 +211,8 @@ for (const [name, page] of [
   ["RTX 3090 versus RTX 4090 local LLM comparison", rtx3090Vs4090GuideHtml],
   ["RTX 4090 local LLM guide", rtx4090GuideHtml],
   ["RTX 5060 Ti comparison", rtx5060TiComparisonGuideHtml],
+  ["RTX 4070 Super comparison", rtx4070SuperComparisonGuideHtml],
+  ["Mac mini M4 local LLM guide", macMiniM4GuideHtml],
   ["RTX 5080 local LLM guide", rtx5080GuideHtml],
   ["RTX 5090 local LLM guide", rtx5090GuideHtml],
   ["Qwen2.5 GPU requirements guide", qwenGuideHtml],
@@ -343,6 +349,12 @@ for (const [name, page, title, source, officialUrl, values, questions] of [
     "Can the RTX 5060 Ti 16GB run Qwen3 14B?",
     "How do I verify whether an RTX 5060 Ti has 8GB or 16GB?",
   ]],
+  ["RTX 4070 Super versus RTX 4070 Ti Super local LLM comparison", rtx4070SuperComparisonGuideHtml, "RTX 4070 Super vs 4070 Ti Super for Local LLMs", "rtx_4070_super_vs_4070_ti_super_local_llm", "https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4070-family/", ["9.98", "14.27", "14.29", "14.56", "27.93", "10.8", "14.4"], [
+    "Which is better for local LLMs, RTX 4070 Super or RTX 4070 Ti Super?",
+    "What LLM can an RTX 4070 Super 12GB run?",
+    "Can an RTX 4070 Ti Super 16GB run Qwen3 14B?",
+    "Is 16GB VRAM enough for a 32B local LLM?",
+  ]],
   ["RTX 5080 local LLM guide", rtx5080GuideHtml, "What LLM Can an RTX 5080 Run? 16GB VRAM Guide", "rtx_5080_llm_models", "https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5080/", ["9.98", "14.27", "14.29", "14.56", "27.93", "10.8"], [
     "What LLM can an RTX 5080 run?",
     "Can an RTX 5080 run Qwen3 14B?",
@@ -382,6 +394,34 @@ for (const [name, page, title, source, officialUrl, values, questions] of [
 }
 
 assert.match(rtx3090Vs4090GuideHtml, /GEFORCE_RTX_3090_USER_GUIDE_v01\.pdf/, "RTX 3090 versus RTX 4090 comparison should cite NVIDIA's RTX 3090 guide");
+
+assert.match(macMiniM4GuideHtml, /<title>Mac mini M4 for Local LLMs: 16GB to 64GB Guide \| ResearchAudio<\/title>/);
+assert.equal((macMiniM4GuideHtml.match(/"@type": "TechArticle"/g) || []).length, 1, "Mac mini guide should have one TechArticle schema");
+assert.equal((macMiniM4GuideHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "Mac mini guide should have one FAQ schema");
+assert.doesNotThrow(() => parseStructuredData(macMiniM4GuideHtml), "Mac mini guide structured data must be valid JSON");
+assert.equal((macMiniM4GuideHtml.match(/class="scenario-card/g) || []).length, 6, "Mac mini guide should contain six editable scenarios");
+assert.match(macMiniM4GuideHtml, /https:\/\/support\.apple\.com\/en-us\/121555/);
+assert.match(macMiniM4GuideHtml, /https:\/\/github\.com\/ml-explore\/mlx/);
+assert.match(macMiniM4GuideHtml, /usableVramPercent=75/);
+assert.match(macMiniM4GuideHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=mac_mini_m4_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab/);
+for (const value of ["9.98", "14.27", "14.29", "27.93", "39.12", "12", "18", "24", "36", "48"]) {
+  assert.match(macMiniM4GuideHtml, new RegExp(`${value.replace(".", "\\.")} GiB`), `Mac mini guide should expose the ${value} GiB planning value`);
+}
+for (const question of [
+  "Is a 16GB Mac mini M4 enough for local LLMs?",
+  "Should I choose 24GB or 32GB unified memory for local LLMs?",
+  "Can a 48GB Mac mini M4 Pro run a 32B local LLM?",
+  "Is unified memory the same as GPU VRAM?",
+]) {
+  const escapedQuestion = question.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  assert.match(macMiniM4GuideHtml, new RegExp(`<h3>${escapedQuestion}<\\/h3>`), `Mac mini visible FAQ question missing: ${question}`);
+  assert.match(macMiniM4GuideHtml, new RegExp(`"name": "${escapedQuestion}"`), `Mac mini FAQ schema question missing: ${question}`);
+}
+assert.match(rtx3060GuideHtml, /rtx-4070-super-vs-4070-ti-super-local-llm/);
+assert.match(rtx4060Ti16GuideHtml, /rtx-4070-super-vs-4070-ti-super-local-llm/);
+assert.match(rtx5080GuideHtml, /rtx-4070-super-vs-4070-ti-super-local-llm/);
+assert.match(finderHtml, /mac-mini-m4-local-llm/);
+assert.match(compatibilityHtml, /mac-mini-m4-local-llm/);
 
 assert.match(gptOssGuideHtml, /<title>gpt-oss 20B &amp; 120B Hardware Requirements \| ResearchAudio<\/title>/);
 assert.equal((gptOssGuideHtml.match(/"@type": "TechArticle"/g) || []).length, 1, "gpt-oss guide should have one TechArticle schema");
@@ -1584,7 +1624,7 @@ assert.match(voiceCostHtml, /elevenlabs\.io\/pricing/);
 assert.match(toolsHtml, /voice-ai-cost-calculator/);
 assert.match(toolsHtml, /voice-ai-cost-per-minute/);
 assert.match(toolsHtml, /ai-receptionist-cost/);
-assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 22, "tools hub should contain twenty-two search field notes");
+assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 24, "tools hub should contain twenty-four search field notes");
 assert.match(toolsHtml, /local-llm-gpu-guide/);
 assert.match(toolsHtml, /7b-vs-13b-llm-gpu-requirements/);
 assert.match(toolsHtml, /70b-llm-gpu-requirements/);
@@ -1594,6 +1634,8 @@ assert.match(toolsHtml, /rtx-4060-ti-16gb-llm-models/);
 assert.match(toolsHtml, /rtx-3090-vs-4090-local-llm/);
 assert.match(toolsHtml, /rtx-4090-llm-models/);
 assert.match(toolsHtml, /rtx-5060-ti-8gb-vs-16gb-local-llm/);
+assert.match(toolsHtml, /rtx-4070-super-vs-4070-ti-super-local-llm/);
+assert.match(toolsHtml, /mac-mini-m4-local-llm/);
 assert.match(toolsHtml, /rtx-5080-llm-models/);
 assert.match(toolsHtml, /rtx-5090-llm-models/);
 assert.match(toolsHtml, /qwen2-5-gpu-requirements/);
@@ -1876,6 +1918,8 @@ for (const target of [
   "rtx-3090-vs-4090-local-llm",
   "rtx-4090-llm-models",
   "rtx-5060-ti-8gb-vs-16gb-local-llm",
+  "rtx-4070-super-vs-4070-ti-super-local-llm",
+  "mac-mini-m4-local-llm",
   "rtx-5080-llm-models",
   "rtx-5090-llm-models",
   "qwen2-5-gpu-requirements",
@@ -1899,6 +1943,8 @@ for (const [name, page] of [
   ["RTX 3090 versus 4090 guide", rtx3090Vs4090GuideHtml],
   ["RTX 4090 guide", rtx4090GuideHtml],
   ["RTX 5060 Ti comparison", rtx5060TiComparisonGuideHtml],
+  ["RTX 4070 Super comparison", rtx4070SuperComparisonGuideHtml],
+  ["Mac mini M4 guide", macMiniM4GuideHtml],
   ["RTX 5080 guide", rtx5080GuideHtml],
   ["RTX 5090 guide", rtx5090GuideHtml],
   ["Qwen2.5 guide", qwenGuideHtml],
@@ -1911,12 +1957,14 @@ for (const [name, page] of [
   assert.match(page, /href="\.\.\/local-llm-gpu-guide\/\?utm_source=[^&"]+&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=spoke_to_pillar"/, `${name} should link back to the local LLM pillar with attribution`);
 }
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 43, "sitemap should contain all forty-three crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 45, "sitemap should contain all forty-five crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 43, "sitemap should publish forty-three URL locations");
+assert.equal(sitemapUrls.length, 45, "sitemap should publish forty-five URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/partners/"), "sitemap should publish the partner distribution kit");
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/local-llm-gpu-guide/"), "sitemap should publish the local LLM hardware pillar");
+assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/rtx-4070-super-vs-4070-ti-super-local-llm/"), "sitemap should publish the RTX 4070 Super comparison");
+assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/mac-mini-m4-local-llm/"), "sitemap should publish the Mac mini M4 guide");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
 assert.doesNotMatch(`${sitemap}\n${robots}\n${llms}`, retiredGitHubPagesPath, "discovery files should not expose the retired GitHub Pages path");
 assert.match(llms, /AI Cost per Successful Task Calculator/);
@@ -1953,6 +2001,8 @@ assert.match(llms, /RTX 4060 Ti 16GB Local LLM Guide/);
 assert.match(llms, /RTX 3090 vs RTX 4090 Local LLM Comparison/);
 assert.match(llms, /RTX 4090 Local LLM Guide/);
 assert.match(llms, /RTX 5060 Ti 8GB vs 16GB Local LLM Comparison/);
+assert.match(llms, /RTX 4070 Super vs RTX 4070 Ti Super Local LLM Comparison/);
+assert.match(llms, /Mac mini M4 Local LLM Memory Guide/);
 assert.match(llms, /RTX 5080 Local LLM Guide/);
 assert.match(llms, /RTX 5090 Local LLM Guide/);
 assert.match(llms, /Qwen2\.5 GPU Requirements/);
@@ -1976,4 +2026,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 16 tools, 1 gated acquisition page, 1 private activation kit, 1 private one-referral reward pack, 1 embed library, 1 partner distribution kit, 22 search field notes, 43 crawlable pages, a 2,500-word local LLM hardware pillar, attributed subscribe and share CTAs, interaction-triggered signup rails, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 16 tools, 1 gated acquisition page, 1 private activation kit, 1 private one-referral reward pack, 1 embed library, 1 partner distribution kit, 24 search field notes, 45 crawlable pages, a 2,500-word local LLM hardware pillar, attributed subscribe and share CTAs, interaction-triggered signup rails, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

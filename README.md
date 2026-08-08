@@ -29,6 +29,8 @@ Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain con
 - `/rtx-4090-llm-models/` — hardware-first 24 GB guide with generic precision floors plus exact Qwen3 and gpt-oss deployment boundaries.
 - `/rtx-5060-ti-8gb-vs-16gb-local-llm/` — variant comparison showing where doubling VRAM changes exact Qwen3 and gpt-oss fit decisions.
 - `/rtx-5080-llm-models/` — hardware-first 16 GB guide exposing razor-thin Qwen3 14B and short-context gpt-oss-20b paper fits.
+- `/rtx-4070-super-vs-4070-ti-super-local-llm/` — buyer comparison mapping the 12 GB versus 16 GB Ada capacity difference to exact Qwen3 and gpt-oss boundaries.
+- `/mac-mini-m4-local-llm/` — unified-memory guide for the official 16 GB through 64 GB M4 and M4 Pro configurations, with a conservative shared-system reserve.
 - `/rtx-5090-llm-models/` — hardware-first 32 GB guide showing where Qwen3 32B and a 128K gpt-oss-20b profile cross into narrow one-card fits.
 - `/qwen2-5-gpu-requirements/` — crawlable Qwen2.5 7B, 32B, and 72B matrix across INT4, INT8, BF16, 32K KV cache, and 128K context.
 - `/qwen3-gpu-requirements/` — crawlable Qwen3 8B, 14B, 32B, and 30B-A3B matrix with exact 32K cache math, MoE memory boundaries, and first-party runtime checks.
