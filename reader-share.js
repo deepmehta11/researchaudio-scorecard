@@ -53,6 +53,7 @@ function installReaderShareLoop() {
       <p class="eyebrow">One useful link, one new reader</p>
       <h2 id="reader-share-title">Send this evidence to one teammate.</h2>
       <p>If this resolved a real question, share the exact guide. The attributed link lets ResearchAudio measure which evidence travels without exposing your inputs.</p>
+      <p><strong>Subscriber reward:</strong> one confirmed signup through your personal referral link in a ResearchAudio email unlocks the AI Launch Evidence Checklist automatically.</p>
     </div>
     <div class="reader-share-actions">
       <button type="button" class="reader-share-button">Share this guide</button>

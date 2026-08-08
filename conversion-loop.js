@@ -34,7 +34,7 @@ export function installEvidenceCapture({ trigger = "scroll" } = {}) {
     <div class="evidence-capture-signal" aria-hidden="true"><span></span>Next evidence</div>
     <div class="evidence-capture-copy">
       <strong>The next useful check should find you.</strong>
-      <span>Get sourced AI teardowns for engineers and builders. Free.</span>
+      <span>Join free. One confirmed referral unlocks the AI Launch Evidence Checklist.</span>
     </div>
     <a class="evidence-capture-action" href="#subscribe">Join free</a>
     <button class="evidence-capture-dismiss" type="button" aria-label="Dismiss signup prompt">×</button>

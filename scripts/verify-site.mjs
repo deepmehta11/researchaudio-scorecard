@@ -1679,6 +1679,7 @@ assert.match(acquisitionHtml, /<link rel="canonical" href="https:\/\/tools\.rese
 assert.match(acquisitionHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
 assert.match(acquisitionHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
 assert.match(acquisitionHtml, /51,000\+/);
+assert.match(acquisitionHtml, /One confirmed referral unlocks the AI Launch Evidence Checklist automatically/);
 assert.match(acquisitionHtml, /utm_source=ai_evidence_starter_kit&amp;utm_medium=organic_lead_magnet&amp;utm_campaign=ai_evidence_lab/);
 assert.equal((acquisitionHtml.match(/class="starter-card"/g) || []).length, 4, "lead magnet should preview four decision tests");
 assert.equal((acquisitionHtml.match(/"@type": "Question"/g) || []).length, 3, "lead magnet should expose three FAQ answers in schema");
@@ -1694,6 +1695,8 @@ assert.equal(readerShareUrl.searchParams.get("utm_medium"), "referral");
 assert.equal(readerShareUrl.searchParams.get("utm_campaign"), "ai_evidence_lab");
 assert.equal(readerShareUrl.searchParams.get("utm_content"), "qwen3-gpu-requirements_shared_guide");
 assert.equal(readerShareUrl.hash, "");
+assert.match(readerShareJs, /one confirmed signup through your personal referral link in a ResearchAudio email/);
+assert.match(conversionLoopJs, /One confirmed referral unlocks the AI Launch Evidence Checklist/);
 
 const sharedCostUrl = buildAttributedShareUrl(
   "https://tools.researchaudio.io/ai-cost-calculator/?utm_source=old#result",
