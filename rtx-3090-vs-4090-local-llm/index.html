@@ -67,7 +67,7 @@
     <header class="lab-header" aria-label="ResearchAudio Evidence Lab">
       <a class="wordmark" href="https://researchaudio.io/?utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark"><span class="wordmark-mark" aria-hidden="true">RA</span><span>ResearchAudio</span></a>
       <nav class="lab-nav" aria-label="Primary navigation">
-        <a href="../tools/?utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a href="../tools/">All tools</a>
         <a class="briefings-link" href="https://researchaudio.io/?utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
         <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
       </nav>
@@ -110,7 +110,7 @@
           <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=32.8&amp;bitsPerParameter=4&amp;layers=64&amp;kvHeads=8&amp;headDimension=128&amp;contextTokens=32768&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=qwen3_32b_32k"><span>Qwen3 32B · INT4 · 32K</span><strong>27.93 GiB</strong><small>Misses either one-card budget →</small></a>
           <a class="scenario-card is-base" href="../llm-gpu-memory-calculator/?parameterBillions=20.91&amp;bitsPerParameter=4.25&amp;checkpointGiB=12.8&amp;layers=24&amp;kvHeads=8&amp;headDimension=64&amp;contextTokens=4096&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=10&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpt_oss_20b_4k"><span>gpt-oss-20b · MXFP4 · 4K</span><strong>14.29 GiB</strong><small>Fits either card's planning budget →</small></a>
           <a class="scenario-card" href="../llm-gpu-memory-calculator/?parameterBillions=20.91&amp;bitsPerParameter=4.25&amp;checkpointGiB=12.8&amp;layers=24&amp;kvHeads=8&amp;headDimension=64&amp;contextTokens=131072&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1&amp;utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpt_oss_20b_128k"><span>gpt-oss-20b · MXFP4 · 128K</span><strong>22.56 GiB</strong><small>Narrow miss on either card →</small></a>
-          <a class="scenario-card" href="../70b-llm-gpu-requirements/?utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=70b_boundary"><span>70B · raw INT4 weights</span><strong>32.60 GiB</strong><small>More than either card before cache →</small></a>
+          <a class="scenario-card" href="../70b-llm-gpu-requirements/"><span>70B · raw INT4 weights</span><strong>32.60 GiB</strong><small>More than either card before cache →</small></a>
         </div>
       </section>
 
@@ -141,7 +141,7 @@
           <p>NVIDIA's RTX 3090 guide and Ampere architecture paper specify 24GB of GDDR6X. NVIDIA also specifies 24GB of GDDR6X for the RTX 4090. ResearchAudio's calculator applies the same reserve and model assumptions to both.</p>
           <a class="guide-link" href="https://www.nvidia.com/content/geforce-gtx/GEFORCE_RTX_3090_USER_GUIDE_v01.pdf">Official NVIDIA RTX 3090 user guide →</a>
           <a class="guide-link" href="https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4090/">Official NVIDIA RTX 4090 specifications →</a>
-          <a class="guide-link" href="../rtx-4090-llm-models/?utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=rtx_4090_capacity_guide">Open the detailed 24GB model guide →</a>
+          <a class="guide-link" href="../rtx-4090-llm-models/">Open the detailed 24GB model guide →</a>
         </div>
         <div class="faq-list">
           <article class="faq-item"><h3>Does an RTX 4090 fit larger local LLMs than an RTX 3090?</h3><p>No when VRAM is the binding constraint. Both have 24GB, so the fully resident model-fit boundary is the same under equal assumptions.</p></article>
@@ -153,7 +153,7 @@
 
       <aside class="cluster-return" aria-label="Local LLM hardware guide">
         <p>Need the full decision path? Connect model size, quantization, cache, VRAM tier, and exact GPU guides.</p>
-        <a href="../local-llm-gpu-guide/?utm_source=rtx_3090_vs_4090_local_llm&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=spoke_to_pillar">Open the local LLM GPU guide →</a>
+        <a href="../local-llm-gpu-guide/">Open the local LLM GPU guide →</a>
       </aside>
 
       <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">

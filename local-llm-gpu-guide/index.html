@@ -82,7 +82,7 @@
         <span>ResearchAudio</span>
       </a>
       <nav class="lab-nav" aria-label="Primary navigation">
-        <a href="../tools/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=all_tools">All tools</a>
+        <a href="../tools/">All tools</a>
         <a class="briefings-link" href="https://researchaudio.io/?utm_source=local_llm_gpu_guide&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
         <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=local_llm_gpu_guide&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
       </nav>
@@ -94,7 +94,7 @@
           <p class="eyebrow">Local LLM hardware / decision guide</p>
           <h1 id="hero-title">Local LLM GPU and VRAM requirements, without the one-number shortcut.</h1>
           <p class="hero-deck">A model can clear its raw weight floor and still fail at the context window you need. Start with parameters and quantization, add the actual KV cache, concurrency, and runtime headroom, then compare the total with usable GPU memory.</p>
-          <a class="hero-join-link" href="../llm-gpu-memory-calculator/?utm_source=local_llm_gpu_guide&amp;utm_medium=organic_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=hero_calculator">Calculate your exact GPU plan →</a>
+          <a class="hero-join-link" href="../llm-gpu-memory-calculator/">Calculate your exact GPU plan →</a>
         </div>
         <aside class="lab-index" aria-label="Guide scope">
           <span>Decision paths</span>
@@ -112,7 +112,7 @@
           <p>The honest answer is not a single lookup number. For GPU inference, memory planning begins with the model weights, then adds the key-value cache, runtime allocations, and a safety margin. The GPU must have enough usable capacity for the resulting plan—or the runtime must offload part of the work to slower system memory.</p>
           <p>A transparent weight floor is <code>parameters × bits per parameter ÷ 8</code>. Seven billion parameters at exactly four bits are about 3.26 GiB. Thirteen billion are about 6.05 GiB. Thirty-two billion are about 14.90 GiB. Seventy billion are about 32.60 GiB. These figures are arithmetic floors, not promises that a packaged checkpoint or live server will fit.</p>
           <p>Real checkpoints carry metadata and quantization overhead. Live inference needs workspace memory. Long context creates a KV cache whose size depends on layers, KV heads, head dimension, cache precision, tokens, and concurrent sequences. A runtime can also reserve memory before it serves the first request. That is why two models with the same parameter count can cross different hardware boundaries.</p>
-          <p>If you already know the model architecture, use the <a href="../llm-gpu-memory-calculator/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=quick_answer_calculator">LLM GPU memory calculator</a>. If you only know your available memory, use <a href="../what-llm-can-i-run/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=quick_answer_finder">What LLM can I run?</a> to find a starting tier, then refine it with the exact checkpoint.</p>
+          <p>If you already know the model architecture, use the <a href="../llm-gpu-memory-calculator/">LLM GPU memory calculator</a>. If you only know your available memory, use <a href="../what-llm-can-i-run/">What LLM can I run?</a> to find a starting tier, then refine it with the exact checkpoint.</p>
         </div>
       </section>
 
@@ -129,10 +129,10 @@
           <table>
             <thead><tr><th scope="col">Model size</th><th scope="col">INT4 floor</th><th scope="col">INT8 floor</th><th scope="col">FP16 / BF16 floor</th><th scope="col">Next exact check</th></tr></thead>
             <tbody>
-              <tr><th scope="row">7B</th><td>3.26 GiB</td><td>6.52 GiB</td><td>13.04 GiB</td><td><a href="../7b-vs-13b-llm-gpu-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=table_7b">7B cache scenarios</a></td></tr>
-              <tr><th scope="row">13B</th><td>6.05 GiB</td><td>12.11 GiB</td><td>24.21 GiB</td><td><a href="../7b-vs-13b-llm-gpu-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=table_13b">13B cache scenarios</a></td></tr>
-              <tr><th scope="row">32B</th><td>14.90 GiB</td><td>29.80 GiB</td><td>59.60 GiB</td><td><a href="../qwen3-gpu-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=table_32b">Qwen3 32B architecture</a></td></tr>
-              <tr><th scope="row">70B</th><td>32.60 GiB</td><td>65.19 GiB</td><td>130.39 GiB</td><td><a href="../70b-llm-gpu-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=table_70b">70B serving targets</a></td></tr>
+              <tr><th scope="row">7B</th><td>3.26 GiB</td><td>6.52 GiB</td><td>13.04 GiB</td><td><a href="../7b-vs-13b-llm-gpu-requirements/">7B cache scenarios</a></td></tr>
+              <tr><th scope="row">13B</th><td>6.05 GiB</td><td>12.11 GiB</td><td>24.21 GiB</td><td><a href="../7b-vs-13b-llm-gpu-requirements/">13B cache scenarios</a></td></tr>
+              <tr><th scope="row">32B</th><td>14.90 GiB</td><td>29.80 GiB</td><td>59.60 GiB</td><td><a href="../qwen3-gpu-requirements/">Qwen3 32B architecture</a></td></tr>
+              <tr><th scope="row">70B</th><td>32.60 GiB</td><td>65.19 GiB</td><td>130.39 GiB</td><td><a href="../70b-llm-gpu-requirements/">70B serving targets</a></td></tr>
             </tbody>
           </table>
         </div>
@@ -155,25 +155,25 @@
           <p>Do not force every visitor through the same calculator. Start from the information you actually have.</p>
         </div>
         <div class="resource-grid">
-          <a class="resource-card" href="../llm-gpu-memory-calculator/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=path_exact_model">
+          <a class="resource-card" href="../llm-gpu-memory-calculator/">
             <span class="instrument-code">I know the model</span>
             <h2>Calculate weights, cache, and GPU count</h2>
             <p>Enter parameters, precision, architecture, context, concurrency, headroom, and usable memory per GPU.</p>
             <b>Build the exact plan →</b>
           </a>
-          <a class="resource-card" href="../what-llm-can-i-run/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=path_known_vram">
+          <a class="resource-card" href="../what-llm-can-i-run/">
             <span class="instrument-code">I know my VRAM</span>
             <h2>Find the largest model-size floor</h2>
             <p>Start with 8 to 141 GB of available memory and a precision target, then carry the result into the full calculator.</p>
             <b>Find a model tier →</b>
           </a>
-          <a class="resource-card" href="../local-llm-gpu-compatibility/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=path_common_gpu">
+          <a class="resource-card" href="../local-llm-gpu-compatibility/">
             <span class="instrument-code">I know the GPU class</span>
             <h2>Compare common hardware profiles</h2>
             <p>Check standard 8, 12, 16, 24, 32, 48, 80, and 141 GB profiles against model-size floors.</p>
             <b>Check the hardware →</b>
           </a>
-          <a class="resource-card" href="../kv-cache-calculator/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=path_context_cache">
+          <a class="resource-card" href="../kv-cache-calculator/">
             <span class="instrument-code">Context is the constraint</span>
             <h2>Calculate KV cache and concurrency</h2>
             <p>Use layers, KV heads, head dimension, cache precision, tokens, and simultaneous sequences to expose the context bill.</p>
@@ -195,11 +195,11 @@
           <table>
             <thead><tr><th scope="col">Advertised VRAM</th><th scope="col">90% planning capacity</th><th scope="col">What the weight floor suggests</th><th scope="col">What can break the fit</th><th scope="col">Hardware guide</th></tr></thead>
             <tbody>
-              <tr><th scope="row">8 GB</th><td>7.2 GiB</td><td>7B INT4 and some 8B quants</td><td>Long context, large GQA/MHA cache, runtime overhead</td><td><a href="../rtx-4060-llm-models/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=tier_8gb">RTX 4060 8GB</a></td></tr>
-              <tr><th scope="row">12 GB</th><td>10.8 GiB</td><td>More room for 7B/8B; a generic 14B INT4 floor is possible</td><td>A 14B checkpoint plus cache can cross the line</td><td><a href="../rtx-3060-llm-models/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=tier_12gb">RTX 3060 12GB</a></td></tr>
-              <tr><th scope="row">16 GB</th><td>14.4 GiB</td><td>13B/14B INT4 becomes practical on paper</td><td>32K cache can turn a fit into a shortfall</td><td><a href="../rtx-4060-ti-16gb-llm-models/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=tier_16gb">RTX 4060 Ti 16GB</a></td></tr>
-              <tr><th scope="row">24 GB</th><td>21.6 GiB</td><td>32B INT4 weights clear the raw floor</td><td>Architecture and context decide whether the full plan clears it</td><td><a href="../rtx-4090-llm-models/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=tier_24gb">RTX 4090 24GB</a></td></tr>
-              <tr><th scope="row">32 GB</th><td>28.8 GiB</td><td>More 32B and MoE profiles become viable</td><td>70B INT4 weights still exceed one card before cache</td><td><a href="../rtx-5090-llm-models/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=tier_32gb">RTX 5090 32GB</a></td></tr>
+              <tr><th scope="row">8 GB</th><td>7.2 GiB</td><td>7B INT4 and some 8B quants</td><td>Long context, large GQA/MHA cache, runtime overhead</td><td><a href="../rtx-4060-llm-models/">RTX 4060 8GB</a></td></tr>
+              <tr><th scope="row">12 GB</th><td>10.8 GiB</td><td>More room for 7B/8B; a generic 14B INT4 floor is possible</td><td>A 14B checkpoint plus cache can cross the line</td><td><a href="../rtx-3060-llm-models/">RTX 3060 12GB</a></td></tr>
+              <tr><th scope="row">16 GB</th><td>14.4 GiB</td><td>13B/14B INT4 becomes practical on paper</td><td>32K cache can turn a fit into a shortfall</td><td><a href="../rtx-4060-ti-16gb-llm-models/">RTX 4060 Ti 16GB</a></td></tr>
+              <tr><th scope="row">24 GB</th><td>21.6 GiB</td><td>32B INT4 weights clear the raw floor</td><td>Architecture and context decide whether the full plan clears it</td><td><a href="../rtx-4090-llm-models/">RTX 4090 24GB</a></td></tr>
+              <tr><th scope="row">32 GB</th><td>28.8 GiB</td><td>More 32B and MoE profiles become viable</td><td>70B INT4 weights still exceed one card before cache</td><td><a href="../rtx-5090-llm-models/">RTX 5090 32GB</a></td></tr>
             </tbody>
           </table>
         </div>
@@ -215,37 +215,37 @@
           <p>Capacity answers whether the plan can fit. It does not answer whether a newer GPU is worth the price for your prompt-processing, decoding, batching, and power target.</p>
         </div>
         <div class="resource-grid">
-          <a class="resource-card" href="../rtx-3090-vs-4090-local-llm/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpu_3090_4090">
+          <a class="resource-card" href="../rtx-3090-vs-4090-local-llm/">
             <span class="instrument-code">24 GB / generation comparison</span>
             <h2>RTX 3090 vs RTX 4090</h2>
             <p>Both cards have the same one-card capacity ceiling. Compare workload value after separating fit from throughput.</p>
             <b>Compare the 24 GB cards →</b>
           </a>
-          <a class="resource-card" href="../rtx-5060-ti-8gb-vs-16gb-local-llm/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpu_5060_ti">
+          <a class="resource-card" href="../rtx-5060-ti-8gb-vs-16gb-local-llm/">
             <span class="instrument-code">8 GB vs 16 GB / same family</span>
             <h2>RTX 5060 Ti variant choice</h2>
             <p>See where doubling VRAM changes exact Qwen3 and gpt-oss planning outcomes rather than merely improving margin.</p>
             <b>Compare the variants →</b>
           </a>
-          <a class="resource-card" href="../rtx-4070-super-vs-4070-ti-super-local-llm/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpu_4070_super_comparison">
+          <a class="resource-card" href="../rtx-4070-super-vs-4070-ti-super-local-llm/">
             <span class="instrument-code">12 GB vs 16 GB / buyer comparison</span>
             <h2>RTX 4070 Super vs 4070 Ti Super</h2>
             <p>See why four extra gigabytes open a narrow 14B and 20B lane without making the 32B tier fit.</p>
             <b>Compare the Ada cards →</b>
           </a>
-          <a class="resource-card" href="../mac-mini-m4-local-llm/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=mac_mini_m4_memory_guide">
+          <a class="resource-card" href="../mac-mini-m4-local-llm/">
             <span class="instrument-code">16–64 GB / unified memory</span>
             <h2>Mac mini M4 local LLM memory</h2>
             <p>Plan against memory shared by macOS, CPU, and GPU instead of treating installed unified memory like dedicated VRAM.</p>
             <b>Choose the Mac memory tier →</b>
           </a>
-          <a class="resource-card" href="../rtx-5080-llm-models/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpu_5080">
+          <a class="resource-card" href="../rtx-5080-llm-models/">
             <span class="instrument-code">16 GB / current generation</span>
             <h2>RTX 5080 local LLM boundary</h2>
             <p>Inspect narrow 14B and gpt-oss-20b scenarios before assuming a current flagship generation means a larger model tier.</p>
             <b>Inspect the 16 GB boundary →</b>
           </a>
-          <a class="resource-card" href="../rtx-5090-llm-models/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=gpu_5090">
+          <a class="resource-card" href="../rtx-5090-llm-models/">
             <span class="instrument-code">32 GB / current generation</span>
             <h2>RTX 5090 local LLM boundary</h2>
             <p>Test 32B and long-context gpt-oss profiles, then see why a 70B INT4 weight floor still needs another memory path.</p>
@@ -262,7 +262,7 @@
         <div class="method-copy">
           <p><strong>1. The checkpoint, not just the parameter label.</strong> A model name is a routing clue. The actual files reveal the resident artifact, precision, tensors, and packaging overhead. For a dense model, parameter math is a useful cross-check. For a mixture-of-experts model, do not confuse the smaller active-parameter count with the larger resident weight set. Read the release artifact before choosing hardware.</p>
           <p><strong>2. Quantization.</strong> Moving from sixteen-bit to eight-bit or four-bit weights lowers the arithmetic floor. Real formats are not always exactly four or eight bits per parameter because scales, metadata, and mixed-precision tensors add overhead. Quantization can also change output quality and runtime compatibility. Treat precision as both a memory choice and a model-quality experiment.</p>
-          <p><strong>3. KV-cache architecture and precision.</strong> Autoregressive inference stores keys and values for previous tokens. The cache grows with the number of layers, KV heads, head dimension, cached tokens, bytes per element, and concurrent sequences. Grouped-query attention can use fewer KV heads than multi-head attention, producing dramatically different cache totals for models with similar parameter counts. The <a href="../kv-cache-calculator/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=memory_kv_cache">KV-cache calculator</a> exposes every term.</p>
+          <p><strong>3. KV-cache architecture and precision.</strong> Autoregressive inference stores keys and values for previous tokens. The cache grows with the number of layers, KV heads, head dimension, cached tokens, bytes per element, and concurrent sequences. Grouped-query attention can use fewer KV heads than multi-head attention, producing dramatically different cache totals for models with similar parameter counts. The <a href="../kv-cache-calculator/">KV-cache calculator</a> exposes every term.</p>
           <p><strong>4. Runtime headroom and usable capacity.</strong> Model weights and KV cache do not own the whole GPU. Kernels, temporary buffers, graph captures, the display stack, and allocator fragmentation consume memory. Evidence Lab examples often reserve 10% of advertised VRAM and then apply 20% headroom to the weights-plus-cache target. Those are explicit planning defaults; replace them with measured values from the runtime and machine you will operate.</p>
           <p><strong>5. Concurrency and serving policy.</strong> A personal chat with one active sequence is not the same deployment as an API serving many users. A runtime may preallocate a cache pool or reserve enough blocks for a target concurrency. The cache can therefore become a service-capacity decision, not merely a context-length choice. Enter the simultaneous sequences you intend to support, not the traffic volume you hope never arrives.</p>
         </div>
@@ -277,12 +277,12 @@
           <p>These guides use first-party model configurations, checkpoint sizes, or vendor memory estimates, then keep context and runtime assumptions visible.</p>
         </div>
         <div class="resource-grid">
-          <a class="resource-card" href="../qwen3-gpu-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=model_qwen3"><span class="instrument-code">Dense plus MoE</span><h2>Qwen3 GPU requirements</h2><p>Compare 8B, 14B, 32B, and 30B-A3B with exact architecture and cache inputs.</p><b>Inspect Qwen3 →</b></a>
-          <a class="resource-card" href="../qwen2-5-gpu-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=model_qwen25"><span class="instrument-code">7B to 72B</span><h2>Qwen2.5 GPU requirements</h2><p>Compare 7B, 32B, and 72B across precision levels, 32K cache, and 128K context.</p><b>Inspect Qwen2.5 →</b></a>
-          <a class="resource-card" href="../gpt-oss-hardware-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=model_gpt_oss"><span class="instrument-code">20B and 120B MoE</span><h2>gpt-oss hardware requirements</h2><p>Separate official checkpoint size, resident weights, active parameters, and 4K-to-128K cache.</p><b>Inspect gpt-oss →</b></a>
-          <a class="resource-card" href="../gemma-4-gpu-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=model_gemma4"><span class="instrument-code">Official memory estimates</span><h2>Gemma 4 GPU requirements</h2><p>Compare E2B through 31B using Google estimates and exact 12B checkpoint checks.</p><b>Inspect Gemma 4 →</b></a>
-          <a class="resource-card" href="../deepseek-v4-flash-gpu-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=model_deepseek_v4"><span class="instrument-code">284B total / 13B active</span><h2>DeepSeek V4 Flash</h2><p>Keep the 155.43 GiB resident artifact separate from the smaller active path.</p><b>Inspect DeepSeek →</b></a>
-          <a class="resource-card" href="../diffusiongemma-gpu-requirements/?utm_source=local_llm_gpu_guide&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=model_diffusiongemma"><span class="instrument-code">Block-diffusion language model</span><h2>DiffusionGemma requirements</h2><p>Compare the official BF16 and NVFP4 checkpoints without hiding the 256K context boundary.</p><b>Inspect DiffusionGemma →</b></a>
+          <a class="resource-card" href="../qwen3-gpu-requirements/"><span class="instrument-code">Dense plus MoE</span><h2>Qwen3 GPU requirements</h2><p>Compare 8B, 14B, 32B, and 30B-A3B with exact architecture and cache inputs.</p><b>Inspect Qwen3 →</b></a>
+          <a class="resource-card" href="../qwen2-5-gpu-requirements/"><span class="instrument-code">7B to 72B</span><h2>Qwen2.5 GPU requirements</h2><p>Compare 7B, 32B, and 72B across precision levels, 32K cache, and 128K context.</p><b>Inspect Qwen2.5 →</b></a>
+          <a class="resource-card" href="../gpt-oss-hardware-requirements/"><span class="instrument-code">20B and 120B MoE</span><h2>gpt-oss hardware requirements</h2><p>Separate official checkpoint size, resident weights, active parameters, and 4K-to-128K cache.</p><b>Inspect gpt-oss →</b></a>
+          <a class="resource-card" href="../gemma-4-gpu-requirements/"><span class="instrument-code">Official memory estimates</span><h2>Gemma 4 GPU requirements</h2><p>Compare E2B through 31B using Google estimates and exact 12B checkpoint checks.</p><b>Inspect Gemma 4 →</b></a>
+          <a class="resource-card" href="../deepseek-v4-flash-gpu-requirements/"><span class="instrument-code">284B total / 13B active</span><h2>DeepSeek V4 Flash</h2><p>Keep the 155.43 GiB resident artifact separate from the smaller active path.</p><b>Inspect DeepSeek →</b></a>
+          <a class="resource-card" href="../diffusiongemma-gpu-requirements/"><span class="instrument-code">Block-diffusion language model</span><h2>DiffusionGemma requirements</h2><p>Compare the official BF16 and NVFP4 checkpoints without hiding the 256K context boundary.</p><b>Inspect DiffusionGemma →</b></a>
         </div>
       </section>
 

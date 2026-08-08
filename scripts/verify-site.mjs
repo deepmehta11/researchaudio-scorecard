@@ -1456,7 +1456,7 @@ assert.match(codexConfigJs, /utm_source", "codex_config_share"/);
 assert.match(codexConfigJs, /utm_campaign", "ai_evidence_lab"/);
 assert.match(codexConfigHtml, /AGENTS\.override\.md/);
 assert.match(codexConfigHtml, /Generate <code>project_doc_fallback_filenames<\/code> and <code>project_doc_max_bytes<\/code> for Codex CLI\./);
-assert.match(codexConfigHtml, /href="\.\.\/codex-exec-command-builder\/\?utm_source=codex_config_generator&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=exec_builder"/);
+assert.match(codexConfigHtml, /href="\.\.\/codex-exec-command-builder\/"/);
 
 assert.equal(
   buildCodexExecCommand(),
@@ -1841,7 +1841,7 @@ assert.match(embedsJs, /utm_source/);
 assert.match(embedsJs, /utm_medium/);
 assert.match(embedsJs, /utm_campaign/);
 assert.match(embedsJs, /navigator\.clipboard\.writeText/);
-assert.match(toolsHtml, /href="\.\.\/embeds\/\?utm_source=evidence_lab/);
+assert.match(toolsHtml, /href="\.\.\/embeds\/"/);
 assert.match(partnersHtml, /<title>Partner With ResearchAudio: Newsletter &amp; AI Tool Kit<\/title>/);
 assert.match(partnersHtml, /<link rel="canonical" href="https:\/\/tools\.researchaudio\.io\/partners\/" \/>/);
 assert.match(partnersHtml, /id="partner-name"/);
@@ -1854,15 +1854,15 @@ assert.equal((partnersHtml.match(/"@type": "Question"/g) || []).length, 4, "part
 assert.doesNotThrow(() => parseStructuredData(partnersHtml), "partner-kit structured data must be valid JSON");
 assert.doesNotMatch(partnersHtml, /noindex|nofollow/, "the partner kit must remain crawlable");
 assert.doesNotMatch(partnersHtml, /data-beehiiv-form|subscribe-forms\.beehiiv\.com/, "the publisher kit should not submit a signup form");
-assert.match(partnersHtml, /href="\.\.\/embeds\/\?utm_source=partner_kit/);
+assert.match(partnersHtml, /href="\.\.\/embeds\/"/);
 assert.match(partnersJs, /https:\/\/magic\.beehiiv\.com\/v1\/\$\{publicationId\}\?email=\{\{email\}\}/);
 assert.match(partnersJs, /https:\/\/tools\.researchaudio\.io\/ai-evidence-starter-kit\//);
 assert.match(partnersJs, /https:\/\/tools\.researchaudio\.io\/evidence-starter-kit\//);
 assert.match(partnersJs, /utm_medium", "partner_referral"/);
 assert.match(partnersJs, /utm_medium=magic_link/);
 assert.match(partnersJs, /navigator\.clipboard\.writeText/);
-assert.match(toolsHtml, /href="\.\.\/partners\/\?utm_source=evidence_lab/);
-assert.match(embedsHtml, /href="\.\.\/partners\/\?utm_source=embed_library/);
+assert.match(toolsHtml, /href="\.\.\/partners\/"/);
+assert.match(embedsHtml, /href="\.\.\/partners\/"/);
 
 assert.match(toolsHtml, /7B vs 13B LLM GPU requirements/);
 assert.match(gpuMemoryHtml, /7b-vs-13b-llm-gpu-requirements/);
@@ -1959,13 +1959,25 @@ for (const [name, page] of [
   ["DeepSeek V4 guide", deepseekV4GuideHtml],
   ["DiffusionGemma guide", diffusionGemmaGuideHtml],
 ]) {
-  assert.match(page, /href="\.\.\/local-llm-gpu-guide\/\?utm_source=[^&"]+&amp;utm_medium=internal&amp;utm_campaign=ai_evidence_lab&amp;utm_content=spoke_to_pillar"/, `${name} should link back to the local LLM pillar with attribution`);
+  assert.match(page, /href="\.\.\/local-llm-gpu-guide\/"/, `${name} should link back to the canonical local LLM pillar URL`);
 }
 
 assert.equal((sitemap.match(/<url>/g) || []).length, 45, "sitemap should contain all forty-five crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
 assert.equal(sitemapUrls.length, 45, "sitemap should publish forty-five URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
+const crawlablePages = await Promise.all(sitemapUrls.map(async (url) => {
+  const pathname = new URL(url).pathname.replace(/^\/+|\/+$/g, "");
+  const file = pathname ? path.join(root, pathname, "index.html") : path.join(root, "index.html");
+  return [url, await readFile(file, "utf8")];
+}));
+for (const [url, page] of crawlablePages) {
+  assert.doesNotMatch(
+    page,
+    /href="(?!https?:\/\/|#)[^"]*\?utm_/,
+    `${url} should use canonical paths for internal navigation; attribution belongs on external signup, share, and embed links`,
+  );
+}
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/partners/"), "sitemap should publish the partner distribution kit");
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/local-llm-gpu-guide/"), "sitemap should publish the local LLM hardware pillar");
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/rtx-4070-super-vs-4070-ti-super-local-llm/"), "sitemap should publish the RTX 4070 Super comparison");
