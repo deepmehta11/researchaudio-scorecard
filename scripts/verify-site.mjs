@@ -27,7 +27,7 @@ const brandedToolsOrigin = "https://tools.researchaudio.io";
 const cloudflareWebAnalyticsToken = "c20a9e29828c471c92ed7c2284901e05";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, readerShareJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, rtx3060GuideHtml, rtx4060GuideHtml, rtx4060Ti16GuideHtml, rtx3090Vs4090GuideHtml, rtx4090GuideHtml, rtx5060TiComparisonGuideHtml, rtx5080GuideHtml, rtx5090GuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, kimiK3GuideHtml, gemma4GuideHtml, diffusionGemmaGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, starterHtml, starterJs, deploymentPackHtml, deploymentBrief, evidenceChecklist, rolloutGates, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, readerShareJs, toolsHtml, embedsHtml, embedsJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, rtx3060GuideHtml, rtx4060GuideHtml, rtx4060Ti16GuideHtml, rtx3090Vs4090GuideHtml, rtx4090GuideHtml, rtx5060TiComparisonGuideHtml, rtx5080GuideHtml, rtx5090GuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, kimiK3GuideHtml, gemma4GuideHtml, diffusionGemmaGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, acquisitionHtml, starterHtml, starterJs, deploymentPackHtml, deploymentBrief, evidenceChecklist, rolloutGates, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -87,6 +87,7 @@ const [html, css, js, labCss, embedModeJs, readerShareJs, toolsHtml, embedsHtml,
   readFile(path.join(root, "voice-ai-cost-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "voice-ai-cost-per-minute/index.html"), "utf8"),
   readFile(path.join(root, "ai-receptionist-cost/index.html"), "utf8"),
+  readFile(path.join(root, "ai-evidence-starter-kit/index.html"), "utf8"),
   readFile(path.join(root, "evidence-starter-kit/index.html"), "utf8"),
   readFile(path.join(root, "evidence-starter-kit/starter.js"), "utf8"),
   readFile(path.join(root, "ai-deployment-pack/index.html"), "utf8"),
@@ -174,7 +175,7 @@ for (const [name, page, pathname] of [
   ["DiffusionGemma GPU requirements guide", diffusionGemmaGuideHtml, "/diffusiongemma-gpu-requirements/"],
   ["AI agent security checklist", securityGuideHtml, "/ai-agent-security-checklist/"],
   ["AI benchmark audit checklist", benchmarkGuideHtml, "/ai-benchmark-audit-checklist/"],
-  ["starter kit", starterHtml, "/evidence-starter-kit/"],
+  ["AI evidence starter kit acquisition page", acquisitionHtml, "/ai-evidence-starter-kit/"],
   ["Fable 5 cost playbook", fablePlaybookHtml, "/fable-playbook/"],
 ]) {
   const canonical = page.match(/<link rel="canonical" href="([^"]+)"/);
@@ -1591,6 +1592,7 @@ assert.match(toolsHtml, /ai-agent-security-checklist/);
 assert.match(toolsHtml, /ai-benchmark-audit-checklist/);
 assert.match(toolsHtml, /ai-task-fit-diagnostic/);
 assert.match(toolsHtml, /codex-exec-command-builder/);
+assert.match(toolsHtml, /ai-evidence-starter-kit/);
 assert.match(voiceLatencyHtml, /voice-ai-cost-per-minute/);
 assert.match(labCss, /\.resource-section/);
 assert.match(labCss, /\.resource-grid/);
@@ -1613,6 +1615,18 @@ assert.match(toolsHtml, /fable-playbook/);
 
 assert.match(starterHtml, /<title>AI Evidence Starter Kit: 4 Free Evaluation Tools \| ResearchAudio<\/title>/);
 assert.match(starterHtml, /rel="canonical"/);
+assert.match(starterHtml, /<meta name="robots" content="noindex, nofollow" \/>/);
+
+assert.match(acquisitionHtml, /<title>Free AI Evaluation Starter Kit: 4 Practical Tests \| ResearchAudio<\/title>/);
+assert.match(acquisitionHtml, /<link rel="canonical" href="https:\/\/tools\.researchaudio\.io\/ai-evidence-starter-kit\/" \/>/);
+assert.match(acquisitionHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
+assert.match(acquisitionHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
+assert.match(acquisitionHtml, /51,000\+/);
+assert.match(acquisitionHtml, /utm_source=ai_evidence_starter_kit&amp;utm_medium=organic_lead_magnet&amp;utm_campaign=ai_evidence_lab/);
+assert.equal((acquisitionHtml.match(/class="starter-card"/g) || []).length, 4, "lead magnet should preview four decision tests");
+assert.equal((acquisitionHtml.match(/"@type": "Question"/g) || []).length, 3, "lead magnet should expose three FAQ answers in schema");
+assert.doesNotThrow(() => parseStructuredData(acquisitionHtml), "lead-magnet structured data must be valid JSON");
+assert.doesNotMatch(acquisitionHtml, /noindex|nofollow/, "the acquisition landing page must remain crawlable");
 
 const readerShareUrl = buildReaderShareUrl(
   "https://tools.researchaudio.io/qwen3-gpu-requirements/?utm_source=old#subscribe",
@@ -1656,7 +1670,6 @@ assert.deepEqual(
 );
 assert.match(starterHtml, /application\/ld\+json/);
 assert.match(starterHtml, /social-card\.png/);
-assert.match(starterHtml, /51,000\+/);
 assert.match(starterHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=evidence_starter_kit/);
 assert.match(starterHtml, /class="join-link" href="#subscribe"/);
 assert.match(starterHtml, /id="onboarding-loop"[\s\S]*?hidden/);
@@ -1665,6 +1678,7 @@ assert.match(starterHtml, /subscribe-forms\.beehiiv\.com\/v3\/loader\.js/);
 assert.match(starterHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
 assert.equal((starterHtml.match(/data-step=/g) || []).length, 4, "starter kit should contain four progress steps");
 assert.match(starterJs, /researchaudio_evidence_starter_progress_v1/);
+assert.match(starterJs, /new URL\("https:\/\/tools\.researchaudio\.io\/ai-evidence-starter-kit\/"\)/);
 assert.match(starterJs, /utm_source", "evidence_starter_share"/);
 assert.match(starterJs, /utm_medium", "referral"/);
 assert.match(starterJs, /utm_campaign", "ai_evidence_lab"/);
@@ -1683,6 +1697,7 @@ assert.match(deploymentPackHtml, /utm_medium=referral_reward&amp;utm_campaign=ai
 assert.match(deploymentPackHtml, new RegExp(`data-cf-beacon='[^']*${cloudflareWebAnalyticsToken}[^']*'`));
 assert.doesNotMatch(deploymentPackHtml, /data-beehiiv-form|subscribe-forms\.beehiiv\.com/, "the private reward should not ask an existing subscriber to join again");
 assert.doesNotMatch(sitemap, /ai-deployment-pack/, "the private referral reward should stay out of the public sitemap");
+assert.doesNotMatch(sitemap, /<loc>https:\/\/tools\.researchaudio\.io\/evidence-starter-kit\/<\/loc>/, "the private activation kit should stay out of the public sitemap");
 assert.match(deploymentBrief, /Ship when:/);
 assert.match(evidenceChecklist, /Cost is calculated per successful outcome/);
 assert.match(rolloutGates, /Prompt-injection resistance/);
@@ -1826,7 +1841,9 @@ assert.match(llms, /Codex CLI config\.toml Generator/);
 assert.match(llms, /Codex exec Command Builder/);
 assert.match(llms, /Voice AI Latency Calculator/);
 assert.match(llms, /AI Voice Agent Cost Calculator/);
-assert.match(llms, /AI Evidence Starter Kit/);
+assert.match(llms, /Free AI Evaluation Starter Kit/);
+assert.match(llms, /https:\/\/tools\.researchaudio\.io\/ai-evidence-starter-kit\//);
+assert.doesNotMatch(llms, /https:\/\/tools\.researchaudio\.io\/evidence-starter-kit\//, "llms.txt should advertise the acquisition gate, not the private activation path");
 assert.match(llms, /Embeddable AI Tools/);
 assert.match(llms, /Kimi K3 GPU Requirements/);
 assert.match(llms, /Gemma 4 GPU Requirements/);
@@ -1865,4 +1882,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 16 tools, 1 activation kit, 1 private one-referral reward pack, 1 embed library, 21 search field notes, 41 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 16 tools, 1 gated acquisition page, 1 private activation kit, 1 private one-referral reward pack, 1 embed library, 21 search field notes, 41 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

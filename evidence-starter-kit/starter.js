@@ -42,12 +42,12 @@ if (currentUrl.searchParams.get("utm_medium") === "onboarding") {
 document.querySelectorAll("[data-share-kit]").forEach((button) => {
   button.addEventListener("click", async () => {
     const shareStatus = button.closest("[data-share-panel]").querySelector(".share-status");
-    const url = new URL("https://tools.researchaudio.io/evidence-starter-kit/");
+    const url = new URL("https://tools.researchaudio.io/ai-evidence-starter-kit/");
     url.searchParams.set("utm_source", "evidence_starter_share");
     url.searchParams.set("utm_medium", "referral");
     url.searchParams.set("utm_campaign", "ai_evidence_lab");
     url.searchParams.set("utm_content", button.dataset.shareContent);
-    const text = "Four free tests for the AI claim, operating cost, agent loop, and business case:";
+    const text = "Get four free tests for the AI claim, operating cost, agent loop, and business case:";
 
     try {
       if (navigator.share) {

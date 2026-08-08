@@ -42,7 +42,8 @@ Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain con
 - `/llm-gpu-memory-calculator/` — model-weight VRAM, optional architecture-aware KV cache, runtime headroom, usable memory, and minimum GPU count.
 - `/local-llm-gpu-compatibility/` — browser-local 7B, 13B, 32B, and 70B weight-floor fit checks across common 8 GB to 141 GB GPU profiles, with preserved state into the architecture-aware calculator.
 - `/what-llm-can-i-run/` — browser-local inverse model finder that starts with 8 GB to 141 GB of available VRAM and returns the largest listed INT4, INT8, or FP16 parameter tier below a conservative arithmetic ceiling.
-- `/evidence-starter-kit/` — post-signup activation, four-tool progress, referral reward explanation, and attributed sharing.
+- `/ai-evidence-starter-kit/` — crawlable acquisition page that previews the four-test kit and opens the Beehiiv signup flow.
+- `/evidence-starter-kit/` — private, noindex post-signup activation with four-tool progress and attributed sharing back to the acquisition page.
 - `/ai-deployment-pack/` — private, noindex one-referral reward with three downloadable decision templates and a seven-day AI deployment sequence.
 - `/tools/` — crawlable, interlinked Evidence Lab hub.
 - `/embeds/` — copy-ready, source-attributed iframe widgets plus a self-serve installation guide for WordPress, Webflow, Ghost, Beehiiv, and static sites. Every tool page deep-links publishers to its exact widget, and the library publishes a sixteen-tool application index with matching FAQ schema for search discovery.
@@ -81,6 +82,6 @@ Then open `http://127.0.0.1:4173`.
 2. Match the instrument to the briefing: launch proof, operating cost, agent reliability, voice latency, or automation ROI.
 3. Link it near the first decision table in every relevant ResearchAudio web post.
 4. Publish one result card per issue on LinkedIn, X, Reddit, and relevant engineering communities.
-5. Redirect new Evidence Lab subscribers into the starter kit, then use its attributed share action and three-referral reward to compound distribution.
+5. Redirect new Evidence Lab subscribers into the private starter kit, use its attributed share action to send new readers through the signup gate, then deliver the one-referral reward from Beehiiv.
 6. Offer the sixteen-widget embed library to technical publishers; each tool keeps a visible ResearchAudio credit and rewrites signup links to the publisher-specific `embed_*` source.
 7. Review Beehiiv source and campaign breakdowns weekly. Keep only channels that produce active subscribers, not raw clicks.

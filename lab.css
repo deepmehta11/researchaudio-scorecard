@@ -209,6 +209,102 @@ h2 {
   color: #c1d2cf;
 }
 
+.lead-magnet-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(390px, 0.7fr);
+  gap: clamp(44px, 8vw, 108px);
+  align-items: center;
+  min-height: 720px;
+  padding: 78px 0 92px;
+}
+
+.lead-magnet-copy h1 {
+  max-width: 780px;
+}
+
+.lead-magnet-copy,
+.lead-magnet-gate,
+.lead-magnet-gate .subscribe-form-shell {
+  min-width: 0;
+}
+
+.lead-magnet-proof {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin: 42px 0 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--ink);
+  border: 2px solid var(--ink);
+  list-style: none;
+}
+
+.lead-magnet-proof li {
+  display: grid;
+  gap: 5px;
+  padding: 18px;
+  background: var(--surface);
+}
+
+.lead-magnet-proof strong,
+.lead-magnet-outcome {
+  font: 700 0.75rem/1.35 var(--mono);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.lead-magnet-proof span {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.lead-magnet-gate {
+  padding: 30px;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  box-shadow: 10px 10px 0 var(--blue);
+}
+
+.lead-magnet-gate h2 {
+  font-size: clamp(2.5rem, 4.5vw, 4.3rem);
+}
+
+.lead-magnet-gate > p:not(.eyebrow),
+.lead-magnet-gate > small,
+.lead-magnet-preview .starter-heading > p {
+  color: var(--muted);
+}
+
+.lead-magnet-gate .subscribe-form-shell {
+  min-height: 330px;
+  margin-top: 24px;
+}
+
+.lead-magnet-gate > small {
+  display: block;
+  font: 0.72rem/1.5 var(--mono);
+}
+
+.lead-magnet-gate .subscribe-direct-fallback a {
+  overflow-wrap: anywhere;
+}
+
+.lead-magnet-outcome {
+  align-self: end;
+  padding-top: 16px;
+  color: var(--blue);
+  border-top: 1px solid var(--line);
+}
+
+.lead-magnet-faq {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.6fr) minmax(0, 1fr);
+  gap: 60px 90px;
+  padding: 96px 0 112px;
+  border-top: 2px solid var(--ink);
+}
+
 .tool-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1914,6 +2010,7 @@ h2 {
 
 @media (max-width: 900px) {
   .lab-hero,
+  .lead-magnet-hero,
   .tool-grid,
   .instrument-intro,
   .calculator-layout,
@@ -1926,7 +2023,8 @@ h2 {
   .starter-heading,
   .resource-heading,
   .activation-strip,
-  .subscribe-block {
+  .subscribe-block,
+  .lead-magnet-faq {
     grid-template-columns: 1fr;
   }
 
@@ -1986,6 +2084,10 @@ h2 {
     grid-template-columns: 1fr;
     max-width: 760px;
     margin-inline: auto;
+  }
+
+  .lead-magnet-proof {
+    grid-template-columns: 1fr;
   }
 
   .principle-strip {
