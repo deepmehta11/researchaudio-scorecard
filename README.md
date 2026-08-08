@@ -55,6 +55,8 @@ Every acquisition page also exposes a page-attributed hosted signup fallback abo
 
 Every result share is restorable: the recipient opens the sender's exact score, diagnosis, budget, or business case with referral UTMs intact instead of landing on a blank default tool.
 
+Every instrument surfaces the existing Beehiiv signup only after a visitor interacts with the tool, and every field note does the same after meaningful reading depth. The prompt is dismissible, does not create or submit a second form, and stays out of partner embeds.
+
 Every main-branch deployment also verifies the site and submits all sitemap URLs to the IndexNow global endpoint after the public ownership key is available. IndexNow speeds discovery by participating search engines; it does not guarantee crawling, indexing, or rankings.
 
 ## Growth contract

@@ -72,5 +72,9 @@ if (isEmbedded) {
       <a href="${libraryUrl.toString()}">Get this tool’s embed code →</a>
     `;
     intro.insertAdjacentElement("afterend", distribution);
+
+    import("/conversion-loop.js")
+      .then(({ installEvidenceCapture }) => installEvidenceCapture({ trigger: "interaction" }))
+      .catch(() => {});
   });
 }

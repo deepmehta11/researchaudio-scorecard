@@ -1,4 +1,5 @@
 import { buildAttributedShareUrl } from "./share-state.js";
+import { installEvidenceCapture } from "./conversion-loop.js";
 
 function normalizedSlug(pathname) {
   return pathname.split("/").filter(Boolean).at(-1) || "evidence_lab";
@@ -79,6 +80,7 @@ function installReaderShareLoop() {
   });
 
   subscribe.insertAdjacentElement("beforebegin", section);
+  installEvidenceCapture({ trigger: "scroll" });
 }
 
 if (typeof document !== "undefined") {

@@ -27,13 +27,14 @@ const brandedToolsOrigin = "https://tools.researchaudio.io";
 const cloudflareWebAnalyticsToken = "c20a9e29828c471c92ed7c2284901e05";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, readerShareJs, toolsHtml, embedsHtml, embedsJs, partnersHtml, partnersJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, rtx3060GuideHtml, rtx4060GuideHtml, rtx4060Ti16GuideHtml, rtx3090Vs4090GuideHtml, rtx4090GuideHtml, rtx5060TiComparisonGuideHtml, rtx5080GuideHtml, rtx5090GuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, kimiK3GuideHtml, gemma4GuideHtml, diffusionGemmaGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, acquisitionHtml, starterHtml, starterJs, deploymentPackHtml, deploymentBrief, evidenceChecklist, rolloutGates, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, readerShareJs, conversionLoopJs, toolsHtml, embedsHtml, embedsJs, partnersHtml, partnersJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, smallGpuGuideHtml, gpuGuideHtml, rtx3060GuideHtml, rtx4060GuideHtml, rtx4060Ti16GuideHtml, rtx3090Vs4090GuideHtml, rtx4090GuideHtml, rtx5060TiComparisonGuideHtml, rtx5080GuideHtml, rtx5090GuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, kimiK3GuideHtml, gemma4GuideHtml, diffusionGemmaGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, acquisitionHtml, starterHtml, starterJs, deploymentPackHtml, deploymentBrief, evidenceChecklist, rolloutGates, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
   readFile(path.join(root, "lab.css"), "utf8"),
   readFile(path.join(root, "embed-mode.js"), "utf8"),
   readFile(path.join(root, "reader-share.js"), "utf8"),
+  readFile(path.join(root, "conversion-loop.js"), "utf8"),
   readFile(path.join(root, "tools/index.html"), "utf8"),
   readFile(path.join(root, "embeds/index.html"), "utf8"),
   readFile(path.join(root, "embeds/embeds.js"), "utf8"),
@@ -224,8 +225,17 @@ assert.match(readerShareJs, /navigator\.share/);
 assert.match(readerShareJs, /querySelector\("\.subscribe-block"\)/);
 assert.match(readerShareJs, /insertAdjacentElement\("beforebegin", section\)/);
 assert.match(readerShareJs, /href="#subscribe"/);
+assert.match(readerShareJs, /installEvidenceCapture\(\{ trigger: "scroll" \}\)/);
+assert.match(embedModeJs, /installEvidenceCapture\(\{ trigger: "interaction" \}\)/);
+assert.match(conversionLoopJs, /researchaudio_evidence_rail_dismissed/);
+assert.match(conversionLoopJs, /trigger === "interaction"/);
+assert.match(conversionLoopJs, /progress < 0\.38/);
+assert.match(conversionLoopJs, /href="#subscribe"/);
+assert.match(conversionLoopJs, /get\("embed"\) === "1"/);
 assert.match(labCss, /\.reader-share-loop/);
 assert.match(labCss, /\.reader-share-button/);
+assert.match(labCss, /\.evidence-capture-rail/);
+assert.match(labCss, /\.evidence-capture-rail\.is-visible/);
 
 for (const [name, page, title, source, calculatorPath, questions] of [
   ["voice AI cost per minute guide", voiceCostPerMinuteHtml, "Voice AI Cost per Minute: Formula &amp; Calculator", "voice_ai_cost_per_minute", "voice-ai-cost-calculator", [
@@ -1906,4 +1916,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 16 tools, 1 gated acquisition page, 1 private activation kit, 1 private one-referral reward pack, 1 embed library, 1 partner distribution kit, 21 search field notes, 42 crawlable pages, attributed subscribe and share CTAs, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 16 tools, 1 gated acquisition page, 1 private activation kit, 1 private one-referral reward pack, 1 embed library, 1 partner distribution kit, 21 search field notes, 42 crawlable pages, attributed subscribe and share CTAs, interaction-triggered signup rails, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
