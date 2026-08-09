@@ -1,0 +1,69 @@
+name: Publisher showcase request
+description: Request a verified listing after embedding a ResearchAudio tool on a public page.
+title: "[Showcase]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for publishing a ResearchAudio instrument. We verify the live page and visible credit before adding a publisher to the distribution roster. Do not include private analytics, subscriber data, or credentials.
+
+  - type: input
+    id: publication_name
+    attributes:
+      label: Publication or website name
+      placeholder: Example AI Engineering Notes
+    validations:
+      required: true
+
+  - type: input
+    id: live_page_url
+    attributes:
+      label: Live page URL
+      description: Link directly to the public article, documentation page, course, or resource page containing the widget.
+      placeholder: https://example.com/article-with-tool
+    validations:
+      required: true
+
+  - type: dropdown
+    id: embedded_tool
+    attributes:
+      label: Embedded ResearchAudio tool
+      options:
+        - What LLM Can I Run on My GPU?
+        - LLM GPU Memory Calculator
+        - Local LLM GPU Compatibility Checker
+        - LLM API Cost Calculator
+        - LLM KV Cache Calculator
+        - Prompt Caching Cost Calculator
+        - AI Agent ROI Calculator
+        - AI Cost per Successful Task Calculator
+        - AI Task Fit Diagnostic
+        - AI Agent Loop Diagnostic
+        - AI Agent Security Checklist
+        - AI Benchmark Audit Checklist
+        - Voice AI Cost Calculator
+        - Voice AI Latency Calculator
+        - Codex config.toml Generator
+        - Codex exec Command Builder
+    validations:
+      required: true
+
+  - type: textarea
+    id: editorial_context
+    attributes:
+      label: How the tool supports the page
+      description: One or two sentences describing the claim, calculation, or decision the widget helps readers inspect.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: researchaudio_credit
+    attributes:
+      label: Verification
+      options:
+        - label: I confirm the page is publicly reachable and displays the ResearchAudio credit.
+          required: true
+        - label: I confirm the widget is not used to collect sensitive visitor inputs.
+          required: true
+        - label: I allow ResearchAudio to link to this page from its public publisher materials.
+          required: true

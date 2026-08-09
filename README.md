@@ -2,7 +2,9 @@
 
 An evergreen acquisition ecosystem for ResearchAudio. Sixteen browser-local tools, twenty-two practical field guides, and a self-serve embed library turn AI task framing, benchmark and launch claims, token budgets, voice latency and outcome economics, hardware-first local LLM discovery, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability and security, automation business cases, and Codex workflows into concrete inspections before inviting visitors into the daily briefing.
 
-Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain connected to the Beehiiv publication at `https://researchaudio.io/`.
+[Open the Evidence Lab](https://tools.researchaudio.io/?utm_source=github_readme&utm_medium=repository&utm_campaign=ai_evidence_lab&utm_content=open_lab) · [Embed a free tool](https://tools.researchaudio.io/embeds/?utm_source=github_readme&utm_medium=repository&utm_campaign=ai_evidence_lab&utm_content=embed_tools) · [Join ResearchAudio](https://researchaudio.io/subscribe?utm_source=github_readme&utm_medium=repository&utm_campaign=ai_evidence_lab&utm_content=join_free)
+
+Live at [tools.researchaudio.io](https://tools.researchaudio.io/), a branded ResearchAudio subdomain connected to the Beehiiv publication at [researchaudio.io](https://researchaudio.io/).
 
 ## Live instruments
 

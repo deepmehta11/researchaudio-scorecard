@@ -111,6 +111,8 @@ const [html, css, js, labCss, embedModeJs, readerShareJs, conversionLoopJs, tool
   readFile(path.join(root, "scripts/submit-indexnow.mjs"), "utf8"),
   readFile(path.join(root, ".github/workflows/indexnow.yml"), "utf8"),
 ]);
+const showcaseIssueTemplate = await readFile(path.join(root, ".github/ISSUE_TEMPLATE/publisher-showcase.yml"), "utf8");
+const readme = await readFile(path.join(root, "README.md"), "utf8");
 
 assert.match(html, /<title>AI Launch Evidence Scorecard \| ResearchAudio<\/title>/);
 assert.match(html, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
@@ -1863,6 +1865,14 @@ assert.match(embedsJs, /id="researchaudio-\$\{tool\}"/);
 assert.match(embedsJs, /Math\.min\(4800/);
 assert.match(embedsJs, /navigator\.clipboard\.writeText/);
 assert.match(embedsHtml, /Auto-resizes after interaction/);
+assert.match(embedsHtml, /Request a verified publisher listing/);
+assert.match(embedsHtml, /github\.com\/deepmehta11\/researchaudio-scorecard\/issues\/new\?template=publisher-showcase\.yml/);
+assert.match(showcaseIssueTemplate, /name: Publisher showcase request/);
+assert.match(showcaseIssueTemplate, /id: live_page_url/);
+assert.match(showcaseIssueTemplate, /id: researchaudio_credit/);
+assert.match(showcaseIssueTemplate, /publicly reachable and displays the ResearchAudio credit/);
+assert.match(readme, /utm_source=github_readme&utm_medium=repository&utm_campaign=ai_evidence_lab&utm_content=open_lab/);
+assert.match(readme, /utm_source=github_readme&utm_medium=repository&utm_campaign=ai_evidence_lab&utm_content=join_free/);
 assert.match(toolsHtml, /href="\.\.\/embeds\/"/);
 assert.match(partnersHtml, /<title>Partner With ResearchAudio: Newsletter &amp; AI Tool Kit<\/title>/);
 assert.match(partnersHtml, /<link rel="canonical" href="https:\/\/tools\.researchaudio\.io\/partners\/" \/>/);
