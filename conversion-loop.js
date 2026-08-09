@@ -29,16 +29,34 @@ function rememberDismissal() {
   }
 }
 
+function applyOffer(rail, offer, isCustomOffer) {
+  if (rail.dataset.offerPriority === "custom" && !isCustomOffer) return;
+
+  rail.setAttribute("aria-label", offer.ariaLabel);
+  rail.querySelector(".evidence-capture-signal b").textContent = offer.signal;
+  rail.querySelector(".evidence-capture-copy strong").textContent = offer.title;
+  rail.querySelector(".evidence-capture-copy span").textContent = offer.description;
+  const action = rail.querySelector(".evidence-capture-action");
+  action.textContent = offer.action;
+  action.href = offer.href;
+  rail.dataset.offerPriority = isCustomOffer ? "custom" : "default";
+}
+
 export function installEvidenceCapture({ trigger = "scroll", offer = DEFAULT_OFFER } = {}) {
   if (new URLSearchParams(window.location.search).get("embed") === "1") return;
 
   const subscribe = document.querySelector(".subscribe-block");
-  if (!subscribe || document.querySelector(".evidence-capture-rail") || wasDismissed()) return;
+  if (!subscribe || wasDismissed()) return;
   const captureOffer = { ...DEFAULT_OFFER, ...offer };
+  const isCustomOffer = offer !== DEFAULT_OFFER;
+  const existingRail = document.querySelector(".evidence-capture-rail");
+  if (existingRail) {
+    applyOffer(existingRail, captureOffer, isCustomOffer);
+    return;
+  }
 
   const rail = document.createElement("aside");
   rail.className = "evidence-capture-rail";
-  rail.setAttribute("aria-label", captureOffer.ariaLabel);
   rail.innerHTML = `
     <div class="evidence-capture-signal" aria-hidden="true"><span></span><b></b></div>
     <div class="evidence-capture-copy">
@@ -48,12 +66,7 @@ export function installEvidenceCapture({ trigger = "scroll", offer = DEFAULT_OFF
     <a class="evidence-capture-action"></a>
     <button class="evidence-capture-dismiss" type="button" aria-label="Dismiss signup prompt">×</button>
   `;
-  rail.querySelector(".evidence-capture-signal b").textContent = captureOffer.signal;
-  rail.querySelector(".evidence-capture-copy strong").textContent = captureOffer.title;
-  rail.querySelector(".evidence-capture-copy span").textContent = captureOffer.description;
-  const action = rail.querySelector(".evidence-capture-action");
-  action.textContent = captureOffer.action;
-  action.href = captureOffer.href;
+  applyOffer(rail, captureOffer, isCustomOffer);
   document.body.append(rail);
 
   let activated = false;
