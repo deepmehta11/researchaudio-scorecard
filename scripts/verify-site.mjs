@@ -2396,6 +2396,23 @@ for (const [url, page] of crawlablePages) {
     `${url} should use canonical paths for internal navigation; attribution belongs on external signup, share, and embed links`,
   );
 }
+const sitemapPathnames = new Set(sitemapUrls.map((url) => new URL(url).pathname));
+const incomingInternalLinks = new Map([...sitemapPathnames].map((pathname) => [pathname, new Set()]));
+for (const [url, page] of crawlablePages) {
+  const sourcePathname = new URL(url).pathname;
+  for (const match of page.matchAll(/href="([^"]+)"/g)) {
+    const target = new URL(match[1], url);
+    if (target.origin !== brandedToolsOrigin) continue;
+    const targetPathname = target.pathname.endsWith("/index.html")
+      ? target.pathname.slice(0, -"index.html".length)
+      : target.pathname;
+    if (!sitemapPathnames.has(targetPathname) || targetPathname === sourcePathname) continue;
+    incomingInternalLinks.get(targetPathname).add(sourcePathname);
+  }
+}
+for (const [pathname, sources] of incomingInternalLinks) {
+  assert.ok(sources.size >= 3, `${pathname} should have at least three incoming internal links; found ${sources.size}`);
+}
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/partners/"), "sitemap should publish the partner distribution kit");
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/local-llm-gpu-guide/"), "sitemap should publish the local LLM hardware pillar");
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/trending-local-llms/"), "sitemap should publish the daily trending model index");
