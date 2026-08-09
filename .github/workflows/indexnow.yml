@@ -8,6 +8,7 @@ on:
 permissions:
   actions: read
   contents: read
+  pages: read
 
 concurrency:
   group: indexnow-main
@@ -27,25 +28,24 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          runs_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs?head_sha=${GITHUB_SHA}&per_page=20"
+          builds_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/pages/builds?per_page=20"
 
           for attempt in {1..36}; do
-            runs="$(curl --fail --silent --show-error \
+            builds="$(curl --fail --silent --show-error \
               --header "Accept: application/vnd.github+json" \
               --header "Authorization: Bearer ${GH_TOKEN}" \
               --header "X-GitHub-Api-Version: 2022-11-28" \
-              "$runs_url" 2>/dev/null || true)"
-            pages_run="$(jq -c '[.workflow_runs[]? | select(.name == "pages build and deployment")] | first // {}' <<<"$runs")"
-            status="$(jq -r '.status // empty' <<<"$pages_run")"
-            conclusion="$(jq -r '.conclusion // empty' <<<"$pages_run")"
+              "$builds_url" 2>/dev/null || true)"
+            pages_build="$(jq -c --arg sha "$GITHUB_SHA" '[.[]? | select(.commit == $sha)] | first // {}' <<<"$builds")"
+            status="$(jq -r '.status // empty' <<<"$pages_build")"
 
-            if [[ "$status" == "completed" && "$conclusion" == "success" ]]; then
+            if [[ "$status" == "built" ]]; then
               echo "GitHub Pages built ${GITHUB_SHA}."
               exit 0
             fi
 
-            if [[ "$status" == "completed" && "$conclusion" != "success" ]]; then
-              echo "Pages deployment for ${GITHUB_SHA} finished with ${conclusion:-unknown}."
+            if [[ "$status" == "errored" ]]; then
+              echo "Pages deployment for ${GITHUB_SHA} failed."
               exit 1
             fi
 
