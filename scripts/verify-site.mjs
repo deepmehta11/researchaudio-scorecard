@@ -19,6 +19,7 @@ import { buildCodexExecCommand, shellQuote } from "../codex-exec-command-builder
 import { calculateVoiceLatency, classifyVoiceLatency } from "../voice-ai-latency-calculator/calculator.js";
 import { calculateVoiceAiCost } from "../voice-ai-cost-calculator/calculator.js";
 import { buildAttributedShareUrl, parseSharedChecklist, parseSharedNumbers } from "../share-state.js";
+import { buildEvidenceBadgeMarkdown } from "../scorecard-badge.js";
 import { buildReaderShareUrl } from "../reader-share.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -114,12 +115,17 @@ const [html, css, js, labCss, embedModeJs, readerShareJs, conversionLoopJs, tool
 const showcaseIssueTemplate = await readFile(path.join(root, ".github/ISSUE_TEMPLATE/publisher-showcase.yml"), "utf8");
 const readme = await readFile(path.join(root, "README.md"), "utf8");
 const publisherBadge = await readFile(path.join(root, "researchaudio-toolkit.svg"), "utf8");
+const evidenceBadges = await Promise.all(
+  Array.from({ length: 8 }, (_, score) => readFile(path.join(root, `badges/evidence-${score}.svg`), "utf8")),
+);
 
 assert.match(html, /<title>AI Launch Evidence Scorecard \| ResearchAudio<\/title>/);
 assert.match(html, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
 assert.match(html, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
 assert.equal((html.match(/type="checkbox"/g) || []).length, 7, "expected seven evidence checks");
 assert.match(html, /utm_campaign=ai_launch_scorecard/);
+assert.match(html, /id="copy-readme-badge"/);
+assert.match(html, /Copy GitHub README badge/);
 assert.match(html, /rel="canonical"/);
 assert.match(html, /application\/ld\+json/);
 assert.match(html, /social-card\.png/);
@@ -142,7 +148,28 @@ assert.match(js, /const STORAGE_KEY/);
 assert.match(js, /navigator\.share/);
 assert.match(js, /source: "scorecard_share"/);
 assert.match(js, /content: `shared_score_\$\{score\}`/);
+assert.match(js, /buildEvidenceBadgeMarkdown/);
+assert.match(js, /README badge copied for this \$\{score\}\/7 result\./);
 assert.match(js, /min: 7,[\s\S]*title: "Evidence-complete"/);
+
+const sampleChecks = ["access", "claim", "cost"];
+const badgeMarkdown = buildEvidenceBadgeMarkdown("https://tools.researchaudio.io/?old=parameter#old", sampleChecks);
+assert.match(badgeMarkdown, /^\[!\[ResearchAudio evidence 3\/7\]\(https:\/\/tools\.researchaudio\.io\/badges\/evidence-3\.svg\)\]\(/);
+const badgeDestinationMatch = badgeMarkdown.match(/\]\((https:\/\/tools\.researchaudio\.io\/[^)]+)\)$/);
+assert.ok(badgeDestinationMatch, "README badge should link to the scorecard");
+const badgeDestination = new URL(badgeDestinationMatch[1]);
+assert.equal(badgeDestination.searchParams.get("utm_source"), "evidence_badge");
+assert.equal(badgeDestination.searchParams.get("utm_medium"), "project_readme");
+assert.equal(badgeDestination.searchParams.get("utm_campaign"), "ai_evidence_lab");
+assert.equal(badgeDestination.searchParams.get("utm_content"), "score_3");
+assert.equal(badgeDestination.hash, "#scorecard");
+assert.deepEqual(parseSharedChecklist(badgeDestination.search, sampleChecks), sampleChecks);
+
+evidenceBadges.forEach((badge, score) => {
+  assert.match(badge, new RegExp(`ResearchAudio evidence score: ${score} out of 7`));
+  assert.match(badge, new RegExp(`>${score}/7<`));
+  assert.doesNotMatch(badge, /<script|javascript:/i, "evidence badges must remain passive images");
+});
 
 for (const [name, page, pathname] of [
   ["scorecard", html, "/"],

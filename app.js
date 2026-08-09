@@ -1,4 +1,5 @@
 import { buildAttributedShareUrl, parseSharedChecklist } from "./share-state.js";
+import { buildEvidenceBadgeMarkdown } from "./scorecard-badge.js";
 
 const STORAGE_KEY = "researchaudio-evidence-score-v1";
 
@@ -77,6 +78,7 @@ const meterCaption = document.querySelector("#meter-caption");
 const nextAction = document.querySelector("#next-action");
 const signalBars = [...document.querySelectorAll("#signal-grid span")];
 const shareButton = document.querySelector("#share-score");
+const badgeButton = document.querySelector("#copy-readme-badge");
 const shareStatus = document.querySelector("#share-status");
 const resetButton = document.querySelector("#reset-score");
 
@@ -123,6 +125,7 @@ function updateScore() {
     ? firstMissing.next
     : "Run the same seven checks against the next launch and compare the evidence quality.";
   shareButton.disabled = score === 0;
+  badgeButton.disabled = score === 0;
 
   signalBars.forEach((bar, index) => {
     const active = index < score;
@@ -162,8 +165,21 @@ async function shareScore() {
   }
 }
 
+async function copyReadmeBadge() {
+  const selected = selectedNames();
+  const score = selected.length;
+
+  try {
+    await navigator.clipboard.writeText(buildEvidenceBadgeMarkdown(window.location.href, selected));
+    shareStatus.textContent = `README badge copied for this ${score}/7 result.`;
+  } catch {
+    shareStatus.textContent = "Clipboard access is unavailable. Use Share this exact score instead.";
+  }
+}
+
 inputs.forEach((input) => input.addEventListener("change", updateScore));
 shareButton.addEventListener("click", shareScore);
+badgeButton.addEventListener("click", copyReadmeBadge);
 resetButton.addEventListener("click", () => {
   inputs.forEach((input) => {
     input.checked = false;

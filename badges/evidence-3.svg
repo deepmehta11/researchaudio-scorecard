@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="248" height="32" viewBox="0 0 248 32" role="img" aria-labelledby="title desc">
+  <title id="title">ResearchAudio evidence score: 3 out of 7</title>
+  <desc id="desc">Evidence checked with the ResearchAudio AI Launch Evidence Scorecard.</desc>
+  <rect width="248" height="32" rx="5" fill="#102321"/><rect x="190" width="58" height="32" rx="5" fill="#d89d22"/><path d="M190 0h5v32h-5z" fill="#d89d22"/>
+  <g fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="12"><text x="12" y="20">ResearchAudio evidence</text><text x="207" y="20" font-weight="700">3/7</text></g>
+</svg>

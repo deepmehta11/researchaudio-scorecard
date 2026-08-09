@@ -499,6 +499,11 @@ h2 {
   font-size: 0.93rem;
 }
 
+.result-actions {
+  display: grid;
+  gap: 10px;
+}
+
 .share-button {
   width: 100%;
   padding: 13px 16px;
@@ -507,6 +512,18 @@ h2 {
   border: 2px solid var(--yellow);
   cursor: pointer;
   font-weight: 700;
+}
+
+.badge-button {
+  color: var(--white);
+  background: transparent;
+  border-color: #78908d;
+}
+
+.badge-button:not(:disabled):hover {
+  color: var(--ink);
+  background: var(--white);
+  border-color: var(--white);
 }
 
 .share-button:disabled {

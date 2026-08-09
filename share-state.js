@@ -8,7 +8,7 @@ function shareValue(value) {
 export function buildAttributedShareUrl(
   href,
   state,
-  { source, content, campaign = "ai_evidence_lab", hash = "" },
+  { source, content, campaign = "ai_evidence_lab", medium = "referral", hash = "" },
 ) {
   const url = new URL(href);
   url.search = "";
@@ -20,7 +20,7 @@ export function buildAttributedShareUrl(
   }
 
   url.searchParams.set("utm_source", source);
-  url.searchParams.set("utm_medium", "referral");
+  url.searchParams.set("utm_medium", medium);
   url.searchParams.set("utm_campaign", campaign);
   url.searchParams.set("utm_content", content);
   if (hash) url.hash = hash;
