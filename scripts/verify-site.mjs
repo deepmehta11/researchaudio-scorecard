@@ -1612,6 +1612,7 @@ assert.match(huggingFaceVramHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_s
 assert.match(huggingFaceVramHtml, /huggingface\.co\/docs\/huggingface_hub\/en\/package_reference\/hf_api/);
 assert.match(huggingFaceVramHtml, /huggingface\.co\/docs\/hub\/en\/model-cards/);
 assert.match(huggingFaceVramHtml, /deepmehta11\/researchaudio-hf-vram-action@v1/);
+assert.match(huggingFaceVramHtml, /huggingface\.co\/spaces\/researchaudio\/hugging-face-vram-calculator\?utm_source=researchaudio_hf_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=huggingface_space/);
 assert.match(huggingFaceVramHtml, /github_action_badge/);
 assert.match(huggingFaceVramHtml, /utm_source=hugging_face_vram_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=github_action_install/);
 assert.match(huggingFaceVramHtml, /without modifying repository files/);
@@ -1626,6 +1627,7 @@ assert.match(modelCardVramBadge, /HUGGING FACE MODEL VRAM PLAN/);
 assert.match(modelCardVramBadge, /PUBLIC SAFETENSORS METADATA/);
 assert.doesNotMatch(modelCardVramBadge, /<script|javascript:|<foreignObject/i, "generic model-card badge must remain a passive image");
 assert.match(toolsHtml, /hugging-face-vram-calculator/);
+assert.match(toolsHtml, /native Hugging Face Space/);
 assert.match(localLlmGuideHtml, /hugging-face-vram-calculator/);
 assert.match(trendingHtml, /hugging-face-vram-calculator/);
 
@@ -2317,6 +2319,7 @@ assert.match(llms, /LLM GPU Memory Calculator/);
 assert.match(llms, /Local LLM GPU Compatibility Checker/);
 assert.match(llms, /What LLM Can I Run on My GPU\?/);
 assert.match(llms, /Hugging Face VRAM Calculator and Model Card Badge/);
+assert.match(llms, /huggingface\.co\/spaces\/researchaudio\/hugging-face-vram-calculator/);
 assert.match(llms, /github\.com\/deepmehta11\/researchaudio-hf-vram-action/);
 assert.match(llms, /LLM KV Cache Calculator/);
 assert.match(llms, /Prompt Caching Cost Calculator/);

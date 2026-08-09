@@ -52,6 +52,7 @@ Live at [tools.researchaudio.io](https://tools.researchaudio.io/), a branded Res
 - `/local-llm-gpu-compatibility/` — browser-local 7B, 13B, 32B, and 70B weight-floor fit checks across common 8 GB to 141 GB GPU profiles, with preserved state into the architecture-aware calculator.
 - `/what-llm-can-i-run/` — browser-local inverse model finder that starts with 8 GB to 141 GB of available VRAM and returns the largest listed INT4, INT8, or FP16 parameter tier below a conservative arithmetic ceiling.
 - `/hugging-face-vram-calculator/` — read-only public Hugging Face repository lookup that turns safetensors parameter metadata into INT4, INT8, and BF16 weight floors, a model-specific permalink, and a passive tracked Markdown badge for README and model-card distribution.
+- `researchaudio/hugging-face-vram-calculator` — public static Hugging Face Space that puts the same source-backed receipt inside the Hub, links three representative model repositories, and attributes downstream briefing signups with `huggingface_space` while model-card badges use `huggingface_space_badge`.
 - `deepmehta11/researchaudio-hf-vram-action@v1` — dependency-free public GitHub Action that writes the same source receipt into a workflow summary and emits a passive badge attributed to the exact installing repository.
 - `/ai-evidence-starter-kit/` — crawlable acquisition page that previews the four-test kit and opens the Beehiiv signup flow.
 - `/evidence-starter-kit/` — private, noindex post-signup activation with four-tool progress and attributed sharing back to the acquisition page.
@@ -101,5 +102,6 @@ Then open `http://127.0.0.1:4173`.
 7. Give newsletter and open-source publishers the partner kit; Beehiiv partners use its one-click Magic Link, other platforms use the attributed universal signup link, and GitHub projects can paste the tracked Markdown badge.
 8. Give each reviewed model page's copy-ready badge to its matching GitHub or Hugging Face maintainer for the README or model card; the passive SVG links back to the exact evidence page with `utm_source=model_badge` and `utm_medium=model_card`.
 9. Use the self-serve Hugging Face lookup for every public repository outside the reviewed batch; its generic passive badge links to an exact source lookup with `utm_source=hf_model_card_badge` and `utm_medium=model_card`.
-10. Give model projects the versioned GitHub Action; each run emits a repository-specific badge using `utm_source=github_action_badge` and `utm_medium=repository_badge` without modifying the adopter's files.
-11. Review Beehiiv source and campaign breakdowns weekly. Keep only channels that produce active subscribers, not raw clicks.
+10. Send model users to the public Hugging Face Space; its direct briefing paths use `utm_source=huggingface_space`, while its copy-ready model-card badge uses `utm_source=huggingface_space_badge`.
+11. Give model projects the versioned GitHub Action; each run emits a repository-specific badge using `utm_source=github_action_badge` and `utm_medium=repository_badge` without modifying the adopter's files.
+12. Review Beehiiv source and campaign breakdowns weekly. Keep only channels that produce active subscribers, not raw clicks.
