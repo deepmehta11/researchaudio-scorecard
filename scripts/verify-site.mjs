@@ -29,7 +29,7 @@ import { calculateVoiceLatency, classifyVoiceLatency } from "../voice-ai-latency
 import { calculateVoiceAiCost } from "../voice-ai-cost-calculator/calculator.js";
 import { buildAttributedShareUrl, parseSharedChecklist, parseSharedNumbers } from "../share-state.js";
 import { buildEvidenceBadgeMarkdown } from "../scorecard-badge.js";
-import { buildReaderShareUrl } from "../reader-share.js";
+import { buildCommunityShareText, buildCommunityShareUrl, buildReaderShareUrl } from "../reader-share.js";
 import {
   buildModelHardwareBadgeDestination,
   buildModelHardwareBadgeMarkdown,
@@ -423,6 +423,11 @@ for (const [name, page] of [
 
 assert.match(readerShareJs, /source: "reader_share"/);
 assert.match(readerShareJs, /content: `\$\{slug\}_shared_guide`/);
+assert.match(readerShareJs, /source: "community_share"/);
+assert.match(readerShareJs, /medium: "community_referral"/);
+assert.match(readerShareJs, /content: `\$\{slug\}_community_post`/);
+assert.match(readerShareJs, /Copy community post/);
+assert.match(readerShareJs, /Add your own context; do not spam/);
 assert.match(readerShareJs, /navigator\.share/);
 assert.match(readerShareJs, /querySelector\("\.subscribe-block"\)/);
 assert.match(readerShareJs, /insertAdjacentElement\("beforebegin", section\)/);
@@ -436,6 +441,7 @@ assert.match(conversionLoopJs, /href="#subscribe"/);
 assert.match(conversionLoopJs, /get\("embed"\) === "1"/);
 assert.match(labCss, /\.reader-share-loop/);
 assert.match(labCss, /\.reader-share-button/);
+assert.match(labCss, /\.reader-community-button/);
 assert.match(labCss, /\.evidence-capture-rail/);
 assert.match(labCss, /\.evidence-capture-rail\.is-visible/);
 
@@ -1982,6 +1988,24 @@ assert.equal(readerShareUrl.searchParams.get("utm_medium"), "referral");
 assert.equal(readerShareUrl.searchParams.get("utm_campaign"), "ai_evidence_lab");
 assert.equal(readerShareUrl.searchParams.get("utm_content"), "qwen3-gpu-requirements_shared_guide");
 assert.equal(readerShareUrl.hash, "");
+
+const communityShareUrl = buildCommunityShareUrl(
+  "https://tools.researchaudio.io/qwen3-gpu-requirements/?utm_source=old#subscribe",
+  "qwen3-gpu-requirements",
+);
+assert.equal(communityShareUrl.searchParams.get("utm_source"), "community_share");
+assert.equal(communityShareUrl.searchParams.get("utm_medium"), "community_referral");
+assert.equal(communityShareUrl.searchParams.get("utm_campaign"), "ai_evidence_lab");
+assert.equal(communityShareUrl.searchParams.get("utm_content"), "qwen3-gpu-requirements_community_post");
+assert.equal(communityShareUrl.hash, "");
+const communityShareText = buildCommunityShareText(
+  "Qwen3 GPU requirements",
+  "A sourced memory-planning guide.",
+  communityShareUrl,
+);
+assert.match(communityShareText, /^Qwen3 GPU requirements\n\nA sourced memory-planning guide\./);
+assert.match(communityShareText, /Evidence, assumptions, and working tools:/);
+assert.match(communityShareText, /utm_source=community_share/);
 assert.match(readerShareJs, /one confirmed signup through your personal referral link in a ResearchAudio email/);
 assert.match(conversionLoopJs, /One confirmed referral unlocks the AI Launch Evidence Checklist/);
 

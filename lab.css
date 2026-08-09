@@ -3266,6 +3266,7 @@ html.embed-mode .result-join a {
 }
 
 .reader-share-button,
+.reader-community-button,
 .reader-share-actions > a {
   display: inline-flex;
   justify-content: center;
@@ -3287,13 +3288,20 @@ html.embed-mode .result-join a {
   cursor: pointer;
 }
 
+.reader-community-button,
 .reader-share-actions > a {
   color: var(--ink);
   background: var(--white);
 }
 
+.reader-community-button {
+  cursor: pointer;
+}
+
 .reader-share-button:hover,
 .reader-share-button:focus-visible,
+.reader-community-button:hover,
+.reader-community-button:focus-visible,
 .reader-share-actions > a:hover,
 .reader-share-actions > a:focus-visible {
   transform: translate(-2px, -2px);
@@ -3305,6 +3313,12 @@ html.embed-mode .result-join a {
   margin: 0;
   overflow-wrap: anywhere;
   font: 600 0.72rem/1.4 var(--mono);
+}
+
+.reader-share-note {
+  margin: 0;
+  color: #243d3b;
+  font: 600 0.68rem/1.5 var(--mono);
 }
 
 @media (max-width: 720px) {

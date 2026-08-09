@@ -17,6 +17,23 @@ export function buildReaderShareUrl(href, slug = normalizedSlug(new URL(href).pa
   );
 }
 
+export function buildCommunityShareUrl(href, slug = normalizedSlug(new URL(href).pathname)) {
+  return buildAttributedShareUrl(
+    href,
+    {},
+    {
+      source: "community_share",
+      medium: "community_referral",
+      content: `${slug}_community_post`,
+      hash: "",
+    },
+  );
+}
+
+export function buildCommunityShareText(title, description, url) {
+  return `${title}\n\n${description}\n\nEvidence, assumptions, and working tools:\n${url}`;
+}
+
 function copyText(value) {
   if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(value);
 
@@ -41,9 +58,11 @@ function installReaderShareLoop() {
   const canonical = document.querySelector('link[rel="canonical"]')?.href || window.location.href;
   const slug = normalizedSlug(window.location.pathname);
   const url = buildReaderShareUrl(canonical, slug);
+  const communityUrl = buildCommunityShareUrl(canonical, slug);
   const title = document.title.split("|")[0].trim() || document.querySelector("h1")?.textContent.trim();
   const description = document.querySelector('meta[name="description"]')?.content.trim() || "A practical ResearchAudio evidence guide.";
   const text = `${title} — ${description}`;
+  const communityText = buildCommunityShareText(title, description, communityUrl);
 
   const section = document.createElement("section");
   section.className = "reader-share-loop";
@@ -57,12 +76,15 @@ function installReaderShareLoop() {
     </div>
     <div class="reader-share-actions">
       <button type="button" class="reader-share-button">Share this guide</button>
+      <button type="button" class="reader-community-button">Copy community post</button>
       <a href="#subscribe">Get the next teardown free →</a>
+      <p class="reader-share-note">For a relevant Reddit, Hacker News, Slack, or forum thread. Add your own context; do not spam.</p>
       <p class="reader-share-status" aria-live="polite"></p>
     </div>
   `;
 
   const button = section.querySelector(".reader-share-button");
+  const communityButton = section.querySelector(".reader-community-button");
   const status = section.querySelector(".reader-share-status");
   button.addEventListener("click", async () => {
     status.textContent = "";
@@ -77,6 +99,16 @@ function installReaderShareLoop() {
       status.textContent = "Attributed link copied.";
     } catch (error) {
       if (error?.name !== "AbortError") status.textContent = `Copy this link: ${url}`;
+    }
+  });
+
+  communityButton.addEventListener("click", async () => {
+    status.textContent = "";
+    try {
+      await copyText(communityText);
+      status.textContent = "Community post copied. Add your own context before sharing.";
+    } catch {
+      status.textContent = `Copy this link: ${communityUrl}`;
     }
   });
 
