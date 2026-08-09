@@ -2,6 +2,7 @@ import { buildAttributedShareUrl } from "./share-state.js";
 import { installEvidenceCapture } from "./conversion-loop.js";
 
 const GATED_VRAM_WORKSHEET_URL = "https://researchaudio.io/p/local-llm-vram-worksheet";
+const GATED_AI_DECISION_MEMO_URL = "https://researchaudio.io/p/ai-launch-decision-memo";
 const LOCAL_LLM_TOPIC = /\b(?:local\s+llm|vram|gpu\s+(?:memory|requirements?)|kv[\s-]?cache|unified\s+memory)\b/i;
 
 function normalizedSlug(pathname) {
@@ -55,6 +56,20 @@ export function buildGatedArticleUrl(slug) {
   );
 }
 
+export function buildDecisionMemoUrl(slug) {
+  return buildAttributedShareUrl(
+    GATED_AI_DECISION_MEMO_URL,
+    {},
+    {
+      source: slug,
+      medium: "evidence_lab_referral",
+      campaign: "ai_launch_decision_memo_gate",
+      content: "decision_memo_unlock",
+      hash: "",
+    },
+  );
+}
+
 function copyText(value) {
   if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(value);
 
@@ -84,12 +99,17 @@ function installReaderShareLoop() {
   const description = document.querySelector('meta[name="description"]')?.content.trim() || "A practical ResearchAudio evidence guide.";
   const text = `${title} — ${description}`;
   const communityText = buildCommunityShareText(title, description, communityUrl);
-  const gatedArticle = isLocalLlmTopic(slug, title, description)
-    ? `
-      <a class="reader-gated-article-link" href="${buildGatedArticleUrl(slug)}">Unlock the free VRAM worksheet →</a>
-      <p class="reader-gated-article-note">Read the two-sentence preview, then use your email to unlock the formulas, 8–32 GB table, and buying checklist.</p>
-    `
-    : "";
+  const leadMagnet = isLocalLlmTopic(slug, title, description)
+    ? {
+        href: buildGatedArticleUrl(slug),
+        label: "Unlock the free VRAM worksheet →",
+        note: "Read the two-sentence preview, then use your email to unlock the formulas, 8–32 GB table, and buying checklist.",
+      }
+    : {
+        href: buildDecisionMemoUrl(slug),
+        label: "Unlock the free AI decision memo →",
+        note: "Read the two-sentence preview, then use your email to unlock the six-line Adopt, Pilot, Watch, or Pass template.",
+      };
 
   const section = document.createElement("section");
   section.className = "reader-share-loop";
@@ -102,7 +122,8 @@ function installReaderShareLoop() {
       <p><strong>Subscriber reward:</strong> one confirmed signup through your personal referral link in a ResearchAudio email unlocks the AI Launch Evidence Checklist automatically.</p>
     </div>
     <div class="reader-share-actions">
-      ${gatedArticle}
+      <a class="reader-gated-article-link" href="${leadMagnet.href}">${leadMagnet.label}</a>
+      <p class="reader-gated-article-note">${leadMagnet.note}</p>
       <button type="button" class="reader-share-button">Share this guide</button>
       <button type="button" class="reader-community-button">Copy community post</button>
       <a href="#subscribe">Get the next teardown free →</a>

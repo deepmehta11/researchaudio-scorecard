@@ -32,6 +32,7 @@ import { buildEvidenceBadgeMarkdown } from "../scorecard-badge.js";
 import {
   buildCommunityShareText,
   buildCommunityShareUrl,
+  buildDecisionMemoUrl,
   buildGatedArticleUrl,
   buildReaderShareUrl,
   isLocalLlmTopic,
@@ -440,6 +441,8 @@ assert.match(readerShareJs, /Copy community post/);
 assert.match(readerShareJs, /Add your own context; do not spam/);
 assert.match(readerShareJs, /local-llm-vram-worksheet/);
 assert.match(readerShareJs, /Unlock the free VRAM worksheet/);
+assert.match(readerShareJs, /ai-launch-decision-memo/);
+assert.match(readerShareJs, /Unlock the free AI decision memo/);
 assert.match(readerShareJs, /navigator\.share/);
 assert.match(readerShareJs, /querySelector\("\.subscribe-block"\)/);
 assert.match(readerShareJs, /insertAdjacentElement\("beforebegin", section\)/);
@@ -2027,6 +2030,14 @@ assert.equal(gatedArticleUrl.searchParams.get("utm_medium"), "evidence_lab_refer
 assert.equal(gatedArticleUrl.searchParams.get("utm_campaign"), "local_llm_vram_gate");
 assert.equal(gatedArticleUrl.searchParams.get("utm_content"), "worksheet_unlock");
 assert.equal(gatedArticleUrl.hash, "");
+const decisionMemoUrl = buildDecisionMemoUrl("ai-agent-roi-calculator");
+assert.equal(decisionMemoUrl.origin, "https://researchaudio.io");
+assert.equal(decisionMemoUrl.pathname, "/p/ai-launch-decision-memo");
+assert.equal(decisionMemoUrl.searchParams.get("utm_source"), "ai-agent-roi-calculator");
+assert.equal(decisionMemoUrl.searchParams.get("utm_medium"), "evidence_lab_referral");
+assert.equal(decisionMemoUrl.searchParams.get("utm_campaign"), "ai_launch_decision_memo_gate");
+assert.equal(decisionMemoUrl.searchParams.get("utm_content"), "decision_memo_unlock");
+assert.equal(decisionMemoUrl.hash, "");
 assert.equal(isLocalLlmTopic("Qwen3 GPU requirements and VRAM planning"), true);
 assert.equal(isLocalLlmTopic("LLM API token cost calculator"), false);
 assert.match(readerShareJs, /one confirmed signup through your personal referral link in a ResearchAudio email/);
