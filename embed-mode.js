@@ -94,7 +94,10 @@ if (isEmbedded) {
     intro.insertAdjacentElement("afterend", distribution);
 
     import("/conversion-loop.js")
-      .then(({ installEvidenceCapture }) => installEvidenceCapture({ trigger: "interaction" }))
+      .then(({ installEvidenceCapture }) => {
+        installEvidenceCapture({ trigger: "interaction" });
+        return import("/reader-share.js");
+      })
       .catch(() => {});
   });
 }

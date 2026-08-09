@@ -449,6 +449,7 @@ assert.match(readerShareJs, /insertAdjacentElement\("beforebegin", section\)/);
 assert.match(readerShareJs, /href="#subscribe"/);
 assert.match(readerShareJs, /installEvidenceCapture\(\{ trigger: "scroll" \}\)/);
 assert.match(embedModeJs, /installEvidenceCapture\(\{ trigger: "interaction" \}\)/);
+assert.match(embedModeJs, /import\("\/reader-share\.js"\)/);
 assert.match(conversionLoopJs, /researchaudio_evidence_rail_dismissed/);
 assert.match(conversionLoopJs, /trigger === "interaction"/);
 assert.match(conversionLoopJs, /progress < 0\.38/);
@@ -1987,6 +1988,7 @@ assert.match(acquisitionHtml, /<title>Free AI Evaluation Starter Kit: 4 Practica
 assert.match(acquisitionHtml, /<link rel="canonical" href="https:\/\/tools\.researchaudio\.io\/ai-evidence-starter-kit\/" \/>/);
 assert.match(acquisitionHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
 assert.match(acquisitionHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
+assert.match(starterHtml, /<script type="module" src="\.\.\/reader-share\.js"><\/script>/);
 assert.match(acquisitionHtml, /51,000\+/);
 assert.match(acquisitionHtml, /One confirmed referral unlocks the AI Launch Evidence Checklist automatically/);
 assert.match(acquisitionHtml, /utm_source=ai_evidence_starter_kit&amp;utm_medium=organic_lead_magnet&amp;utm_campaign=ai_evidence_lab/);
@@ -1994,6 +1996,7 @@ assert.equal((acquisitionHtml.match(/class="starter-card"/g) || []).length, 4, "
 assert.equal((acquisitionHtml.match(/"@type": "Question"/g) || []).length, 3, "lead magnet should expose three FAQ answers in schema");
 assert.doesNotThrow(() => parseStructuredData(acquisitionHtml), "lead-magnet structured data must be valid JSON");
 assert.doesNotMatch(acquisitionHtml, /noindex|nofollow/, "the acquisition landing page must remain crawlable");
+assert.match(fablePlaybookHtml, /<script type="module" src="\.\.\/reader-share\.js"><\/script>/);
 
 const readerShareUrl = buildReaderShareUrl(
   "https://tools.researchaudio.io/qwen3-gpu-requirements/?utm_source=old#subscribe",
