@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>What LLM Can I Run on My GPU? VRAM Model Finder | ResearchAudio</title>
-    <meta name="description" content="Choose 8, 12, 16, 24, 32, 48, 80, or 141 GB of GPU memory to find the largest standard LLM parameter tier that clears a conservative INT4, INT8, or FP16 weight floor." />
+    <title>What LLM Can I Run? GPU VRAM Finder | ResearchAudio</title>
+    <meta name="description" content="Enter 8–141GB VRAM to find the largest local LLM tier your GPU can hold, then copy a verified Ollama starter command for Qwen3 or gpt-oss." />
     <meta name="theme-color" content="#eaf2f0" />
     <meta name="robots" content="index,follow,max-image-preview:large" />
     <link rel="canonical" href="https://tools.researchaudio.io/what-llm-can-i-run/" />
@@ -168,6 +168,13 @@
             </div>
             <p class="result-note"><strong>Listed floors that fit:</strong> <span id="finder-fit-list">3B · 7B · 8B · 13B · 14B</span></p>
             <p class="result-note" id="finder-note">Choose your hardware and reserve.</p>
+            <div class="ollama-starter">
+              <span>Ollama starter command</span>
+              <strong id="ollama-model">Qwen3 14B · 9.3GB official artifact</strong>
+              <code id="ollama-command">ollama run qwen3:14b</code>
+              <small>This uses Ollama's published default artifact, independent of the planning precision above. Size comes from the <a id="ollama-source" href="https://ollama.com/library/qwen3" rel="noopener">official Ollama model card</a>; verify context and runtime memory before deployment.</small>
+            </div>
+            <button class="secondary-button" id="copy-ollama-command" type="button" data-event-content="ollama_starter_command">Copy starter command</button>
             <a class="action-button" id="open-model-calculator" href="../llm-gpu-memory-calculator/">Add exact context and architecture →</a>
             <button class="secondary-button" id="share-finder" type="button">Share this hardware result</button>
             <button class="secondary-button" id="reset-finder" type="button">Restore 12 GB / INT4 example</button>

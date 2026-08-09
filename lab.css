@@ -865,6 +865,45 @@ h2 {
   font-size: 0.9rem;
 }
 
+.ollama-starter {
+  display: grid;
+  gap: 8px;
+  margin: 18px 0 4px;
+  padding: 16px;
+  background: #0d2421;
+  border: 1px solid #5a7370;
+}
+
+.ollama-starter > span {
+  color: #9cb3af;
+  font: 0.68rem/1.35 var(--mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ollama-starter strong {
+  color: var(--yellow);
+}
+
+.ollama-starter code {
+  padding: 10px;
+  overflow-x: auto;
+  color: #eaf6f2;
+  background: #071714;
+  font: 500 0.82rem/1.4 var(--mono);
+  white-space: nowrap;
+}
+
+.ollama-starter small {
+  color: #a9c0bc;
+  line-height: 1.45;
+}
+
+.ollama-starter a {
+  color: var(--yellow);
+  text-underline-offset: 3px;
+}
+
 .action-button,
 .secondary-button {
   width: 100%;

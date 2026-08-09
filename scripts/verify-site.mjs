@@ -11,7 +11,7 @@ import { calculateAgentRoi, classifyAgentRoi } from "../ai-agent-roi-calculator/
 import { calculateLlmApiCost } from "../llm-api-cost-calculator/calculator.js";
 import { calculateGpuMemory } from "../llm-gpu-memory-calculator/calculator.js";
 import { calculateCompatibility } from "../local-llm-gpu-compatibility/checker.js";
-import { calculateModelFinder } from "../what-llm-can-i-run/finder.js";
+import { calculateModelFinder, recommendOllamaStarter } from "../what-llm-can-i-run/finder.js";
 import { calculateKvCache, MODEL_PRESETS } from "../kv-cache-calculator/calculator.js";
 import { calculatePromptCacheSavings } from "../prompt-caching-calculator/calculator.js";
 import { buildCodexConfig, normalizeFallbackFiles, normalizeMaxBytes } from "../codex-config-generator/generator.js";
@@ -349,7 +349,7 @@ for (const [name, page, title, source, officialUrl, values, questions] of [
     "Can the RTX 5060 Ti 16GB run Qwen3 14B?",
     "How do I verify whether an RTX 5060 Ti has 8GB or 16GB?",
   ]],
-  ["RTX 4070 Super versus RTX 4070 Ti Super local LLM comparison", rtx4070SuperComparisonGuideHtml, "RTX 4070 Super vs 4070 Ti Super for Local LLMs", "rtx_4070_super_vs_4070_ti_super_local_llm", "https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4070-family/", ["9.98", "14.27", "14.29", "14.56", "27.93", "10.8", "14.4"], [
+  ["RTX 4070 Super versus RTX 4070 Ti Super local LLM comparison", rtx4070SuperComparisonGuideHtml, "12GB vs 16GB VRAM for Local LLMs (RTX 4070)", "rtx_4070_super_vs_4070_ti_super_local_llm", "https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4070-family/", ["9.98", "14.27", "14.29", "14.56", "27.93", "10.8", "14.4"], [
     "Which is better for local LLMs, RTX 4070 Super or RTX 4070 Ti Super?",
     "What LLM can an RTX 4070 Super 12GB run?",
     "Can an RTX 4070 Ti Super 16GB run Qwen3 14B?",
@@ -1297,6 +1297,13 @@ assert.equal(Number(defaultModelFinder.maximumParameterBillions.toFixed(1)), 19.
 assert.equal(defaultModelFinder.recommended.parameterBillions, 14);
 assert.equal(defaultModelFinder.next.parameterBillions, 20);
 assert.deepEqual(defaultModelFinder.fittingTiers.map((tier) => tier.parameterBillions), [3, 7, 8, 13, 14]);
+assert.deepEqual(recommendOllamaStarter(defaultModelFinder), {
+  model: "qwen3:14b",
+  artifactSizeGb: 9.3,
+  command: "ollama run qwen3:14b",
+  officialUrl: "https://ollama.com/library/qwen3",
+  label: "Qwen3 14B",
+});
 const twentyFourGbModelFinder = calculateModelFinder({
   vramPerGpu: 24,
   availableGpus: 1,
@@ -1306,6 +1313,7 @@ const twentyFourGbModelFinder = calculateModelFinder({
 });
 assert.equal(Number(twentyFourGbModelFinder.maximumParameterBillions.toFixed(1)), 38.7);
 assert.equal(twentyFourGbModelFinder.recommended.parameterBillions, 32);
+assert.equal(recommendOllamaStarter(twentyFourGbModelFinder).model, "qwen3:32b");
 const multiGpuModelFinder = calculateModelFinder({
   vramPerGpu: 24,
   availableGpus: 2,
@@ -1315,7 +1323,8 @@ const multiGpuModelFinder = calculateModelFinder({
 });
 assert.equal(Number(multiGpuModelFinder.maximumParameterBillions.toFixed(1)), 77.3);
 assert.equal(multiGpuModelFinder.recommended.parameterBillions, 70);
-assert.match(finderHtml, /<title>What LLM Can I Run on My GPU\? VRAM Model Finder \| ResearchAudio<\/title>/);
+assert.equal(recommendOllamaStarter(multiGpuModelFinder).model, "qwen3:32b");
+assert.match(finderHtml, /<title>What LLM Can I Run\? GPU VRAM Finder \| ResearchAudio<\/title>/);
 assert.equal((finderHtml.match(/"@type": "WebApplication"/g) || []).length, 1, "model finder should have one WebApplication schema");
 assert.equal((finderHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "model finder should have one FAQ schema");
 assert.doesNotThrow(() => parseStructuredData(finderHtml), "model finder structured data must be valid JSON");
@@ -1331,6 +1340,11 @@ assert.match(finderHtml, /16 GB/);
 assert.match(finderHtml, /24 GB/);
 assert.match(finderHtml, /38\.7B ceiling/);
 assert.match(finderHtml, /227\.1B ceiling/);
+assert.match(finderHtml, /Ollama starter command/);
+assert.match(finderHtml, /ollama run qwen3:14b/);
+assert.match(finderHtml, /id="copy-ollama-command"/);
+assert.match(finderHtml, /data-event-content="ollama_starter_command"/);
+assert.match(finderHtml, /https:\/\/ollama\.com\/library\/qwen3/);
 assert.match(finderJs, /what_llm_can_i_run_share/);
 assert.match(finderJs, /add_context_and_architecture/);
 assert.match(toolsHtml, /what-llm-can-i-run/);

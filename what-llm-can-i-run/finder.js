@@ -2,6 +2,16 @@ import { calculateGpuMemory } from "../llm-gpu-memory-calculator/calculator.js";
 
 export const MODEL_TIERS = [3, 7, 8, 13, 14, 20, 27, 32, 70, 120];
 
+const OLLAMA_STARTERS = [
+  { minimumCapacityGiB: 65, model: "gpt-oss:120b", artifactSizeGb: 65, label: "gpt-oss 120B", officialUrl: "https://ollama.com/library/gpt-oss" },
+  { minimumCapacityGiB: 20, model: "qwen3:32b", artifactSizeGb: 20, label: "Qwen3 32B", officialUrl: "https://ollama.com/library/qwen3" },
+  { minimumCapacityGiB: 14, model: "gpt-oss:20b", artifactSizeGb: 14, label: "gpt-oss 20B", officialUrl: "https://ollama.com/library/gpt-oss" },
+  { minimumCapacityGiB: 9.3, model: "qwen3:14b", artifactSizeGb: 9.3, label: "Qwen3 14B", officialUrl: "https://ollama.com/library/qwen3" },
+  { minimumCapacityGiB: 5.2, model: "qwen3:8b", artifactSizeGb: 5.2, label: "Qwen3 8B", officialUrl: "https://ollama.com/library/qwen3" },
+  { minimumCapacityGiB: 2.5, model: "qwen3:4b", artifactSizeGb: 2.5, label: "Qwen3 4B", officialUrl: "https://ollama.com/library/qwen3" },
+  { minimumCapacityGiB: 1.4, model: "qwen3:1.7b", artifactSizeGb: 1.4, label: "Qwen3 1.7B", officialUrl: "https://ollama.com/library/qwen3" },
+];
+
 const DEFAULTS = {
   vramPerGpu: 12,
   availableGpus: 1,
@@ -93,6 +103,19 @@ export function calculateModelFinder({
   };
 }
 
+export function recommendOllamaStarter(result) {
+  const capacity = Number(result?.availableCapacityGiB);
+  const starter = OLLAMA_STARTERS.find(({ minimumCapacityGiB }) => capacity >= minimumCapacityGiB)
+    || OLLAMA_STARTERS.at(-1);
+  return {
+    model: starter.model,
+    artifactSizeGb: starter.artifactSizeGb,
+    command: `ollama run ${starter.model}`,
+    officialUrl: starter.officialUrl,
+    label: starter.label,
+  };
+}
+
 function formatNumber(value, maximumFractionDigits = 2) {
   return new Intl.NumberFormat("en-US", { maximumFractionDigits }).format(value);
 }
@@ -116,6 +139,9 @@ if (form) {
     profile: document.querySelector("#finder-profile"),
     fitList: document.querySelector("#finder-fit-list"),
     note: document.querySelector("#finder-note"),
+    ollamaModel: document.querySelector("#ollama-model"),
+    ollamaCommand: document.querySelector("#ollama-command"),
+    ollamaSource: document.querySelector("#ollama-source"),
     fullCalculator: document.querySelector("#open-model-calculator"),
     shareStatus: document.querySelector("#share-status"),
   };
@@ -156,6 +182,7 @@ if (form) {
     current.availableGpus = positiveInteger(current.availableGpus);
     const result = calculateModelFinder(current);
     const recommended = result.recommended;
+    const starter = recommendOllamaStarter(result);
     const precision = PRECISION_LABELS[result.bitsPerParameter];
 
     output.status.textContent = recommended ? `UP TO ${recommended.parameterBillions}B FLOOR` : "BELOW 3B FLOOR";
@@ -172,6 +199,9 @@ if (form) {
     output.note.textContent = recommended
       ? `A ${recommended.parameterBillions}B ${precision} weight floor clears the selected reserve. This is a capacity result, not a named-model, context-window, runtime-support, or speed guarantee.`
       : `The selected reserve does not leave enough capacity for this page's smallest 3B ${precision} tier. Try more VRAM, more GPUs, or a lower-bit artifact.`;
+    output.ollamaModel.textContent = `${starter.label} · ${starter.artifactSizeGb}GB official artifact`;
+    output.ollamaCommand.textContent = starter.command;
+    output.ollamaSource.href = starter.officialUrl;
     output.fullCalculator.href = calculatorUrl(current, recommended?.parameterBillions || 3).toString();
     output.shareStatus.textContent = "";
   }
@@ -205,6 +235,16 @@ if (form) {
       }
     } catch (error) {
       if (error?.name !== "AbortError") output.shareStatus.textContent = "Copy the page URL to share this result.";
+    }
+  });
+
+  document.querySelector("#copy-ollama-command").addEventListener("click", async () => {
+    const starter = recommendOllamaStarter(calculateModelFinder(values()));
+    try {
+      await navigator.clipboard.writeText(starter.command);
+      output.shareStatus.textContent = `Copied: ${starter.command}`;
+    } catch {
+      output.shareStatus.textContent = `Copy this command: ${starter.command}`;
     }
   });
 
