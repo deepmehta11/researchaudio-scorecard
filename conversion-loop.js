@@ -1,4 +1,12 @@
 const DISMISS_KEY_PREFIX = "researchaudio_evidence_rail_dismissed";
+const DEFAULT_OFFER = {
+  signal: "Next evidence",
+  title: "The next useful check should find you.",
+  description: "Join free. One confirmed referral unlocks the AI Launch Evidence Checklist.",
+  action: "Join free",
+  href: "#subscribe",
+  ariaLabel: "Join the ResearchAudio newsletter",
+};
 
 function storageKey() {
   const slug = window.location.pathname.split("/").filter(Boolean).at(-1) || "scorecard";
@@ -21,24 +29,31 @@ function rememberDismissal() {
   }
 }
 
-export function installEvidenceCapture({ trigger = "scroll" } = {}) {
+export function installEvidenceCapture({ trigger = "scroll", offer = DEFAULT_OFFER } = {}) {
   if (new URLSearchParams(window.location.search).get("embed") === "1") return;
 
   const subscribe = document.querySelector(".subscribe-block");
   if (!subscribe || document.querySelector(".evidence-capture-rail") || wasDismissed()) return;
+  const captureOffer = { ...DEFAULT_OFFER, ...offer };
 
   const rail = document.createElement("aside");
   rail.className = "evidence-capture-rail";
-  rail.setAttribute("aria-label", "Join the ResearchAudio newsletter");
+  rail.setAttribute("aria-label", captureOffer.ariaLabel);
   rail.innerHTML = `
-    <div class="evidence-capture-signal" aria-hidden="true"><span></span>Next evidence</div>
+    <div class="evidence-capture-signal" aria-hidden="true"><span></span><b></b></div>
     <div class="evidence-capture-copy">
-      <strong>The next useful check should find you.</strong>
-      <span>Join free. One confirmed referral unlocks the AI Launch Evidence Checklist.</span>
+      <strong></strong>
+      <span></span>
     </div>
-    <a class="evidence-capture-action" href="#subscribe">Join free</a>
+    <a class="evidence-capture-action"></a>
     <button class="evidence-capture-dismiss" type="button" aria-label="Dismiss signup prompt">×</button>
   `;
+  rail.querySelector(".evidence-capture-signal b").textContent = captureOffer.signal;
+  rail.querySelector(".evidence-capture-copy strong").textContent = captureOffer.title;
+  rail.querySelector(".evidence-capture-copy span").textContent = captureOffer.description;
+  const action = rail.querySelector(".evidence-capture-action");
+  action.textContent = captureOffer.action;
+  action.href = captureOffer.href;
   document.body.append(rail);
 
   let activated = false;

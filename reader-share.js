@@ -133,18 +133,26 @@ function installReaderShareLoop() {
   const communityUrl = buildCommunityShareUrl(canonical, slug);
   const title = document.title.split("|")[0].trim() || document.querySelector("h1")?.textContent.trim();
   const description = document.querySelector('meta[name="description"]')?.content.trim() || "A practical ResearchAudio evidence guide.";
-  const text = `${title} — ${description}`;
+  const text = `${title}: ${description}`;
   const communityText = buildCommunityShareText(title, description, communityUrl);
   const leadMagnet = isLocalLlmTopic(slug, title, description)
     ? {
         href: buildGatedArticleUrl(slug, search),
         label: "Unlock the free VRAM worksheet →",
         note: "Read the two-sentence preview, then use your email to unlock the formulas, 8–32 GB table, and buying checklist.",
+        railSignal: "Free VRAM worksheet",
+        railTitle: "Turn this estimate into a deployment checklist.",
+        railDescription: "Subscribe free to unlock the formulas, VRAM table, and buying checklist.",
+        railAction: "Unlock worksheet",
       }
     : {
         href: buildDecisionMemoUrl(slug, search),
         label: "Unlock the free AI decision memo →",
         note: "Read the two-sentence preview, then use your email to unlock the six-line Adopt, Pilot, Watch, or Pass template.",
+        railSignal: "Free AI decision memo",
+        railTitle: "Turn this AI claim into a decision.",
+        railDescription: "Subscribe free to unlock the six-line Adopt, Pilot, Watch, or Pass template.",
+        railAction: "Unlock memo",
       };
 
   document.querySelectorAll('a[href^="https://researchaudio.io/subscribe"]').forEach((link) => {
@@ -205,7 +213,17 @@ function installReaderShareLoop() {
   });
 
   subscribe.insertAdjacentElement("beforebegin", section);
-  installEvidenceCapture({ trigger: "scroll" });
+  installEvidenceCapture({
+    trigger: "scroll",
+    offer: {
+      signal: leadMagnet.railSignal,
+      title: leadMagnet.railTitle,
+      description: leadMagnet.railDescription,
+      action: leadMagnet.railAction,
+      href: leadMagnet.href,
+      ariaLabel: leadMagnet.railSignal,
+    },
+  });
 }
 
 if (typeof document !== "undefined") {
