@@ -5,6 +5,8 @@ const sourcePreview = document.querySelector("#partner-source-preview");
 const magicLinkOutput = document.querySelector("#magic-link");
 const universalLinkOutput = document.querySelector("#universal-link");
 const universalPreview = document.querySelector("#universal-preview");
+const markdownBadgeOutput = document.querySelector("#markdown-badge");
+const badgePreview = document.querySelector("#badge-preview");
 
 const toSourceSlug = (value) => {
   const slug = value
@@ -41,7 +43,15 @@ const buildLinks = (partnerName) => {
     "utm_content=partner_kit",
   ].join("&");
 
-  return { magicLink, source, universalLink: universalUrl.toString() };
+  const badgeUrl = "https://tools.researchaudio.io/researchaudio-toolkit.svg";
+  const badgeDestination = new URL("https://tools.researchaudio.io/tools/");
+  badgeDestination.searchParams.set("utm_source", `badge_${partnerSlug}`);
+  badgeDestination.searchParams.set("utm_medium", "publisher_badge");
+  badgeDestination.searchParams.set("utm_campaign", campaign);
+  badgeDestination.searchParams.set("utm_content", "free_ai_tools");
+  const markdownBadge = `[![Free ResearchAudio browser-local AI tools](${badgeUrl})](${badgeDestination.toString()})`;
+
+  return { badgeDestination: badgeDestination.toString(), magicLink, markdownBadge, source, universalLink: universalUrl.toString() };
 };
 
 const updateLinks = () => {
@@ -50,6 +60,8 @@ const updateLinks = () => {
   magicLinkOutput.value = links.magicLink;
   universalLinkOutput.value = links.universalLink;
   universalPreview.href = links.universalLink;
+  markdownBadgeOutput.value = links.markdownBadge;
+  badgePreview.href = links.badgeDestination;
 };
 
 const copyText = async (text, statusElement, successMessage) => {

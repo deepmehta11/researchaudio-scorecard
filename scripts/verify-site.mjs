@@ -113,6 +113,7 @@ const [html, css, js, labCss, embedModeJs, readerShareJs, conversionLoopJs, tool
 ]);
 const showcaseIssueTemplate = await readFile(path.join(root, ".github/ISSUE_TEMPLATE/publisher-showcase.yml"), "utf8");
 const readme = await readFile(path.join(root, "README.md"), "utf8");
+const publisherBadge = await readFile(path.join(root, "researchaudio-toolkit.svg"), "utf8");
 
 assert.match(html, /<title>AI Launch Evidence Scorecard \| ResearchAudio<\/title>/);
 assert.match(html, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
@@ -1873,6 +1874,11 @@ assert.match(showcaseIssueTemplate, /id: researchaudio_credit/);
 assert.match(showcaseIssueTemplate, /publicly reachable and displays the ResearchAudio credit/);
 assert.match(readme, /utm_source=github_readme&utm_medium=repository&utm_campaign=ai_evidence_lab&utm_content=open_lab/);
 assert.match(readme, /utm_source=github_readme&utm_medium=repository&utm_campaign=ai_evidence_lab&utm_content=join_free/);
+assert.match(readme, /researchaudio-toolkit\.svg/);
+assert.match(readme, /utm_source=badge_researchaudio-scorecard&utm_medium=publisher_badge&utm_campaign=ai_evidence_lab&utm_content=free_ai_tools/);
+assert.match(publisherBadge, /<title id="title">Free ResearchAudio AI tools<\/title>/);
+assert.match(publisherBadge, /FREE BROWSER-LOCAL AI TOOLS/);
+assert.doesNotMatch(publisherBadge, /<script|javascript:/i, "publisher badge must remain a passive image");
 assert.match(toolsHtml, /href="\.\.\/embeds\/"/);
 assert.match(partnersHtml, /<title>Partner With ResearchAudio: Newsletter &amp; AI Tool Kit<\/title>/);
 assert.match(partnersHtml, /<link rel="canonical" href="https:\/\/tools\.researchaudio\.io\/partners\/" \/>/);
@@ -1881,6 +1887,9 @@ assert.match(partnersHtml, /href="https:\/\/app\.beehiiv\.com\/recommendations"/
 assert.match(partnersHtml, /data-copy-target="network-reason"/);
 assert.match(partnersHtml, /data-copy-target="magic-link"/);
 assert.match(partnersHtml, /data-copy-target="universal-link"/);
+assert.match(partnersHtml, /data-copy-target="markdown-badge"/);
+assert.match(partnersHtml, /id="badge-preview"/);
+assert.match(partnersHtml, /researchaudio-toolkit\.svg/);
 assert.equal((partnersHtml.match(/data-copy-snippet=/g) || []).length, 3, "partner kit should provide three copy-ready placements");
 assert.equal((partnersHtml.match(/"@type": "Question"/g) || []).length, 4, "partner kit should expose four FAQ answers in schema");
 assert.doesNotThrow(() => parseStructuredData(partnersHtml), "partner-kit structured data must be valid JSON");
@@ -1892,6 +1901,9 @@ assert.match(partnersJs, /https:\/\/tools\.researchaudio\.io\/ai-evidence-starte
 assert.match(partnersJs, /https:\/\/tools\.researchaudio\.io\/evidence-starter-kit\//);
 assert.match(partnersJs, /utm_medium", "partner_referral"/);
 assert.match(partnersJs, /utm_medium=magic_link/);
+assert.match(partnersJs, /utm_medium", "publisher_badge"/);
+assert.match(partnersJs, /utm_source", `badge_\$\{partnerSlug\}`/);
+assert.match(partnersJs, /Free ResearchAudio browser-local AI tools/);
 assert.match(partnersJs, /navigator\.clipboard\.writeText/);
 assert.match(toolsHtml, /href="\.\.\/partners\/"/);
 assert.match(embedsHtml, /href="\.\.\/partners\/"/);
