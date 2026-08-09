@@ -3294,6 +3294,18 @@ html.embed-mode .result-join a {
   background: var(--white);
 }
 
+.reader-share-actions > .reader-gated-article-link {
+  color: var(--white);
+  background: var(--blue);
+  border-color: var(--blue);
+}
+
+.reader-gated-article-note {
+  margin: -2px 0 6px;
+  color: #243d3b;
+  font: 600 0.68rem/1.5 var(--mono);
+}
+
 .reader-community-button {
   cursor: pointer;
 }

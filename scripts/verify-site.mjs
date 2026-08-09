@@ -29,7 +29,13 @@ import { calculateVoiceLatency, classifyVoiceLatency } from "../voice-ai-latency
 import { calculateVoiceAiCost } from "../voice-ai-cost-calculator/calculator.js";
 import { buildAttributedShareUrl, parseSharedChecklist, parseSharedNumbers } from "../share-state.js";
 import { buildEvidenceBadgeMarkdown } from "../scorecard-badge.js";
-import { buildCommunityShareText, buildCommunityShareUrl, buildReaderShareUrl } from "../reader-share.js";
+import {
+  buildCommunityShareText,
+  buildCommunityShareUrl,
+  buildGatedArticleUrl,
+  buildReaderShareUrl,
+  isLocalLlmTopic,
+} from "../reader-share.js";
 import {
   buildModelHardwareBadgeDestination,
   buildModelHardwareBadgeMarkdown,
@@ -408,6 +414,10 @@ for (const [name, page] of [
   ["Mac mini M4 local LLM guide", macMiniM4GuideHtml],
   ["RTX 5080 local LLM guide", rtx5080GuideHtml],
   ["RTX 5090 local LLM guide", rtx5090GuideHtml],
+  ["LLM GPU memory calculator", gpuMemoryHtml],
+  ["Local LLM GPU compatibility checker", compatibilityHtml],
+  ["VRAM-first model finder", finderHtml],
+  ["KV cache calculator", kvCacheHtml],
   ["Qwen2.5 GPU requirements guide", qwenGuideHtml],
   ["Qwen3 GPU requirements guide", qwen3GuideHtml],
   ["gpt-oss hardware requirements guide", gptOssGuideHtml],
@@ -428,6 +438,8 @@ assert.match(readerShareJs, /medium: "community_referral"/);
 assert.match(readerShareJs, /content: `\$\{slug\}_community_post`/);
 assert.match(readerShareJs, /Copy community post/);
 assert.match(readerShareJs, /Add your own context; do not spam/);
+assert.match(readerShareJs, /local-llm-vram-worksheet/);
+assert.match(readerShareJs, /Unlock the free VRAM worksheet/);
 assert.match(readerShareJs, /navigator\.share/);
 assert.match(readerShareJs, /querySelector\("\.subscribe-block"\)/);
 assert.match(readerShareJs, /insertAdjacentElement\("beforebegin", section\)/);
@@ -442,6 +454,7 @@ assert.match(conversionLoopJs, /get\("embed"\) === "1"/);
 assert.match(labCss, /\.reader-share-loop/);
 assert.match(labCss, /\.reader-share-button/);
 assert.match(labCss, /\.reader-community-button/);
+assert.match(labCss, /\.reader-gated-article-link/);
 assert.match(labCss, /\.evidence-capture-rail/);
 assert.match(labCss, /\.evidence-capture-rail\.is-visible/);
 
@@ -2006,6 +2019,16 @@ const communityShareText = buildCommunityShareText(
 assert.match(communityShareText, /^Qwen3 GPU requirements\n\nA sourced memory-planning guide\./);
 assert.match(communityShareText, /Evidence, assumptions, and working tools:/);
 assert.match(communityShareText, /utm_source=community_share/);
+const gatedArticleUrl = buildGatedArticleUrl("qwen3-gpu-requirements");
+assert.equal(gatedArticleUrl.origin, "https://researchaudio.io");
+assert.equal(gatedArticleUrl.pathname, "/p/local-llm-vram-worksheet");
+assert.equal(gatedArticleUrl.searchParams.get("utm_source"), "qwen3-gpu-requirements");
+assert.equal(gatedArticleUrl.searchParams.get("utm_medium"), "evidence_lab_referral");
+assert.equal(gatedArticleUrl.searchParams.get("utm_campaign"), "local_llm_vram_gate");
+assert.equal(gatedArticleUrl.searchParams.get("utm_content"), "worksheet_unlock");
+assert.equal(gatedArticleUrl.hash, "");
+assert.equal(isLocalLlmTopic("Qwen3 GPU requirements and VRAM planning"), true);
+assert.equal(isLocalLlmTopic("LLM API token cost calculator"), false);
 assert.match(readerShareJs, /one confirmed signup through your personal referral link in a ResearchAudio email/);
 assert.match(conversionLoopJs, /One confirmed referral unlocks the AI Launch Evidence Checklist/);
 
