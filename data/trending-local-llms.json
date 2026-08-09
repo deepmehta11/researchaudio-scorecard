@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-09T02:37:07.809Z",
+  "generatedAt": "2026-08-09T02:45:18.972Z",
   "source": {
     "name": "Hugging Face Hub public models API",
     "url": "https://huggingface.co/models?pipeline_tag=text-generation&sort=trending",
@@ -34,9 +34,9 @@
       "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731",
       "parameters": 304180418494,
       "parameterBillions": 304.18,
-      "trendingScore": 1190,
+      "trendingScore": 1187,
       "downloads": 785771,
-      "likes": 2859,
+      "likes": 2860,
       "lastModified": "2026-08-01T03:07:41.000Z",
       "planningGiB": {
         "int4": 169.97,
@@ -88,9 +88,9 @@
       "url": "https://huggingface.co/inclusionAI/Ling-3.0-flash",
       "parameters": 127486405600,
       "parameterBillions": 127.49,
-      "trendingScore": 212,
+      "trendingScore": 213,
       "downloads": 4189,
-      "likes": 222,
+      "likes": 223,
       "lastModified": "2026-08-06T15:09:42.000Z",
       "planningGiB": {
         "int4": 71.24,
