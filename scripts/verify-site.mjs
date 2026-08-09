@@ -237,12 +237,17 @@ assert.match(trendingUpdateScript, /models\.length >= 8/);
 assert.match(trendingUpdateScript, /TRENDING_MODELS:START/);
 assert.match(trendingUpdateWorkflow, /cron: "23 08 \* \* \*"/);
 assert.match(trendingUpdateWorkflow, /permissions:[\s\S]*contents: write/);
+assert.match(trendingUpdateWorkflow, /permissions:[\s\S]*actions: write/);
 assert.match(trendingUpdateWorkflow, /node scripts\/update-trending-models\.mjs/);
 assert.match(trendingUpdateWorkflow, /node scripts\/generate-model-hardware-pages\.mjs/);
 assert.match(trendingUpdateWorkflow, /node scripts\/verify-site\.mjs/);
 assert.match(trendingUpdateWorkflow, /git add trending-local-llms\/index\.html data\/trending-local-llms\.json/);
 assert.match(trendingUpdateWorkflow, /data\/model-hardware-pages\.json models\/ sitemap\.xml llms\.txt/);
 assert.match(trendingUpdateWorkflow, /reviewed-page quality gates/);
+assert.match(trendingUpdateWorkflow, /echo "changed=false" >> "\$GITHUB_OUTPUT"/);
+assert.match(trendingUpdateWorkflow, /echo "changed=true" >> "\$GITHUB_OUTPUT"/);
+assert.match(trendingUpdateWorkflow, /if: steps\.snapshot\.outputs\.changed == 'true'/);
+assert.match(trendingUpdateWorkflow, /gh workflow run indexnow\.yml --ref main/);
 assert.match(trendingUpdateWorkflow, /Not-tested: Search ranking, external sharing, and subscriber conversion\./);
 
 assert.equal(reviewedModelRegistry.pages.length, 8, "the initial programmatic rollout should remain a small reviewed batch");

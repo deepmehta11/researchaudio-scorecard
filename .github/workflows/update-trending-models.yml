@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: write
   contents: write
 
 concurrency:
@@ -24,10 +25,12 @@ jobs:
       - name: Verify the complete acquisition site
         run: node scripts/verify-site.mjs
       - name: Commit a changed snapshot
+        id: snapshot
         shell: bash
         run: |
           if git diff --quiet -- trending-local-llms/index.html data/trending-local-llms.json data/model-hardware-pages.json models/ sitemap.xml llms.txt; then
             echo "The verified source records and model pages are unchanged."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -44,3 +47,9 @@ jobs:
             -m "Tested: Trending source validation, reviewed-page quality gates, and scripts/verify-site.mjs." \
             -m "Not-tested: Search ranking, external sharing, and subscriber conversion."
           git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+      - name: Notify search engines after a changed snapshot
+        if: steps.snapshot.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run indexnow.yml --ref main
