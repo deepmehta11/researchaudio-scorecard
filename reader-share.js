@@ -4,6 +4,7 @@ import { installEvidenceCapture } from "./conversion-loop.js";
 const GATED_VRAM_WORKSHEET_URL = "https://researchaudio.io/p/local-llm-vram-worksheet";
 const GATED_AI_DECISION_MEMO_URL = "https://researchaudio.io/p/ai-launch-decision-memo";
 const LOCAL_LLM_TOPIC = /\b(?:local\s+llm|vram|gpu\s+(?:memory|requirements?)|kv[\s-]?cache|unified\s+memory)\b/i;
+const ATTRIBUTION_VALUE = /^[a-zA-Z0-9][a-zA-Z0-9._-]{0,127}$/;
 
 function normalizedSlug(pathname) {
   return pathname.split("/").filter(Boolean).at(-1) || "evidence_lab";
@@ -42,13 +43,26 @@ export function isLocalLlmTopic(...values) {
   return LOCAL_LLM_TOPIC.test(values.filter(Boolean).join(" "));
 }
 
-export function buildGatedArticleUrl(slug) {
+function channelAttribution(search, fallback) {
+  const params = new URLSearchParams(search);
+  const source = params.get("utm_source")?.trim();
+  const medium = params.get("utm_medium")?.trim();
+  return {
+    source: source && ATTRIBUTION_VALUE.test(source) ? source : fallback.source,
+    medium: medium && ATTRIBUTION_VALUE.test(medium) ? medium : fallback.medium,
+  };
+}
+
+export function buildGatedArticleUrl(slug, search = "") {
+  const channel = channelAttribution(search, {
+    source: slug,
+    medium: "evidence_lab_referral",
+  });
   return buildAttributedShareUrl(
     GATED_VRAM_WORKSHEET_URL,
-    {},
+    { utm_term: slug },
     {
-      source: slug,
-      medium: "evidence_lab_referral",
+      ...channel,
       campaign: "local_llm_vram_gate",
       content: "worksheet_unlock",
       hash: "",
@@ -56,16 +70,37 @@ export function buildGatedArticleUrl(slug) {
   );
 }
 
-export function buildDecisionMemoUrl(slug) {
+export function buildDecisionMemoUrl(slug, search = "") {
+  const channel = channelAttribution(search, {
+    source: slug,
+    medium: "evidence_lab_referral",
+  });
   return buildAttributedShareUrl(
     GATED_AI_DECISION_MEMO_URL,
-    {},
+    { utm_term: slug },
     {
-      source: slug,
-      medium: "evidence_lab_referral",
+      ...channel,
       campaign: "ai_launch_decision_memo_gate",
       content: "decision_memo_unlock",
       hash: "",
+    },
+  );
+}
+
+export function buildSubscribeUrl(href, slug, search = "") {
+  const destination = new URL(href);
+  const channel = channelAttribution(search, {
+    source: destination.searchParams.get("utm_source") || slug,
+    medium: destination.searchParams.get("utm_medium") || "evidence_lab_referral",
+  });
+  return buildAttributedShareUrl(
+    destination,
+    { utm_term: slug },
+    {
+      ...channel,
+      campaign: destination.searchParams.get("utm_campaign") || "ai_evidence_lab",
+      content: destination.searchParams.get("utm_content") || "direct_join",
+      hash: destination.hash,
     },
   );
 }
@@ -93,6 +128,7 @@ function installReaderShareLoop() {
 
   const canonical = document.querySelector('link[rel="canonical"]')?.href || window.location.href;
   const slug = normalizedSlug(window.location.pathname);
+  const search = window.location.search;
   const url = buildReaderShareUrl(canonical, slug);
   const communityUrl = buildCommunityShareUrl(canonical, slug);
   const title = document.title.split("|")[0].trim() || document.querySelector("h1")?.textContent.trim();
@@ -101,15 +137,22 @@ function installReaderShareLoop() {
   const communityText = buildCommunityShareText(title, description, communityUrl);
   const leadMagnet = isLocalLlmTopic(slug, title, description)
     ? {
-        href: buildGatedArticleUrl(slug),
+        href: buildGatedArticleUrl(slug, search),
         label: "Unlock the free VRAM worksheet →",
         note: "Read the two-sentence preview, then use your email to unlock the formulas, 8–32 GB table, and buying checklist.",
       }
     : {
-        href: buildDecisionMemoUrl(slug),
+        href: buildDecisionMemoUrl(slug, search),
         label: "Unlock the free AI decision memo →",
         note: "Read the two-sentence preview, then use your email to unlock the six-line Adopt, Pilot, Watch, or Pass template.",
       };
+
+  document.querySelectorAll('a[href^="https://researchaudio.io/subscribe"]').forEach((link) => {
+    link.href = buildSubscribeUrl(link.href, slug, search);
+  });
+  document.querySelectorAll(".result-gated-link").forEach((link) => {
+    link.href = leadMagnet.href;
+  });
 
   const section = document.createElement("section");
   section.className = "reader-share-loop";

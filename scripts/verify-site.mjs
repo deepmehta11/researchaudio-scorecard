@@ -35,6 +35,7 @@ import {
   buildDecisionMemoUrl,
   buildGatedArticleUrl,
   buildReaderShareUrl,
+  buildSubscribeUrl,
   isLocalLlmTopic,
 } from "../reader-share.js";
 import {
@@ -879,7 +880,6 @@ for (const [name, page] of [
   ["AI task fit diagnostic", taskFitHtml],
   ["agent ROI calculator", roiHtml],
   ["LLM API cost calculator", llmCostHtml],
-  ["LLM GPU memory calculator", gpuMemoryHtml],
   ["LLM KV cache calculator", kvCacheHtml],
   ["prompt caching calculator", promptCacheHtml],
   ["Codex config generator", codexConfigHtml],
@@ -890,6 +890,8 @@ for (const [name, page] of [
   assert.match(page, /class="result-join"[\s\S]*?href="#subscribe"/, `${name} result CTA must keep visitors on the page`);
   assert.match(page, /<section class="subscribe-(?:block|section)" id="subscribe"/, `${name} inline subscribe destination missing`);
 }
+assert.match(gpuMemoryHtml, /class="result-join"[\s\S]*?class="result-gated-link"[\s\S]*?local-llm-vram-worksheet/, "LLM GPU memory calculator result CTA should open its gated worksheet");
+assert.match(gpuMemoryHtml, /<section class="subscribe-block" id="subscribe"/, "LLM GPU memory calculator inline subscribe destination missing");
 
 for (const [name, page, title] of [
   ["hub", toolsHtml, "Free AI Evaluation Tools for Builders"],
@@ -2032,7 +2034,17 @@ assert.equal(gatedArticleUrl.searchParams.get("utm_source"), "qwen3-gpu-requirem
 assert.equal(gatedArticleUrl.searchParams.get("utm_medium"), "evidence_lab_referral");
 assert.equal(gatedArticleUrl.searchParams.get("utm_campaign"), "local_llm_vram_gate");
 assert.equal(gatedArticleUrl.searchParams.get("utm_content"), "worksheet_unlock");
+assert.equal(gatedArticleUrl.searchParams.get("utm_term"), "qwen3-gpu-requirements");
 assert.equal(gatedArticleUrl.hash, "");
+const redditGatedArticleUrl = buildGatedArticleUrl(
+  "llm-gpu-memory-calculator",
+  "?utm_source=reddit&utm_medium=community_referral&utm_campaign=ai_evidence_lab&utm_content=ollama_vram_worksheet",
+);
+assert.equal(redditGatedArticleUrl.searchParams.get("utm_source"), "reddit");
+assert.equal(redditGatedArticleUrl.searchParams.get("utm_medium"), "community_referral");
+assert.equal(redditGatedArticleUrl.searchParams.get("utm_campaign"), "local_llm_vram_gate");
+assert.equal(redditGatedArticleUrl.searchParams.get("utm_content"), "worksheet_unlock");
+assert.equal(redditGatedArticleUrl.searchParams.get("utm_term"), "llm-gpu-memory-calculator");
 const decisionMemoUrl = buildDecisionMemoUrl("ai-agent-roi-calculator");
 assert.equal(decisionMemoUrl.origin, "https://researchaudio.io");
 assert.equal(decisionMemoUrl.pathname, "/p/ai-launch-decision-memo");
@@ -2040,11 +2052,25 @@ assert.equal(decisionMemoUrl.searchParams.get("utm_source"), "ai-agent-roi-calcu
 assert.equal(decisionMemoUrl.searchParams.get("utm_medium"), "evidence_lab_referral");
 assert.equal(decisionMemoUrl.searchParams.get("utm_campaign"), "ai_launch_decision_memo_gate");
 assert.equal(decisionMemoUrl.searchParams.get("utm_content"), "decision_memo_unlock");
+assert.equal(decisionMemoUrl.searchParams.get("utm_term"), "ai-agent-roi-calculator");
 assert.equal(decisionMemoUrl.hash, "");
+const redditSubscribeUrl = buildSubscribeUrl(
+  "https://researchaudio.io/subscribe?utm_source=llm_gpu_memory_calculator&utm_medium=tool&utm_campaign=ai_evidence_lab&utm_content=direct_join",
+  "llm-gpu-memory-calculator",
+  "?utm_source=reddit&utm_medium=community_referral&utm_campaign=ai_evidence_lab&utm_content=ollama_vram_worksheet",
+);
+assert.equal(redditSubscribeUrl.pathname, "/subscribe");
+assert.equal(redditSubscribeUrl.searchParams.get("utm_source"), "reddit");
+assert.equal(redditSubscribeUrl.searchParams.get("utm_medium"), "community_referral");
+assert.equal(redditSubscribeUrl.searchParams.get("utm_campaign"), "ai_evidence_lab");
+assert.equal(redditSubscribeUrl.searchParams.get("utm_content"), "direct_join");
+assert.equal(redditSubscribeUrl.searchParams.get("utm_term"), "llm-gpu-memory-calculator");
 assert.equal(isLocalLlmTopic("Qwen3 GPU requirements and VRAM planning"), true);
 assert.equal(isLocalLlmTopic("LLM API token cost calculator"), false);
 assert.match(readerShareJs, /one confirmed signup through your personal referral link in a ResearchAudio email/);
 assert.match(conversionLoopJs, /One confirmed referral unlocks the AI Launch Evidence Checklist/);
+assert.match(gpuMemoryHtml, /class="result-gated-link"/);
+assert.match(gpuMemoryHtml, /Unlock the free VRAM worksheet/);
 
 const sharedCostUrl = buildAttributedShareUrl(
   "https://tools.researchaudio.io/ai-cost-calculator/?utm_source=old#result",
