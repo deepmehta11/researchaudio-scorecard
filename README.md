@@ -1,10 +1,10 @@
 # ResearchAudio Evidence Lab
 
-An evergreen acquisition ecosystem for ResearchAudio. Sixteen browser-local tools, a daily source-backed model index, eight reviewed repository hardware pages, twenty-four practical field guides, and a self-serve embed library turn AI task framing, benchmark and launch claims, token budgets, voice latency and outcome economics, hardware-first local LLM discovery, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability and security, automation business cases, and Codex workflows into concrete inspections before inviting visitors into the daily briefing.
+An evergreen acquisition ecosystem for ResearchAudio. Seventeen browser-based tools, a daily source-backed model index, eight reviewed repository hardware pages, twenty-four practical field guides, and a self-serve embed library turn AI task framing, benchmark and launch claims, token budgets, voice latency and outcome economics, hardware-first local LLM discovery, Hugging Face repository lookup, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability and security, automation business cases, and Codex workflows into concrete inspections before inviting visitors into the daily briefing.
 
 [Open the Evidence Lab](https://tools.researchaudio.io/?utm_source=github_readme&utm_medium=repository&utm_campaign=ai_evidence_lab&utm_content=open_lab) · [Embed a free tool](https://tools.researchaudio.io/embeds/?utm_source=github_readme&utm_medium=repository&utm_campaign=ai_evidence_lab&utm_content=embed_tools) · [Join ResearchAudio](https://researchaudio.io/subscribe?utm_source=github_readme&utm_medium=repository&utm_campaign=ai_evidence_lab&utm_content=join_free)
 
-[![Free ResearchAudio browser-local AI tools](https://tools.researchaudio.io/researchaudio-toolkit.svg)](https://tools.researchaudio.io/tools/?utm_source=badge_researchaudio-scorecard&utm_medium=publisher_badge&utm_campaign=ai_evidence_lab&utm_content=free_ai_tools)
+[![Free ResearchAudio browser-based AI tools](https://tools.researchaudio.io/researchaudio-toolkit.svg)](https://tools.researchaudio.io/tools/?utm_source=badge_researchaudio-scorecard&utm_medium=publisher_badge&utm_campaign=ai_evidence_lab&utm_content=free_ai_tools)
 
 Live at [tools.researchaudio.io](https://tools.researchaudio.io/), a branded ResearchAudio subdomain connected to the Beehiiv publication at [researchaudio.io](https://researchaudio.io/).
 
@@ -51,14 +51,15 @@ Live at [tools.researchaudio.io](https://tools.researchaudio.io/), a branded Res
 - `/llm-gpu-memory-calculator/` — model-weight VRAM, optional architecture-aware KV cache, runtime headroom, usable memory, and minimum GPU count.
 - `/local-llm-gpu-compatibility/` — browser-local 7B, 13B, 32B, and 70B weight-floor fit checks across common 8 GB to 141 GB GPU profiles, with preserved state into the architecture-aware calculator.
 - `/what-llm-can-i-run/` — browser-local inverse model finder that starts with 8 GB to 141 GB of available VRAM and returns the largest listed INT4, INT8, or FP16 parameter tier below a conservative arithmetic ceiling.
+- `/hugging-face-vram-calculator/` — read-only public Hugging Face repository lookup that turns safetensors parameter metadata into INT4, INT8, and BF16 weight floors, a model-specific permalink, and a passive tracked Markdown badge for README and model-card distribution.
 - `/ai-evidence-starter-kit/` — crawlable acquisition page that previews the four-test kit and opens the Beehiiv signup flow.
 - `/evidence-starter-kit/` — private, noindex post-signup activation with four-tool progress and attributed sharing back to the acquisition page.
 - `/ai-deployment-pack/` — private, noindex one-referral reward with three downloadable decision templates and a seven-day AI deployment sequence.
 - `/tools/` — crawlable, interlinked Evidence Lab hub.
-- `/embeds/` — copy-ready, source-attributed iframe widgets plus an origin-validated auto-resize listener and a self-serve installation guide for WordPress, Webflow, Ghost, Beehiiv, and static sites. Every tool page deep-links publishers to its exact widget, and the library publishes a sixteen-tool application index with matching FAQ schema for search discovery.
+- `/embeds/` — copy-ready, source-attributed iframe widgets plus an origin-validated auto-resize listener and a self-serve installation guide for WordPress, Webflow, Ghost, Beehiiv, and static sites. Every tool page deep-links publishers to its exact widget, and the library publishes a seventeen-tool application index with matching FAQ schema for search discovery.
 - `/partners/` — self-serve distribution kit that generates a publication-attributed Beehiiv Magic Link, a universal signup-gate URL, a tracked GitHub or documentation badge, and three copy-ready partner placements without submitting or storing the publisher name.
 
-Every instrument uses the dedicated Beehiiv acquisition form and keeps user inputs in the browser.
+Every instrument uses the dedicated Beehiiv acquisition form. Private calculation and checklist inputs stay in the browser; the Hugging Face lookup sends only the entered public model ID directly to Hugging Face's API and does not store it on ResearchAudio.
 
 Every acquisition page also exposes a page-attributed hosted signup fallback above the embed, so visitors can still join when third-party form loading is delayed or blocked.
 
@@ -95,7 +96,8 @@ Then open `http://127.0.0.1:4173`.
 3. Link it near the first decision table in every relevant ResearchAudio web post.
 4. Publish one result card per issue on LinkedIn, X, Reddit, and relevant engineering communities.
 5. Redirect new Evidence Lab subscribers into the private starter kit, use its attributed share action to send new readers through the signup gate, then deliver the one-referral reward from Beehiiv.
-6. Offer the sixteen-widget embed library to technical publishers; each tool keeps a visible ResearchAudio credit and rewrites signup links to the publisher-specific `embed_*` source.
+6. Offer the seventeen-widget embed library to technical publishers; each tool keeps a visible ResearchAudio credit and rewrites signup links to the publisher-specific `embed_*` source.
 7. Give newsletter and open-source publishers the partner kit; Beehiiv partners use its one-click Magic Link, other platforms use the attributed universal signup link, and GitHub projects can paste the tracked Markdown badge.
 8. Give each reviewed model page's copy-ready badge to its matching GitHub or Hugging Face maintainer for the README or model card; the passive SVG links back to the exact evidence page with `utm_source=model_badge` and `utm_medium=model_card`.
-9. Review Beehiiv source and campaign breakdowns weekly. Keep only channels that produce active subscribers, not raw clicks.
+9. Use the self-serve Hugging Face lookup for every public repository outside the reviewed batch; its generic passive badge links to an exact source lookup with `utm_source=hf_model_card_badge` and `utm_medium=model_card`.
+10. Review Beehiiv source and campaign breakdowns weekly. Keep only channels that produce active subscribers, not raw clicks.

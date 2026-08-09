@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="214" height="32" viewBox="0 0 214 32" role="img" aria-labelledby="title description">
   <title id="title">Free ResearchAudio AI tools</title>
-  <desc id="description">A badge linking to browser-local AI evidence tools from ResearchAudio.</desc>
+  <desc id="description">A badge linking to browser-based AI evidence tools from ResearchAudio.</desc>
   <rect width="214" height="32" fill="#173c36" />
   <rect x="1" y="1" width="212" height="30" fill="none" stroke="#8fd8c8" />
   <rect x="9" y="8" width="16" height="16" fill="#d8ff62" />
   <text x="17" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="700" fill="#173c36">RA</text>
   <text x="33" y="14" font-family="Arial, sans-serif" font-size="9" font-weight="700" letter-spacing="0.7" fill="#d9f3ed">RESEARCHAUDIO</text>
-  <text x="33" y="24" font-family="Arial, sans-serif" font-size="9" fill="#ffffff">FREE BROWSER-LOCAL AI TOOLS</text>
+  <text x="33" y="24" font-family="Arial, sans-serif" font-size="9" fill="#ffffff">FREE BROWSER-BASED AI TOOLS</text>
 </svg>

@@ -12,6 +12,15 @@ import { calculateLlmApiCost } from "../llm-api-cost-calculator/calculator.js";
 import { calculateGpuMemory } from "../llm-gpu-memory-calculator/calculator.js";
 import { calculateCompatibility } from "../local-llm-gpu-compatibility/checker.js";
 import { calculateModelFinder, recommendOllamaStarter } from "../what-llm-can-i-run/finder.js";
+import {
+  buildHuggingFaceModelApiUrl,
+  buildModelCardBadgeDestination as buildHuggingFaceBadgeDestination,
+  buildModelCardBadgeMarkdown as buildHuggingFaceBadgeMarkdown,
+  buildModelLookupUrl,
+  calculateHuggingFaceVramPlan,
+  normalizeHuggingFaceModel,
+  parseHuggingFaceModelId,
+} from "../hugging-face-vram-calculator/calculator.js";
 import { calculateKvCache, MODEL_PRESETS } from "../kv-cache-calculator/calculator.js";
 import { calculatePromptCacheSavings } from "../prompt-caching-calculator/calculator.js";
 import { buildCodexConfig, normalizeFallbackFiles, normalizeMaxBytes } from "../codex-config-generator/generator.js";
@@ -35,7 +44,7 @@ const brandedToolsOrigin = "https://tools.researchaudio.io";
 const cloudflareWebAnalyticsToken = "c20a9e29828c471c92ed7c2284901e05";
 const retiredGitHubPagesPath = /deepmehta11\.github\.io\/researchaudio-scorecard/;
 const parseStructuredData = (page) => [...page.matchAll(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g)].map((match) => JSON.parse(match[1]));
-const [html, css, js, labCss, embedModeJs, readerShareJs, conversionLoopJs, toolsHtml, embedsHtml, embedsJs, partnersHtml, partnersJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, kvCacheHtml, kvCacheJs, localLlmGuideHtml, smallGpuGuideHtml, gpuGuideHtml, rtx3060GuideHtml, rtx4060GuideHtml, rtx4060Ti16GuideHtml, rtx3090Vs4090GuideHtml, rtx4090GuideHtml, rtx5060TiComparisonGuideHtml, rtx4070SuperComparisonGuideHtml, macMiniM4GuideHtml, rtx5080GuideHtml, rtx5090GuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, kimiK3GuideHtml, gemma4GuideHtml, diffusionGemmaGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, acquisitionHtml, starterHtml, starterJs, deploymentPackHtml, deploymentBrief, evidenceChecklist, rolloutGates, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
+const [html, css, js, labCss, embedModeJs, readerShareJs, conversionLoopJs, toolsHtml, embedsHtml, embedsJs, partnersHtml, partnersJs, costHtml, loopHtml, taskFitHtml, taskFitJs, roiHtml, roiJs, llmCostHtml, llmCostJs, gpuMemoryHtml, gpuMemoryJs, compatibilityHtml, compatibilityJs, finderHtml, finderJs, huggingFaceVramHtml, huggingFaceVramJs, kvCacheHtml, kvCacheJs, localLlmGuideHtml, smallGpuGuideHtml, gpuGuideHtml, rtx3060GuideHtml, rtx4060GuideHtml, rtx4060Ti16GuideHtml, rtx3090Vs4090GuideHtml, rtx4090GuideHtml, rtx5060TiComparisonGuideHtml, rtx4070SuperComparisonGuideHtml, macMiniM4GuideHtml, rtx5080GuideHtml, rtx5090GuideHtml, qwenGuideHtml, qwen3GuideHtml, gptOssGuideHtml, deepseekV4GuideHtml, glm52GuideHtml, kimiK3GuideHtml, gemma4GuideHtml, diffusionGemmaGuideHtml, securityGuideHtml, securityGuideJs, benchmarkGuideHtml, benchmarkGuideJs, promptCacheHtml, promptCacheJs, codexConfigHtml, codexConfigJs, codexExecHtml, codexExecJs, voiceLatencyHtml, voiceLatencyJs, voiceCostHtml, voiceCostJs, voiceCostPerMinuteHtml, aiReceptionistCostHtml, acquisitionHtml, starterHtml, starterJs, deploymentPackHtml, deploymentBrief, evidenceChecklist, rolloutGates, fablePlaybookHtml, fablePlaybookCss, fablePlaybookPdf, sitemap, robots, llms, socialCard, publishedKey, indexNowScript, indexNowWorkflow] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
@@ -62,6 +71,8 @@ const [html, css, js, labCss, embedModeJs, readerShareJs, conversionLoopJs, tool
   readFile(path.join(root, "local-llm-gpu-compatibility/checker.js"), "utf8"),
   readFile(path.join(root, "what-llm-can-i-run/index.html"), "utf8"),
   readFile(path.join(root, "what-llm-can-i-run/finder.js"), "utf8"),
+  readFile(path.join(root, "hugging-face-vram-calculator/index.html"), "utf8"),
+  readFile(path.join(root, "hugging-face-vram-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "kv-cache-calculator/index.html"), "utf8"),
   readFile(path.join(root, "kv-cache-calculator/calculator.js"), "utf8"),
   readFile(path.join(root, "local-llm-gpu-guide/index.html"), "utf8"),
@@ -122,6 +133,7 @@ const [html, css, js, labCss, embedModeJs, readerShareJs, conversionLoopJs, tool
 const showcaseIssueTemplate = await readFile(path.join(root, ".github/ISSUE_TEMPLATE/publisher-showcase.yml"), "utf8");
 const readme = await readFile(path.join(root, "README.md"), "utf8");
 const publisherBadge = await readFile(path.join(root, "researchaudio-toolkit.svg"), "utf8");
+const modelCardVramBadge = await readFile(path.join(root, "model-card-vram-badge.svg"), "utf8");
 const evidenceBadges = await Promise.all(
   Array.from({ length: 8 }, (_, score) => readFile(path.join(root, `badges/evidence-${score}.svg`), "utf8")),
 );
@@ -364,6 +376,7 @@ for (const [name, page, pathname] of [
   ["DiffusionGemma GPU requirements guide", diffusionGemmaGuideHtml, "/diffusiongemma-gpu-requirements/"],
   ["AI agent security checklist", securityGuideHtml, "/ai-agent-security-checklist/"],
   ["AI benchmark audit checklist", benchmarkGuideHtml, "/ai-benchmark-audit-checklist/"],
+  ["Hugging Face VRAM calculator", huggingFaceVramHtml, "/hugging-face-vram-calculator/"],
   ["AI evidence starter kit acquisition page", acquisitionHtml, "/ai-evidence-starter-kit/"],
   ["Fable 5 cost playbook", fablePlaybookHtml, "/fable-playbook/"],
 ]) {
@@ -403,6 +416,7 @@ for (const [name, page] of [
   ["Kimi K3 GPU requirements guide", kimiK3GuideHtml],
   ["Gemma 4 GPU requirements guide", gemma4GuideHtml],
   ["DiffusionGemma GPU requirements guide", diffusionGemmaGuideHtml],
+  ["Hugging Face VRAM calculator", huggingFaceVramHtml],
 ]) {
   assert.match(page, /<script type="module" src="\.\.\/reader-share\.js"><\/script>/, `${name} should load the reader sharing loop`);
 }
@@ -1539,6 +1553,78 @@ for (const question of [
   assert.match(finderHtml, new RegExp(`"name": "${escapedQuestion}"`), `model finder FAQ schema question missing: ${question}`);
 }
 
+assert.equal(parseHuggingFaceModelId("Qwen/Qwen2.5-7B-Instruct"), "Qwen/Qwen2.5-7B-Instruct");
+assert.equal(parseHuggingFaceModelId("https://huggingface.co/Qwen/Qwen2.5-7B-Instruct/tree/main"), "Qwen/Qwen2.5-7B-Instruct");
+assert.equal(parseHuggingFaceModelId("https://huggingface.co/models/microsoft/Phi-3.5-mini-instruct"), "microsoft/Phi-3.5-mini-instruct");
+assert.throws(() => parseHuggingFaceModelId("https://example.com/Qwen/Qwen2.5-7B-Instruct"), /huggingface\.co/);
+assert.throws(() => parseHuggingFaceModelId("https://huggingface.co/spaces/foo/bar"), /model repository/);
+assert.throws(() => parseHuggingFaceModelId("Qwen"), /owner and repository/);
+assert.throws(() => parseHuggingFaceModelId("Qwen/<script>"), /valid owner\/model/);
+const huggingFaceApiUrl = buildHuggingFaceModelApiUrl("Qwen/Qwen2.5-7B-Instruct");
+assert.equal(huggingFaceApiUrl.origin, "https://huggingface.co");
+assert.equal(huggingFaceApiUrl.pathname, "/api/models/Qwen/Qwen2.5-7B-Instruct");
+assert.deepEqual(huggingFaceApiUrl.searchParams.getAll("expand[]"), ["safetensors", "config", "pipeline_tag", "library_name", "gated", "private", "lastModified"]);
+const qwenHuggingFaceModel = normalizeHuggingFaceModel({
+  id: "Qwen/Qwen2.5-7B-Instruct",
+  pipeline_tag: "text-generation",
+  library_name: "transformers",
+  config: { architectures: ["Qwen2ForCausalLM"] },
+  safetensors: { total: 7_615_616_512 },
+  gated: false,
+  private: false,
+  lastModified: "2026-08-01T12:00:00.000Z",
+});
+assert.equal(qwenHuggingFaceModel.parameterBillions, 7.615616512);
+assert.equal(qwenHuggingFaceModel.architecture, "Qwen2ForCausalLM");
+assert.equal(qwenHuggingFaceModel.sourceUrl, "https://huggingface.co/Qwen/Qwen2.5-7B-Instruct");
+const qwenHuggingFacePlan = calculateHuggingFaceVramPlan(qwenHuggingFaceModel);
+assert.deepEqual(qwenHuggingFacePlan.map(({ bits }) => bits), [4, 8, 16]);
+assert.equal(Number(qwenHuggingFacePlan[0].planningGiB.toFixed(2)), 4.26);
+assert.equal(Number(qwenHuggingFacePlan[1].planningGiB.toFixed(2)), 8.51);
+assert.equal(Number(qwenHuggingFacePlan[2].planningGiB.toFixed(2)), 17.02);
+assert.equal(buildModelLookupUrl(qwenHuggingFaceModel.id).searchParams.get("model"), qwenHuggingFaceModel.id);
+const qwenHuggingFaceBadgeUrl = new URL(buildHuggingFaceBadgeDestination(qwenHuggingFaceModel));
+assert.equal(qwenHuggingFaceBadgeUrl.searchParams.get("model"), qwenHuggingFaceModel.id);
+assert.equal(qwenHuggingFaceBadgeUrl.searchParams.get("utm_source"), "hf_model_card_badge");
+assert.equal(qwenHuggingFaceBadgeUrl.searchParams.get("utm_medium"), "model_card");
+assert.equal(qwenHuggingFaceBadgeUrl.searchParams.get("utm_campaign"), "ai_evidence_lab");
+assert.equal(qwenHuggingFaceBadgeUrl.searchParams.get("utm_content"), "qwen-qwen2-5-7b-instruct");
+assert.equal(qwenHuggingFaceBadgeUrl.hash, "#vram-plan");
+assert.equal(
+  buildHuggingFaceBadgeMarkdown(qwenHuggingFaceModel),
+  `[![Qwen2.5-7B-Instruct source-backed INT4 floor 4.26 GiB - ResearchAudio](https://tools.researchaudio.io/model-card-vram-badge.svg)](${qwenHuggingFaceBadgeUrl.toString()})`,
+);
+assert.throws(() => normalizeHuggingFaceModel({ id: "Qwen/no-safetensors" }), /no usable public safetensors parameter total/);
+assert.throws(() => normalizeHuggingFaceModel({ id: "Qwen/outlier", safetensors: { total: 2_000_000_000_001 } }), /more than two trillion/);
+assert.match(huggingFaceVramHtml, /<title>Hugging Face VRAM Calculator \+ Model Card Badge \| ResearchAudio<\/title>/);
+assert.match(huggingFaceVramHtml, /<link rel="canonical" href="https:\/\/tools\.researchaudio\.io\/hugging-face-vram-calculator\/"/);
+assert.equal((huggingFaceVramHtml.match(/"@type": "WebApplication"/g) || []).length, 1, "Hugging Face lookup should have one WebApplication schema");
+assert.equal((huggingFaceVramHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "Hugging Face lookup should have one FAQ schema");
+assert.doesNotThrow(() => parseStructuredData(huggingFaceVramHtml), "Hugging Face lookup structured data must be valid JSON");
+assert.match(huggingFaceVramHtml, /id="hf-model-form"/);
+assert.match(huggingFaceVramHtml, /id="hf-model-input" name="model"/);
+assert.match(huggingFaceVramHtml, /data-plan-floor="4"/);
+assert.match(huggingFaceVramHtml, /data-plan-floor="8"/);
+assert.match(huggingFaceVramHtml, /data-plan-floor="16"/);
+assert.match(huggingFaceVramHtml, /model-card-vram-badge\.svg/);
+assert.match(huggingFaceVramHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
+assert.match(huggingFaceVramHtml, /https:\/\/researchaudio\.io\/subscribe\?utm_source=hugging_face_vram_calculator&amp;utm_medium=(tool|tool_result)&amp;utm_campaign=ai_evidence_lab/);
+assert.match(huggingFaceVramHtml, /huggingface\.co\/docs\/huggingface_hub\/en\/package_reference\/hf_api/);
+assert.match(huggingFaceVramHtml, /huggingface\.co\/docs\/hub\/en\/model-cards/);
+assert.match(huggingFaceVramHtml, /<script type="module" src="\.\.\/reader-share\.js"><\/script>/);
+assert.match(huggingFaceVramJs, /credentials: "omit"/);
+assert.match(huggingFaceVramJs, /referrerPolicy: "no-referrer"/);
+assert.match(huggingFaceVramJs, /12_000/);
+assert.match(huggingFaceVramJs, /utm_source", "hf_model_card_badge"/);
+assert.match(huggingFaceVramJs, /installEvidenceCapture\(\{ trigger: "interaction" \}\)/);
+assert.doesNotMatch(huggingFaceVramJs, /localStorage|sessionStorage|innerHTML/);
+assert.match(modelCardVramBadge, /HUGGING FACE MODEL VRAM PLAN/);
+assert.match(modelCardVramBadge, /PUBLIC SAFETENSORS METADATA/);
+assert.doesNotMatch(modelCardVramBadge, /<script|javascript:|<foreignObject/i, "generic model-card badge must remain a passive image");
+assert.match(toolsHtml, /hugging-face-vram-calculator/);
+assert.match(localLlmGuideHtml, /hugging-face-vram-calculator/);
+assert.match(trendingHtml, /hugging-face-vram-calculator/);
+
 const defaultKvCache = calculateKvCache({
   layers: 28,
   attentionHeads: 28,
@@ -1592,7 +1678,7 @@ assert.match(kvCacheHtml, /Qwen2\.5 32B/);
 assert.match(kvCacheHtml, /Qwen2\.5 72B/);
 assert.equal((kvCacheHtml.match(/class="scenario-card/g) || []).length, 3, "KV-cache calculator should contain three sourced scenarios");
 assert.match(toolsHtml, /kv-cache-calculator/);
-assert.equal((toolsHtml.match(/class="tool-card"/g) || []).length, 16, "tools hub should contain sixteen instruments");
+assert.equal((toolsHtml.match(/class="tool-card"/g) || []).length, 17, "tools hub should contain seventeen instruments");
 
 const defaultPromptCache = calculatePromptCacheSavings({
   requestsPerMonth: 100000,
@@ -1971,6 +2057,7 @@ for (const [name, page] of [
   ["LLM GPU memory", gpuMemoryHtml],
   ["local LLM GPU compatibility", compatibilityHtml],
   ["hardware-first LLM model finder", finderHtml],
+  ["Hugging Face VRAM calculator", huggingFaceVramHtml],
   ["LLM KV cache", kvCacheHtml],
   ["prompt caching", promptCacheHtml],
   ["Codex config", codexConfigHtml],
@@ -1994,11 +2081,11 @@ assert.match(embedModeJs, /utm_content", "embed_this_tool"/);
 assert.match(embedModeJs, /libraryUrl\.hash = `embed-\$\{tool\}`/);
 assert.match(embedsHtml, /<title>Embed Free AI Tools on Your Website \| ResearchAudio<\/title>/);
 assert.match(embedsHtml, /href="https:\/\/researchaudio\.io\/p\/free-ai-tools-to-embed\?utm_source=embed_library&amp;utm_medium=organic_tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=publisher_guide"/);
-assert.equal((embedsHtml.match(/data-widget-url=/g) || []).length, 16, "embed library should offer sixteen widgets");
-assert.equal((embedsHtml.match(/data-copy-embed/g) || []).length, 16, "every widget should expose a copy action");
+assert.equal((embedsHtml.match(/data-widget-url=/g) || []).length, 17, "embed library should offer seventeen widgets");
+assert.equal((embedsHtml.match(/data-copy-embed/g) || []).length, 17, "every widget should expose a copy action");
 assert.doesNotThrow(() => parseStructuredData(embedsHtml), "embed library structured data must be valid JSON");
-assert.equal((embedsHtml.match(/"@type": "ListItem"/g) || []).length, 16, "embed library schema should enumerate sixteen widgets");
-assert.equal((embedsHtml.match(/"@type": "WebApplication"/g) || []).length, 16, "every embedded tool should have WebApplication schema");
+assert.equal((embedsHtml.match(/"@type": "ListItem"/g) || []).length, 17, "embed library schema should enumerate seventeen widgets");
+assert.equal((embedsHtml.match(/"@type": "WebApplication"/g) || []).length, 17, "every embedded tool should have WebApplication schema");
 assert.equal((embedsHtml.match(/"@type": "FAQPage"/g) || []).length, 1, "embed library should have FAQ schema");
 for (const pathName of [
   "ai-benchmark-audit-checklist",
@@ -2007,6 +2094,7 @@ for (const pathName of [
   "llm-gpu-memory-calculator",
   "local-llm-gpu-compatibility",
   "what-llm-can-i-run",
+  "hugging-face-vram-calculator",
   "kv-cache-calculator",
   "voice-ai-cost-calculator",
   "ai-agent-roi-calculator",
@@ -2055,8 +2143,11 @@ assert.match(readme, /utm_source=github_readme&utm_medium=repository&utm_campaig
 assert.match(readme, /researchaudio-toolkit\.svg/);
 assert.match(readme, /utm_source=badge_researchaudio-scorecard&utm_medium=publisher_badge&utm_campaign=ai_evidence_lab&utm_content=free_ai_tools/);
 assert.match(publisherBadge, /<title id="title">Free ResearchAudio AI tools<\/title>/);
-assert.match(publisherBadge, /FREE BROWSER-LOCAL AI TOOLS/);
+assert.match(publisherBadge, /FREE BROWSER-BASED AI TOOLS/);
 assert.doesNotMatch(publisherBadge, /<script|javascript:/i, "publisher badge must remain a passive image");
+assert.match(toolsHtml, /public model lookups go directly to Hugging Face/);
+assert.match(embedsHtml, /Hugging Face lookup sends only the entered public model ID directly to Hugging Face/);
+assert.match(readme, /Hugging Face lookup sends only the entered public model ID directly to Hugging Face's API/);
 assert.match(toolsHtml, /href="\.\.\/embeds\/"/);
 assert.match(partnersHtml, /<title>Partner With ResearchAudio: Newsletter &amp; AI Tool Kit<\/title>/);
 assert.match(partnersHtml, /<link rel="canonical" href="https:\/\/tools\.researchaudio\.io\/partners\/" \/>/);
@@ -2081,7 +2172,7 @@ assert.match(partnersJs, /utm_medium", "partner_referral"/);
 assert.match(partnersJs, /utm_medium=magic_link/);
 assert.match(partnersJs, /utm_medium", "publisher_badge"/);
 assert.match(partnersJs, /utm_source", `badge_\$\{partnerSlug\}`/);
-assert.match(partnersJs, /Free ResearchAudio browser-local AI tools/);
+assert.match(partnersJs, /Free ResearchAudio browser-based AI tools/);
 assert.match(partnersJs, /navigator\.clipboard\.writeText/);
 assert.match(toolsHtml, /href="\.\.\/partners\/"/);
 assert.match(embedsHtml, /href="\.\.\/partners\/"/);
@@ -2161,6 +2252,7 @@ for (const [name, page] of [
   ["LLM GPU memory calculator", gpuMemoryHtml],
   ["KV-cache calculator", kvCacheHtml],
   ["hardware-first model finder", finderHtml],
+  ["Hugging Face VRAM calculator", huggingFaceVramHtml],
   ["GPU compatibility checker", compatibilityHtml],
   ["7B versus 13B guide", smallGpuGuideHtml],
   ["70B guide", gpuGuideHtml],
@@ -2184,9 +2276,9 @@ for (const [name, page] of [
   assert.match(page, /href="\.\.\/local-llm-gpu-guide\/"/, `${name} should link back to the canonical local LLM pillar URL`);
 }
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 55, "sitemap should contain all fifty-five crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 56, "sitemap should contain all fifty-six crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 55, "sitemap should publish fifty-five URL locations");
+assert.equal(sitemapUrls.length, 56, "sitemap should publish fifty-six URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 const crawlablePages = await Promise.all(sitemapUrls.map(async (url) => {
   const pathname = new URL(url).pathname.replace(/^\/+|\/+$/g, "");
@@ -2203,6 +2295,7 @@ for (const [url, page] of crawlablePages) {
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/partners/"), "sitemap should publish the partner distribution kit");
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/local-llm-gpu-guide/"), "sitemap should publish the local LLM hardware pillar");
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/trending-local-llms/"), "sitemap should publish the daily trending model index");
+assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/hugging-face-vram-calculator/"), "sitemap should publish the Hugging Face VRAM calculator");
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/models/"), "sitemap should publish the reviewed model hardware hub");
 for (const model of modelPagesData.models) {
   assert.ok(sitemapUrls.includes(model.url), `sitemap should publish ${model.slug}`);
@@ -2218,6 +2311,7 @@ assert.match(llms, /LLM API Cost Calculator/);
 assert.match(llms, /LLM GPU Memory Calculator/);
 assert.match(llms, /Local LLM GPU Compatibility Checker/);
 assert.match(llms, /What LLM Can I Run on My GPU\?/);
+assert.match(llms, /Hugging Face VRAM Calculator and Model Card Badge/);
 assert.match(llms, /LLM KV Cache Calculator/);
 assert.match(llms, /Prompt Caching Cost Calculator/);
 assert.match(llms, /Codex CLI config\.toml Generator/);
@@ -2279,4 +2373,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 16 tools, 1 daily trending model index, 8 quality-gated repository hardware pages, 1 gated acquisition page, 1 private activation kit, 1 private one-referral reward pack, 1 embed library, 1 partner distribution kit, 24 search field notes, 55 crawlable pages, a 2,500-word local LLM hardware pillar, attributed subscribe and share CTAs, interaction-triggered signup rails, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 17 tools, 1 daily trending model index, 8 quality-gated repository hardware pages, 1 gated acquisition page, 1 private activation kit, 1 private one-referral reward pack, 1 embed library, 1 partner distribution kit, 24 search field notes, 56 crawlable pages, a 2,500-word local LLM hardware pillar, attributed subscribe and share CTAs, interaction-triggered signup rails, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

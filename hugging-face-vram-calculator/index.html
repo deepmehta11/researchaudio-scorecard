@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hugging Face VRAM Calculator + Model Card Badge | ResearchAudio</title>
+    <meta name="description" content="Paste a Hugging Face model URL to calculate source-backed INT4, INT8, and BF16 VRAM floors and generate a tracked model-card badge." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/hugging-face-vram-calculator/" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Turn a Hugging Face model card into a transparent VRAM plan" />
+    <meta property="og:description" content="Read public safetensors metadata, compare three weight floors, and copy a source-linked badge for the model card." />
+    <meta property="og:url" content="https://tools.researchaudio.io/hugging-face-vram-calculator/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://huggingface.co" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+    <script src="../embed-mode.js"></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Hugging Face Model VRAM Calculator and Model Card Badge Generator",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "url": "https://tools.researchaudio.io/hugging-face-vram-calculator/",
+        "description": "A browser-based source lookup that reads public Hugging Face safetensors metadata, calculates INT4, INT8, and BF16 weight-memory floors with explicit headroom, and generates a copy-ready model-card badge.",
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "publisher": { "@type": "Organization", "name": "ResearchAudio", "url": "https://researchaudio.io/" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "How does the Hugging Face VRAM calculator get a model's parameter count?", "acceptedAnswer": { "@type": "Answer", "text": "It requests the public Hugging Face model API in the visitor's browser and reads the repository's safetensors total. Repositories without usable public safetensors metadata are not estimated automatically." } },
+          { "@type": "Question", "name": "Does the result include KV cache and serving memory?", "acceptedAnswer": { "@type": "Answer", "text": "No. The three displayed results are model-weight arithmetic plus 20 percent planning headroom. KV cache, activations, runtime workspace, fragmentation, offload, and throughput remain separate deployment checks." } },
+          { "@type": "Question", "name": "Can I add the generated badge to a Hugging Face model card?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Hugging Face model cards are Markdown README files. The generated passive badge links to a permalink that reloads the same public source lookup and attributes model-card visits." } },
+          { "@type": "Question", "name": "Does ResearchAudio store the model ID I enter?", "acceptedAnswer": { "@type": "Answer", "text": "No. The lookup runs in the browser against the public Hugging Face API. The model ID can appear in a permalink when the visitor chooses to copy or share the result." } }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#model-lookup">Skip to the model lookup</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=hugging_face_vram_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span><span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/">All tools</a>
+        <a href="../models/">Reviewed models</a>
+        <a class="briefings-link" href="https://researchaudio.io/?utm_source=hugging_face_vram_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=latest_briefings">Latest briefings</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=hugging_face_vram_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Instrument 17 / source-to-model-card loop</p>
+          <h1 id="hero-title">Turn any public Hugging Face model into a transparent VRAM plan.</h1>
+          <p class="hero-deck">Paste the repository URL. This browser reads its public safetensors parameter total, calculates INT4, INT8, and BF16 weight floors, and gives the maintainer a passive Markdown badge that carries the source and assumptions with it.</p>
+          <a class="hero-join-link" href="#model-lookup">Inspect a model →</a>
+        </div>
+        <aside class="lab-index" aria-label="Lookup contract">
+          <span>Private uploads</span>
+          <strong>0</strong>
+          <p>Public Hub metadata only. No token, account, model download, or server-side model-ID storage.</p>
+        </aside>
+      </section>
+
+      <section class="instrument-shell hf-lookup-shell" id="model-lookup" aria-labelledby="lookup-title">
+        <div class="instrument-intro">
+          <div><p class="eyebrow">Public source lookup</p><h2 id="lookup-title">Start with the repository, not the model name.</h2></div>
+          <p>A model label can hide a derivative, quantization, merge, or different parameter total. The lookup accepts an <code>owner/model</code> ID or a full <code>huggingface.co</code> model URL.</p>
+        </div>
+
+        <div class="hf-lookup-layout">
+          <form class="hf-lookup-form" id="hf-model-form" aria-describedby="lookup-privacy">
+            <label for="hf-model-input"><span>Hugging Face model ID or URL</span><small>Example: Qwen/Qwen2.5-7B-Instruct</small></label>
+            <div class="hf-lookup-row">
+              <input id="hf-model-input" name="model" type="text" required maxlength="240" spellcheck="false" autocomplete="off" placeholder="owner/model or https://huggingface.co/owner/model" />
+              <button class="action-button" id="lookup-model" type="submit">Inspect model and build badge</button>
+            </div>
+            <p id="lookup-privacy">The browser sends this model ID directly to Hugging Face's public API. ResearchAudio does not receive or store the lookup value.</p>
+            <div class="hf-example-row" aria-label="Example public models">
+              <span>Try:</span>
+              <button type="button" data-example-model="Qwen/Qwen2.5-7B-Instruct">Qwen2.5 7B</button>
+              <button type="button" data-example-model="meta-llama/Llama-3.1-8B-Instruct">Llama 3.1 8B</button>
+              <button type="button" data-example-model="microsoft/Phi-3.5-mini-instruct">Phi-3.5 mini</button>
+            </div>
+          </form>
+
+          <aside class="hf-lookup-status" aria-live="polite">
+            <span>Lookup state</span>
+            <strong id="lookup-status">WAITING FOR MODEL ID</strong>
+            <p id="lookup-error" hidden></p>
+          </aside>
+        </div>
+
+        <section class="hf-model-result" id="hf-model-result" hidden aria-labelledby="result-title">
+          <div class="hf-result-heading">
+            <div><p class="eyebrow">Public metadata receipt</p><h2 id="result-title"><span id="hf-model-name">Model</span> VRAM floor</h2><p id="hf-model-id"></p></div>
+            <a id="hf-model-source" href="https://huggingface.co/" target="_blank" rel="noopener noreferrer">Open source model card ↗</a>
+          </div>
+          <div class="hf-source-grid">
+            <div><span>Safetensors parameters</span><strong id="hf-model-parameters">—</strong></div>
+            <div><span>Architecture</span><strong id="hf-model-architecture">—</strong></div>
+            <div><span>Pipeline</span><strong id="hf-model-pipeline">—</strong></div>
+            <div><span>Library</span><strong id="hf-model-library">—</strong></div>
+            <div><span>Access</span><strong id="hf-model-access">—</strong></div>
+            <div><span>Last modified</span><strong id="hf-model-modified">—</strong></div>
+          </div>
+
+          <div class="hf-precision-grid" id="vram-plan" aria-label="Model weight VRAM plan">
+            <article><span>INT4</span><strong data-plan-floor="4">—</strong><p><b data-plan-weight="4">—</b> raw weight arithmetic plus 20% planning headroom.</p></article>
+            <article><span>INT8</span><strong data-plan-floor="8">—</strong><p><b data-plan-weight="8">—</b> raw weight arithmetic plus 20% planning headroom.</p></article>
+            <article><span>FP16 / BF16</span><strong data-plan-floor="16">—</strong><p><b data-plan-weight="16">—</b> raw weight arithmetic plus 20% planning headroom.</p></article>
+          </div>
+          <p class="hf-result-warning"><strong>Boundary:</strong> these are parameter-derived weight floors. They do not include KV cache, activations, graph capture, allocator fragmentation, quantization metadata, CPU offload, runtime compatibility, interconnect, speed, quality, safety, or license interpretation.</p>
+          <a class="action-button" id="hf-open-calculator" href="../llm-gpu-memory-calculator/">Add architecture, context, GPU count, and usable VRAM →</a>
+
+          <div class="hf-badge-builder" data-hf-badge>
+            <div>
+              <p class="eyebrow">Powered-by distribution loop</p>
+              <h3>Add the evidence path to the model card.</h3>
+              <p>The image is a passive SVG. The destination reloads this exact public lookup with <code>utm_source=hf_model_card_badge</code>, so external model-card visits and downstream ResearchAudio signups can be measured separately.</p>
+              <a id="hf-badge-preview" href="https://tools.researchaudio.io/hugging-face-vram-calculator/"><img src="../model-card-vram-badge.svg" width="620" height="52" alt="Source-backed Hugging Face model VRAM plan by ResearchAudio" /></a>
+            </div>
+            <div class="hf-badge-console">
+              <label for="hf-badge-markdown">Markdown for README.md or the Hugging Face model card</label>
+              <textarea id="hf-badge-markdown" rows="5" readonly spellcheck="false"></textarea>
+              <button class="action-button" id="copy-hf-badge" type="button">Copy tracked model-card badge</button>
+              <label for="hf-model-permalink">Clean source-lookup permalink</label>
+              <textarea id="hf-model-permalink" rows="3" readonly spellcheck="false"></textarea>
+              <button class="secondary-button" id="copy-hf-permalink" type="button">Copy lookup permalink</button>
+              <p class="share-status" id="hf-badge-status" role="status"></p>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="principle-strip" aria-label="Lookup guarantees and limits">
+        <p class="eyebrow">What this tool proves</p>
+        <p><strong>Repository identity.</strong><br />The owner and exact model repository remain attached to the result.</p>
+        <p><strong>Transparent arithmetic.</strong><br />Parameters × bits ÷ eight, converted to GiB, then increased by 20%.</p>
+        <p><strong>No quality verdict.</strong><br />Download counts, model names, and memory fit do not prove output quality or runtime support.</p>
+      </section>
+
+      <section class="method-section" aria-labelledby="method-title">
+        <div><p class="eyebrow">Source and method</p><h2 id="method-title">The useful answer is smaller than a deployment promise.</h2></div>
+        <div class="method-copy">
+          <p><strong>The source is public Hub metadata.</strong> Hugging Face documents its model-info interface as the repository-information route, including optional expanded properties. This page requests only the public model ID, safetensors summary, architecture configuration, task pipeline, library, access state, and last-modified value. It does not download model weights. Review the <a href="https://huggingface.co/docs/huggingface_hub/en/package_reference/hf_api">official HfApi documentation</a> for the current contract.</p>
+          <p><strong>The total is a model-weight input.</strong> The safetensors total is converted into billions of parameters. For each displayed precision, the page multiplies the parameter count by four, eight, or sixteen bits, divides by eight to obtain bytes, converts bytes to binary GiB, and adds 20% planning headroom. The headroom makes the number less brittle, but it still does not transform a weight estimate into a measured runtime.</p>
+          <p><strong>A repository can lack usable metadata.</strong> A GGUF-only project, unusual checkpoint layout, private repository, broken safetensors metadata, or missing public total cannot be sized safely from this API field. The tool fails closed and directs the reader to the manual calculator. It also refuses totals above two trillion parameters because a surprising metadata count needs checkpoint inspection before it becomes a hardware claim.</p>
+          <p><strong>Mixture-of-experts models require resident-weight discipline.</strong> An active-parameter figure can describe how much of the network participates in a token's computation. It does not necessarily describe how many weights the serving system must store. This tool uses the repository's total safetensors parameters for the resident-weight floor and makes no claim about expert placement, offload, routing cost, or supported parallelism.</p>
+          <p><strong>Exact artifacts can be larger or smaller.</strong> Real checkpoints can mix data types, include embeddings or duplicate tensors, add quantization scales, or publish a converted artifact whose byte size differs from ideal bit-width arithmetic. Hugging Face's own <a href="https://huggingface.co/docs/accelerate/en/usage_guides/model_size_estimator">memory-estimator guidance</a> describes model loading as one part of the memory decision. Inspect the exact files and runtime before purchasing hardware.</p>
+          <p><strong>Context belongs in the next calculation.</strong> Autoregressive serving stores keys and values for prior tokens. The cache grows with layers, KV heads, head dimension, context length, concurrent sequences, and cache precision. Use the linked architecture-aware worksheet and the current <a href="https://huggingface.co/docs/transformers/en/kv_cache">Transformers KV-cache guidance</a> after the source lookup.</p>
+        </div>
+      </section>
+
+      <section class="resource-section" aria-labelledby="flywheel-title">
+        <div class="resource-heading">
+          <div><p class="eyebrow">Why the badge exists</p><h2 id="flywheel-title">Useful infrastructure can distribute the publication.</h2></div>
+          <p>A badge is valuable only when it helps the model-card reader inspect a real decision. It should not imply endorsement, benchmark quality, compatibility, or a verified production recipe.</p>
+        </div>
+        <div class="resource-grid">
+          <article class="resource-card"><span class="instrument-code">1 / inspect</span><h2>Paste the exact repository</h2><p>The public API supplies the model identity and parameter total. Missing evidence stops the automatic result.</p><b>Source before sizing</b></article>
+          <article class="resource-card"><span class="instrument-code">2 / copy</span><h2>Add one Markdown line</h2><p>The passive badge can live in a GitHub README, Hugging Face model card, benchmark report, or deployment note.</p><b>No script in the badge</b></article>
+          <article class="resource-card"><span class="instrument-code">3 / measure</span><h2>Keep attribution attached</h2><p>Each destination includes the model slug, model-card source, shared campaign, and exact VRAM-plan anchor.</p><b>Visits before claims</b></article>
+        </div>
+        <p class="table-note">Hugging Face describes model cards as Markdown README files that support discovery, reproducibility, and sharing. The badge supplies a hardware-evidence link; it does not replace the model card's intended-use, limitation, training, dataset, or evaluation sections. See the <a href="https://huggingface.co/docs/hub/en/model-cards">official model-card guidance</a>.</p>
+      </section>
+
+      <section class="guide-section" aria-labelledby="faq-title">
+        <div class="guide-intro"><p class="eyebrow">Hugging Face VRAM FAQ</p><h2 id="faq-title">Four boundaries keep the badge honest.</h2><p>The fastest way to make a memory calculator misleading is to hide where the parameter count came from or what the number excludes.</p></div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>How does the Hugging Face VRAM calculator get a model's parameter count?</h3><p>It requests the public Hugging Face model API in your browser and reads the repository's safetensors total. Repositories without usable public safetensors metadata are not estimated automatically.</p></article>
+          <article class="faq-item"><h3>Does the result include KV cache and serving memory?</h3><p>No. The three displayed results are model-weight arithmetic plus 20% planning headroom. KV cache, activations, runtime workspace, fragmentation, offload, and throughput remain separate deployment checks.</p></article>
+          <article class="faq-item"><h3>Can I add the generated badge to a Hugging Face model card?</h3><p>Yes. Hugging Face model cards are Markdown README files. The generated passive badge links to a permalink that reloads the same public source lookup and attributes model-card visits.</p></article>
+          <article class="faq-item"><h3>Does ResearchAudio store the model ID I enter?</h3><p>No. The lookup runs in the browser against the public Hugging Face API. The model ID appears in the page URL only when you load, copy, or share a model-specific permalink.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">
+        <div><p class="eyebrow">Evidence before infrastructure</p><h2 id="subscribe-title">Get the next model decision brief.</h2><p>ResearchAudio turns release claims, model metadata, memory boundaries, and serving constraints into practical decisions for engineers and builders.</p></div>
+        <div class="subscribe-form-shell">
+          <p class="subscribe-direct-fallback"><strong>Prefer the hosted signup page?</strong><a href="https://researchaudio.io/subscribe?utm_source=hugging_face_vram_calculator&amp;utm_medium=tool_result&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join">Join ResearchAudio free →</a></p>
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=hugging_face_vram_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer"><p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p><div class="footer-links"><a href="../tools/">All tools</a><a href="../local-llm-gpu-guide/">Hardware guide</a><a href="../models/">Reviewed models</a><a href="https://researchaudio.io/?utm_source=hugging_face_vram_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a></div></footer>
+    <script type="module" src="calculator.js"></script>
+    <script type="module" src="../reader-share.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"c20a9e29828c471c92ed7c2284901e05","spa":false}'></script>
+  </body>
+</html>

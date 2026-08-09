@@ -32,12 +32,14 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
   Checks 7B, 13B, 32B, and 70B weight floors against common 8 GB to 141 GB GPU profiles before handing the selected state to the architecture-aware calculator.
 - What LLM Can I Run on My GPU?: https://tools.researchaudio.io/what-llm-can-i-run/
   Starts with available GPU memory and returns the largest listed model-size tier below a transparent INT4, INT8, or FP16 weight-floor ceiling.
+- Hugging Face VRAM Calculator and Model Card Badge: https://tools.researchaudio.io/hugging-face-vram-calculator/
+  Reads public safetensors metadata in the visitor's browser, calculates transparent INT4, INT8, and BF16 weight floors, and generates a model-specific permalink plus an attributed passive Markdown badge.
 - LLM KV Cache Calculator: https://tools.researchaudio.io/kv-cache-calculator/
   Calculates exact KV-cache memory per token, sequence, context window, and concurrent request, plus GQA savings and full-context capacity.
 - Free AI Evaluation Starter Kit: https://tools.researchaudio.io/ai-evidence-starter-kit/
   A signup-gated preview of four browser-local tests for launch evidence, operating cost, agent reliability, and automation ROI.
 - Embeddable AI Tools: https://tools.researchaudio.io/embeds/
-  Generates copy-ready, source-attributed iframe widgets for sixteen browser-local calculators, model finders, diagnostics, builders, and checklists.
+  Generates copy-ready, source-attributed iframe widgets for seventeen browser-based calculators, model finders, diagnostics, builders, and checklists.
 - ResearchAudio Partner Distribution Kit: https://tools.researchaudio.io/partners/
   Generates a publication-attributed Beehiiv Magic Link, a universal starter-kit URL, and copy-ready newsletter placements for free publisher cross-promotion.
 

@@ -49,7 +49,7 @@ const buildLinks = (partnerName) => {
   badgeDestination.searchParams.set("utm_medium", "publisher_badge");
   badgeDestination.searchParams.set("utm_campaign", campaign);
   badgeDestination.searchParams.set("utm_content", "free_ai_tools");
-  const markdownBadge = `[![Free ResearchAudio browser-local AI tools](${badgeUrl})](${badgeDestination.toString()})`;
+  const markdownBadge = `[![Free ResearchAudio browser-based AI tools](${badgeUrl})](${badgeDestination.toString()})`;
 
   return { badgeDestination: badgeDestination.toString(), magicLink, markdownBadge, source, universalLink: universalUrl.toString() };
 };
