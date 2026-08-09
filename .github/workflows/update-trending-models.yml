@@ -28,7 +28,7 @@ jobs:
         id: snapshot
         shell: bash
         run: |
-          if git diff --quiet -- trending-local-llms/index.html data/trending-local-llms.json data/model-hardware-pages.json models/ sitemap.xml llms.txt; then
+          if git diff --quiet -- trending-local-llms/index.html data/trending-local-llms.json data/model-hardware-pages.json models/ badges/models/ sitemap.xml llms.txt; then
             echo "The verified source records and model pages are unchanged."
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
@@ -36,7 +36,7 @@ jobs:
 
           git config user.name "researchaudio-index-bot"
           git config user.email "researchaudio-index-bot@users.noreply.github.com"
-          git add trending-local-llms/index.html data/trending-local-llms.json data/model-hardware-pages.json models/ sitemap.xml llms.txt
+          git add trending-local-llms/index.html data/trending-local-llms.json data/model-hardware-pages.json models/ badges/models/ sitemap.xml llms.txt
           git commit \
             -m "Keep the open-model hardware signal current" \
             -m "Refresh the public Hugging Face trending snapshot and the quality-gated repository hardware pages after the complete site verifier passes." \

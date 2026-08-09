@@ -26,7 +26,7 @@ Live at [tools.researchaudio.io](https://tools.researchaudio.io/), a branded Res
 - `/ai-receptionist-cost/` — crawlable monthly worksheet with after-hours, appointment, and high-volume call scenarios.
 - `/local-llm-gpu-guide/` — crawlable pillar connecting model-size floors, VRAM tiers, GPU-specific comparisons, released-model evidence, and four browser-local sizing instruments into one hardware decision path.
 - `/trending-local-llms/` — daily-refreshed Hugging Face text-generation index with safetensors parameter counts, transparent INT4/INT8/BF16 planning floors, a public JSON snapshot, and exact handoffs into the GPU calculator.
-- `/models/` — quality-gated hub for eight reviewed repository pages. Each page publishes public architecture and license metadata, 987+ words, a precision ladder, a nine-tier card-fit matrix, repository-specific pre-download checks, related pages, and an attributed Beehiiv signup path. New trending repositories are never indexed automatically.
+- `/models/` — quality-gated hub for eight reviewed repository pages. Each page publishes public architecture and license metadata, 1,136+ words, a precision ladder, a nine-tier card-fit matrix, repository-specific pre-download checks, related pages, an attributed Beehiiv signup path, and a passive copy-ready model-card badge. Each badge exposes the page's source-backed INT4 planning floor and attributes repository traffic with model-specific UTMs. New trending repositories are never indexed automatically.
 - `/70b-llm-gpu-requirements/` — crawlable INT4, INT8, and FP16 guide with explicit 32K KV-cache scenarios.
 - `/rtx-3060-llm-models/` — hardware-first 12 GB guide separating the generic 14B INT4 weight tier from exact Qwen3 and gpt-oss context-memory boundaries.
 - `/rtx-4060-llm-models/` — hardware-first 8 GB guide showing where Qwen3 8B crosses from a 4K and 8K fit into 16K and 32K full-cache shortfalls.
@@ -97,4 +97,5 @@ Then open `http://127.0.0.1:4173`.
 5. Redirect new Evidence Lab subscribers into the private starter kit, use its attributed share action to send new readers through the signup gate, then deliver the one-referral reward from Beehiiv.
 6. Offer the sixteen-widget embed library to technical publishers; each tool keeps a visible ResearchAudio credit and rewrites signup links to the publisher-specific `embed_*` source.
 7. Give newsletter and open-source publishers the partner kit; Beehiiv partners use its one-click Magic Link, other platforms use the attributed universal signup link, and GitHub projects can paste the tracked Markdown badge.
-8. Review Beehiiv source and campaign breakdowns weekly. Keep only channels that produce active subscribers, not raw clicks.
+8. Give each reviewed model page's copy-ready badge to its matching GitHub or Hugging Face maintainer for the README or model card; the passive SVG links back to the exact evidence page with `utm_source=model_badge` and `utm_medium=model_card`.
+9. Review Beehiiv source and campaign breakdowns weekly. Keep only channels that produce active subscribers, not raw clicks.

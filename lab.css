@@ -2279,6 +2279,73 @@ h2 {
   font: 600 0.78rem/1 var(--mono);
 }
 
+.model-badge-section {
+  display: grid;
+  grid-template-columns: minmax(0, 0.75fr) minmax(420px, 1fr);
+  gap: 46px 80px;
+  align-items: start;
+  padding: 96px 0;
+  border-top: 2px solid var(--ink);
+}
+
+.model-badge-section > div:first-child > p:last-child {
+  color: var(--muted);
+}
+
+.model-badge-console {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+  color: var(--white);
+  background: var(--ink);
+  box-shadow: 8px 8px 0 var(--blue);
+}
+
+.model-badge-preview {
+  display: block;
+  overflow-x: auto;
+}
+
+.model-badge-preview img {
+  display: block;
+  width: 100%;
+  min-width: 520px;
+  height: auto;
+}
+
+.model-badge-console label {
+  color: var(--yellow);
+  font: 600 0.7rem/1.35 var(--mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.model-badge-console textarea {
+  width: 100%;
+  min-height: 112px;
+  padding: 14px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 2px solid var(--white);
+  resize: vertical;
+  font: 0.72rem/1.5 var(--mono);
+}
+
+.model-badge-console .action-button {
+  width: fit-content;
+}
+
+.model-badge-console .share-status,
+.model-badge-console small {
+  margin: 0;
+  color: #c1d2cf;
+}
+
+.model-badge-console code {
+  color: var(--yellow);
+  font: inherit;
+}
+
 .model-related-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -2377,7 +2444,8 @@ h2 {
   .subscribe-block,
   .lead-magnet-faq,
   .model-decision,
-  .model-next-checks {
+  .model-next-checks,
+  .model-badge-section {
     grid-template-columns: 1fr;
   }
 

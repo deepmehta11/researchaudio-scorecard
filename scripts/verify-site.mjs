@@ -21,6 +21,11 @@ import { calculateVoiceAiCost } from "../voice-ai-cost-calculator/calculator.js"
 import { buildAttributedShareUrl, parseSharedChecklist, parseSharedNumbers } from "../share-state.js";
 import { buildEvidenceBadgeMarkdown } from "../scorecard-badge.js";
 import { buildReaderShareUrl } from "../reader-share.js";
+import {
+  buildModelHardwareBadgeDestination,
+  buildModelHardwareBadgeMarkdown,
+  buildModelHardwareBadgeSvg,
+} from "../model-hardware-badge.js";
 import { planningGiB, prepareTrendingModels, renderTrendingRows } from "./update-trending-models.mjs";
 import { assertProgrammaticQuality } from "./generate-model-hardware-pages.mjs";
 
@@ -139,6 +144,13 @@ const renderedModelPages = await Promise.all(modelPagesData.models.map(async (mo
   model,
   html: await readFile(path.join(root, "models", model.slug, "index.html"), "utf8"),
 })));
+const [modelHardwareBadgeJs, renderedModelBadges] = await Promise.all([
+  readFile(path.join(root, "model-hardware-badge.js"), "utf8"),
+  Promise.all(modelPagesData.models.map(async (model) => ({
+    model,
+    svg: await readFile(path.join(root, "badges/models", `${model.slug}.svg`), "utf8"),
+  }))),
+]);
 
 assert.match(html, /<title>AI Launch Evidence Scorecard \| ResearchAudio<\/title>/);
 assert.match(html, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
@@ -242,7 +254,7 @@ assert.match(trendingUpdateWorkflow, /node scripts\/update-trending-models\.mjs/
 assert.match(trendingUpdateWorkflow, /node scripts\/generate-model-hardware-pages\.mjs/);
 assert.match(trendingUpdateWorkflow, /node scripts\/verify-site\.mjs/);
 assert.match(trendingUpdateWorkflow, /git add trending-local-llms\/index\.html data\/trending-local-llms\.json/);
-assert.match(trendingUpdateWorkflow, /data\/model-hardware-pages\.json models\/ sitemap\.xml llms\.txt/);
+assert.match(trendingUpdateWorkflow, /data\/model-hardware-pages\.json models\/ badges\/models\/ sitemap\.xml llms\.txt/);
 assert.match(trendingUpdateWorkflow, /reviewed-page quality gates/);
 assert.match(trendingUpdateWorkflow, /echo "changed=false" >> "\$GITHUB_OUTPUT"/);
 assert.match(trendingUpdateWorkflow, /echo "changed=true" >> "\$GITHUB_OUTPUT"/);
@@ -278,9 +290,32 @@ for (const { model, html: page } of renderedModelPages) {
   assert.equal((page.match(/<tr>/g) || []).length, 14, `${model.slug} should render three precision rows and nine card tiers plus headers`);
   assert.match(page, /subscribe-forms\.beehiiv\.com\/attribution\.js/, `${model.slug} should preserve Beehiiv attribution`);
   assert.match(page, /reader-share\.js/, `${model.slug} should connect the reader sharing loop`);
+  assert.equal((page.match(/data-model-badge(?:=|>)/g) || []).length, 1, `${model.slug} should expose one badge container`);
+  assert.equal((page.match(/data-model-badge-output/g) || []).length, 1, `${model.slug} should expose one badge Markdown output`);
+  assert.equal((page.match(/data-model-badge-status/g) || []).length, 1, `${model.slug} should expose one badge copy status`);
+  assert.match(page, /data-copy-model-badge/, `${model.slug} should expose a model-card badge copy action`);
+  assert.match(page, /model-hardware-badge\.js/, `${model.slug} should load the shared badge interaction`);
+  assert.match(page, new RegExp(model.badge.imageUrl.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), `${model.slug} should preview its passive badge asset`);
+  assert.match(page, /utm_source=model_badge&amp;utm_medium=model_card&amp;utm_campaign=ai_evidence_lab/, `${model.slug} badge preview should preserve backlink attribution`);
   assert.doesNotThrow(() => parseStructuredData(page), `${model.slug} structured data must be valid JSON`);
   assert.doesNotMatch(page, /noindex|nofollow|TODO|PLACEHOLDER|example\.com/, `${model.slug} must remain crawlable and production-ready`);
 }
+for (const { model, svg } of renderedModelBadges) {
+  assert.equal(model.badge.markdown, buildModelHardwareBadgeMarkdown(model), `${model.slug} should publish reproducible badge Markdown`);
+  assert.equal(model.badge.destinationUrl, buildModelHardwareBadgeDestination(model), `${model.slug} should publish a reproducible badge destination`);
+  assert.equal(svg, buildModelHardwareBadgeSvg(model), `${model.slug} passive SVG should match its current source-backed floor`);
+  const badgeDestination = new URL(model.badge.destinationUrl);
+  assert.equal(badgeDestination.searchParams.get("utm_source"), "model_badge");
+  assert.equal(badgeDestination.searchParams.get("utm_medium"), "model_card");
+  assert.equal(badgeDestination.searchParams.get("utm_campaign"), "ai_evidence_lab");
+  assert.equal(badgeDestination.searchParams.get("utm_content"), model.slug);
+  assert.equal(badgeDestination.hash, "#hardware-plan");
+  assert.match(svg, new RegExp(`${model.precision[0].floorGiB} GiB`), `${model.slug} badge should expose its current INT4 floor`);
+  assert.doesNotMatch(svg, /<script|javascript:|<foreignObject/i, `${model.slug} badge must remain a passive image`);
+}
+assert.match(modelHardwareBadgeJs, /navigator\.clipboard\.writeText/);
+assert.match(modelHardwareBadgeJs, /output\.select\(\)/);
+assert.match(modelHardwareBadgeJs, /typeof document !== "undefined"/);
 assert.match(modelPagesGenerator, /rendered pages must remain at least 40% unique|must remain at least 40% unique|reviewed pages must remain at least 40% unique/);
 assert.match(modelPagesGenerator, /must contain at least 550 main-content words/);
 assert.match(toolsHtml, /href="\.\.\/models\/"/);

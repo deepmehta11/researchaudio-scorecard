@@ -2,6 +2,11 @@ import assert from "node:assert/strict";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import {
+  buildModelHardwareBadgeDestination,
+  buildModelHardwareBadgeMarkdown,
+  buildModelHardwareBadgeSvg,
+} from "../model-hardware-badge.js";
 import { planningGiB } from "./update-trending-models.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -9,6 +14,7 @@ const registryPath = path.join(root, "data/reviewed-model-hardware-pages.json");
 const trendingPath = path.join(root, "data/trending-local-llms.json");
 const outputDataPath = path.join(root, "data/model-hardware-pages.json");
 const modelsRoot = path.join(root, "models");
+const modelBadgesRoot = path.join(root, "badges/models");
 const sitemapPath = path.join(root, "sitemap.xml");
 const llmsPath = path.join(root, "llms.txt");
 const siteOrigin = "https://tools.researchaudio.io";
@@ -133,7 +139,7 @@ export function buildGuideModel(editorial, metadata, trendingData, generatedAt) 
   assert.ok(architecture, `${editorial.modelId} requires a source-reported architecture`);
   assert.ok(license, `${editorial.modelId} requires source-reported license metadata`);
 
-  return {
+  const model = {
     ...editorial,
     url: `${siteOrigin}/models/${editorial.slug}/`,
     hubUrl: modelHubUrl(editorial.modelId),
@@ -159,6 +165,12 @@ export function buildGuideModel(editorial, metadata, trendingData, generatedAt) 
     currentTrendingScore: currentTrending?.trendingScore ?? null,
     precision,
   };
+  model.badge = {
+    imageUrl: `${siteOrigin}/badges/models/${editorial.slug}.svg`,
+    destinationUrl: buildModelHardwareBadgeDestination(model),
+    markdown: buildModelHardwareBadgeMarkdown(model),
+  };
+  return model;
 }
 
 function renderPrecisionRows(model) {
@@ -416,6 +428,25 @@ ${renderSourceFacts(model)}
         </ol>
       </section>
 
+      <section class="model-badge-section" aria-labelledby="badge-title" data-model-badge>
+        <div>
+          <p class="eyebrow">Passive backlink / model-card distribution</p>
+          <h2 id="badge-title">Let the repository carry its hardware evidence.</h2>
+          <p>Add this passive SVG badge to a README, model card, documentation page, or benchmark report. It states the source-backed ${escapeHtml(model.name)} INT4 floor and links to the assumptions—not to a download or quality claim.</p>
+          <p><strong>Why this repository benefits.</strong> ${escapeHtml(model.badgePitch)}</p>
+        </div>
+        <div class="model-badge-console">
+          <a class="model-badge-preview" href="${escapeHtml(model.badge.destinationUrl)}">
+            <img src="${escapeHtml(model.badge.imageUrl)}" alt="${escapeHtml(model.name)} source-backed INT4 planning floor badge" width="620" height="52" />
+          </a>
+          <label for="model-badge-${escapeHtml(model.slug)}">Markdown for a README or model card</label>
+          <textarea id="model-badge-${escapeHtml(model.slug)}" rows="4" readonly data-model-badge-output>${escapeHtml(model.badge.markdown)}</textarea>
+          <button class="action-button model-badge-copy" type="button" data-copy-model-badge>Copy model-card badge</button>
+          <p class="share-status" role="status" data-model-badge-status></p>
+          <small>Badge visits use <code>utm_source=model_badge</code>, <code>utm_medium=model_card</code>, and this repository’s slug. Copying does not submit or store anything.</small>
+        </div>
+      </section>
+
       <section class="resource-section" aria-labelledby="related-title">
         <div class="resource-heading">
           <div><p class="eyebrow">Nearest reviewed parameter totals</p><h2 id="related-title">Compare before choosing hardware.</h2></div>
@@ -457,6 +488,7 @@ ${renderRelatedCards(model, relatedModels)}
       <div class="footer-links"><a href="../">All model pages</a><a href="../../trending-local-llms/">Daily index</a><a href="../../local-llm-gpu-guide/">Hardware guide</a><a href="${publicationOrigin}/?utm_source=${attributionSource}&amp;utm_medium=organic_model_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a></div>
     </footer>
     <script type="module" src="../../reader-share.js"></script>
+    <script type="module" src="../../model-hardware-badge.js"></script>
     <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
     <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"c20a9e29828c471c92ed7c2284901e05","spa":false}'></script>
   </body>
@@ -567,7 +599,7 @@ export function assertProgrammaticQuality(renderedPages, registry) {
 
   const pageSignals = renderedPages.map(({ model, html }) => {
     const tokens = mainTextTokens(html);
-    const editorialTokens = [model.editorialSummary, model.capacityDecision, model.deploymentCaution, model.whyThisPage, ...model.nextChecks].join(" ").match(/\S+/g) || [];
+    const editorialTokens = [model.editorialSummary, model.capacityDecision, model.deploymentCaution, model.whyThisPage, model.badgePitch, ...model.nextChecks].join(" ").match(/\S+/g) || [];
     assert.ok(tokens.length >= 550, `${model.slug} must contain at least 550 main-content words`);
     assert.ok(editorialTokens.length >= 150, `${model.slug} requires at least 150 words of reviewed model-specific analysis`);
     assert.match(html, new RegExp(`<link rel="canonical" href="${model.url.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`));
@@ -644,7 +676,7 @@ export async function generateModelHardwarePages({ fetchImpl = fetch, generatedA
   for (const page of registry.pages) {
     assert.match(page.slug, /^[a-z0-9]+(?:-[a-z0-9]+)*$/, `${page.modelId} requires a lowercase hyphenated slug`);
     assert.ok(page.slug.length < 80, `${page.modelId} slug should remain short`);
-    for (const key of ["searchIntent", "editorialSummary", "capacityDecision", "deploymentCaution", "whyThisPage"]) {
+    for (const key of ["searchIntent", "editorialSummary", "capacityDecision", "deploymentCaution", "whyThisPage", "badgePitch"]) {
       assert.ok(typeof page[key] === "string" && page[key].trim(), `${page.modelId} requires ${key}`);
     }
     assert.ok(Array.isArray(page.nextChecks) && page.nextChecks.length === 3, `${page.modelId} requires exactly three reviewed next checks`);
@@ -679,11 +711,13 @@ export async function generateModelHardwarePages({ fetchImpl = fetch, generatedA
   const nextLlms = replaceBlock(llms, "<!-- MODEL_HARDWARE_PAGES:START -->", "<!-- MODEL_HARDWARE_PAGES:END -->", renderLlmsEntries(data));
 
   await mkdir(modelsRoot, { recursive: true });
+  await mkdir(modelBadgesRoot, { recursive: true });
   await Promise.all(renderedPages.map(({ model }) => mkdir(path.join(modelsRoot, model.slug), { recursive: true })));
   await Promise.all([
     writeFile(outputDataPath, `${JSON.stringify(data, null, 2)}\n`, "utf8"),
     writeFile(path.join(modelsRoot, "index.html"), hubHtml, "utf8"),
     ...renderedPages.map(({ model, html }) => writeFile(path.join(modelsRoot, model.slug, "index.html"), html, "utf8")),
+    ...models.map((model) => writeFile(path.join(modelBadgesRoot, `${model.slug}.svg`), buildModelHardwareBadgeSvg(model), "utf8")),
     writeFile(sitemapPath, nextSitemap, "utf8"),
     writeFile(llmsPath, nextLlms, "utf8"),
   ]);

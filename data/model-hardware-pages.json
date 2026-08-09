@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-09T02:45:19.208Z",
+  "generatedAt": "2026-08-09T02:56:32.133Z",
   "source": {
     "name": "Hugging Face Hub public model API",
     "urlTemplate": "https://huggingface.co/api/models/{repository}",
@@ -44,6 +44,7 @@
       "capacityDecision": "The weight-plus-20%-headroom floors are 1.51 GiB at INT4, 3.01 GiB at INT8, and 6.03 GiB at BF16. All three clear a conservative 7.2 GiB usable budget on an 8 GB card, but BF16 leaves little room for everything the formula intentionally omits. INT4 or INT8 is the more defensible starting point for an 8 GB deployment experiment.",
       "deploymentCaution": "The repository declares a non-standard LFM license rather than MIT or Apache. Memory fit does not answer whether a runtime supports the Lfm2ForCausalLM architecture, whether the chosen artifact matches the parameter total, or whether a particular context window will remain inside the card. Check the model card, license, and exact checkpoint before downloading.",
       "whyThisPage": "This page earns a standalone URL because it resolves a real boundary: unlike generic 7B guidance, the source-backed 2.70B total makes even a BF16 weight floor plausible on 8 GB, while still showing why weight fit alone is not deployment proof.",
+      "badgePitch": "This badge belongs beside an edge-device or 8 GB deployment note: it makes the unusually small 1.51 GiB INT4 floor visible while the linked page explains why BF16's apparent 8 GB fit still needs cache and runtime measurement.",
       "nextChecks": [
         "Confirm that the intended runtime implements Lfm2ForCausalLM before choosing hardware from the capacity result.",
         "Compare the exact checkpoint bytes with the 2.70B parameter-derived floor, especially if the artifact uses a storage format not represented here.",
@@ -55,7 +56,7 @@
       "apiUrl": "https://huggingface.co/api/models/LiquidAI/LFM2.5-2.6B",
       "name": "LFM2.5-2.6B",
       "author": "LiquidAI",
-      "generatedAt": "2026-08-09T02:45:19.208Z",
+      "generatedAt": "2026-08-09T02:56:32.133Z",
       "parameters": 2697198592,
       "parameterBillions": 2.7,
       "downloads": 81522,
@@ -116,7 +117,12 @@
           "firstSingleGpuGiB": 8,
           "gpu24Count": 1
         }
-      ]
+      ],
+      "badge": {
+        "imageUrl": "https://tools.researchaudio.io/badges/models/lfm2-5-2-6b-gpu-requirements.svg",
+        "destinationUrl": "https://tools.researchaudio.io/models/lfm2-5-2-6b-gpu-requirements/?utm_source=model_badge&utm_medium=model_card&utm_campaign=ai_evidence_lab&utm_content=lfm2-5-2-6b-gpu-requirements#hardware-plan",
+        "markdown": "[![LFM2.5-2.6B INT4 floor 1.51 GiB - ResearchAudio](https://tools.researchaudio.io/badges/models/lfm2-5-2-6b-gpu-requirements.svg)](https://tools.researchaudio.io/models/lfm2-5-2-6b-gpu-requirements/?utm_source=model_badge&utm_medium=model_card&utm_campaign=ai_evidence_lab&utm_content=lfm2-5-2-6b-gpu-requirements#hardware-plan)"
+      }
     },
     {
       "modelId": "deepgrove/maple-preview",
@@ -126,6 +132,7 @@
       "capacityDecision": "Its INT4 weight-plus-headroom floor is 11.30 GiB. A conservative 90% usable budget leaves only 10.8 GiB on a 12 GB card, so this page does not call 12 GB a fit. The first listed single-card tier that clears the floor is 16 GB. INT8 moves the first conservative tier to 32 GB, while BF16 needs an 80 GB tier before cache and runtime workspace.",
       "deploymentCaution": "Preview status is a reason to inspect the repository rather than infer maturity from the trending signal. The Hub metadata does not establish speed, runtime compatibility, prompt format, production stability, or a safe context length. A converted checkpoint can also differ from the full safetensors total used here, so replace the estimate with exact artifact bytes when available.",
       "whyThisPage": "This page is distinct from generic 20B or 24B advice because it makes the 12 GB versus 16 GB boundary explicit using the repository's own parameter total and a declared usable-memory rule.",
+      "badgePitch": "This badge is most useful beside a Maple Preview setup or benchmark because its link resolves the deceptive 12 GB near-fit: 11.30 GiB exceeds the conservative 10.8 GiB usable budget, making 16 GB the first reviewed INT4 tier.",
       "nextChecks": [
         "Treat the preview label as a prompt to verify the current model card, tokenizer, and runtime instructions before downloading any weights.",
         "Do not force the 11.30 GiB INT4 floor onto a 12 GB card without measuring the runtime reserve that the capacity table cannot see.",
@@ -137,7 +144,7 @@
       "apiUrl": "https://huggingface.co/api/models/deepgrove/maple-preview",
       "name": "maple-preview",
       "author": "deepgrove",
-      "generatedAt": "2026-08-09T02:45:19.208Z",
+      "generatedAt": "2026-08-09T02:56:32.133Z",
       "parameters": 20214030336,
       "parameterBillions": 20.21,
       "downloads": 896,
@@ -181,7 +188,12 @@
           "firstSingleGpuGiB": 80,
           "gpu24Count": 3
         }
-      ]
+      ],
+      "badge": {
+        "imageUrl": "https://tools.researchaudio.io/badges/models/maple-preview-gpu-requirements.svg",
+        "destinationUrl": "https://tools.researchaudio.io/models/maple-preview-gpu-requirements/?utm_source=model_badge&utm_medium=model_card&utm_campaign=ai_evidence_lab&utm_content=maple-preview-gpu-requirements#hardware-plan",
+        "markdown": "[![maple-preview INT4 floor 11.3 GiB - ResearchAudio](https://tools.researchaudio.io/badges/models/maple-preview-gpu-requirements.svg)](https://tools.researchaudio.io/models/maple-preview-gpu-requirements/?utm_source=model_badge&utm_medium=model_card&utm_campaign=ai_evidence_lab&utm_content=maple-preview-gpu-requirements#hardware-plan)"
+      }
     },
     {
       "modelId": "inclusionAI/Ling-3.0-flash",
@@ -191,6 +203,7 @@
       "capacityDecision": "The INT4 weight-plus-headroom floor is 71.24 GiB. An 80 GB accelerator at 90% usable provides 72 GiB, leaving less than one GiB beyond this simplified floor, so it is a boundary case rather than a comfortable deployment recommendation. A 96 GB tier creates more room. INT8 and BF16 exceed the largest single-card tiers in the comparison and require supported sharding or offload.",
       "deploymentCaution": "The calculation cannot determine how many experts are active, how the runtime places them, or what interconnect cost a multi-GPU plan introduces. It also excludes cache, activations, graph capture, allocator fragmentation, and system memory. Treat the one-card result as arithmetic evidence, then verify the exact runtime recipe published by the model author.",
       "whyThisPage": "This page deserves separate treatment because the 80 GB result is unusually narrow and because a mixture-of-experts name can tempt readers to size memory from active parameters instead of the source-reported total.",
+      "badgePitch": "Use this badge where Ling's mixture-of-experts design is discussed. The 71.24 GiB INT4 floor links to the resident-versus-active explanation and the unusually narrow 0.76 GiB margin inside an 80 GB accelerator's conservative usable budget.",
       "nextChecks": [
         "Find the author's supported BailingMoeV3 serving recipe and verify whether it keeps every expert resident or documents an offload path.",
         "Measure the actual runtime reserve before accepting the less-than-one-GiB margin on an 80 GB accelerator.",
@@ -202,7 +215,7 @@
       "apiUrl": "https://huggingface.co/api/models/inclusionAI/Ling-3.0-flash",
       "name": "Ling-3.0-flash",
       "author": "inclusionAI",
-      "generatedAt": "2026-08-09T02:45:19.208Z",
+      "generatedAt": "2026-08-09T02:56:32.133Z",
       "parameters": 127486405600,
       "parameterBillions": 127.49,
       "downloads": 4189,
@@ -244,7 +257,12 @@
           "firstSingleGpuGiB": null,
           "gpu24Count": 14
         }
-      ]
+      ],
+      "badge": {
+        "imageUrl": "https://tools.researchaudio.io/badges/models/ling-3-0-flash-gpu-requirements.svg",
+        "destinationUrl": "https://tools.researchaudio.io/models/ling-3-0-flash-gpu-requirements/?utm_source=model_badge&utm_medium=model_card&utm_campaign=ai_evidence_lab&utm_content=ling-3-0-flash-gpu-requirements#hardware-plan",
+        "markdown": "[![Ling-3.0-flash INT4 floor 71.24 GiB - ResearchAudio](https://tools.researchaudio.io/badges/models/ling-3-0-flash-gpu-requirements.svg)](https://tools.researchaudio.io/models/ling-3-0-flash-gpu-requirements/?utm_source=model_badge&utm_medium=model_card&utm_campaign=ai_evidence_lab&utm_content=ling-3-0-flash-gpu-requirements#hardware-plan)"
+      }
     },
     {
       "modelId": "Kwaipilot/KAT-Coder-V2.5-Dev",
@@ -254,6 +272,7 @@
       "capacityDecision": "The INT4 weight-plus-20%-headroom floor is 19.37 GiB. A 24 GB card with a 90% usable budget exposes 21.6 GiB, leaving roughly 2.23 GiB before the cache and runtime costs excluded by the model. That is a plausible first experiment, not a blanket fit guarantee. INT8 first clears the 48 GB tier, while BF16 first clears 96 GB.",
       "deploymentCaution": "Mixture-of-experts execution, tokenizer behavior, supported quantizations, and coding quality are outside this page's evidence. The reported total is useful for resident-weight planning, but it does not prove that a particular consumer runtime implements the Qwen3_5MoeForConditionalGeneration architecture or that a long context will fit the remaining memory.",
       "whyThisPage": "The page resolves a high-value 24 GB boundary with source-specific arithmetic and keeps that decision separate from the broader Qwen3 family guide, which covers different released parameter tiers and architectures.",
+      "badgePitch": "This badge fits a coding-model README or evaluation report because it anchors KAT-Coder's 24 GB workstation claim to a 19.37 GiB INT4 floor, while the destination preserves the missing context, runtime, and MoE-support checks.",
       "nextChecks": [
         "Verify that the selected runtime supports Qwen3_5MoeForConditionalGeneration and the repository's development checkpoint format.",
         "Add the intended code context length and concurrent sequences before trusting the approximately two-GiB margin on a 24 GB card.",
@@ -265,7 +284,7 @@
       "apiUrl": "https://huggingface.co/api/models/Kwaipilot/KAT-Coder-V2.5-Dev",
       "name": "KAT-Coder-V2.5-Dev",
       "author": "Kwaipilot",
-      "generatedAt": "2026-08-09T02:45:19.208Z",
+      "generatedAt": "2026-08-09T02:56:32.133Z",
       "parameters": 34660610688,
       "parameterBillions": 34.66,
       "downloads": 17885,
@@ -312,7 +331,12 @@
           "firstSingleGpuGiB": 96,
           "gpu24Count": 4
         }
-      ]
+      ],
+      "badge": {
+        "imageUrl": "https://tools.researchaudio.io/badges/models/kat-coder-v2-5-dev-gpu-requirements.svg",
+        "destinationUrl": "https://tools.researchaudio.io/models/kat-coder-v2-5-dev-gpu-requirements/?utm_source=model_badge&utm_medium=model_card&utm_campaign=ai_evidence_lab&utm_content=kat-coder-v2-5-dev-gpu-requirements#hardware-plan",
+        "markdown": "[![KAT-Coder-V2.5-Dev INT4 floor 19.37 GiB - ResearchAudio](https://tools.researchaudio.io/badges/models/kat-coder-v2-5-dev-gpu-requirements.svg)](https://tools.researchaudio.io/models/kat-coder-v2-5-dev-gpu-requirements/?utm_source=model_badge&utm_medium=model_card&utm_campaign=ai_evidence_lab&utm_content=kat-coder-v2-5-dev-gpu-requirements#hardware-plan)"
+      }
     },
     {
       "modelId": "Akahsizrr/fuse-1-Lite",
@@ -322,6 +346,7 @@
       "capacityDecision": "The calculated floors are 3.20 GiB at INT4, 6.39 GiB at INT8, and 12.78 GiB at BF16 after the shared 20% allowance. INT4 and INT8 both clear a conservative 8 GB card budget; BF16 first clears 16 GB. The smaller modes leave materially different room for cache and runtime overhead, so precision is still a deployment decision rather than a label.",
       "deploymentCaution": "A merge or derivative can have runtime and prompt-format constraints that parameter arithmetic cannot reveal. The Apache-2.0 card metadata, Fuse3ForCausalLM architecture, and source lineage should be checked directly. This page does not infer compatibility, quality, or licensing obligations from either base model and does not recommend a converted artifact.",
       "whyThisPage": "The standalone value is provenance-aware sizing: it prevents readers from applying the 35B parent name to a repository whose published safetensors total produces a very different memory floor.",
+      "badgePitch": "This badge prevents a provenance mistake on derivative-model pages: fuse-1-Lite reports a 5.72B total despite its LFM and Qwen parentage, so the linked 3.20 GiB floor comes from this repository rather than either parent name.",
       "nextChecks": [
         "Inspect how the repository combines its LFM2.5 and Qwen3.6 base models rather than assuming either parent's prompt format or memory plan applies.",
         "Confirm that the deployment runtime implements Fuse3ForCausalLM; a comfortable weight floor cannot compensate for missing architecture support.",
@@ -333,7 +358,7 @@
       "apiUrl": "https://huggingface.co/api/models/Akahsizrr/fuse-1-Lite",
       "name": "fuse-1-Lite",
       "author": "Akahsizrr",
-      "generatedAt": "2026-08-09T02:45:19.208Z",
+      "generatedAt": "2026-08-09T02:56:32.133Z",
       "parameters": 5719063552,
       "parameterBillions": 5.72,
       "downloads": 309,
@@ -380,7 +405,12 @@
           "firstSingleGpuGiB": 16,
           "gpu24Count": 1
         }
-      ]
+      ],
+      "badge": {
+        "imageUrl": "https://tools.researchaudio.io/badges/models/fuse-1-lite-gpu-requirements.svg",
+        "destinationUrl": "https://tools.researchaudio.io/models/fuse-1-lite-gpu-requirements/?utm_source=model_badge&utm_medium=model_card&utm_campaign=ai_evidence_lab&utm_content=fuse-1-lite-gpu-requirements#hardware-plan",
+        "markdown": "[![fuse-1-Lite INT4 floor 3.2 GiB - ResearchAudio](https://tools.researchaudio.io/badges/models/fuse-1-lite-gpu-requirements.svg)](https://tools.researchaudio.io/models/fuse-1-lite-gpu-requirements/?utm_source=model_badge&utm_medium=model_card&utm_campaign=ai_evidence_lab&utm_content=fuse-1-lite-gpu-requirements#hardware-plan)"
+      }
     },
     {
       "modelId": "meta-llama/Llama-3.1-8B-Instruct",
@@ -390,6 +420,7 @@
       "capacityDecision": "The weight-plus-headroom floor is 4.49 GiB at INT4, 8.97 GiB at INT8, and 17.95 GiB at BF16. Under the same 90%-usable rule, INT4 clears an 8 GB card, INT8 first clears 12 GB, and BF16 first clears 24 GB. Those thresholds leave different amounts for cache, runtime workspace, and the operating system.",
       "deploymentCaution": "Access approval and license acceptance are separate from hardware fit. The page does not assume a context length, quantization implementation, throughput target, or runtime. The popular model name also appears on many converted repositories; verify that the artifact you select corresponds to the source and precision used in your calculation.",
       "whyThisPage": "This page provides a source-specific precision ladder for the exact instruct repository and adds the gated-license boundary that generic 8B sizing pages often omit.",
+      "badgePitch": "This badge is appropriate for the exact gated instruct repository, not every Llama conversion. It carries the 4.49 GiB INT4 floor into documentation while the linked evidence page keeps access approval, Llama 3.1 licensing, and artifact identity visible.",
       "nextChecks": [
         "Obtain access through the gated repository and review the Llama 3.1 license before planning distribution or production use.",
         "Match the calculator to the exact official or converted checkpoint rather than transferring the 8.03B parameter floor blindly.",
@@ -401,7 +432,7 @@
       "apiUrl": "https://huggingface.co/api/models/meta-llama/Llama-3.1-8B-Instruct",
       "name": "Llama-3.1-8B-Instruct",
       "author": "meta-llama",
-      "generatedAt": "2026-08-09T02:45:19.208Z",
+      "generatedAt": "2026-08-09T02:56:32.133Z",
       "parameters": 8030261248,
       "parameterBillions": 8.03,
       "downloads": 7512450,
@@ -454,7 +485,12 @@
           "firstSingleGpuGiB": 24,
           "gpu24Count": 1
         }
-      ]
+      ],
+      "badge": {
+        "imageUrl": "https://tools.researchaudio.io/badges/models/llama-3-1-8b-instruct-gpu-requirements.svg",
+        "destinationUrl": "https://tools.researchaudio.io/models/llama-3-1-8b-instruct-gpu-requirements/?utm_source=model_badge&utm_medium=model_card&utm_campaign=ai_evidence_lab&utm_content=llama-3-1-8b-instruct-gpu-requirements#hardware-plan",
+        "markdown": "[![Llama-3.1-8B-Instruct INT4 floor 4.49 GiB - ResearchAudio](https://tools.researchaudio.io/badges/models/llama-3-1-8b-instruct-gpu-requirements.svg)](https://tools.researchaudio.io/models/llama-3-1-8b-instruct-gpu-requirements/?utm_source=model_badge&utm_medium=model_card&utm_campaign=ai_evidence_lab&utm_content=llama-3-1-8b-instruct-gpu-requirements#hardware-plan)"
+      }
     },
     {
       "modelId": "badtheorylabs/BTL-4",
@@ -464,6 +500,7 @@
       "capacityDecision": "At INT4, the weight-plus-headroom floor is 19.62 GiB. That clears a 21.6 GiB usable budget on one 24 GB card by less than two GiB, making cache and runtime validation essential. INT8 first clears a 48 GB tier, and BF16 first clears 96 GB. Two or more GPUs only help if the chosen runtime supports the required sharding.",
       "deploymentCaution": "The repository's current download and like counts are small compared with established releases, and the trending score is not a quality judgment. Architecture support, expert routing, exact checkpoint files, prompt format, and benchmark behavior require direct inspection. This page deliberately refuses to convert social attention into a production recommendation.",
       "whyThisPage": "BTL-4 earns a reviewed page because its 24 GB INT4 boundary, MoE architecture, and limited adoption signals create a different decision from a generic dense 35B guide.",
+      "badgePitch": "Use this badge only with BTL-4 evidence, where the 19.62 GiB INT4 floor sits narrowly inside a 24 GB card policy. Its destination separates Qwen3.5 MoE capacity from architecture support and the repository's still-limited adoption signal.",
       "nextChecks": [
         "Verify Qwen3.5 MoE architecture support and expert placement in the intended runtime before buying around the 24 GB result.",
         "Inspect the Ornith-1.0-35B lineage and repository instructions instead of inferring behavior from the BTL-4 name or parameter total.",
@@ -475,7 +512,7 @@
       "apiUrl": "https://huggingface.co/api/models/badtheorylabs/BTL-4",
       "name": "BTL-4",
       "author": "badtheorylabs",
-      "generatedAt": "2026-08-09T02:45:19.208Z",
+      "generatedAt": "2026-08-09T02:56:32.133Z",
       "parameters": 35107181936,
       "parameterBillions": 35.11,
       "downloads": 571,
@@ -519,7 +556,12 @@
           "firstSingleGpuGiB": 96,
           "gpu24Count": 4
         }
-      ]
+      ],
+      "badge": {
+        "imageUrl": "https://tools.researchaudio.io/badges/models/btl-4-gpu-requirements.svg",
+        "destinationUrl": "https://tools.researchaudio.io/models/btl-4-gpu-requirements/?utm_source=model_badge&utm_medium=model_card&utm_campaign=ai_evidence_lab&utm_content=btl-4-gpu-requirements#hardware-plan",
+        "markdown": "[![BTL-4 INT4 floor 19.62 GiB - ResearchAudio](https://tools.researchaudio.io/badges/models/btl-4-gpu-requirements.svg)](https://tools.researchaudio.io/models/btl-4-gpu-requirements/?utm_source=model_badge&utm_medium=model_card&utm_campaign=ai_evidence_lab&utm_content=btl-4-gpu-requirements#hardware-plan)"
+      }
     },
     {
       "modelId": "microsoft/Phi-3.5-mini-instruct",
@@ -529,6 +571,7 @@
       "capacityDecision": "The shared calculation produces 2.14 GiB at INT4, 4.27 GiB at INT8, and 8.54 GiB at BF16 after 20% headroom. INT4 and INT8 clear the 7.2 GiB usable budget on an 8 GB card. BF16 does not; it first clears a conservative 12 GB tier. Exact checkpoint bytes can replace these parameter-derived estimates in the calculator.",
       "deploymentCaution": "A multilingual label and high download count do not establish quality for a particular language or task. The formula also says nothing about context length, KV-cache growth, CPU or unified-memory offload, or tokens per second. Confirm the model card, runtime support, and the exact artifact before treating the capacity tier as a deployment plan.",
       "whyThisPage": "The page is independently useful because it distinguishes the 3.82B repository from generic 7B advice and shows the precise point where BF16 crosses from 8 GB to 12 GB.",
+      "badgePitch": "This badge helps Phi documentation avoid generic 7B advice: the exact 3.82B total keeps INT4 and INT8 inside an 8 GB policy, while the linked precision ladder shows why BF16 first clears the reviewed 12 GB tier.",
       "nextChecks": [
         "Confirm Phi3ForCausalLM support and the exact tokenizer or chat template in the runtime selected for the experiment.",
         "Use language-specific evaluations before relying on the multilingual card label for any customer-facing workflow.",
@@ -540,7 +583,7 @@
       "apiUrl": "https://huggingface.co/api/models/microsoft/Phi-3.5-mini-instruct",
       "name": "Phi-3.5-mini-instruct",
       "author": "microsoft",
-      "generatedAt": "2026-08-09T02:45:19.208Z",
+      "generatedAt": "2026-08-09T02:56:32.133Z",
       "parameters": 3821079552,
       "parameterBillions": 3.82,
       "downloads": 1064954,
@@ -584,12 +627,17 @@
           "firstSingleGpuGiB": 12,
           "gpu24Count": 1
         }
-      ]
+      ],
+      "badge": {
+        "imageUrl": "https://tools.researchaudio.io/badges/models/phi-3-5-mini-instruct-gpu-requirements.svg",
+        "destinationUrl": "https://tools.researchaudio.io/models/phi-3-5-mini-instruct-gpu-requirements/?utm_source=model_badge&utm_medium=model_card&utm_campaign=ai_evidence_lab&utm_content=phi-3-5-mini-instruct-gpu-requirements#hardware-plan",
+        "markdown": "[![Phi-3.5-mini-instruct INT4 floor 2.14 GiB - ResearchAudio](https://tools.researchaudio.io/badges/models/phi-3-5-mini-instruct-gpu-requirements.svg)](https://tools.researchaudio.io/models/phi-3-5-mini-instruct-gpu-requirements/?utm_source=model_badge&utm_medium=model_card&utm_campaign=ai_evidence_lab&utm_content=phi-3-5-mini-instruct-gpu-requirements#hardware-plan)"
+      }
     }
   ],
   "quality": {
     "pageCount": 8,
-    "minimumWords": 987,
-    "minimumPairwiseUniqueness": 0.408
+    "minimumWords": 1136,
+    "minimumPairwiseUniqueness": 0.414
   }
 }

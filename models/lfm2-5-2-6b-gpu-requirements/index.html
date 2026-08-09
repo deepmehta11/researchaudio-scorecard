@@ -28,7 +28,7 @@
                   "description": "This page earns a standalone URL because it resolves a real boundary: unlike generic 7B guidance, the source-backed 2.70B total makes even a BF16 weight floor plausible on 8 GB, while still showing why weight fit alone is not deployment proof.",
                   "url": "https://tools.researchaudio.io/models/lfm2-5-2-6b-gpu-requirements/",
                   "datePublished": "2026-08-09",
-                  "dateModified": "2026-08-09T02:45:19.208Z",
+                  "dateModified": "2026-08-09T02:56:32.133Z",
                   "author": {
                         "@type": "Organization",
                         "name": "ResearchAudio",
@@ -303,6 +303,25 @@
         </ol>
       </section>
 
+      <section class="model-badge-section" aria-labelledby="badge-title" data-model-badge>
+        <div>
+          <p class="eyebrow">Passive backlink / model-card distribution</p>
+          <h2 id="badge-title">Let the repository carry its hardware evidence.</h2>
+          <p>Add this passive SVG badge to a README, model card, documentation page, or benchmark report. It states the source-backed LFM2.5-2.6B INT4 floor and links to the assumptions—not to a download or quality claim.</p>
+          <p><strong>Why this repository benefits.</strong> This badge belongs beside an edge-device or 8 GB deployment note: it makes the unusually small 1.51 GiB INT4 floor visible while the linked page explains why BF16&#39;s apparent 8 GB fit still needs cache and runtime measurement.</p>
+        </div>
+        <div class="model-badge-console">
+          <a class="model-badge-preview" href="https://tools.researchaudio.io/models/lfm2-5-2-6b-gpu-requirements/?utm_source=model_badge&amp;utm_medium=model_card&amp;utm_campaign=ai_evidence_lab&amp;utm_content=lfm2-5-2-6b-gpu-requirements#hardware-plan">
+            <img src="https://tools.researchaudio.io/badges/models/lfm2-5-2-6b-gpu-requirements.svg" alt="LFM2.5-2.6B source-backed INT4 planning floor badge" width="620" height="52" />
+          </a>
+          <label for="model-badge-lfm2-5-2-6b-gpu-requirements">Markdown for a README or model card</label>
+          <textarea id="model-badge-lfm2-5-2-6b-gpu-requirements" rows="4" readonly data-model-badge-output>[![LFM2.5-2.6B INT4 floor 1.51 GiB - ResearchAudio](https://tools.researchaudio.io/badges/models/lfm2-5-2-6b-gpu-requirements.svg)](https://tools.researchaudio.io/models/lfm2-5-2-6b-gpu-requirements/?utm_source=model_badge&amp;utm_medium=model_card&amp;utm_campaign=ai_evidence_lab&amp;utm_content=lfm2-5-2-6b-gpu-requirements#hardware-plan)</textarea>
+          <button class="action-button model-badge-copy" type="button" data-copy-model-badge>Copy model-card badge</button>
+          <p class="share-status" role="status" data-model-badge-status></p>
+          <small>Badge visits use <code>utm_source=model_badge</code>, <code>utm_medium=model_card</code>, and this repository’s slug. Copying does not submit or store anything.</small>
+        </div>
+      </section>
+
       <section class="resource-section" aria-labelledby="related-title">
         <div class="resource-heading">
           <div><p class="eyebrow">Nearest reviewed parameter totals</p><h2 id="related-title">Compare before choosing hardware.</h2></div>
@@ -363,6 +382,7 @@
       <div class="footer-links"><a href="../">All model pages</a><a href="../../trending-local-llms/">Daily index</a><a href="../../local-llm-gpu-guide/">Hardware guide</a><a href="https://researchaudio.io/?utm_source=model_lfm2_5_2_6b_gpu_requirements&amp;utm_medium=organic_model_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a></div>
     </footer>
     <script type="module" src="../../reader-share.js"></script>
+    <script type="module" src="../../model-hardware-badge.js"></script>
     <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
     <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"c20a9e29828c471c92ed7c2284901e05","spa":false}'></script>
   </body>
