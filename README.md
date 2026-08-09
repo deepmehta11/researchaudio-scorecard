@@ -1,6 +1,6 @@
 # ResearchAudio Evidence Lab
 
-An evergreen acquisition ecosystem for ResearchAudio. Sixteen browser-local tools, a daily source-backed model index, twenty-two practical field guides, and a self-serve embed library turn AI task framing, benchmark and launch claims, token budgets, voice latency and outcome economics, hardware-first local LLM discovery, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability and security, automation business cases, and Codex workflows into concrete inspections before inviting visitors into the daily briefing.
+An evergreen acquisition ecosystem for ResearchAudio. Sixteen browser-local tools, a daily source-backed model index, eight reviewed repository hardware pages, twenty-four practical field guides, and a self-serve embed library turn AI task framing, benchmark and launch claims, token budgets, voice latency and outcome economics, hardware-first local LLM discovery, GPU and KV-cache sizing, cache economics, workflow economics, agent reliability and security, automation business cases, and Codex workflows into concrete inspections before inviting visitors into the daily briefing.
 
 [Open the Evidence Lab](https://tools.researchaudio.io/?utm_source=github_readme&utm_medium=repository&utm_campaign=ai_evidence_lab&utm_content=open_lab) · [Embed a free tool](https://tools.researchaudio.io/embeds/?utm_source=github_readme&utm_medium=repository&utm_campaign=ai_evidence_lab&utm_content=embed_tools) · [Join ResearchAudio](https://researchaudio.io/subscribe?utm_source=github_readme&utm_medium=repository&utm_campaign=ai_evidence_lab&utm_content=join_free)
 
@@ -26,6 +26,7 @@ Live at [tools.researchaudio.io](https://tools.researchaudio.io/), a branded Res
 - `/ai-receptionist-cost/` — crawlable monthly worksheet with after-hours, appointment, and high-volume call scenarios.
 - `/local-llm-gpu-guide/` — crawlable pillar connecting model-size floors, VRAM tiers, GPU-specific comparisons, released-model evidence, and four browser-local sizing instruments into one hardware decision path.
 - `/trending-local-llms/` — daily-refreshed Hugging Face text-generation index with safetensors parameter counts, transparent INT4/INT8/BF16 planning floors, a public JSON snapshot, and exact handoffs into the GPU calculator.
+- `/models/` — quality-gated hub for eight reviewed repository pages. Each page publishes public architecture and license metadata, 987+ words, a precision ladder, a nine-tier card-fit matrix, repository-specific pre-download checks, related pages, and an attributed Beehiiv signup path. New trending repositories are never indexed automatically.
 - `/70b-llm-gpu-requirements/` — crawlable INT4, INT8, and FP16 guide with explicit 32K KV-cache scenarios.
 - `/rtx-3060-llm-models/` — hardware-first 12 GB guide separating the generic 14B INT4 weight tier from exact Qwen3 and gpt-oss context-memory boundaries.
 - `/rtx-4060-llm-models/` — hardware-first 8 GB guide showing where Qwen3 8B crosses from a 4K and 8K fit into 16K and 32K full-cache shortfalls.
@@ -65,7 +66,7 @@ Every result share is restorable: the recipient opens the sender's exact score, 
 
 Every instrument surfaces the existing Beehiiv signup only after a visitor interacts with the tool, and every field note does the same after meaningful reading depth. The prompt is dismissible, does not create or submit a second form, and stays out of partner embeds.
 
-Every main-branch deployment also verifies the site and submits all sitemap URLs to the IndexNow global endpoint after the public ownership key is available. A separate daily workflow refreshes the trending-model snapshot only when the Hugging Face response and the complete site pass validation. IndexNow speeds discovery by participating search engines; it does not guarantee crawling, indexing, or rankings.
+Every main-branch deployment also verifies the site and submits all sitemap URLs to the IndexNow global endpoint after the public ownership key is available. A separate daily workflow refreshes the trending-model snapshot and the reviewed repository metadata only when the Hugging Face responses, the 40% page-uniqueness gate, and the complete site pass validation. IndexNow speeds discovery by participating search engines; it does not guarantee crawling, indexing, rankings, or subscribers.
 
 ## Growth contract
 

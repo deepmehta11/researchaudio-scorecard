@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>fuse-1-Lite GPU &amp; VRAM Requirements (INT4, INT8, BF16) | ResearchAudio</title>
+    <meta name="description" content="Source-backed fuse-1-Lite GPU memory requirements: 5.72B parameters, 3.2 GiB INT4 floor, precision table, card-fit matrix, and editable calculator." />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/models/fuse-1-lite-gpu-requirements/" />
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="fuse-1-Lite GPU &amp; VRAM Requirements" />
+    <meta property="og:description" content="8 GB is the first listed single-card tier that clears the conservative INT4 floor. Inspect the source, assumptions, and editable plan." />
+    <meta property="og:url" content="https://tools.researchaudio.io/models/fuse-1-lite-gpu-requirements/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&amp;family=Instrument+Sans:wght@400;500;600;700&amp;family=Newsreader:opsz,wght@6..72,600;6..72,700&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../lab.css" />
+    <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@graph": [
+            {
+                  "@type": "TechArticle",
+                  "headline": "fuse-1-Lite GPU and VRAM Requirements",
+                  "description": "The standalone value is provenance-aware sizing: it prevents readers from applying the 35B parent name to a repository whose published safetensors total produces a very different memory floor.",
+                  "url": "https://tools.researchaudio.io/models/fuse-1-lite-gpu-requirements/",
+                  "datePublished": "2026-08-09",
+                  "dateModified": "2026-08-09T02:40:27.617Z",
+                  "author": {
+                        "@type": "Organization",
+                        "name": "ResearchAudio",
+                        "url": "https://researchaudio.io/"
+                  },
+                  "publisher": {
+                        "@type": "Organization",
+                        "name": "ResearchAudio",
+                        "url": "https://researchaudio.io/"
+                  },
+                  "isBasedOn": "https://huggingface.co/Akahsizrr/fuse-1-Lite",
+                  "about": [
+                        "Akahsizrr/fuse-1-Lite",
+                        "5.72 billion parameters",
+                        "GPU memory",
+                        "local LLM inference"
+                  ],
+                  "mainEntityOfPage": "https://tools.researchaudio.io/models/fuse-1-lite-gpu-requirements/"
+            },
+            {
+                  "@type": "BreadcrumbList",
+                  "itemListElement": [
+                        {
+                              "@type": "ListItem",
+                              "position": 1,
+                              "name": "ResearchAudio tools",
+                              "item": "https://tools.researchaudio.io/tools/"
+                        },
+                        {
+                              "@type": "ListItem",
+                              "position": 2,
+                              "name": "Model hardware pages",
+                              "item": "https://tools.researchaudio.io/models/"
+                        },
+                        {
+                              "@type": "ListItem",
+                              "position": 3,
+                              "name": "fuse-1-Lite",
+                              "item": "https://tools.researchaudio.io/models/fuse-1-lite-gpu-requirements/"
+                        }
+                  ]
+            },
+            {
+                  "@type": "FAQPage",
+                  "mainEntity": [
+                        {
+                              "@type": "Question",
+                              "name": "How much VRAM does fuse-1-Lite need?",
+                              "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "fuse-1-Lite has 5.72 billion safetensors parameters in the public Hub metadata. The weight-plus-20%-headroom floors are 3.2 GiB at INT4, 6.39 GiB at INT8, and 12.78 GiB at BF16. These estimates exclude KV cache, activations, runtime workspace, fragmentation, offload, and speed."
+                              }
+                        },
+                        {
+                              "@type": "Question",
+                              "name": "Can fuse-1-Lite run on one GPU?",
+                              "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "The first listed card tier whose 90%-usable budget clears the INT4 weight floor is 8 GB. That is an arithmetic starting point, not a runtime guarantee."
+                              }
+                        },
+                        {
+                              "@type": "Question",
+                              "name": "Does the Hugging Face signal prove fuse-1-Lite is good?",
+                              "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "No. Downloads, likes, and trending position are discovery signals. They do not prove task quality, safety, speed, runtime compatibility, or licensing suitability."
+                              }
+                        }
+                  ]
+            }
+      ]
+}
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#hardware-plan">Skip to the hardware plan</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=model_fuse_1_lite_gpu_requirements&amp;utm_medium=organic_model_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark"><span class="wordmark-mark">RA</span><span>ResearchAudio</span></a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../">All models</a>
+        <a href="../../trending-local-llms/">Daily index</a>
+        <a href="../../llm-gpu-memory-calculator/">Calculator</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=model_fuse_1_lite_gpu_requirements&amp;utm_medium=organic_model_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero model-guide-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Reviewed repository / hardware evidence</p>
+          <h1 id="hero-title">fuse-1-Lite: GPU &amp; VRAM requirements</h1>
+          <p class="hero-deck">fuse-1-Lite is a 5.72 billion-parameter repository whose card lists both LiquidAI/LFM2.5-2.6B and Qwen/Qwen3.6-35B-A3B as base models. That provenance makes it important not to infer memory from either parent name. The only number used for the weight floor is the 5.72 billion total exposed by this repository&#39;s own safetensors metadata.</p>
+          <a class="hero-join-link" href="#hardware-plan">See the precision plan →</a>
+          <a class="hero-join-link" href="https://huggingface.co/Akahsizrr/fuse-1-Lite" rel="noopener">Inspect the source repository →</a>
+        </div>
+        <aside class="lab-index" aria-label="Source-backed model summary">
+          <span>Safetensors total</span>
+          <strong>5.72B</strong>
+          <p>3.2 GiB INT4 weight-plus-headroom floor. 8 GB is the first listed single-card tier that clears the conservative INT4 floor.</p>
+        </aside>
+      </section>
+
+      <section class="comparison-section model-decision" aria-labelledby="decision-title">
+        <div>
+          <p class="eyebrow">Decision summary</p>
+          <h2 id="decision-title">Where the memory boundary actually lands.</h2>
+        </div>
+        <div class="method-copy">
+          <p>The calculated floors are 3.20 GiB at INT4, 6.39 GiB at INT8, and 12.78 GiB at BF16 after the shared 20% allowance. INT4 and INT8 both clear a conservative 8 GB card budget; BF16 first clears 16 GB. The smaller modes leave materially different room for cache and runtime overhead, so precision is still a deployment decision rather than a label.</p>
+          <p><strong>Why this page exists.</strong> The standalone value is provenance-aware sizing: it prevents readers from applying the 35B parent name to a repository whose published safetensors total produces a very different memory floor.</p>
+        </div>
+      </section>
+
+      <section class="comparison-section" id="hardware-plan" aria-labelledby="plan-title">
+        <div class="resource-heading">
+          <div>
+            <p class="eyebrow">Weights first / precision by precision</p>
+            <h2 id="plan-title">The reproducible memory floor.</h2>
+          </div>
+          <p>Every row uses 5.72B parameters × bits ÷ 8 ÷ 1024³, then adds 20% planning headroom. The single-card tier assumes 90% of labeled VRAM is available.</p>
+        </div>
+        <div class="comparison-table-wrap model-table-wrap">
+          <table>
+            <thead><tr><th>Mode</th><th>Bits</th><th>Raw weights</th><th>+ 20% floor</th><th>First single-card tier</th><th>24 GB GPU count*</th><th>Calculator</th></tr></thead>
+            <tbody>
+              <tr>
+                <th scope="row">INT4</th>
+                <td>4 bits</td>
+                <td>2.66 GiB</td>
+                <td><strong>3.2 GiB</strong></td>
+                <td>8 GB</td>
+                <td>1</td>
+                <td><a href="../../llm-gpu-memory-calculator/?parameterBillions=5.72&amp;bitsPerParameter=4&amp;checkpointGiB=0&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1">Edit plan →</a></td>
+              </tr>
+              <tr>
+                <th scope="row">INT8</th>
+                <td>8 bits</td>
+                <td>5.33 GiB</td>
+                <td><strong>6.39 GiB</strong></td>
+                <td>8 GB</td>
+                <td>1</td>
+                <td><a href="../../llm-gpu-memory-calculator/?parameterBillions=5.72&amp;bitsPerParameter=8&amp;checkpointGiB=0&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1">Edit plan →</a></td>
+              </tr>
+              <tr>
+                <th scope="row">BF16</th>
+                <td>16 bits</td>
+                <td>10.65 GiB</td>
+                <td><strong>12.78 GiB</strong></td>
+                <td>16 GB</td>
+                <td>1</td>
+                <td><a href="../../llm-gpu-memory-calculator/?parameterBillions=5.72&amp;bitsPerParameter=16&amp;checkpointGiB=0&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1">Edit plan →</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">*GPU count is capacity division against 90% usable VRAM. It does not prove the runtime can shard the model, avoid replication, or deliver acceptable interconnect performance.</p>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="fit-title">
+        <div class="resource-heading">
+          <div>
+            <p class="eyebrow">INT4 card-fit matrix</p>
+            <h2 id="fit-title">Test the floor against common memory tiers.</h2>
+          </div>
+          <p>Positive margin means the INT4 weight-plus-headroom floor fits inside the declared usable budget. It is not leftover context capacity: cache, runtime workspace, and system allocations are still unknown.</p>
+        </div>
+        <div class="comparison-table-wrap model-table-wrap">
+          <table>
+            <thead><tr><th>Card memory</th><th>90% usable</th><th>One-card result</th><th>Capacity-only count</th></tr></thead>
+            <tbody>
+              <tr>
+                <th scope="row">8 GB</th>
+                <td>7.2 GiB</td>
+                <td class="fit-pass">Clears by 4 GiB</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <th scope="row">12 GB</th>
+                <td>10.8 GiB</td>
+                <td class="fit-pass">Clears by 7.6 GiB</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <th scope="row">16 GB</th>
+                <td>14.4 GiB</td>
+                <td class="fit-pass">Clears by 11.2 GiB</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <th scope="row">24 GB</th>
+                <td>21.6 GiB</td>
+                <td class="fit-pass">Clears by 18.4 GiB</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <th scope="row">32 GB</th>
+                <td>28.8 GiB</td>
+                <td class="fit-pass">Clears by 25.6 GiB</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <th scope="row">48 GB</th>
+                <td>43.2 GiB</td>
+                <td class="fit-pass">Clears by 40 GiB</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <th scope="row">80 GB</th>
+                <td>72 GiB</td>
+                <td class="fit-pass">Clears by 68.8 GiB</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <th scope="row">96 GB</th>
+                <td>86.4 GiB</td>
+                <td class="fit-pass">Clears by 83.2 GiB</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <th scope="row">141 GB</th>
+                <td>126.9 GiB</td>
+                <td class="fit-pass">Clears by 123.7 GiB</td>
+                <td>1</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="method-section" aria-labelledby="source-title">
+        <div>
+          <p class="eyebrow">Public source record</p>
+          <h2 id="source-title">What the repository declares.</h2>
+          <p class="model-source-note">Metadata refreshed Aug 9, 2026. Open the source before relying on any field.</p>
+          <a class="guide-link" href="https://huggingface.co/Akahsizrr/fuse-1-Lite" rel="noopener">Open Akahsizrr/fuse-1-Lite →</a>
+        </div>
+        <div>
+          <dl class="model-fact-grid">
+            <div><dt>Repository</dt><dd>Akahsizrr/fuse-1-Lite</dd></div>
+            <div><dt>Safetensors total</dt><dd>5.72B parameters</dd></div>
+            <div><dt>Architecture</dt><dd>Fuse3ForCausalLM</dd></div>
+            <div><dt>Model type</dt><dd>fuse3</dd></div>
+            <div><dt>Library</dt><dd>transformers</dd></div>
+            <div><dt>License metadata</dt><dd>apache-2.0</dd></div>
+            <div><dt>Access gated</dt><dd>No</dd></div>
+            <div><dt>Base model</dt><dd>LiquidAI/LFM2.5-2.6B, Qwen/Qwen3.6-35B-A3B</dd></div>
+            <div><dt>Languages</dt><dd>en</dd></div>
+            <div><dt>Created</dt><dd>Aug 5, 2026</dd></div>
+            <div><dt>Last modified</dt><dd>Aug 5, 2026</dd></div>
+            <div><dt>Hub signal</dt><dd>309 downloads · 81 likes · daily rank #8</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="principle-strip model-caution" aria-label="Deployment boundaries">
+        <p class="eyebrow">Do not confuse capacity with deployment</p>
+        <p><strong>Repository-specific caution.</strong><br />A merge or derivative can have runtime and prompt-format constraints that parameter arithmetic cannot reveal. The Apache-2.0 card metadata, Fuse3ForCausalLM architecture, and source lineage should be checked directly. This page does not infer compatibility, quality, or licensing obligations from either base model and does not recommend a converted artifact.</p>
+        <p><strong>Formula boundary.</strong><br />No KV cache, activations, graph capture, allocator fragmentation, offload, operating-system reserve, throughput, latency, or power is included.</p>
+        <p><strong>Source boundary.</strong><br />Hub trend, downloads, and likes help discover repositories. They are not a benchmark, endorsement, security review, or license opinion.</p>
+      </section>
+
+      <section class="comparison-section model-next-checks" aria-labelledby="checks-title">
+        <div>
+          <p class="eyebrow">Before downloading weights</p>
+          <h2 id="checks-title">Three checks specific to this repository.</h2>
+        </div>
+        <ol class="model-check-list">
+          <li>Inspect how the repository combines its LFM2.5 and Qwen3.6 base models rather than assuming either parent&#39;s prompt format or memory plan applies.</li>
+          <li>Confirm that the deployment runtime implements Fuse3ForCausalLM; a comfortable weight floor cannot compensate for missing architecture support.</li>
+          <li>Choose between INT4 and INT8 based on exact artifacts and cache needs, since both clear 8 GB but leave very different working margins.</li>
+        </ol>
+      </section>
+
+      <section class="resource-section" aria-labelledby="related-title">
+        <div class="resource-heading">
+          <div><p class="eyebrow">Nearest reviewed parameter totals</p><h2 id="related-title">Compare before choosing hardware.</h2></div>
+          <p>These pages use the same formula and source rules, making the capacity boundary comparable without pretending the models have equivalent quality or runtime behavior.</p>
+        </div>
+        <div class="resource-grid model-related-grid">
+          <a class="resource-card model-related-card" href="../llama-3-1-8b-instruct-gpu-requirements/">
+            <span class="instrument-code">8.03B · 4.49 GiB INT4 floor</span>
+            <h2>Llama-3.1-8B-Instruct</h2>
+            <p>This page provides a source-specific precision ladder for the exact instruct repository and adds the gated-license boundary that generic 8B sizing pages often omit.</p>
+            <b>Review Llama-3.1-8B-Instruct →</b>
+          </a>
+          <a class="resource-card model-related-card" href="../phi-3-5-mini-instruct-gpu-requirements/">
+            <span class="instrument-code">3.82B · 2.14 GiB INT4 floor</span>
+            <h2>Phi-3.5-mini-instruct</h2>
+            <p>The page is independently useful because it distinguishes the 3.82B repository from generic 7B advice and shows the precise point where BF16 crosses from 8 GB to 12 GB.</p>
+            <b>Review Phi-3.5-mini-instruct →</b>
+          </a>
+          <a class="resource-card model-related-card" href="../lfm2-5-2-6b-gpu-requirements/">
+            <span class="instrument-code">2.7B · 1.51 GiB INT4 floor</span>
+            <h2>LFM2.5-2.6B</h2>
+            <p>This page earns a standalone URL because it resolves a real boundary: unlike generic 7B guidance, the source-backed 2.70B total makes even a BF16 weight floor plausible on 8 GB, while still showing why weight fit alone is not deployment proof.</p>
+            <b>Review LFM2.5-2.6B →</b>
+          </a>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="faq-title">
+        <div class="guide-intro">
+          <p class="eyebrow">fuse-1-Lite FAQ</p>
+          <h2 id="faq-title">Three answers with the assumptions attached.</h2>
+          <p>Use these as a first-pass hardware screen. Replace parameter arithmetic with exact artifact bytes and architecture-aware cache inputs before deployment.</p>
+          <a class="guide-link" href="../../llm-gpu-memory-calculator/?parameterBillions=5.72&amp;bitsPerParameter=4&amp;checkpointGiB=0&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1">Open the editable GPU calculator →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>How much VRAM does fuse-1-Lite need?</h3><p>fuse-1-Lite has 5.72 billion safetensors parameters in the public Hub metadata. The weight-plus-20%-headroom floors are 3.2 GiB at INT4, 6.39 GiB at INT8, and 12.78 GiB at BF16. These estimates exclude KV cache, activations, runtime workspace, fragmentation, offload, and speed.</p></article>
+          <article class="faq-item"><h3>Can fuse-1-Lite run on one GPU?</h3><p>The first listed card tier whose 90%-usable budget clears the INT4 weight floor is 8 GB. That is an arithmetic starting point, not a runtime guarantee.</p></article>
+          <article class="faq-item"><h3>Does the Hugging Face signal prove fuse-1-Lite is good?</h3><p>No. Downloads, likes, and trending position are discovery signals. They do not prove task quality, safety, speed, runtime compatibility, or licensing suitability.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">Evidence before infrastructure</p>
+          <h2 id="subscribe-title">Get the next model decision brief.</h2>
+          <p>ResearchAudio turns model releases, checkpoint claims, memory boundaries, and serving constraints into practical decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <p class="subscribe-direct-fallback"><strong>Prefer the hosted signup page?</strong><a href="https://researchaudio.io/subscribe?utm_source=model_fuse_1_lite_gpu_requirements&amp;utm_medium=organic_model_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join">Join ResearchAudio free →</a></p>
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=model_fuse_1_lite_gpu_requirements&amp;utm_medium=organic_model_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links"><a href="../">All model pages</a><a href="../../trending-local-llms/">Daily index</a><a href="../../local-llm-gpu-guide/">Hardware guide</a><a href="https://researchaudio.io/?utm_source=model_fuse_1_lite_gpu_requirements&amp;utm_medium=organic_model_guide&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a></div>
+    </footer>
+    <script type="module" src="../../reader-share.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"c20a9e29828c471c92ed7c2284901e05","spa":false}'></script>
+  </body>
+</html>

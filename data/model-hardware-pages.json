@@ -1,0 +1,595 @@
+{
+  "generatedAt": "2026-08-09T02:40:27.617Z",
+  "source": {
+    "name": "Hugging Face Hub public model API",
+    "urlTemplate": "https://huggingface.co/api/models/{repository}",
+    "fields": [
+      "safetensors.total",
+      "config.architectures",
+      "config.model_type",
+      "cardData.license",
+      "cardData.language",
+      "cardData.base_model",
+      "downloads",
+      "likes",
+      "createdAt",
+      "lastModified",
+      "gated"
+    ]
+  },
+  "method": {
+    "weightFormula": "parameters * bits / 8 / 1024^3",
+    "headroomPercent": 20,
+    "usableVramPercent": 90,
+    "gpuTiersGiB": [
+      8,
+      12,
+      16,
+      24,
+      32,
+      48,
+      80,
+      96,
+      141
+    ],
+    "publicationGate": "Publish only repositories with public safetensors totals, a distinct hardware decision, complete source attribution, and an editorial review. New trending models are not published automatically.",
+    "limitations": "Capacity math only. Excludes KV cache, activations, runtime workspace, fragmentation, offload, interconnect, speed, quality, safety, and license interpretation."
+  },
+  "models": [
+    {
+      "modelId": "LiquidAI/LFM2.5-2.6B",
+      "slug": "lfm2-5-2-6b-gpu-requirements",
+      "searchIntent": "LFM2.5 2.6B GPU and VRAM requirements",
+      "editorialSummary": "LFM2.5-2.6B is the small-model case in this reviewed batch. The Hub reports 2.70 billion safetensors parameters, while its card labels it for conversational and edge use across a multilingual language set. That makes the useful question less about multi-GPU sharding and more about how much memory remains after weights for cache, runtime workspace, and the operating system.",
+      "capacityDecision": "The weight-plus-20%-headroom floors are 1.51 GiB at INT4, 3.01 GiB at INT8, and 6.03 GiB at BF16. All three clear a conservative 7.2 GiB usable budget on an 8 GB card, but BF16 leaves little room for everything the formula intentionally omits. INT4 or INT8 is the more defensible starting point for an 8 GB deployment experiment.",
+      "deploymentCaution": "The repository declares a non-standard LFM license rather than MIT or Apache. Memory fit does not answer whether a runtime supports the Lfm2ForCausalLM architecture, whether the chosen artifact matches the parameter total, or whether a particular context window will remain inside the card. Check the model card, license, and exact checkpoint before downloading.",
+      "whyThisPage": "This page earns a standalone URL because it resolves a real boundary: unlike generic 7B guidance, the source-backed 2.70B total makes even a BF16 weight floor plausible on 8 GB, while still showing why weight fit alone is not deployment proof.",
+      "nextChecks": [
+        "Confirm that the intended runtime implements Lfm2ForCausalLM before choosing hardware from the capacity result.",
+        "Compare the exact checkpoint bytes with the 2.70B parameter-derived floor, especially if the artifact uses a storage format not represented here.",
+        "Budget KV cache and operating-system memory explicitly before attempting BF16 on an 8 GB device, where the remaining margin is narrow."
+      ],
+      "reviewedAt": "2026-08-09",
+      "url": "https://tools.researchaudio.io/models/lfm2-5-2-6b-gpu-requirements/",
+      "hubUrl": "https://huggingface.co/LiquidAI/LFM2.5-2.6B",
+      "apiUrl": "https://huggingface.co/api/models/LiquidAI/LFM2.5-2.6B",
+      "name": "LFM2.5-2.6B",
+      "author": "LiquidAI",
+      "generatedAt": "2026-08-09T02:40:27.617Z",
+      "parameters": 2697198592,
+      "parameterBillions": 2.7,
+      "downloads": 81522,
+      "likes": 419,
+      "createdAt": "2026-07-28T22:14:32.000Z",
+      "lastModified": "2026-08-07T10:30:38.000Z",
+      "library": "transformers",
+      "modelType": "lfm2",
+      "architecture": "Lfm2ForCausalLM",
+      "license": "other",
+      "licenseName": "lfm1.0",
+      "languages": [
+        "ar",
+        "zh",
+        "en",
+        "fr",
+        "de",
+        "hi",
+        "id",
+        "it",
+        "ja",
+        "ko",
+        "pl",
+        "pt",
+        "ru",
+        "es",
+        "th",
+        "vi"
+      ],
+      "baseModels": [
+        "LiquidAI/LFM2.5-2.6B-Base"
+      ],
+      "gated": false,
+      "currentTrendingRank": 2,
+      "currentTrendingScore": 400,
+      "precision": [
+        {
+          "label": "INT4",
+          "bits": 4,
+          "rawGiB": 1.26,
+          "floorGiB": 1.51,
+          "firstSingleGpuGiB": 8,
+          "gpu24Count": 1
+        },
+        {
+          "label": "INT8",
+          "bits": 8,
+          "rawGiB": 2.51,
+          "floorGiB": 3.01,
+          "firstSingleGpuGiB": 8,
+          "gpu24Count": 1
+        },
+        {
+          "label": "BF16",
+          "bits": 16,
+          "rawGiB": 5.02,
+          "floorGiB": 6.03,
+          "firstSingleGpuGiB": 8,
+          "gpu24Count": 1
+        }
+      ]
+    },
+    {
+      "modelId": "deepgrove/maple-preview",
+      "slug": "maple-preview-gpu-requirements",
+      "searchIntent": "Maple Preview GPU and VRAM requirements",
+      "editorialSummary": "Maple Preview sits in an awkward hardware middle: the Hub exposes 20.21 billion safetensors parameters, which is far beyond small-model assumptions but below the familiar 32B tier. The repository is marked as an MIT-licensed preview and names MapleForCausalLM as its architecture. The practical decision is whether a 12 GB card is genuinely enough or merely close on paper.",
+      "capacityDecision": "Its INT4 weight-plus-headroom floor is 11.30 GiB. A conservative 90% usable budget leaves only 10.8 GiB on a 12 GB card, so this page does not call 12 GB a fit. The first listed single-card tier that clears the floor is 16 GB. INT8 moves the first conservative tier to 32 GB, while BF16 needs an 80 GB tier before cache and runtime workspace.",
+      "deploymentCaution": "Preview status is a reason to inspect the repository rather than infer maturity from the trending signal. The Hub metadata does not establish speed, runtime compatibility, prompt format, production stability, or a safe context length. A converted checkpoint can also differ from the full safetensors total used here, so replace the estimate with exact artifact bytes when available.",
+      "whyThisPage": "This page is distinct from generic 20B or 24B advice because it makes the 12 GB versus 16 GB boundary explicit using the repository's own parameter total and a declared usable-memory rule.",
+      "nextChecks": [
+        "Treat the preview label as a prompt to verify the current model card, tokenizer, and runtime instructions before downloading any weights.",
+        "Do not force the 11.30 GiB INT4 floor onto a 12 GB card without measuring the runtime reserve that the capacity table cannot see.",
+        "Use the 16 GB tier as the first conservative single-card experiment, then add the intended context and concurrency to the calculator."
+      ],
+      "reviewedAt": "2026-08-09",
+      "url": "https://tools.researchaudio.io/models/maple-preview-gpu-requirements/",
+      "hubUrl": "https://huggingface.co/deepgrove/maple-preview",
+      "apiUrl": "https://huggingface.co/api/models/deepgrove/maple-preview",
+      "name": "maple-preview",
+      "author": "deepgrove",
+      "generatedAt": "2026-08-09T02:40:27.617Z",
+      "parameters": 20214030336,
+      "parameterBillions": 20.21,
+      "downloads": 896,
+      "likes": 255,
+      "createdAt": "2026-08-04T20:50:54.000Z",
+      "lastModified": "2026-08-04T20:51:36.000Z",
+      "library": "transformers",
+      "modelType": null,
+      "architecture": "MapleForCausalLM",
+      "license": "mit",
+      "licenseName": null,
+      "languages": [
+        "en"
+      ],
+      "baseModels": [],
+      "gated": false,
+      "currentTrendingRank": 3,
+      "currentTrendingScore": 248,
+      "precision": [
+        {
+          "label": "INT4",
+          "bits": 4,
+          "rawGiB": 9.41,
+          "floorGiB": 11.3,
+          "firstSingleGpuGiB": 16,
+          "gpu24Count": 1
+        },
+        {
+          "label": "INT8",
+          "bits": 8,
+          "rawGiB": 18.83,
+          "floorGiB": 22.59,
+          "firstSingleGpuGiB": 32,
+          "gpu24Count": 2
+        },
+        {
+          "label": "BF16",
+          "bits": 16,
+          "rawGiB": 37.65,
+          "floorGiB": 45.18,
+          "firstSingleGpuGiB": 80,
+          "gpu24Count": 3
+        }
+      ]
+    },
+    {
+      "modelId": "inclusionAI/Ling-3.0-flash",
+      "slug": "ling-3-0-flash-gpu-requirements",
+      "searchIntent": "Ling 3.0 Flash GPU and VRAM requirements",
+      "editorialSummary": "Ling-3.0-flash is the large mixture-of-experts case in the batch. The Hub reports 127.49 billion safetensors parameters and identifies a BailingMoeV3ForCausalLM architecture with a hybrid model type. Active experts may affect compute per token, but they do not erase the storage requirement for resident weights or the need for a supported offload plan.",
+      "capacityDecision": "The INT4 weight-plus-headroom floor is 71.24 GiB. An 80 GB accelerator at 90% usable provides 72 GiB, leaving less than one GiB beyond this simplified floor, so it is a boundary case rather than a comfortable deployment recommendation. A 96 GB tier creates more room. INT8 and BF16 exceed the largest single-card tiers in the comparison and require supported sharding or offload.",
+      "deploymentCaution": "The calculation cannot determine how many experts are active, how the runtime places them, or what interconnect cost a multi-GPU plan introduces. It also excludes cache, activations, graph capture, allocator fragmentation, and system memory. Treat the one-card result as arithmetic evidence, then verify the exact runtime recipe published by the model author.",
+      "whyThisPage": "This page deserves separate treatment because the 80 GB result is unusually narrow and because a mixture-of-experts name can tempt readers to size memory from active parameters instead of the source-reported total.",
+      "nextChecks": [
+        "Find the author's supported BailingMoeV3 serving recipe and verify whether it keeps every expert resident or documents an offload path.",
+        "Measure the actual runtime reserve before accepting the less-than-one-GiB margin on an 80 GB accelerator.",
+        "For INT8 or BF16, validate tensor or expert parallel support and interconnect requirements instead of treating capacity division as a deployment topology."
+      ],
+      "reviewedAt": "2026-08-09",
+      "url": "https://tools.researchaudio.io/models/ling-3-0-flash-gpu-requirements/",
+      "hubUrl": "https://huggingface.co/inclusionAI/Ling-3.0-flash",
+      "apiUrl": "https://huggingface.co/api/models/inclusionAI/Ling-3.0-flash",
+      "name": "Ling-3.0-flash",
+      "author": "inclusionAI",
+      "generatedAt": "2026-08-09T02:40:27.617Z",
+      "parameters": 127486405600,
+      "parameterBillions": 127.49,
+      "downloads": 4189,
+      "likes": 222,
+      "createdAt": "2026-08-02T16:14:41.000Z",
+      "lastModified": "2026-08-06T15:09:42.000Z",
+      "library": null,
+      "modelType": "bailing_hybrid",
+      "architecture": "BailingMoeV3ForCausalLM",
+      "license": "mit",
+      "licenseName": null,
+      "languages": [],
+      "baseModels": [],
+      "gated": false,
+      "currentTrendingRank": 4,
+      "currentTrendingScore": 212,
+      "precision": [
+        {
+          "label": "INT4",
+          "bits": 4,
+          "rawGiB": 59.37,
+          "floorGiB": 71.24,
+          "firstSingleGpuGiB": 80,
+          "gpu24Count": 4
+        },
+        {
+          "label": "INT8",
+          "bits": 8,
+          "rawGiB": 118.73,
+          "floorGiB": 142.48,
+          "firstSingleGpuGiB": null,
+          "gpu24Count": 7
+        },
+        {
+          "label": "BF16",
+          "bits": 16,
+          "rawGiB": 237.46,
+          "floorGiB": 284.95,
+          "firstSingleGpuGiB": null,
+          "gpu24Count": 14
+        }
+      ]
+    },
+    {
+      "modelId": "Kwaipilot/KAT-Coder-V2.5-Dev",
+      "slug": "kat-coder-v2-5-dev-gpu-requirements",
+      "searchIntent": "KAT-Coder V2.5 Dev GPU and VRAM requirements",
+      "editorialSummary": "KAT-Coder-V2.5-Dev is reported as a 34.66 billion-parameter Qwen3.5 mixture-of-experts architecture derived from Qwen3.6-35B-A3B. The repository name signals a development-focused coding release, but the Hub trend, likes, and downloads are discovery signals rather than an evaluation. The immediate hardware question is whether INT4 can stay on one 24 GB card.",
+      "capacityDecision": "The INT4 weight-plus-20%-headroom floor is 19.37 GiB. A 24 GB card with a 90% usable budget exposes 21.6 GiB, leaving roughly 2.23 GiB before the cache and runtime costs excluded by the model. That is a plausible first experiment, not a blanket fit guarantee. INT8 first clears the 48 GB tier, while BF16 first clears 96 GB.",
+      "deploymentCaution": "Mixture-of-experts execution, tokenizer behavior, supported quantizations, and coding quality are outside this page's evidence. The reported total is useful for resident-weight planning, but it does not prove that a particular consumer runtime implements the Qwen3_5MoeForConditionalGeneration architecture or that a long context will fit the remaining memory.",
+      "whyThisPage": "The page resolves a high-value 24 GB boundary with source-specific arithmetic and keeps that decision separate from the broader Qwen3 family guide, which covers different released parameter tiers and architectures.",
+      "nextChecks": [
+        "Verify that the selected runtime supports Qwen3_5MoeForConditionalGeneration and the repository's development checkpoint format.",
+        "Add the intended code context length and concurrent sequences before trusting the approximately two-GiB margin on a 24 GB card.",
+        "Evaluate coding quality with task-specific tests; neither the coder label nor Hub trend score supplies that evidence."
+      ],
+      "reviewedAt": "2026-08-09",
+      "url": "https://tools.researchaudio.io/models/kat-coder-v2-5-dev-gpu-requirements/",
+      "hubUrl": "https://huggingface.co/Kwaipilot/KAT-Coder-V2.5-Dev",
+      "apiUrl": "https://huggingface.co/api/models/Kwaipilot/KAT-Coder-V2.5-Dev",
+      "name": "KAT-Coder-V2.5-Dev",
+      "author": "Kwaipilot",
+      "generatedAt": "2026-08-09T02:40:27.617Z",
+      "parameters": 34660610688,
+      "parameterBillions": 34.66,
+      "downloads": 17885,
+      "likes": 545,
+      "createdAt": "2026-07-23T09:54:08.000Z",
+      "lastModified": "2026-07-28T04:35:27.000Z",
+      "library": "transformers",
+      "modelType": "qwen3_5_moe",
+      "architecture": "Qwen3_5MoeForConditionalGeneration",
+      "license": "apache-2.0",
+      "licenseName": null,
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "baseModels": [
+        "Qwen3.6-35B-A3B"
+      ],
+      "gated": false,
+      "currentTrendingRank": 5,
+      "currentTrendingScore": 126,
+      "precision": [
+        {
+          "label": "INT4",
+          "bits": 4,
+          "rawGiB": 16.14,
+          "floorGiB": 19.37,
+          "firstSingleGpuGiB": 24,
+          "gpu24Count": 1
+        },
+        {
+          "label": "INT8",
+          "bits": 8,
+          "rawGiB": 32.28,
+          "floorGiB": 38.74,
+          "firstSingleGpuGiB": 48,
+          "gpu24Count": 2
+        },
+        {
+          "label": "BF16",
+          "bits": 16,
+          "rawGiB": 64.56,
+          "floorGiB": 77.47,
+          "firstSingleGpuGiB": 96,
+          "gpu24Count": 4
+        }
+      ]
+    },
+    {
+      "modelId": "Akahsizrr/fuse-1-Lite",
+      "slug": "fuse-1-lite-gpu-requirements",
+      "searchIntent": "fuse-1-Lite GPU and VRAM requirements",
+      "editorialSummary": "fuse-1-Lite is a 5.72 billion-parameter repository whose card lists both LiquidAI/LFM2.5-2.6B and Qwen/Qwen3.6-35B-A3B as base models. That provenance makes it important not to infer memory from either parent name. The only number used for the weight floor is the 5.72 billion total exposed by this repository's own safetensors metadata.",
+      "capacityDecision": "The calculated floors are 3.20 GiB at INT4, 6.39 GiB at INT8, and 12.78 GiB at BF16 after the shared 20% allowance. INT4 and INT8 both clear a conservative 8 GB card budget; BF16 first clears 16 GB. The smaller modes leave materially different room for cache and runtime overhead, so precision is still a deployment decision rather than a label.",
+      "deploymentCaution": "A merge or derivative can have runtime and prompt-format constraints that parameter arithmetic cannot reveal. The Apache-2.0 card metadata, Fuse3ForCausalLM architecture, and source lineage should be checked directly. This page does not infer compatibility, quality, or licensing obligations from either base model and does not recommend a converted artifact.",
+      "whyThisPage": "The standalone value is provenance-aware sizing: it prevents readers from applying the 35B parent name to a repository whose published safetensors total produces a very different memory floor.",
+      "nextChecks": [
+        "Inspect how the repository combines its LFM2.5 and Qwen3.6 base models rather than assuming either parent's prompt format or memory plan applies.",
+        "Confirm that the deployment runtime implements Fuse3ForCausalLM; a comfortable weight floor cannot compensate for missing architecture support.",
+        "Choose between INT4 and INT8 based on exact artifacts and cache needs, since both clear 8 GB but leave very different working margins."
+      ],
+      "reviewedAt": "2026-08-09",
+      "url": "https://tools.researchaudio.io/models/fuse-1-lite-gpu-requirements/",
+      "hubUrl": "https://huggingface.co/Akahsizrr/fuse-1-Lite",
+      "apiUrl": "https://huggingface.co/api/models/Akahsizrr/fuse-1-Lite",
+      "name": "fuse-1-Lite",
+      "author": "Akahsizrr",
+      "generatedAt": "2026-08-09T02:40:27.617Z",
+      "parameters": 5719063552,
+      "parameterBillions": 5.72,
+      "downloads": 309,
+      "likes": 81,
+      "createdAt": "2026-08-05T14:51:09.000Z",
+      "lastModified": "2026-08-05T16:04:21.000Z",
+      "library": "transformers",
+      "modelType": "fuse3",
+      "architecture": "Fuse3ForCausalLM",
+      "license": "apache-2.0",
+      "licenseName": null,
+      "languages": [
+        "en"
+      ],
+      "baseModels": [
+        "LiquidAI/LFM2.5-2.6B",
+        "Qwen/Qwen3.6-35B-A3B"
+      ],
+      "gated": false,
+      "currentTrendingRank": 8,
+      "currentTrendingScore": 81,
+      "precision": [
+        {
+          "label": "INT4",
+          "bits": 4,
+          "rawGiB": 2.66,
+          "floorGiB": 3.2,
+          "firstSingleGpuGiB": 8,
+          "gpu24Count": 1
+        },
+        {
+          "label": "INT8",
+          "bits": 8,
+          "rawGiB": 5.33,
+          "floorGiB": 6.39,
+          "firstSingleGpuGiB": 8,
+          "gpu24Count": 1
+        },
+        {
+          "label": "BF16",
+          "bits": 16,
+          "rawGiB": 10.65,
+          "floorGiB": 12.78,
+          "firstSingleGpuGiB": 16,
+          "gpu24Count": 1
+        }
+      ]
+    },
+    {
+      "modelId": "meta-llama/Llama-3.1-8B-Instruct",
+      "slug": "llama-3-1-8b-instruct-gpu-requirements",
+      "searchIntent": "Llama 3.1 8B Instruct GPU and VRAM requirements",
+      "editorialSummary": "Llama-3.1-8B-Instruct remains a widely downloaded reference point, with 8.03 billion safetensors parameters in the Hub metadata. Its repository uses the LlamaForCausalLM architecture and is access-gated under the Llama 3.1 license. The useful hardware split is clear: 8 GB is an INT4 starting point, while higher precision moves the single-card boundary.",
+      "capacityDecision": "The weight-plus-headroom floor is 4.49 GiB at INT4, 8.97 GiB at INT8, and 17.95 GiB at BF16. Under the same 90%-usable rule, INT4 clears an 8 GB card, INT8 first clears 12 GB, and BF16 first clears 24 GB. Those thresholds leave different amounts for cache, runtime workspace, and the operating system.",
+      "deploymentCaution": "Access approval and license acceptance are separate from hardware fit. The page does not assume a context length, quantization implementation, throughput target, or runtime. The popular model name also appears on many converted repositories; verify that the artifact you select corresponds to the source and precision used in your calculation.",
+      "whyThisPage": "This page provides a source-specific precision ladder for the exact instruct repository and adds the gated-license boundary that generic 8B sizing pages often omit.",
+      "nextChecks": [
+        "Obtain access through the gated repository and review the Llama 3.1 license before planning distribution or production use.",
+        "Match the calculator to the exact official or converted checkpoint rather than transferring the 8.03B parameter floor blindly.",
+        "Add the intended context and batch behavior before deciding whether INT8 belongs on 12 GB or should move to a roomier tier."
+      ],
+      "reviewedAt": "2026-08-09",
+      "url": "https://tools.researchaudio.io/models/llama-3-1-8b-instruct-gpu-requirements/",
+      "hubUrl": "https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct",
+      "apiUrl": "https://huggingface.co/api/models/meta-llama/Llama-3.1-8B-Instruct",
+      "name": "Llama-3.1-8B-Instruct",
+      "author": "meta-llama",
+      "generatedAt": "2026-08-09T02:40:27.617Z",
+      "parameters": 8030261248,
+      "parameterBillions": 8.03,
+      "downloads": 7512450,
+      "likes": 6551,
+      "createdAt": "2024-07-18T08:56:00.000Z",
+      "lastModified": "2024-09-25T17:00:57.000Z",
+      "library": "transformers",
+      "modelType": "llama",
+      "architecture": "LlamaForCausalLM",
+      "license": "llama3.1",
+      "licenseName": null,
+      "languages": [
+        "en",
+        "de",
+        "fr",
+        "it",
+        "pt",
+        "hi",
+        "es",
+        "th"
+      ],
+      "baseModels": [
+        "meta-llama/Meta-Llama-3.1-8B"
+      ],
+      "gated": "manual",
+      "currentTrendingRank": 9,
+      "currentTrendingScore": 77,
+      "precision": [
+        {
+          "label": "INT4",
+          "bits": 4,
+          "rawGiB": 3.74,
+          "floorGiB": 4.49,
+          "firstSingleGpuGiB": 8,
+          "gpu24Count": 1
+        },
+        {
+          "label": "INT8",
+          "bits": 8,
+          "rawGiB": 7.48,
+          "floorGiB": 8.97,
+          "firstSingleGpuGiB": 12,
+          "gpu24Count": 1
+        },
+        {
+          "label": "BF16",
+          "bits": 16,
+          "rawGiB": 14.96,
+          "floorGiB": 17.95,
+          "firstSingleGpuGiB": 24,
+          "gpu24Count": 1
+        }
+      ]
+    },
+    {
+      "modelId": "badtheorylabs/BTL-4",
+      "slug": "btl-4-gpu-requirements",
+      "searchIntent": "BTL-4 GPU and VRAM requirements",
+      "editorialSummary": "BTL-4 is a 35.11 billion-parameter Apache-2.0 repository whose Hub configuration names Qwen3_5MoeForConditionalGeneration and whose card points to Ornith-1.0-35B as a base model. It is a useful counterexample to sizing from active-expert intuition: the public safetensors total is the resident-weight input unless a documented offload path says otherwise.",
+      "capacityDecision": "At INT4, the weight-plus-headroom floor is 19.62 GiB. That clears a 21.6 GiB usable budget on one 24 GB card by less than two GiB, making cache and runtime validation essential. INT8 first clears a 48 GB tier, and BF16 first clears 96 GB. Two or more GPUs only help if the chosen runtime supports the required sharding.",
+      "deploymentCaution": "The repository's current download and like counts are small compared with established releases, and the trending score is not a quality judgment. Architecture support, expert routing, exact checkpoint files, prompt format, and benchmark behavior require direct inspection. This page deliberately refuses to convert social attention into a production recommendation.",
+      "whyThisPage": "BTL-4 earns a reviewed page because its 24 GB INT4 boundary, MoE architecture, and limited adoption signals create a different decision from a generic dense 35B guide.",
+      "nextChecks": [
+        "Verify Qwen3.5 MoE architecture support and expert placement in the intended runtime before buying around the 24 GB result.",
+        "Inspect the Ornith-1.0-35B lineage and repository instructions instead of inferring behavior from the BTL-4 name or parameter total.",
+        "Run task and safety evaluations locally because the small adoption signal provides too little evidence for a production-quality conclusion."
+      ],
+      "reviewedAt": "2026-08-09",
+      "url": "https://tools.researchaudio.io/models/btl-4-gpu-requirements/",
+      "hubUrl": "https://huggingface.co/badtheorylabs/BTL-4",
+      "apiUrl": "https://huggingface.co/api/models/badtheorylabs/BTL-4",
+      "name": "BTL-4",
+      "author": "badtheorylabs",
+      "generatedAt": "2026-08-09T02:40:27.617Z",
+      "parameters": 35107181936,
+      "parameterBillions": 35.11,
+      "downloads": 571,
+      "likes": 75,
+      "createdAt": "2026-08-05T19:56:05.000Z",
+      "lastModified": "2026-08-07T06:49:57.000Z",
+      "library": "transformers",
+      "modelType": "qwen3_5_moe",
+      "architecture": "Qwen3_5MoeForConditionalGeneration",
+      "license": "apache-2.0",
+      "licenseName": null,
+      "languages": [],
+      "baseModels": [
+        "Ornith-1.0-35B"
+      ],
+      "gated": false,
+      "currentTrendingRank": 10,
+      "currentTrendingScore": 74,
+      "precision": [
+        {
+          "label": "INT4",
+          "bits": 4,
+          "rawGiB": 16.35,
+          "floorGiB": 19.62,
+          "firstSingleGpuGiB": 24,
+          "gpu24Count": 1
+        },
+        {
+          "label": "INT8",
+          "bits": 8,
+          "rawGiB": 32.7,
+          "floorGiB": 39.24,
+          "firstSingleGpuGiB": 48,
+          "gpu24Count": 2
+        },
+        {
+          "label": "BF16",
+          "bits": 16,
+          "rawGiB": 65.39,
+          "floorGiB": 78.47,
+          "firstSingleGpuGiB": 96,
+          "gpu24Count": 4
+        }
+      ]
+    },
+    {
+      "modelId": "microsoft/Phi-3.5-mini-instruct",
+      "slug": "phi-3-5-mini-instruct-gpu-requirements",
+      "searchIntent": "Phi-3.5 Mini Instruct GPU and VRAM requirements",
+      "editorialSummary": "Phi-3.5-mini-instruct is a 3.82 billion-parameter Microsoft repository with a Phi3ForCausalLM architecture, MIT license metadata, and a multilingual model-card label. Its size places it below the generic 7B tier, so an 8 GB card can support more than one precision floor before cache and runtime costs are added.",
+      "capacityDecision": "The shared calculation produces 2.14 GiB at INT4, 4.27 GiB at INT8, and 8.54 GiB at BF16 after 20% headroom. INT4 and INT8 clear the 7.2 GiB usable budget on an 8 GB card. BF16 does not; it first clears a conservative 12 GB tier. Exact checkpoint bytes can replace these parameter-derived estimates in the calculator.",
+      "deploymentCaution": "A multilingual label and high download count do not establish quality for a particular language or task. The formula also says nothing about context length, KV-cache growth, CPU or unified-memory offload, or tokens per second. Confirm the model card, runtime support, and the exact artifact before treating the capacity tier as a deployment plan.",
+      "whyThisPage": "The page is independently useful because it distinguishes the 3.82B repository from generic 7B advice and shows the precise point where BF16 crosses from 8 GB to 12 GB.",
+      "nextChecks": [
+        "Confirm Phi3ForCausalLM support and the exact tokenizer or chat template in the runtime selected for the experiment.",
+        "Use language-specific evaluations before relying on the multilingual card label for any customer-facing workflow.",
+        "If BF16 is required, start at 12 GB under this policy and then add cache, context, and runtime measurements before deployment."
+      ],
+      "reviewedAt": "2026-08-09",
+      "url": "https://tools.researchaudio.io/models/phi-3-5-mini-instruct-gpu-requirements/",
+      "hubUrl": "https://huggingface.co/microsoft/Phi-3.5-mini-instruct",
+      "apiUrl": "https://huggingface.co/api/models/microsoft/Phi-3.5-mini-instruct",
+      "name": "Phi-3.5-mini-instruct",
+      "author": "microsoft",
+      "generatedAt": "2026-08-09T02:40:27.617Z",
+      "parameters": 3821079552,
+      "parameterBillions": 3.82,
+      "downloads": 1064954,
+      "likes": 1061,
+      "createdAt": "2024-08-16T20:48:26.000Z",
+      "lastModified": "2025-12-10T20:22:56.000Z",
+      "library": "transformers",
+      "modelType": "phi3",
+      "architecture": "Phi3ForCausalLM",
+      "license": "mit",
+      "licenseName": null,
+      "languages": [
+        "multilingual"
+      ],
+      "baseModels": [],
+      "gated": false,
+      "currentTrendingRank": 12,
+      "currentTrendingScore": 57,
+      "precision": [
+        {
+          "label": "INT4",
+          "bits": 4,
+          "rawGiB": 1.78,
+          "floorGiB": 2.14,
+          "firstSingleGpuGiB": 8,
+          "gpu24Count": 1
+        },
+        {
+          "label": "INT8",
+          "bits": 8,
+          "rawGiB": 3.56,
+          "floorGiB": 4.27,
+          "firstSingleGpuGiB": 8,
+          "gpu24Count": 1
+        },
+        {
+          "label": "BF16",
+          "bits": 16,
+          "rawGiB": 7.12,
+          "floorGiB": 8.54,
+          "firstSingleGpuGiB": 12,
+          "gpu24Count": 1
+        }
+      ]
+    }
+  ],
+  "quality": {
+    "pageCount": 8,
+    "minimumWords": 987,
+    "minimumPairwiseUniqueness": 0.408
+  }
+}

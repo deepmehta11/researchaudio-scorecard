@@ -23,8 +23,22 @@ const apiUrl = new URL("https://huggingface.co/api/models");
   ["expand[]", "pipeline_tag"],
 ].forEach(([name, value]) => apiUrl.searchParams.append(name, value));
 
-const excludedArtifact = /(?:^|[-_.])(gguf|awq|gptq|exl2|mlx)(?:$|[-_.])/i;
+const excludedArtifact = /(?:^|[-_.])(?:gguf|awq|gptq|exl2|mlx|fp8|bf16|int[248]|[248]bit|w[248](?:a(?:8|16))?)(?:$|[-_.])/i;
 const gibibyte = 1024 ** 3;
+const reviewedGuideHrefByModelId = new Map([
+  ["deepseek-ai/DeepSeek-V4-Flash-0731", "../deepseek-v4-flash-gpu-requirements/"],
+  ["deepseek-ai/DeepSeek-V4-Flash", "../deepseek-v4-flash-gpu-requirements/"],
+  ["zai-org/GLM-5.2", "../glm-5-2-gpu-requirements/"],
+  ["Qwen/Qwen2.5-7B-Instruct", "../qwen2-5-gpu-requirements/"],
+  ["LiquidAI/LFM2.5-2.6B", "../models/lfm2-5-2-6b-gpu-requirements/"],
+  ["deepgrove/maple-preview", "../models/maple-preview-gpu-requirements/"],
+  ["inclusionAI/Ling-3.0-flash", "../models/ling-3-0-flash-gpu-requirements/"],
+  ["Kwaipilot/KAT-Coder-V2.5-Dev", "../models/kat-coder-v2-5-dev-gpu-requirements/"],
+  ["Akahsizrr/fuse-1-Lite", "../models/fuse-1-lite-gpu-requirements/"],
+  ["meta-llama/Llama-3.1-8B-Instruct", "../models/llama-3-1-8b-instruct-gpu-requirements/"],
+  ["badtheorylabs/BTL-4", "../models/btl-4-gpu-requirements/"],
+  ["microsoft/Phi-3.5-mini-instruct", "../models/phi-3-5-mini-instruct-gpu-requirements/"],
+]);
 
 function escapeHtml(value) {
   return String(value)
@@ -109,7 +123,7 @@ export function prepareTrendingModels(rawModels, generatedAt = new Date().toISOS
       modelCount: models.length,
       minimumParameters: 1_000_000_000,
       maximumParameters: 2_000_000_000_000,
-      excludedArtifactNames: ["GGUF", "AWQ", "GPTQ", "EXL2", "MLX"],
+      excludedArtifactNames: ["GGUF", "AWQ", "GPTQ", "EXL2", "MLX", "FP8", "BF16", "INT2/4/8", "2/4/8BIT", "W2/4/8"],
       weightFormula: "parameters * bits / 8 / 1024^3",
       headroomPercent: 20,
       limitations: "Weight plus headroom only. Excludes KV cache, activations, runtime workspace, file-format overhead, offload, speed, quality, and hardware compatibility.",
@@ -141,6 +155,10 @@ export function renderTrendingRows(data) {
   return data.models.map((model) => {
     const modified = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" })
       .format(new Date(model.lastModified));
+    const reviewedGuideHref = reviewedGuideHrefByModelId.get(model.id);
+    const nextCheck = reviewedGuideHref
+      ? `<a href="${escapeHtml(reviewedGuideHref)}">Read evidence →</a><small><a href="${escapeHtml(calculatorHref(model))}">Open calculator</a></small>`
+      : `<a href="${escapeHtml(calculatorHref(model))}">Open plan →</a>`;
     return `              <tr data-model-id="${escapeHtml(model.id.toLowerCase())}">
                 <td><span class="trend-rank">#${String(model.rank).padStart(2, "0")}</span></td>
                 <th scope="row">
@@ -152,7 +170,7 @@ export function renderTrendingRows(data) {
                 <td>${escapeHtml(formatGiB(model.planningGiB.int8))}</td>
                 <td>${escapeHtml(formatGiB(model.planningGiB.bf16))}</td>
                 <td><strong>${escapeHtml(model.trendingScore)}</strong><small>${escapeHtml(formatCount(model.downloads))} downloads · ${escapeHtml(formatCount(model.likes))} likes</small></td>
-                <td><a href="${escapeHtml(calculatorHref(model))}">Open plan →</a></td>
+                <td>${nextCheck}</td>
               </tr>`;
   }).join("\n");
 }

@@ -22,6 +22,7 @@ import { buildAttributedShareUrl, parseSharedChecklist, parseSharedNumbers } fro
 import { buildEvidenceBadgeMarkdown } from "../scorecard-badge.js";
 import { buildReaderShareUrl } from "../reader-share.js";
 import { planningGiB, prepareTrendingModels, renderTrendingRows } from "./update-trending-models.mjs";
+import { assertProgrammaticQuality } from "./generate-model-hardware-pages.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
@@ -126,6 +127,18 @@ const [trendingHtml, trendingDataJson, trendingUpdateScript, trendingUpdateWorkf
   readFile(path.join(root, ".github/workflows/update-trending-models.yml"), "utf8"),
 ]);
 const trendingData = JSON.parse(trendingDataJson);
+const [reviewedModelRegistryJson, modelPagesDataJson, modelPagesHubHtml, modelPagesGenerator] = await Promise.all([
+  readFile(path.join(root, "data/reviewed-model-hardware-pages.json"), "utf8"),
+  readFile(path.join(root, "data/model-hardware-pages.json"), "utf8"),
+  readFile(path.join(root, "models/index.html"), "utf8"),
+  readFile(path.join(root, "scripts/generate-model-hardware-pages.mjs"), "utf8"),
+]);
+const reviewedModelRegistry = JSON.parse(reviewedModelRegistryJson);
+const modelPagesData = JSON.parse(modelPagesDataJson);
+const renderedModelPages = await Promise.all(modelPagesData.models.map(async (model) => ({
+  model,
+  html: await readFile(path.join(root, "models", model.slug, "index.html"), "utf8"),
+})));
 
 assert.match(html, /<title>AI Launch Evidence Scorecard \| ResearchAudio<\/title>/);
 assert.match(html, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
@@ -199,7 +212,7 @@ assert.equal(trendingData.method.weightFormula, "parameters * bits / 8 / 1024^3"
 assert.match(trendingData.source.url, /^https:\/\/huggingface\.co\/models/);
 assert.ok(trendingData.models.every((model, index) => index === 0 || model.trendingScore <= trendingData.models[index - 1].trendingScore), "trending data should remain sorted by score");
 assert.ok(trendingData.models.every((model) => model.parameters >= 1e9 && model.parameters <= 2e12), "trending data should respect parameter bounds");
-assert.ok(trendingData.models.every((model) => !/(?:^|[-_.])(gguf|awq|gptq|exl2|mlx)(?:$|[-_.])/i.test(model.id)), "trending data should exclude format-specific artifact names");
+assert.ok(trendingData.models.every((model) => !/(?:^|[-_.])(?:gguf|awq|gptq|exl2|mlx|fp8|bf16|int[248]|[248]bit|w[248](?:a(?:8|16))?)(?:$|[-_.])/i.test(model.id)), "trending data should exclude format-specific artifact names");
 for (const model of trendingData.models) {
   assert.equal(model.planningGiB.int4, Number(planningGiB(model.parameters, 4).toFixed(2)), `${model.id} INT4 plan should use the shared formula`);
   assert.equal(model.planningGiB.int8, Number(planningGiB(model.parameters, 8).toFixed(2)), `${model.id} INT8 plan should use the shared formula`);
@@ -216,6 +229,8 @@ const regeneratedTrending = prepareTrendingModels(trendingData.models.map((model
 })), trendingData.generatedAt);
 assert.deepEqual(regeneratedTrending.models.map(({ id }) => id), trendingData.models.map(({ id }) => id));
 assert.equal((renderTrendingRows(trendingData).match(/data-model-id=/g) || []).length, 12);
+assert.equal((renderTrendingRows(trendingData).match(/(?:Read evidence|Open plan) →/g) || []).length, 12, "every current trending row should lead to reviewed evidence or the calculator without auto-publishing a page");
+assert.doesNotMatch(trendingHtml, /Qwen3\.6-35B-A3B-Escha-W2/, "precision-specific W2 artifacts should not appear in the base-model discovery index");
 assert.match(trendingUpdateScript, /https:\/\/huggingface\.co\/api\/models/);
 assert.match(trendingUpdateScript, /AbortSignal\.timeout\(20_000\)/);
 assert.match(trendingUpdateScript, /models\.length >= 8/);
@@ -223,9 +238,48 @@ assert.match(trendingUpdateScript, /TRENDING_MODELS:START/);
 assert.match(trendingUpdateWorkflow, /cron: "23 08 \* \* \*"/);
 assert.match(trendingUpdateWorkflow, /permissions:[\s\S]*contents: write/);
 assert.match(trendingUpdateWorkflow, /node scripts\/update-trending-models\.mjs/);
+assert.match(trendingUpdateWorkflow, /node scripts\/generate-model-hardware-pages\.mjs/);
 assert.match(trendingUpdateWorkflow, /node scripts\/verify-site\.mjs/);
 assert.match(trendingUpdateWorkflow, /git add trending-local-llms\/index\.html data\/trending-local-llms\.json/);
+assert.match(trendingUpdateWorkflow, /data\/model-hardware-pages\.json models\/ sitemap\.xml llms\.txt/);
+assert.match(trendingUpdateWorkflow, /reviewed-page quality gates/);
 assert.match(trendingUpdateWorkflow, /Not-tested: Search ranking, external sharing, and subscriber conversion\./);
+
+assert.equal(reviewedModelRegistry.pages.length, 8, "the initial programmatic rollout should remain a small reviewed batch");
+assert.equal(modelPagesData.models.length, 8, "the public model guide dataset should contain the eight reviewed repositories");
+assert.equal(modelPagesData.method.headroomPercent, 20);
+assert.equal(modelPagesData.method.usableVramPercent, 90);
+assert.equal(modelPagesData.method.weightFormula, "parameters * bits / 8 / 1024^3");
+assert.match(modelPagesData.method.publicationGate, /not published automatically/i);
+assert.ok(modelPagesData.models.every((model) => model.architecture && model.license && model.parameters >= 1e9), "every reviewed page requires architecture, license, and parameter evidence");
+assert.ok(modelPagesData.models.every((model) => model.nextChecks.length === 3), "every reviewed page requires three repository-specific next checks");
+const modelPageQuality = assertProgrammaticQuality(renderedModelPages, reviewedModelRegistry);
+assert.ok(modelPageQuality.minimumWords >= 550, "reviewed repository pages must remain substantive");
+assert.ok(modelPageQuality.minimumPairwiseUniqueness >= 0.4, "reviewed repository pages must remain at least forty percent unique");
+assert.deepEqual(modelPageQuality, modelPagesData.quality, "the published quality receipt must match regenerated evidence");
+assert.match(modelPagesHubHtml, /<title>Local LLM Model Hardware Pages: VRAM by Repository \| ResearchAudio<\/title>/);
+assert.match(modelPagesHubHtml, /<link rel="canonical" href="https:\/\/tools\.researchaudio\.io\/models\/"/);
+assert.match(modelPagesHubHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
+assert.match(modelPagesHubHtml, /utm_source=model_hardware_hub&amp;utm_medium=organic_hub&amp;utm_campaign=ai_evidence_lab/);
+assert.equal((modelPagesHubHtml.match(/class="resource-card model-cluster-card"/g) || []).length, 8, "model hub should expose all reviewed pages in static HTML");
+assert.doesNotThrow(() => parseStructuredData(modelPagesHubHtml), "model hub structured data must be valid JSON");
+assert.doesNotMatch(modelPagesHubHtml, /noindex|nofollow|TODO|PLACEHOLDER|example\.com/);
+for (const { model, html: page } of renderedModelPages) {
+  assert.match(page, new RegExp(`<title>${model.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} GPU &amp; VRAM Requirements`), `${model.slug} title should preserve repository identity`);
+  assert.match(page, new RegExp(`<link rel="canonical" href="${model.url.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`), `${model.slug} should self-canonicalize`);
+  assert.match(page, new RegExp(model.hubUrl.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), `${model.slug} should link its source repository`);
+  assert.equal((page.match(/class="model-check-list"/g) || []).length, 1, `${model.slug} should expose one repository-specific pre-download checklist`);
+  assert.equal((page.match(/<li>/g) || []).length, 3, `${model.slug} should expose three repository-specific checks`);
+  assert.equal((page.match(/<tr>/g) || []).length, 14, `${model.slug} should render three precision rows and nine card tiers plus headers`);
+  assert.match(page, /subscribe-forms\.beehiiv\.com\/attribution\.js/, `${model.slug} should preserve Beehiiv attribution`);
+  assert.match(page, /reader-share\.js/, `${model.slug} should connect the reader sharing loop`);
+  assert.doesNotThrow(() => parseStructuredData(page), `${model.slug} structured data must be valid JSON`);
+  assert.doesNotMatch(page, /noindex|nofollow|TODO|PLACEHOLDER|example\.com/, `${model.slug} must remain crawlable and production-ready`);
+}
+assert.match(modelPagesGenerator, /rendered pages must remain at least 40% unique|must remain at least 40% unique|reviewed pages must remain at least 40% unique/);
+assert.match(modelPagesGenerator, /must contain at least 550 main-content words/);
+assert.match(toolsHtml, /href="\.\.\/models\/"/);
+assert.match(localLlmGuideHtml, /href="\.\.\/models\/"/);
 
 for (const [name, page, pathname] of [
   ["scorecard", html, "/"],
@@ -1724,7 +1778,7 @@ assert.match(voiceCostHtml, /elevenlabs\.io\/pricing/);
 assert.match(toolsHtml, /voice-ai-cost-calculator/);
 assert.match(toolsHtml, /voice-ai-cost-per-minute/);
 assert.match(toolsHtml, /ai-receptionist-cost/);
-assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 25, "tools hub should contain the daily model index and twenty-four search field notes");
+assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 26, "tools hub should contain the daily model index, reviewed model cluster, and twenty-four search field notes");
 assert.match(toolsHtml, /href="\.\.\/trending-local-llms\/"/);
 assert.match(toolsHtml, /local-llm-gpu-guide/);
 assert.match(toolsHtml, /7b-vs-13b-llm-gpu-requirements/);
@@ -2090,9 +2144,9 @@ for (const [name, page] of [
   assert.match(page, /href="\.\.\/local-llm-gpu-guide\/"/, `${name} should link back to the canonical local LLM pillar URL`);
 }
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 46, "sitemap should contain all forty-six crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 55, "sitemap should contain all fifty-five crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 46, "sitemap should publish forty-six URL locations");
+assert.equal(sitemapUrls.length, 55, "sitemap should publish fifty-five URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 const crawlablePages = await Promise.all(sitemapUrls.map(async (url) => {
   const pathname = new URL(url).pathname.replace(/^\/+|\/+$/g, "");
@@ -2109,6 +2163,10 @@ for (const [url, page] of crawlablePages) {
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/partners/"), "sitemap should publish the partner distribution kit");
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/local-llm-gpu-guide/"), "sitemap should publish the local LLM hardware pillar");
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/trending-local-llms/"), "sitemap should publish the daily trending model index");
+assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/models/"), "sitemap should publish the reviewed model hardware hub");
+for (const model of modelPagesData.models) {
+  assert.ok(sitemapUrls.includes(model.url), `sitemap should publish ${model.slug}`);
+}
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/rtx-4070-super-vs-4070-ti-super-local-llm/"), "sitemap should publish the RTX 4070 Super comparison");
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/mac-mini-m4-local-llm/"), "sitemap should publish the Mac mini M4 guide");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
@@ -2134,6 +2192,11 @@ assert.match(llms, /ResearchAudio Partner Distribution Kit/);
 assert.match(llms, /Local LLM GPU and Hardware Guide/);
 assert.match(llms, /Trending Local LLM Hardware Index/);
 assert.match(llms, /https:\/\/tools\.researchaudio\.io\/data\/trending-local-llms\.json/);
+assert.match(llms, /Reviewed repository hardware pages/);
+assert.match(llms, /https:\/\/tools\.researchaudio\.io\/models\//);
+for (const model of modelPagesData.models) {
+  assert.match(llms, new RegExp(model.url.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), `llms.txt should publish ${model.slug}`);
+}
 assert.match(llms, /https:\/\/tools\.researchaudio\.io\/partners\//);
 assert.match(llms, /Kimi K3 GPU Requirements/);
 assert.match(llms, /Gemma 4 GPU Requirements/);
@@ -2176,4 +2239,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 16 tools, 1 daily trending model index, 1 gated acquisition page, 1 private activation kit, 1 private one-referral reward pack, 1 embed library, 1 partner distribution kit, 24 search field notes, 46 crawlable pages, a 2,500-word local LLM hardware pillar, attributed subscribe and share CTAs, interaction-triggered signup rails, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 16 tools, 1 daily trending model index, 8 quality-gated repository hardware pages, 1 gated acquisition page, 1 private activation kit, 1 private one-referral reward pack, 1 embed library, 1 partner distribution kit, 24 search field notes, 55 crawlable pages, a 2,500-word local LLM hardware pillar, attributed subscribe and share CTAs, interaction-triggered signup rails, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

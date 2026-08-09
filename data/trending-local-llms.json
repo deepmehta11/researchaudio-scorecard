@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-09T02:13:00.725Z",
+  "generatedAt": "2026-08-09T02:37:07.809Z",
   "source": {
     "name": "Hugging Face Hub public models API",
     "url": "https://huggingface.co/models?pipeline_tag=text-generation&sort=trending",
@@ -14,7 +14,12 @@
       "AWQ",
       "GPTQ",
       "EXL2",
-      "MLX"
+      "MLX",
+      "FP8",
+      "BF16",
+      "INT2/4/8",
+      "2/4/8BIT",
+      "W2/4/8"
     ],
     "weightFormula": "parameters * bits / 8 / 1024^3",
     "headroomPercent": 20,
@@ -29,9 +34,9 @@
       "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731",
       "parameters": 304180418494,
       "parameterBillions": 304.18,
-      "trendingScore": 1192,
+      "trendingScore": 1190,
       "downloads": 785771,
-      "likes": 2854,
+      "likes": 2859,
       "lastModified": "2026-08-01T03:07:41.000Z",
       "planningGiB": {
         "int4": 169.97,
@@ -47,9 +52,9 @@
       "url": "https://huggingface.co/LiquidAI/LFM2.5-2.6B",
       "parameters": 2697198592,
       "parameterBillions": 2.7,
-      "trendingScore": 399,
+      "trendingScore": 400,
       "downloads": 81522,
-      "likes": 418,
+      "likes": 419,
       "lastModified": "2026-08-07T10:30:38.000Z",
       "planningGiB": {
         "int4": 1.51,
@@ -131,24 +136,6 @@
     },
     {
       "rank": 7,
-      "id": "EschaLabs/Qwen3.6-35B-A3B-Escha-W2",
-      "name": "Qwen3.6-35B-A3B-Escha-W2",
-      "author": "EschaLabs",
-      "url": "https://huggingface.co/EschaLabs/Qwen3.6-35B-A3B-Escha-W2",
-      "parameters": 7300654928,
-      "parameterBillions": 7.3,
-      "trendingScore": 97,
-      "downloads": 3873,
-      "likes": 237,
-      "lastModified": "2026-08-06T15:51:28.000Z",
-      "planningGiB": {
-        "int4": 4.08,
-        "int8": 8.16,
-        "bf16": 16.32
-      }
-    },
-    {
-      "rank": 8,
       "id": "deepseek-ai/DeepSeek-V4-Flash",
       "name": "DeepSeek-V4-Flash",
       "author": "deepseek-ai",
@@ -166,7 +153,7 @@
       }
     },
     {
-      "rank": 9,
+      "rank": 8,
       "id": "Akahsizrr/fuse-1-Lite",
       "name": "fuse-1-Lite",
       "author": "Akahsizrr",
@@ -184,7 +171,7 @@
       }
     },
     {
-      "rank": 10,
+      "rank": 9,
       "id": "meta-llama/Llama-3.1-8B-Instruct",
       "name": "Llama-3.1-8B-Instruct",
       "author": "meta-llama",
@@ -202,7 +189,7 @@
       }
     },
     {
-      "rank": 11,
+      "rank": 10,
       "id": "badtheorylabs/BTL-4",
       "name": "BTL-4",
       "author": "badtheorylabs",
@@ -220,7 +207,7 @@
       }
     },
     {
-      "rank": 12,
+      "rank": 11,
       "id": "Qwen/Qwen2.5-7B-Instruct",
       "name": "Qwen2.5-7B-Instruct",
       "author": "Qwen",
@@ -235,6 +222,24 @@
         "int4": 4.26,
         "int8": 8.51,
         "bf16": 17.02
+      }
+    },
+    {
+      "rank": 12,
+      "id": "microsoft/Phi-3.5-mini-instruct",
+      "name": "Phi-3.5-mini-instruct",
+      "author": "microsoft",
+      "url": "https://huggingface.co/microsoft/Phi-3.5-mini-instruct",
+      "parameters": 3821079552,
+      "parameterBillions": 3.82,
+      "trendingScore": 57,
+      "downloads": 1064954,
+      "likes": 1061,
+      "lastModified": "2025-12-10T20:22:56.000Z",
+      "planningGiB": {
+        "int4": 2.14,
+        "int8": 4.27,
+        "bf16": 8.54
       }
     }
   ]

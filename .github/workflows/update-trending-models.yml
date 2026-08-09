@@ -17,28 +17,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Refresh the source-backed snapshot
-        run: node scripts/update-trending-models.mjs
+      - name: Refresh the source-backed snapshot and reviewed model pages
+        run: |
+          node scripts/update-trending-models.mjs
+          node scripts/generate-model-hardware-pages.mjs
       - name: Verify the complete acquisition site
         run: node scripts/verify-site.mjs
       - name: Commit a changed snapshot
         shell: bash
         run: |
-          if git diff --quiet -- trending-local-llms/index.html data/trending-local-llms.json; then
-            echo "The verified snapshot is unchanged."
+          if git diff --quiet -- trending-local-llms/index.html data/trending-local-llms.json data/model-hardware-pages.json models/ sitemap.xml llms.txt; then
+            echo "The verified source records and model pages are unchanged."
             exit 0
           fi
 
           git config user.name "researchaudio-index-bot"
           git config user.email "researchaudio-index-bot@users.noreply.github.com"
-          git add trending-local-llms/index.html data/trending-local-llms.json
+          git add trending-local-llms/index.html data/trending-local-llms.json data/model-hardware-pages.json models/ sitemap.xml llms.txt
           git commit \
             -m "Keep the open-model hardware signal current" \
-            -m "Refresh the public Hugging Face trending snapshot and its transparent VRAM planning floors after the complete site verifier passes." \
+            -m "Refresh the public Hugging Face trending snapshot and the quality-gated repository hardware pages after the complete site verifier passes." \
             -m "Constraint: Public Hub metadata only; no email send, signup submission, paid acquisition, or model download." \
             -m "Confidence: high" \
             -m "Scope-risk: narrow" \
-            -m "Directive: Preserve the fail-closed minimum-model and full-site verification gates." \
-            -m "Tested: Trending source validation and scripts/verify-site.mjs." \
+            -m "Directive: Preserve the fail-closed source, page-uniqueness, and full-site verification gates." \
+            -m "Tested: Trending source validation, reviewed-page quality gates, and scripts/verify-site.mjs." \
             -m "Not-tested: Search ranking, external sharing, and subscriber conversion."
           git push

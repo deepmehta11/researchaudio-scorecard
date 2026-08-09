@@ -44,7 +44,7 @@
           {
             "@type": "ItemList",
             "name": "Local LLM GPU and hardware planning resources",
-            "numberOfItems": 22,
+            "numberOfItems": 23,
             "itemListElement": [
               { "@type": "ListItem", "position": 1, "url": "https://tools.researchaudio.io/llm-gpu-memory-calculator/" },
               { "@type": "ListItem", "position": 2, "url": "https://tools.researchaudio.io/kv-cache-calculator/" },
@@ -67,7 +67,8 @@
               { "@type": "ListItem", "position": 19, "url": "https://tools.researchaudio.io/deepseek-v4-flash-gpu-requirements/" },
               { "@type": "ListItem", "position": 20, "url": "https://tools.researchaudio.io/diffusiongemma-gpu-requirements/" },
               { "@type": "ListItem", "position": 21, "url": "https://tools.researchaudio.io/rtx-4070-super-vs-4070-ti-super-local-llm/" },
-              { "@type": "ListItem", "position": 22, "url": "https://tools.researchaudio.io/mac-mini-m4-local-llm/" }
+              { "@type": "ListItem", "position": 22, "url": "https://tools.researchaudio.io/mac-mini-m4-local-llm/" },
+              { "@type": "ListItem", "position": 23, "url": "https://tools.researchaudio.io/models/" }
             ]
           }
         ]
@@ -112,7 +113,7 @@
           <p>The honest answer is not a single lookup number. For GPU inference, memory planning begins with the model weights, then adds the key-value cache, runtime allocations, and a safety margin. The GPU must have enough usable capacity for the resulting plan—or the runtime must offload part of the work to slower system memory.</p>
           <p>A transparent weight floor is <code>parameters × bits per parameter ÷ 8</code>. Seven billion parameters at exactly four bits are about 3.26 GiB. Thirteen billion are about 6.05 GiB. Thirty-two billion are about 14.90 GiB. Seventy billion are about 32.60 GiB. These figures are arithmetic floors, not promises that a packaged checkpoint or live server will fit.</p>
           <p>Real checkpoints carry metadata and quantization overhead. Live inference needs workspace memory. Long context creates a KV cache whose size depends on layers, KV heads, head dimension, cache precision, tokens, and concurrent sequences. A runtime can also reserve memory before it serves the first request. That is why two models with the same parameter count can cross different hardware boundaries.</p>
-          <p>If you already know the model architecture, use the <a href="../llm-gpu-memory-calculator/">LLM GPU memory calculator</a>. If you only know your available memory, use <a href="../what-llm-can-i-run/">What LLM can I run?</a> to find a starting tier. If you are deciding which new release deserves inspection, start with the daily <a href="../trending-local-llms/">Trending Local LLM Hardware Index</a>, then refine it with the exact checkpoint.</p>
+          <p>If you already know the model architecture, use the <a href="../llm-gpu-memory-calculator/">LLM GPU memory calculator</a>. If you only know your available memory, use <a href="../what-llm-can-i-run/">What LLM can I run?</a> to find a starting tier. If you are deciding which new release deserves inspection, start with the daily <a href="../trending-local-llms/">Trending Local LLM Hardware Index</a>, then open the <a href="../models/">reviewed repository hardware pages</a> before refining the exact checkpoint.</p>
         </div>
       </section>
 
@@ -277,6 +278,7 @@
           <p>These guides use first-party model configurations, checkpoint sizes, or vendor memory estimates, then keep context and runtime assumptions visible.</p>
         </div>
         <div class="resource-grid">
+          <a class="resource-card" href="../models/"><span class="instrument-code">Reviewed repository batch</span><h2>Model-specific hardware pages</h2><p>Compare eight current repositories using public parameter totals, architecture and license metadata, precision floors, and conservative card-fit matrices.</p><b>Browse reviewed model plans →</b></a>
           <a class="resource-card" href="../qwen3-gpu-requirements/"><span class="instrument-code">Dense plus MoE</span><h2>Qwen3 GPU requirements</h2><p>Compare 8B, 14B, 32B, and 30B-A3B with exact architecture and cache inputs.</p><b>Inspect Qwen3 →</b></a>
           <a class="resource-card" href="../qwen2-5-gpu-requirements/"><span class="instrument-code">7B to 72B</span><h2>Qwen2.5 GPU requirements</h2><p>Compare 7B, 32B, and 72B across precision levels, 32K cache, and 128K context.</p><b>Inspect Qwen2.5 →</b></a>
           <a class="resource-card" href="../gpt-oss-hardware-requirements/"><span class="instrument-code">20B and 120B MoE</span><h2>gpt-oss hardware requirements</h2><p>Separate official checkpoint size, resident weights, active parameters, and 4K-to-128K cache.</p><b>Inspect gpt-oss →</b></a>
