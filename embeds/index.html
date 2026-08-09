@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Embed Free AI Tools on Your Website | ResearchAudio</title>
-    <meta name="description" content="Embed any of 16 free AI calculators, model finders, compatibility checkers, diagnostics, checklists, and Codex builders on your website with one copy-and-paste iframe." />
+    <meta name="description" content="Embed any of 16 free AI calculators, model finders, diagnostics, and Codex builders with one copy-and-paste, auto-resizing website widget." />
     <meta name="theme-color" content="#eaf2f0" />
     <link rel="canonical" href="https://tools.researchaudio.io/embeds/" />
     <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
@@ -60,7 +60,7 @@
             "@type": "FAQPage",
             "@id": "https://tools.researchaudio.io/embeds/#faq",
             "mainEntity": [
-              { "@type": "Question", "name": "How do I embed an AI calculator on my website?", "acceptedAnswer": { "@type": "Answer", "text": "Enter your site name, choose a ResearchAudio tool, copy its iframe, and paste it into a custom HTML or embed block on your website." } },
+              { "@type": "Question", "name": "How do I embed an AI calculator on my website?", "acceptedAnswer": { "@type": "Answer", "text": "Enter your site name, choose a ResearchAudio tool, copy its auto-resizing embed code, and paste it into a custom HTML block on your website." } },
               { "@type": "Question", "name": "Which website platforms support the AI tool embeds?", "acceptedAnswer": { "@type": "Answer", "text": "Any platform that accepts iframe or custom HTML blocks can use the widgets, including WordPress, Webflow, Ghost, Beehiiv, and static HTML sites." } },
               { "@type": "Question", "name": "Do embedded ResearchAudio tools collect visitor inputs?", "acceptedAnswer": { "@type": "Answer", "text": "No. Checklist answers and calculator inputs stay in the visitor's browser. ResearchAudio only receives normal page and link attribution data." } },
               { "@type": "Question", "name": "Can I embed the AI tools for free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. All sixteen widgets are free to embed in public articles, documentation, tutorials, courses, and resource pages as long as the visible ResearchAudio credit remains." } }
@@ -122,12 +122,12 @@
             <p class="eyebrow">No plugin. No account. No API key.</p>
             <h2 id="setup-title">Embed a free AI calculator in three steps.</h2>
           </div>
-          <p>Every widget is a hosted iframe. Paste it into a custom HTML or embed block and the working tool appears inside your page.</p>
+          <p>Every widget is a hosted iframe with a tiny resize listener. Paste the generated code into a custom HTML block and the working tool adapts to its content.</p>
         </div>
         <ol class="embed-steps">
           <li><b>01</b><h3>Name your site</h3><p>Replace “partner-site” above with a short publication or domain name so visits remain attributable.</p></li>
-          <li><b>02</b><h3>Copy one iframe</h3><p>Choose the checklist or calculator that directly supports the claim, table, tutorial, or decision on your page.</p></li>
-          <li><b>03</b><h3>Paste and publish</h3><p>Use a custom HTML or embed block. Keep the visible ResearchAudio credit and set the frame height if your theme clips it.</p></li>
+          <li><b>02</b><h3>Copy one widget</h3><p>The iframe and resize listener copy together, so results stay visible without guessing a fixed height.</p></li>
+          <li><b>03</b><h3>Paste and publish</h3><p>Use a custom HTML block and keep the visible ResearchAudio credit. If a platform strips the resize listener, the iframe retains its conservative fallback height.</p></li>
         </ol>
         <div class="platform-strip" aria-label="Compatible website platforms">
           <span>Works with</span>
@@ -137,6 +137,7 @@
             <li>Ghost</li>
             <li>Beehiiv</li>
             <li>Static HTML</li>
+            <li>Auto-resizes after interaction</li>
           </ul>
         </div>
       </section>
@@ -212,7 +213,7 @@
           </div>
         </article>
 
-        <article class="embed-card" id="embed-what-llm-can-i-run" data-widget-url="https://tools.researchaudio.io/what-llm-can-i-run/" data-widget-height="1080" data-widget-name="What LLM Can I Run on My GPU?">
+        <article class="embed-card" id="embed-what-llm-can-i-run" data-widget-url="https://tools.researchaudio.io/what-llm-can-i-run/" data-widget-height="1280" data-widget-name="What LLM Can I Run on My GPU?">
           <div class="embed-card-copy">
             <span class="instrument-code">Local inference / model discovery</span>
             <h2>What LLM can I run?</h2>
@@ -375,6 +376,7 @@
         </div>
         <div class="embed-preview-frame">
           <iframe
+            id="researchaudio-llm-api-cost-calculator"
             title="Live preview of the LLM API Cost Calculator widget"
             src="../llm-api-cost-calculator/?embed=1&amp;utm_source=embed_library_preview&amp;utm_medium=embedded_tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=llm_api_cost"
             loading="eager"
@@ -392,7 +394,7 @@
         <div class="embed-faq-grid">
           <article class="embed-faq-item">
             <h3>How do I embed an AI calculator on my website?</h3>
-            <p>Enter your site name, choose a ResearchAudio tool, copy its iframe, and paste it into a custom HTML or embed block on your website.</p>
+            <p>Enter your site name, choose a ResearchAudio tool, copy its auto-resizing embed code, and paste it into a custom HTML block on your website.</p>
           </article>
           <article class="embed-faq-item">
             <h3>Which website platforms support the AI tool embeds?</h3>

@@ -17,6 +17,18 @@ function widgetSource() {
   return `embed_${sourceSlug(publisherInput.value)}`;
 }
 
+function resizeFrame(event) {
+  if (event.origin !== "https://tools.researchaudio.io") return;
+  const data = event.data || {};
+  if (data.type !== "researchaudio:resize" || !data.tool) return;
+  const frame = document.getElementById(`researchaudio-${data.tool}`);
+  if (!frame) return;
+  const fallback = Number(frame.getAttribute("height")) || 640;
+  frame.style.height = `${Math.max(640, Math.min(4800, Number(data.height) || fallback))}px`;
+}
+
+window.addEventListener("message", resizeFrame);
+
 function buildEmbedCode(card) {
   const url = new URL(card.dataset.widgetUrl);
   const tool = url.pathname.split("/").filter(Boolean).at(-1);
@@ -26,7 +38,9 @@ function buildEmbedCode(card) {
   url.searchParams.set("utm_campaign", "ai_evidence_lab");
   url.searchParams.set("utm_content", tool);
 
-  return `<iframe src="${url.toString()}" title="${card.dataset.widgetName}" loading="lazy" width="100%" height="${card.dataset.widgetHeight}" style="width:100%;max-width:980px;border:1px solid #a8bfbb;border-radius:0" allow="clipboard-write"></iframe>`;
+  const frame = `<iframe id="researchaudio-${tool}" src="${url.toString()}" title="${card.dataset.widgetName}" loading="lazy" width="100%" height="${card.dataset.widgetHeight}" style="width:100%;max-width:980px;border:1px solid #a8bfbb;border-radius:0" allow="clipboard-write"></iframe>`;
+  const resize = `<script>window.addEventListener("message",function(event){if(event.origin !== "https://tools.researchaudio.io")return;var data=event.data||{};if(data.type!=="researchaudio:resize"||data.tool!=="${tool}")return;var frame=document.getElementById("researchaudio-${tool}");if(!frame)return;var fallback=Number(frame.getAttribute("height"))||${card.dataset.widgetHeight};frame.style.height=Math.max(640,Math.min(4800,Number(data.height)||fallback))+"px";});</script>`;
+  return `${frame}\n${resize}`;
 }
 
 function render() {

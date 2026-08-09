@@ -49,7 +49,7 @@ Live at `https://tools.researchaudio.io/`, a branded ResearchAudio subdomain con
 - `/evidence-starter-kit/` — private, noindex post-signup activation with four-tool progress and attributed sharing back to the acquisition page.
 - `/ai-deployment-pack/` — private, noindex one-referral reward with three downloadable decision templates and a seven-day AI deployment sequence.
 - `/tools/` — crawlable, interlinked Evidence Lab hub.
-- `/embeds/` — copy-ready, source-attributed iframe widgets plus a self-serve installation guide for WordPress, Webflow, Ghost, Beehiiv, and static sites. Every tool page deep-links publishers to its exact widget, and the library publishes a sixteen-tool application index with matching FAQ schema for search discovery.
+- `/embeds/` — copy-ready, source-attributed iframe widgets plus an origin-validated auto-resize listener and a self-serve installation guide for WordPress, Webflow, Ghost, Beehiiv, and static sites. Every tool page deep-links publishers to its exact widget, and the library publishes a sixteen-tool application index with matching FAQ schema for search discovery.
 - `/partners/` — self-serve newsletter distribution kit that generates a publication-attributed Beehiiv Magic Link, a universal signup-gate URL, and three copy-ready partner placements without submitting or storing the publisher name.
 
 Every instrument uses the dedicated Beehiiv acquisition form and keeps user inputs in the browser.

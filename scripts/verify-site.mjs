@@ -1804,6 +1804,9 @@ for (const [name, page] of [
 assert.match(embedModeJs, /parameters\.get\("embed"\) === "1"/);
 assert.match(embedModeJs, /utm_medium", "embedded_tool"/);
 assert.match(embedModeJs, /utm_campaign", "ai_evidence_lab"/);
+assert.match(embedModeJs, /researchaudio:resize/);
+assert.match(embedModeJs, /ResizeObserver/);
+assert.match(embedModeJs, /window\.parent\.postMessage/);
 assert.match(embedModeJs, /target = "_blank"/);
 assert.match(embedModeJs, /className = "tool-distribution"/);
 assert.match(embedModeJs, /utm_content", "embed_this_tool"/);
@@ -1854,7 +1857,12 @@ for (const question of [
 assert.match(embedsJs, /utm_source/);
 assert.match(embedsJs, /utm_medium/);
 assert.match(embedsJs, /utm_campaign/);
+assert.match(embedsJs, /researchaudio:resize/);
+assert.match(embedsJs, /event\.origin !== "https:\/\/tools\.researchaudio\.io"/);
+assert.match(embedsJs, /id="researchaudio-\$\{tool\}"/);
+assert.match(embedsJs, /Math\.min\(4800/);
 assert.match(embedsJs, /navigator\.clipboard\.writeText/);
+assert.match(embedsHtml, /Auto-resizes after interaction/);
 assert.match(toolsHtml, /href="\.\.\/embeds\/"/);
 assert.match(partnersHtml, /<title>Partner With ResearchAudio: Newsletter &amp; AI Tool Kit<\/title>/);
 assert.match(partnersHtml, /<link rel="canonical" href="https:\/\/tools\.researchaudio\.io\/partners\/" \/>/);

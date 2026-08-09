@@ -48,6 +48,26 @@ if (isEmbedded) {
       <a class="embed-open" href="${fullToolUrl.toString()}" target="_blank" rel="noopener noreferrer">Open full tool ↗</a>
     `;
     document.body.prepend(attribution);
+
+    let lastReportedHeight = 0;
+    const reportHeight = () => {
+      const height = Math.ceil(Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight,
+        document.body.getBoundingClientRect().height,
+      ));
+      if (Math.abs(height - lastReportedHeight) < 2) return;
+      lastReportedHeight = height;
+      window.parent.postMessage({ type: "researchaudio:resize", tool, height }, "*");
+    };
+
+    requestAnimationFrame(reportHeight);
+    window.addEventListener("load", reportHeight, { once: true });
+    document.fonts?.ready.then(reportHeight).catch(() => {});
+    if ("ResizeObserver" in window) {
+      const observer = new ResizeObserver(reportHeight);
+      observer.observe(document.body);
+    }
   });
 } else {
   onReady(() => {
