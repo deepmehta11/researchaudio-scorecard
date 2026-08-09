@@ -33,7 +33,7 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
 - What LLM Can I Run on My GPU?: https://tools.researchaudio.io/what-llm-can-i-run/
   Starts with available GPU memory and returns the largest listed model-size tier below a transparent INT4, INT8, or FP16 weight-floor ceiling.
 - Hugging Face VRAM Calculator and Model Card Badge: https://tools.researchaudio.io/hugging-face-vram-calculator/
-  Reads public safetensors metadata in the visitor's browser, calculates transparent INT4, INT8, and BF16 weight floors, and generates a model-specific permalink plus an attributed passive Markdown badge.
+  Reads public safetensors metadata in the visitor's browser, calculates transparent INT4, INT8, and BF16 weight floors, and generates a model-specific permalink plus an attributed passive Markdown badge. Its companion GitHub Action at https://github.com/deepmehta11/researchaudio-hf-vram-action writes the receipt into workflow summaries and emits repository-attributed badge markup.
 - LLM KV Cache Calculator: https://tools.researchaudio.io/kv-cache-calculator/
   Calculates exact KV-cache memory per token, sequence, context window, and concurrent request, plus GQA savings and full-context capacity.
 - Free AI Evaluation Starter Kit: https://tools.researchaudio.io/ai-evidence-starter-kit/

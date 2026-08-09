@@ -44,6 +44,7 @@
           { "@type": "Question", "name": "How does the Hugging Face VRAM calculator get a model's parameter count?", "acceptedAnswer": { "@type": "Answer", "text": "It requests the public Hugging Face model API in the visitor's browser and reads the repository's safetensors total. Repositories without usable public safetensors metadata are not estimated automatically." } },
           { "@type": "Question", "name": "Does the result include KV cache and serving memory?", "acceptedAnswer": { "@type": "Answer", "text": "No. The three displayed results are model-weight arithmetic plus 20 percent planning headroom. KV cache, activations, runtime workspace, fragmentation, offload, and throughput remain separate deployment checks." } },
           { "@type": "Question", "name": "Can I add the generated badge to a Hugging Face model card?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Hugging Face model cards are Markdown README files. The generated passive badge links to a permalink that reloads the same public source lookup and attributes model-card visits." } },
+          { "@type": "Question", "name": "Can I generate the VRAM receipt in GitHub Actions?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The free ResearchAudio Hugging Face VRAM Evidence Action reads public metadata, writes the calculation to the job summary, and emits a repository-attributed badge without modifying repository files." } },
           { "@type": "Question", "name": "Does ResearchAudio store the model ID I enter?", "acceptedAnswer": { "@type": "Answer", "text": "No. The lookup runs in the browser against the public Hugging Face API. The model ID can appear in a permalink when the visitor chooses to copy or share the result." } }
         ]
       }
@@ -156,6 +157,23 @@
         <p><strong>No quality verdict.</strong><br />Download counts, model names, and memory fit do not prove output quality or runtime support.</p>
       </section>
 
+      <section class="resource-section" id="github-action" aria-labelledby="github-action-title">
+        <div class="resource-heading">
+          <div><p class="eyebrow">Reusable distribution surface</p><h2 id="github-action-title">Generate the receipt inside GitHub Actions.</h2></div>
+          <p>The public action turns every model workflow into an installation point. It writes the source receipt to the job summary and emits a badge whose attribution includes the exact installing repository.</p>
+        </div>
+        <div class="resource-grid">
+          <article class="resource-card"><span class="instrument-code">1 / install</span><h2>One versioned action</h2><p>Add <code>deepmehta11/researchaudio-hf-vram-action@v1</code> with the public Hugging Face model ID.</p><b>No token required</b></article>
+          <article class="resource-card"><span class="instrument-code">2 / inspect</span><h2>Evidence in every run</h2><p>The job summary shows the public parameter total, raw arithmetic, configured headroom, source link, and explicit exclusions.</p><b>No model download</b></article>
+          <article class="resource-card"><span class="instrument-code">3 / distribute</span><h2>Repository-level attribution</h2><p>The emitted badge uses <code>github_action_badge</code> and the installing repository slug, separating adoption from search and paid traffic.</p><b>Installations before claims</b></article>
+        </div>
+        <pre><code>- uses: deepmehta11/researchaudio-hf-vram-action@v1
+  id: vram
+  with:
+    model: Qwen/Qwen2.5-7B-Instruct</code></pre>
+        <p><a class="action-button" href="https://github.com/deepmehta11/researchaudio-hf-vram-action?utm_source=hugging_face_vram_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=github_action_install" target="_blank" rel="noopener noreferrer">Install the free GitHub Action →</a></p>
+      </section>
+
       <section class="method-section" aria-labelledby="method-title">
         <div><p class="eyebrow">Source and method</p><h2 id="method-title">The useful answer is smaller than a deployment promise.</h2></div>
         <div class="method-copy">
@@ -182,11 +200,12 @@
       </section>
 
       <section class="guide-section" aria-labelledby="faq-title">
-        <div class="guide-intro"><p class="eyebrow">Hugging Face VRAM FAQ</p><h2 id="faq-title">Four boundaries keep the badge honest.</h2><p>The fastest way to make a memory calculator misleading is to hide where the parameter count came from or what the number excludes.</p></div>
+        <div class="guide-intro"><p class="eyebrow">Hugging Face VRAM FAQ</p><h2 id="faq-title">Five boundaries keep the badge honest.</h2><p>The fastest way to make a memory calculator misleading is to hide where the parameter count came from or what the number excludes.</p></div>
         <div class="faq-list">
           <article class="faq-item"><h3>How does the Hugging Face VRAM calculator get a model's parameter count?</h3><p>It requests the public Hugging Face model API in your browser and reads the repository's safetensors total. Repositories without usable public safetensors metadata are not estimated automatically.</p></article>
           <article class="faq-item"><h3>Does the result include KV cache and serving memory?</h3><p>No. The three displayed results are model-weight arithmetic plus 20% planning headroom. KV cache, activations, runtime workspace, fragmentation, offload, and throughput remain separate deployment checks.</p></article>
           <article class="faq-item"><h3>Can I add the generated badge to a Hugging Face model card?</h3><p>Yes. Hugging Face model cards are Markdown README files. The generated passive badge links to a permalink that reloads the same public source lookup and attributes model-card visits.</p></article>
+          <article class="faq-item"><h3>Can I generate the VRAM receipt in GitHub Actions?</h3><p>Yes. The free <a href="https://github.com/deepmehta11/researchaudio-hf-vram-action?utm_source=hugging_face_vram_calculator&amp;utm_medium=tool&amp;utm_campaign=ai_evidence_lab&amp;utm_content=faq_action">ResearchAudio Hugging Face VRAM Evidence Action</a> reads public metadata, writes the calculation to the job summary, and emits a repository-attributed badge without modifying repository files.</p></article>
           <article class="faq-item"><h3>Does ResearchAudio store the model ID I enter?</h3><p>No. The lookup runs in the browser against the public Hugging Face API. The model ID appears in the page URL only when you load, copy, or share a model-specific permalink.</p></article>
         </div>
       </section>
