@@ -2140,6 +2140,42 @@ h2 {
   font: 0.7rem/1.4 var(--mono);
 }
 
+.trending-hero .lab-index time {
+  display: block;
+  margin: 14px 0 0;
+  color: var(--yellow);
+  font: 0.7rem/1.45 var(--mono);
+}
+
+.trending-table-wrap table {
+  min-width: 1220px;
+}
+
+.trending-table-wrap th:nth-child(2) {
+  min-width: 260px;
+}
+
+.trending-table-wrap tbody th a {
+  color: var(--blue);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.trending-table-wrap tbody th small,
+.trending-table-wrap tbody td small {
+  display: block;
+  margin-top: 5px;
+}
+
+.trending-table-wrap tbody td:last-child a {
+  white-space: nowrap;
+}
+
+.trend-rank {
+  color: var(--blue);
+  font: 600 0.78rem/1 var(--mono);
+}
+
 .table-note {
   max-width: 940px;
   margin: 30px 0 0;

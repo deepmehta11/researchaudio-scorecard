@@ -21,6 +21,7 @@ import { calculateVoiceAiCost } from "../voice-ai-cost-calculator/calculator.js"
 import { buildAttributedShareUrl, parseSharedChecklist, parseSharedNumbers } from "../share-state.js";
 import { buildEvidenceBadgeMarkdown } from "../scorecard-badge.js";
 import { buildReaderShareUrl } from "../reader-share.js";
+import { planningGiB, prepareTrendingModels, renderTrendingRows } from "./update-trending-models.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const indexNowKey = "b5f8e5d9ef605861f4432c4b66a2d884";
@@ -118,6 +119,13 @@ const publisherBadge = await readFile(path.join(root, "researchaudio-toolkit.svg
 const evidenceBadges = await Promise.all(
   Array.from({ length: 8 }, (_, score) => readFile(path.join(root, `badges/evidence-${score}.svg`), "utf8")),
 );
+const [trendingHtml, trendingDataJson, trendingUpdateScript, trendingUpdateWorkflow] = await Promise.all([
+  readFile(path.join(root, "trending-local-llms/index.html"), "utf8"),
+  readFile(path.join(root, "data/trending-local-llms.json"), "utf8"),
+  readFile(path.join(root, "scripts/update-trending-models.mjs"), "utf8"),
+  readFile(path.join(root, ".github/workflows/update-trending-models.yml"), "utf8"),
+]);
+const trendingData = JSON.parse(trendingDataJson);
 
 assert.match(html, /<title>AI Launch Evidence Scorecard \| ResearchAudio<\/title>/);
 assert.match(html, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
@@ -170,6 +178,54 @@ evidenceBadges.forEach((badge, score) => {
   assert.match(badge, new RegExp(`>${score}/7<`));
   assert.doesNotMatch(badge, /<script|javascript:/i, "evidence badges must remain passive images");
 });
+
+assert.match(trendingHtml, /<title>Trending Local LLMs Today: VRAM Requirements \| ResearchAudio<\/title>/);
+assert.match(trendingHtml, /<link rel="canonical" href="https:\/\/tools\.researchaudio\.io\/trending-local-llms\/" \/>/);
+assert.match(trendingHtml, /<link rel="alternate" type="application\/json" href="https:\/\/tools\.researchaudio\.io\/data\/trending-local-llms\.json"/);
+assert.match(trendingHtml, /data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"/);
+assert.match(trendingHtml, /subscribe-forms\.beehiiv\.com\/attribution\.js/);
+assert.match(trendingHtml, /utm_source=trending_local_llms&amp;utm_medium=organic_index&amp;utm_campaign=ai_evidence_lab/);
+assert.match(trendingHtml, /href="\.\.\/data\/trending-local-llms\.json"/);
+assert.match(trendingHtml, /huggingface\.co\/docs\/huggingface_hub\/en\/package_reference\/hf_api/);
+assert.equal((trendingHtml.match(/data-model-id=/g) || []).length, 12, "trending index should render twelve models in static HTML");
+assert.equal((trendingHtml.match(/"@type": "ListItem"/g) || []).length, 12, "trending schema should list all twelve models");
+assert.equal((trendingHtml.match(/"@type": "Question"/g) || []).length, 3, "trending index should expose three FAQ answers in schema");
+assert.doesNotThrow(() => parseStructuredData(trendingHtml), "trending index structured data must be valid JSON");
+assert.doesNotMatch(trendingHtml, /Awaiting first refresh|TODO|PLACEHOLDER|example\.com/);
+
+assert.equal(trendingData.models.length, 12, "trending JSON should publish twelve models");
+assert.equal(trendingData.method.headroomPercent, 20);
+assert.equal(trendingData.method.weightFormula, "parameters * bits / 8 / 1024^3");
+assert.match(trendingData.source.url, /^https:\/\/huggingface\.co\/models/);
+assert.ok(trendingData.models.every((model, index) => index === 0 || model.trendingScore <= trendingData.models[index - 1].trendingScore), "trending data should remain sorted by score");
+assert.ok(trendingData.models.every((model) => model.parameters >= 1e9 && model.parameters <= 2e12), "trending data should respect parameter bounds");
+assert.ok(trendingData.models.every((model) => !/(?:^|[-_.])(gguf|awq|gptq|exl2|mlx)(?:$|[-_.])/i.test(model.id)), "trending data should exclude format-specific artifact names");
+for (const model of trendingData.models) {
+  assert.equal(model.planningGiB.int4, Number(planningGiB(model.parameters, 4).toFixed(2)), `${model.id} INT4 plan should use the shared formula`);
+  assert.equal(model.planningGiB.int8, Number(planningGiB(model.parameters, 8).toFixed(2)), `${model.id} INT8 plan should use the shared formula`);
+  assert.equal(model.planningGiB.bf16, Number(planningGiB(model.parameters, 16).toFixed(2)), `${model.id} BF16 plan should use the shared formula`);
+}
+const regeneratedTrending = prepareTrendingModels(trendingData.models.map((model) => ({
+  id: model.id,
+  pipeline_tag: "text-generation",
+  safetensors: { total: model.parameters },
+  trendingScore: model.trendingScore,
+  downloads: model.downloads,
+  likes: model.likes,
+  lastModified: model.lastModified,
+})), trendingData.generatedAt);
+assert.deepEqual(regeneratedTrending.models.map(({ id }) => id), trendingData.models.map(({ id }) => id));
+assert.equal((renderTrendingRows(trendingData).match(/data-model-id=/g) || []).length, 12);
+assert.match(trendingUpdateScript, /https:\/\/huggingface\.co\/api\/models/);
+assert.match(trendingUpdateScript, /AbortSignal\.timeout\(20_000\)/);
+assert.match(trendingUpdateScript, /models\.length >= 8/);
+assert.match(trendingUpdateScript, /TRENDING_MODELS:START/);
+assert.match(trendingUpdateWorkflow, /cron: "23 08 \* \* \*"/);
+assert.match(trendingUpdateWorkflow, /permissions:[\s\S]*contents: write/);
+assert.match(trendingUpdateWorkflow, /node scripts\/update-trending-models\.mjs/);
+assert.match(trendingUpdateWorkflow, /node scripts\/verify-site\.mjs/);
+assert.match(trendingUpdateWorkflow, /git add trending-local-llms\/index\.html data\/trending-local-llms\.json/);
+assert.match(trendingUpdateWorkflow, /Not-tested: Search ranking, external sharing, and subscriber conversion\./);
 
 for (const [name, page, pathname] of [
   ["scorecard", html, "/"],
@@ -1668,7 +1724,8 @@ assert.match(voiceCostHtml, /elevenlabs\.io\/pricing/);
 assert.match(toolsHtml, /voice-ai-cost-calculator/);
 assert.match(toolsHtml, /voice-ai-cost-per-minute/);
 assert.match(toolsHtml, /ai-receptionist-cost/);
-assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 24, "tools hub should contain twenty-four search field notes");
+assert.equal((toolsHtml.match(/class="resource-card"/g) || []).length, 25, "tools hub should contain the daily model index and twenty-four search field notes");
+assert.match(toolsHtml, /href="\.\.\/trending-local-llms\/"/);
 assert.match(toolsHtml, /local-llm-gpu-guide/);
 assert.match(toolsHtml, /7b-vs-13b-llm-gpu-requirements/);
 assert.match(toolsHtml, /70b-llm-gpu-requirements/);
@@ -2033,9 +2090,9 @@ for (const [name, page] of [
   assert.match(page, /href="\.\.\/local-llm-gpu-guide\/"/, `${name} should link back to the canonical local LLM pillar URL`);
 }
 
-assert.equal((sitemap.match(/<url>/g) || []).length, 45, "sitemap should contain all forty-five crawlable pages");
+assert.equal((sitemap.match(/<url>/g) || []).length, 46, "sitemap should contain all forty-six crawlable pages");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-assert.equal(sitemapUrls.length, 45, "sitemap should publish forty-five URL locations");
+assert.equal(sitemapUrls.length, 46, "sitemap should publish forty-six URL locations");
 assert.ok(sitemapUrls.every((url) => new URL(url).origin === brandedToolsOrigin), "every sitemap URL should use the ResearchAudio tools domain");
 const crawlablePages = await Promise.all(sitemapUrls.map(async (url) => {
   const pathname = new URL(url).pathname.replace(/^\/+|\/+$/g, "");
@@ -2051,6 +2108,7 @@ for (const [url, page] of crawlablePages) {
 }
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/partners/"), "sitemap should publish the partner distribution kit");
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/local-llm-gpu-guide/"), "sitemap should publish the local LLM hardware pillar");
+assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/trending-local-llms/"), "sitemap should publish the daily trending model index");
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/rtx-4070-super-vs-4070-ti-super-local-llm/"), "sitemap should publish the RTX 4070 Super comparison");
 assert.ok(sitemapUrls.includes("https://tools.researchaudio.io/mac-mini-m4-local-llm/"), "sitemap should publish the Mac mini M4 guide");
 assert.match(robots, /Sitemap: https:\/\/tools\.researchaudio\.io\/sitemap\.xml/);
@@ -2074,6 +2132,8 @@ assert.doesNotMatch(llms, /https:\/\/tools\.researchaudio\.io\/evidence-starter-
 assert.match(llms, /Embeddable AI Tools/);
 assert.match(llms, /ResearchAudio Partner Distribution Kit/);
 assert.match(llms, /Local LLM GPU and Hardware Guide/);
+assert.match(llms, /Trending Local LLM Hardware Index/);
+assert.match(llms, /https:\/\/tools\.researchaudio\.io\/data\/trending-local-llms\.json/);
 assert.match(llms, /https:\/\/tools\.researchaudio\.io\/partners\//);
 assert.match(llms, /Kimi K3 GPU Requirements/);
 assert.match(llms, /Gemma 4 GPU Requirements/);
@@ -2114,4 +2174,4 @@ assert.match(indexNowWorkflow, /Wait for the ownership key to be public/);
 assert.match(indexNowWorkflow, /key_url="https:\/\/tools\.researchaudio\.io\/\$\{key\}\.txt"/);
 assert.doesNotMatch(indexNowWorkflow, retiredGitHubPagesPath, "IndexNow should verify ownership through the branded tools domain");
 
-console.log("Evidence Lab verified: 16 tools, 1 gated acquisition page, 1 private activation kit, 1 private one-referral reward pack, 1 embed library, 1 partner distribution kit, 24 search field notes, 45 crawlable pages, a 2,500-word local LLM hardware pillar, attributed subscribe and share CTAs, interaction-triggered signup rails, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");
+console.log("Evidence Lab verified: 16 tools, 1 daily trending model index, 1 gated acquisition page, 1 private activation kit, 1 private one-referral reward pack, 1 embed library, 1 partner distribution kit, 24 search field notes, 46 crawlable pages, a 2,500-word local LLM hardware pillar, attributed subscribe and share CTAs, interaction-triggered signup rails, calculation logic, accessibility, responsive CSS, and IndexNow deployment are present.");

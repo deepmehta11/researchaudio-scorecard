@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trending Local LLMs Today: VRAM Requirements | ResearchAudio</title>
+    <meta name="description" content="See twelve trending Hugging Face text-generation models with daily-refreshed parameter counts and transparent INT4, INT8, and BF16 VRAM planning floors." />
+    <meta name="theme-color" content="#eaf2f0" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://tools.researchaudio.io/trending-local-llms/" />
+    <link rel="alternate" type="application/json" href="https://tools.researchaudio.io/data/trending-local-llms.json" title="Trending Local LLM Hardware Index JSON" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Trending Local LLM Hardware Index" />
+    <meta property="og:description" content="A daily source-backed view of the open models moving on Hugging Face—and the transparent weight floor behind each hardware decision." />
+    <meta property="og:url" content="https://tools.researchaudio.io/trending-local-llms/" />
+    <meta property="og:image" content="https://tools.researchaudio.io/social-card.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tools.researchaudio.io/social-card.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wdth,wght@75..100,400..700&amp;family=Newsreader:opsz,wght@6..72,500..800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../lab.css" />
+<!-- TRENDING_SCHEMA:START -->
+    <script type="application/ld+json">
+{
+      "@context": "https://schema.org",
+      "@graph": [
+            {
+                  "@type": "Dataset",
+                  "@id": "https://tools.researchaudio.io/trending-local-llms/#dataset",
+                  "name": "Trending Local LLM Hardware Index",
+                  "description": "A daily snapshot of trending Hugging Face text-generation models with transparent INT4, INT8, and BF16 weight-plus-headroom planning floors.",
+                  "url": "https://tools.researchaudio.io/trending-local-llms/",
+                  "dateModified": "2026-08-09T02:07:32.402Z",
+                  "creator": {
+                        "@type": "Organization",
+                        "name": "ResearchAudio",
+                        "url": "https://researchaudio.io/"
+                  },
+                  "isBasedOn": "https://huggingface.co/models?pipeline_tag=text-generation&sort=trending",
+                  "measurementTechnique": "parameters * bits / 8 / 1024^3",
+                  "distribution": [
+                        {
+                              "@type": "DataDownload",
+                              "encodingFormat": "application/json",
+                              "contentUrl": "https://tools.researchaudio.io/data/trending-local-llms.json"
+                        }
+                  ]
+            },
+            {
+                  "@type": "ItemList",
+                  "@id": "https://tools.researchaudio.io/trending-local-llms/#models",
+                  "name": "Trending text-generation models",
+                  "numberOfItems": 12,
+                  "itemListElement": [
+                        {
+                              "@type": "ListItem",
+                              "position": 1,
+                              "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731",
+                              "name": "deepseek-ai/DeepSeek-V4-Flash-0731"
+                        },
+                        {
+                              "@type": "ListItem",
+                              "position": 2,
+                              "url": "https://huggingface.co/LiquidAI/LFM2.5-2.6B",
+                              "name": "LiquidAI/LFM2.5-2.6B"
+                        },
+                        {
+                              "@type": "ListItem",
+                              "position": 3,
+                              "url": "https://huggingface.co/deepgrove/maple-preview",
+                              "name": "deepgrove/maple-preview"
+                        },
+                        {
+                              "@type": "ListItem",
+                              "position": 4,
+                              "url": "https://huggingface.co/inclusionAI/Ling-3.0-flash",
+                              "name": "inclusionAI/Ling-3.0-flash"
+                        },
+                        {
+                              "@type": "ListItem",
+                              "position": 5,
+                              "url": "https://huggingface.co/Kwaipilot/KAT-Coder-V2.5-Dev",
+                              "name": "Kwaipilot/KAT-Coder-V2.5-Dev"
+                        },
+                        {
+                              "@type": "ListItem",
+                              "position": 6,
+                              "url": "https://huggingface.co/zai-org/GLM-5.2",
+                              "name": "zai-org/GLM-5.2"
+                        },
+                        {
+                              "@type": "ListItem",
+                              "position": 7,
+                              "url": "https://huggingface.co/EschaLabs/Qwen3.6-35B-A3B-Escha-W2",
+                              "name": "EschaLabs/Qwen3.6-35B-A3B-Escha-W2"
+                        },
+                        {
+                              "@type": "ListItem",
+                              "position": 8,
+                              "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash",
+                              "name": "deepseek-ai/DeepSeek-V4-Flash"
+                        },
+                        {
+                              "@type": "ListItem",
+                              "position": 9,
+                              "url": "https://huggingface.co/Akahsizrr/fuse-1-Lite",
+                              "name": "Akahsizrr/fuse-1-Lite"
+                        },
+                        {
+                              "@type": "ListItem",
+                              "position": 10,
+                              "url": "https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct",
+                              "name": "meta-llama/Llama-3.1-8B-Instruct"
+                        },
+                        {
+                              "@type": "ListItem",
+                              "position": 11,
+                              "url": "https://huggingface.co/badtheorylabs/BTL-4",
+                              "name": "badtheorylabs/BTL-4"
+                        },
+                        {
+                              "@type": "ListItem",
+                              "position": 12,
+                              "url": "https://huggingface.co/Qwen/Qwen2.5-7B-Instruct",
+                              "name": "Qwen/Qwen2.5-7B-Instruct"
+                        }
+                  ]
+            },
+            {
+                  "@type": "FAQPage",
+                  "mainEntity": [
+                        {
+                              "@type": "Question",
+                              "name": "How much VRAM does a trending LLM need?",
+                              "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Start with total parameter count multiplied by bits per parameter, converted to binary GiB, then add cache, runtime workspace, and measured headroom. This index shows a weight-plus-20-percent-headroom floor rather than a deployment guarantee."
+                              }
+                        },
+                        {
+                              "@type": "Question",
+                              "name": "Does a mixture-of-experts active parameter count determine VRAM?",
+                              "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "No. Active parameters can describe compute per token, while resident weights still need storage or an explicit offload path. The index uses the Hub safetensors total parameter count as the weight-floor input."
+                              }
+                        },
+                        {
+                              "@type": "Question",
+                              "name": "Is Hugging Face trending score a benchmark?",
+                              "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "No. It is a discovery signal from the Hub. It does not prove model quality, safety, speed, licensing suitability, or production readiness."
+                              }
+                        }
+                  ]
+            }
+      ]
+}
+    </script>
+<!-- TRENDING_SCHEMA:END -->
+  </head>
+  <body>
+    <a class="skip-link" href="#trending-models">Skip to the trending-model table</a>
+    <header class="lab-header">
+      <a class="wordmark" href="https://researchaudio.io/?utm_source=trending_local_llms&amp;utm_medium=organic_index&amp;utm_campaign=ai_evidence_lab&amp;utm_content=wordmark">
+        <span class="wordmark-mark" aria-hidden="true">RA</span>
+        <span>ResearchAudio</span>
+      </a>
+      <nav class="lab-nav" aria-label="Primary navigation">
+        <a href="../tools/">All tools</a>
+        <a href="../local-llm-gpu-guide/">Hardware guide</a>
+        <a class="join-link" href="https://researchaudio.io/subscribe?utm_source=trending_local_llms&amp;utm_medium=organic_index&amp;utm_campaign=ai_evidence_lab&amp;utm_content=header_join">Join free</a>
+      </nav>
+    </header>
+
+    <main class="lab-main">
+      <section class="lab-hero trending-hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Daily index / open-model discovery</p>
+          <h1 id="hero-title">See what is moving before you download the weights.</h1>
+          <p class="hero-deck">Twelve trending Hugging Face text-generation models, translated into INT4, INT8, and BF16 weight-plus-headroom floors. The source refreshes daily; the assumptions stay visible.</p>
+          <a class="hero-join-link" href="#trending-models">Inspect today’s hardware index →</a>
+          <a class="hero-join-link" href="../data/trending-local-llms.json">Use the public JSON snapshot →</a>
+        </div>
+        <aside class="lab-index" aria-label="Index method">
+          <span>Models checked</span>
+          <strong>12</strong>
+<!-- TRENDING_UPDATED:START -->
+          <time datetime="2026-08-09T02:07:32.402Z">Refreshed August 9, 2026 at 2:07 AM UTC</time>
+<!-- TRENDING_UPDATED:END -->
+          <p>Hugging Face trending score is a discovery signal—not a quality, safety, speed, or licensing verdict.</p>
+        </aside>
+      </section>
+
+      <section class="comparison-section trending-index" id="trending-models" aria-labelledby="index-title">
+        <div class="comparison-heading">
+          <div>
+            <p class="eyebrow">Today’s model queue</p>
+            <h2 id="index-title">Trending signal in. Transparent memory floor out.</h2>
+          </div>
+          <p>Every VRAM figure is total safetensors parameters × selected bits ÷ eight, converted to binary GiB, plus 20% planning headroom. KV cache and runtime allocations are not included.</p>
+        </div>
+        <p class="comparison-scroll-hint">Swipe the index horizontally →</p>
+        <div class="comparison-table-wrap trending-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Rank</th>
+                <th scope="col">Model repository</th>
+                <th scope="col">Parameters</th>
+                <th scope="col">INT4 + 20%</th>
+                <th scope="col">INT8 + 20%</th>
+                <th scope="col">BF16 + 20%</th>
+                <th scope="col">Hub signal</th>
+                <th scope="col">Next check</th>
+              </tr>
+            </thead>
+            <tbody>
+<!-- TRENDING_MODELS:START -->
+              <tr data-model-id="deepseek-ai/deepseek-v4-flash-0731">
+                <td><span class="trend-rank">#01</span></td>
+                <th scope="row">
+                  <a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731" rel="noopener">DeepSeek-V4-Flash-0731 ↗</a>
+                  <small>deepseek-ai · updated Aug 1, 2026</small>
+                </th>
+                <td><strong>304.18B</strong></td>
+                <td>170 GiB</td>
+                <td>340 GiB</td>
+                <td>679.9 GiB</td>
+                <td><strong>1192</strong><small>785.8K downloads · 2.9K likes</small></td>
+                <td><a href="../llm-gpu-memory-calculator/?parameterBillions=304.18&amp;bitsPerParameter=4&amp;checkpointGiB=0&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1">Open plan →</a></td>
+              </tr>
+              <tr data-model-id="liquidai/lfm2.5-2.6b">
+                <td><span class="trend-rank">#02</span></td>
+                <th scope="row">
+                  <a href="https://huggingface.co/LiquidAI/LFM2.5-2.6B" rel="noopener">LFM2.5-2.6B ↗</a>
+                  <small>LiquidAI · updated Aug 7, 2026</small>
+                </th>
+                <td><strong>2.7B</strong></td>
+                <td>1.51 GiB</td>
+                <td>3.01 GiB</td>
+                <td>6.03 GiB</td>
+                <td><strong>399</strong><small>81.5K downloads · 418 likes</small></td>
+                <td><a href="../llm-gpu-memory-calculator/?parameterBillions=2.7&amp;bitsPerParameter=4&amp;checkpointGiB=0&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1">Open plan →</a></td>
+              </tr>
+              <tr data-model-id="deepgrove/maple-preview">
+                <td><span class="trend-rank">#03</span></td>
+                <th scope="row">
+                  <a href="https://huggingface.co/deepgrove/maple-preview" rel="noopener">maple-preview ↗</a>
+                  <small>deepgrove · updated Aug 4, 2026</small>
+                </th>
+                <td><strong>20.21B</strong></td>
+                <td>11.3 GiB</td>
+                <td>22.59 GiB</td>
+                <td>45.18 GiB</td>
+                <td><strong>248</strong><small>896 downloads · 255 likes</small></td>
+                <td><a href="../llm-gpu-memory-calculator/?parameterBillions=20.21&amp;bitsPerParameter=4&amp;checkpointGiB=0&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1">Open plan →</a></td>
+              </tr>
+              <tr data-model-id="inclusionai/ling-3.0-flash">
+                <td><span class="trend-rank">#04</span></td>
+                <th scope="row">
+                  <a href="https://huggingface.co/inclusionAI/Ling-3.0-flash" rel="noopener">Ling-3.0-flash ↗</a>
+                  <small>inclusionAI · updated Aug 6, 2026</small>
+                </th>
+                <td><strong>127.49B</strong></td>
+                <td>71.24 GiB</td>
+                <td>142.5 GiB</td>
+                <td>285 GiB</td>
+                <td><strong>212</strong><small>4.2K downloads · 222 likes</small></td>
+                <td><a href="../llm-gpu-memory-calculator/?parameterBillions=127.49&amp;bitsPerParameter=4&amp;checkpointGiB=0&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1">Open plan →</a></td>
+              </tr>
+              <tr data-model-id="kwaipilot/kat-coder-v2.5-dev">
+                <td><span class="trend-rank">#05</span></td>
+                <th scope="row">
+                  <a href="https://huggingface.co/Kwaipilot/KAT-Coder-V2.5-Dev" rel="noopener">KAT-Coder-V2.5-Dev ↗</a>
+                  <small>Kwaipilot · updated Jul 28, 2026</small>
+                </th>
+                <td><strong>34.66B</strong></td>
+                <td>19.37 GiB</td>
+                <td>38.74 GiB</td>
+                <td>77.47 GiB</td>
+                <td><strong>125</strong><small>17.9K downloads · 544 likes</small></td>
+                <td><a href="../llm-gpu-memory-calculator/?parameterBillions=34.66&amp;bitsPerParameter=4&amp;checkpointGiB=0&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1">Open plan →</a></td>
+              </tr>
+              <tr data-model-id="zai-org/glm-5.2">
+                <td><span class="trend-rank">#06</span></td>
+                <th scope="row">
+                  <a href="https://huggingface.co/zai-org/GLM-5.2" rel="noopener">GLM-5.2 ↗</a>
+                  <small>zai-org · updated Jul 2, 2026</small>
+                </th>
+                <td><strong>753.33B</strong></td>
+                <td>421 GiB</td>
+                <td>841.9 GiB</td>
+                <td>1,683.8 GiB</td>
+                <td><strong>121</strong><small>2.5M downloads · 4.9K likes</small></td>
+                <td><a href="../llm-gpu-memory-calculator/?parameterBillions=753.33&amp;bitsPerParameter=4&amp;checkpointGiB=0&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1">Open plan →</a></td>
+              </tr>
+              <tr data-model-id="eschalabs/qwen3.6-35b-a3b-escha-w2">
+                <td><span class="trend-rank">#07</span></td>
+                <th scope="row">
+                  <a href="https://huggingface.co/EschaLabs/Qwen3.6-35B-A3B-Escha-W2" rel="noopener">Qwen3.6-35B-A3B-Escha-W2 ↗</a>
+                  <small>EschaLabs · updated Aug 6, 2026</small>
+                </th>
+                <td><strong>7.3B</strong></td>
+                <td>4.08 GiB</td>
+                <td>8.16 GiB</td>
+                <td>16.32 GiB</td>
+                <td><strong>97</strong><small>3.9K downloads · 237 likes</small></td>
+                <td><a href="../llm-gpu-memory-calculator/?parameterBillions=7.3&amp;bitsPerParameter=4&amp;checkpointGiB=0&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1">Open plan →</a></td>
+              </tr>
+              <tr data-model-id="deepseek-ai/deepseek-v4-flash">
+                <td><span class="trend-rank">#08</span></td>
+                <th scope="row">
+                  <a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash" rel="noopener">DeepSeek-V4-Flash ↗</a>
+                  <small>deepseek-ai · updated Jun 22, 2026</small>
+                </th>
+                <td><strong>290.94B</strong></td>
+                <td>162.6 GiB</td>
+                <td>325.2 GiB</td>
+                <td>650.3 GiB</td>
+                <td><strong>84</strong><small>2.5M downloads · 2.1K likes</small></td>
+                <td><a href="../llm-gpu-memory-calculator/?parameterBillions=290.94&amp;bitsPerParameter=4&amp;checkpointGiB=0&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1">Open plan →</a></td>
+              </tr>
+              <tr data-model-id="akahsizrr/fuse-1-lite">
+                <td><span class="trend-rank">#09</span></td>
+                <th scope="row">
+                  <a href="https://huggingface.co/Akahsizrr/fuse-1-Lite" rel="noopener">fuse-1-Lite ↗</a>
+                  <small>Akahsizrr · updated Aug 5, 2026</small>
+                </th>
+                <td><strong>5.72B</strong></td>
+                <td>3.2 GiB</td>
+                <td>6.39 GiB</td>
+                <td>12.78 GiB</td>
+                <td><strong>81</strong><small>309 downloads · 81 likes</small></td>
+                <td><a href="../llm-gpu-memory-calculator/?parameterBillions=5.72&amp;bitsPerParameter=4&amp;checkpointGiB=0&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1">Open plan →</a></td>
+              </tr>
+              <tr data-model-id="meta-llama/llama-3.1-8b-instruct">
+                <td><span class="trend-rank">#10</span></td>
+                <th scope="row">
+                  <a href="https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct" rel="noopener">Llama-3.1-8B-Instruct ↗</a>
+                  <small>meta-llama · updated Sep 25, 2024</small>
+                </th>
+                <td><strong>8.03B</strong></td>
+                <td>4.49 GiB</td>
+                <td>8.97 GiB</td>
+                <td>17.95 GiB</td>
+                <td><strong>77</strong><small>7.5M downloads · 6.6K likes</small></td>
+                <td><a href="../llm-gpu-memory-calculator/?parameterBillions=8.03&amp;bitsPerParameter=4&amp;checkpointGiB=0&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1">Open plan →</a></td>
+              </tr>
+              <tr data-model-id="badtheorylabs/btl-4">
+                <td><span class="trend-rank">#11</span></td>
+                <th scope="row">
+                  <a href="https://huggingface.co/badtheorylabs/BTL-4" rel="noopener">BTL-4 ↗</a>
+                  <small>badtheorylabs · updated Aug 7, 2026</small>
+                </th>
+                <td><strong>35.11B</strong></td>
+                <td>19.62 GiB</td>
+                <td>39.24 GiB</td>
+                <td>78.47 GiB</td>
+                <td><strong>74</strong><small>571 downloads · 75 likes</small></td>
+                <td><a href="../llm-gpu-memory-calculator/?parameterBillions=35.11&amp;bitsPerParameter=4&amp;checkpointGiB=0&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1">Open plan →</a></td>
+              </tr>
+              <tr data-model-id="qwen/qwen2.5-7b-instruct">
+                <td><span class="trend-rank">#12</span></td>
+                <th scope="row">
+                  <a href="https://huggingface.co/Qwen/Qwen2.5-7B-Instruct" rel="noopener">Qwen2.5-7B-Instruct ↗</a>
+                  <small>Qwen · updated Jan 12, 2025</small>
+                </th>
+                <td><strong>7.62B</strong></td>
+                <td>4.26 GiB</td>
+                <td>8.51 GiB</td>
+                <td>17.02 GiB</td>
+                <td><strong>70</strong><small>11.3M downloads · 1.5K likes</small></td>
+                <td><a href="../llm-gpu-memory-calculator/?parameterBillions=7.62&amp;bitsPerParameter=4&amp;checkpointGiB=0&amp;layers=0&amp;kvHeads=0&amp;headDimension=0&amp;contextTokens=0&amp;concurrentSequences=1&amp;kvCacheBits=16&amp;inferenceHeadroom=20&amp;vramPerGpu=24&amp;usableVramPercent=90&amp;availableGpus=1">Open plan →</a></td>
+              </tr>
+<!-- TRENDING_MODELS:END -->
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">A listed repository may be a base model, fine-tune, research preview, or community release. Open the source card and license before downloading. Artifact names containing GGUF, AWQ, GPTQ, EXL2, or MLX are excluded so a format-specific copy does not crowd out the underlying safetensors model.</p>
+      </section>
+
+      <section class="principle-strip" aria-label="Trending model index boundaries">
+        <p class="eyebrow">Three boundaries</p>
+        <p><strong>Trend is not quality.</strong><br />Hub attention does not prove benchmark strength, safety, or production readiness.</p>
+        <p><strong>Active is not resident.</strong><br />MoE active parameters can be much smaller than the total weights that need memory or offload.</p>
+        <p><strong>Fit is not speed.</strong><br />A weight floor says nothing about tokens per second, latency, context, or runtime support.</p>
+      </section>
+
+      <section class="method-section" aria-labelledby="method-title">
+        <div>
+          <p class="eyebrow">Reproducible method</p>
+          <h2 id="method-title">What the daily refresh does—and refuses to guess.</h2>
+        </div>
+        <div class="method-copy">
+          <p><strong>Discovery.</strong> The refresh requests public text-generation repositories from the Hugging Face Hub models API, sorted by trending score. It keeps the first twelve repositories with a safetensors total between one billion and two trillion parameters.</p>
+          <p><strong>Weight floor.</strong> The calculation is <code>parameters × bits ÷ 8 ÷ 1024³</code>. The displayed value then adds 20% headroom as a consistent first-pass planning allowance. It does not claim that every real four-bit format stores exactly four bits per parameter.</p>
+          <p><strong>What is missing.</strong> The table deliberately excludes KV cache, activations, CUDA or Metal workspace, graph capture, allocator fragmentation, metadata, system memory, offload, multi-GPU communication, prompt processing, decode speed, and power.</p>
+          <p><strong>Failure behavior.</strong> A refresh must return at least eight valid models and pass the full site verifier before it can be committed. If the upstream API fails or the response becomes invalid, the workflow fails and the last verified snapshot remains public.</p>
+          <p><strong>Machine-readable evidence.</strong> The same validated snapshot is available as <a href="../data/trending-local-llms.json">public JSON</a> with source metadata, formulas, exclusions, timestamps, and every displayed number.</p>
+        </div>
+      </section>
+
+      <section class="resource-section" aria-labelledby="next-title">
+        <div class="resource-heading">
+          <div>
+            <p class="eyebrow">Turn discovery into a deployment check</p>
+            <h2 id="next-title">A trending model is the start of the investigation.</h2>
+          </div>
+          <p>Carry the parameter count into an editable plan, then replace generic precision and headroom with the exact checkpoint, architecture, context, runtime, and hardware.</p>
+        </div>
+        <div class="resource-grid">
+          <a class="resource-card" href="../llm-gpu-memory-calculator/">
+            <span class="instrument-code">Weights + cache + GPU count</span>
+            <h2>Build the full memory plan</h2>
+            <p>Add exact artifact size, layers, KV heads, head dimension, context, concurrency, runtime headroom, and usable VRAM.</p>
+            <b>Open the GPU calculator →</b>
+          </a>
+          <a class="resource-card" href="../what-llm-can-i-run/">
+            <span class="instrument-code">Start from hardware</span>
+            <h2>Find what your GPU can hold</h2>
+            <p>Use the VRAM you already own to find the largest standard weight tier below a conservative capacity ceiling.</p>
+            <b>Open the model finder →</b>
+          </a>
+          <a class="resource-card" href="../kv-cache-calculator/">
+            <span class="instrument-code">Context + concurrency</span>
+            <h2>Expose the KV-cache bill</h2>
+            <p>Calculate cache memory per token, sequence, and simultaneous request from the actual model architecture.</p>
+            <b>Open the cache calculator →</b>
+          </a>
+          <a class="resource-card" href="../local-llm-gpu-guide/">
+            <span class="instrument-code">Hardware decision system</span>
+            <h2>Follow the complete evidence path</h2>
+            <p>Connect model size, checkpoint, quantization, context, runtime, GPU tier, and exact released-model guides.</p>
+            <b>Open the hardware guide →</b>
+          </a>
+        </div>
+      </section>
+
+      <section class="guide-section" aria-labelledby="faq-title">
+        <div class="guide-intro">
+          <p class="eyebrow">Trending model FAQ</p>
+          <h2 id="faq-title">Use the signal without confusing it for proof.</h2>
+          <p>The index answers which text-generation repositories are moving on the Hub and what their total-parameter arithmetic implies. It cannot choose a model for your task.</p>
+          <a class="guide-link" href="https://huggingface.co/docs/huggingface_hub/en/package_reference/hf_api#huggingface_hub.HfApi.list_models" rel="noopener">Review the official Hugging Face models API →</a>
+          <a class="guide-link" href="https://huggingface.co/docs/safetensors/index" rel="noopener">Review the safetensors format →</a>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>How much VRAM does a trending LLM need?</h3><p>Start with total parameters multiplied by bits per parameter, converted to binary GiB, then add cache, runtime workspace, and measured headroom. This index shows only a weight-plus-20%-headroom floor.</p></article>
+          <article class="faq-item"><h3>Does an MoE active parameter count determine VRAM?</h3><p>No. Active parameters can describe compute per token, while resident weights still need storage or an explicit offload path. The index uses the Hub safetensors total parameter count.</p></article>
+          <article class="faq-item"><h3>Is Hugging Face trending score a benchmark?</h3><p>No. It is a discovery signal. It does not prove model quality, safety, speed, licensing suitability, or production readiness.</p></article>
+        </div>
+      </section>
+
+      <section class="subscribe-block" id="subscribe" aria-labelledby="subscribe-title">
+        <div>
+          <p class="eyebrow">The model queue changes every day</p>
+          <h2 id="subscribe-title">Get the evidence behind the next model release.</h2>
+          <p>ResearchAudio turns model announcements, checkpoint claims, memory boundaries, and serving constraints into practical decisions for engineers and builders.</p>
+        </div>
+        <div class="subscribe-form-shell">
+          <p class="subscribe-direct-fallback"><strong>Prefer the hosted signup page?</strong><a href="https://researchaudio.io/subscribe?utm_source=trending_local_llms&amp;utm_medium=organic_index&amp;utm_campaign=ai_evidence_lab&amp;utm_content=direct_join">Join ResearchAudio free →</a></p>
+          <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="cbe3aea9-de92-41ca-92c2-691e3be5f2a4"></script>
+          <noscript><p>JavaScript is required for the signup form. <a href="https://researchaudio.io/subscribe?utm_source=trending_local_llms&amp;utm_medium=organic_index&amp;utm_campaign=ai_evidence_lab&amp;utm_content=noscript_join">Subscribe directly on ResearchAudio.</a></p></noscript>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lab-footer">
+      <p>ResearchAudio / evidence-led AI briefings for engineers and builders.</p>
+      <div class="footer-links">
+        <a href="../llm-gpu-memory-calculator/">GPU calculator</a>
+        <a href="../local-llm-gpu-guide/">Hardware guide</a>
+        <a href="../tools/">All tools</a>
+        <a href="https://researchaudio.io/?utm_source=trending_local_llms&amp;utm_medium=organic_index&amp;utm_campaign=ai_evidence_lab&amp;utm_content=footer">Latest briefings</a>
+      </div>
+    </footer>
+    <script type="module" src="../reader-share.js"></script>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"c20a9e29828c471c92ed7c2284901e05","spa":false}'></script>
+  </body>
+</html>

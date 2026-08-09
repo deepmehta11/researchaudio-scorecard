@@ -1,0 +1,44 @@
+name: Refresh trending model index
+
+on:
+  schedule:
+    - cron: "23 08 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: trending-model-index
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Refresh the source-backed snapshot
+        run: node scripts/update-trending-models.mjs
+      - name: Verify the complete acquisition site
+        run: node scripts/verify-site.mjs
+      - name: Commit a changed snapshot
+        shell: bash
+        run: |
+          if git diff --quiet -- trending-local-llms/index.html data/trending-local-llms.json; then
+            echo "The verified snapshot is unchanged."
+            exit 0
+          fi
+
+          git config user.name "researchaudio-index-bot"
+          git config user.email "researchaudio-index-bot@users.noreply.github.com"
+          git add trending-local-llms/index.html data/trending-local-llms.json
+          git commit \
+            -m "Keep the open-model hardware signal current" \
+            -m "Refresh the public Hugging Face trending snapshot and its transparent VRAM planning floors after the complete site verifier passes." \
+            -m "Constraint: Public Hub metadata only; no email send, signup submission, paid acquisition, or model download." \
+            -m "Confidence: high" \
+            -m "Scope-risk: narrow" \
+            -m "Directive: Preserve the fail-closed minimum-model and full-site verification gates." \
+            -m "Tested: Trending source validation and scripts/verify-site.mjs." \
+            -m "Not-tested: Search ranking, external sharing, and subscriber conversion."
+          git push

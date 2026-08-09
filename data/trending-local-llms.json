@@ -1,0 +1,241 @@
+{
+  "generatedAt": "2026-08-09T02:07:32.402Z",
+  "source": {
+    "name": "Hugging Face Hub public models API",
+    "url": "https://huggingface.co/models?pipeline_tag=text-generation&sort=trending",
+    "query": "text-generation models sorted by trending score"
+  },
+  "method": {
+    "modelCount": 12,
+    "minimumParameters": 1000000000,
+    "maximumParameters": 2000000000000,
+    "excludedArtifactNames": [
+      "GGUF",
+      "AWQ",
+      "GPTQ",
+      "EXL2",
+      "MLX"
+    ],
+    "weightFormula": "parameters * bits / 8 / 1024^3",
+    "headroomPercent": 20,
+    "limitations": "Weight plus headroom only. Excludes KV cache, activations, runtime workspace, file-format overhead, offload, speed, quality, and hardware compatibility."
+  },
+  "models": [
+    {
+      "rank": 1,
+      "id": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "name": "DeepSeek-V4-Flash-0731",
+      "author": "deepseek-ai",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731",
+      "parameters": 304180418494,
+      "parameterBillions": 304.18,
+      "trendingScore": 1192,
+      "downloads": 785771,
+      "likes": 2854,
+      "lastModified": "2026-08-01T03:07:41.000Z",
+      "planningGiB": {
+        "int4": 169.97,
+        "int8": 339.95,
+        "bf16": 679.9
+      }
+    },
+    {
+      "rank": 2,
+      "id": "LiquidAI/LFM2.5-2.6B",
+      "name": "LFM2.5-2.6B",
+      "author": "LiquidAI",
+      "url": "https://huggingface.co/LiquidAI/LFM2.5-2.6B",
+      "parameters": 2697198592,
+      "parameterBillions": 2.7,
+      "trendingScore": 399,
+      "downloads": 81522,
+      "likes": 418,
+      "lastModified": "2026-08-07T10:30:38.000Z",
+      "planningGiB": {
+        "int4": 1.51,
+        "int8": 3.01,
+        "bf16": 6.03
+      }
+    },
+    {
+      "rank": 3,
+      "id": "deepgrove/maple-preview",
+      "name": "maple-preview",
+      "author": "deepgrove",
+      "url": "https://huggingface.co/deepgrove/maple-preview",
+      "parameters": 20214030336,
+      "parameterBillions": 20.21,
+      "trendingScore": 248,
+      "downloads": 896,
+      "likes": 255,
+      "lastModified": "2026-08-04T20:51:36.000Z",
+      "planningGiB": {
+        "int4": 11.3,
+        "int8": 22.59,
+        "bf16": 45.18
+      }
+    },
+    {
+      "rank": 4,
+      "id": "inclusionAI/Ling-3.0-flash",
+      "name": "Ling-3.0-flash",
+      "author": "inclusionAI",
+      "url": "https://huggingface.co/inclusionAI/Ling-3.0-flash",
+      "parameters": 127486405600,
+      "parameterBillions": 127.49,
+      "trendingScore": 212,
+      "downloads": 4189,
+      "likes": 222,
+      "lastModified": "2026-08-06T15:09:42.000Z",
+      "planningGiB": {
+        "int4": 71.24,
+        "int8": 142.48,
+        "bf16": 284.95
+      }
+    },
+    {
+      "rank": 5,
+      "id": "Kwaipilot/KAT-Coder-V2.5-Dev",
+      "name": "KAT-Coder-V2.5-Dev",
+      "author": "Kwaipilot",
+      "url": "https://huggingface.co/Kwaipilot/KAT-Coder-V2.5-Dev",
+      "parameters": 34660610688,
+      "parameterBillions": 34.66,
+      "trendingScore": 125,
+      "downloads": 17885,
+      "likes": 544,
+      "lastModified": "2026-07-28T04:35:27.000Z",
+      "planningGiB": {
+        "int4": 19.37,
+        "int8": 38.74,
+        "bf16": 77.47
+      }
+    },
+    {
+      "rank": 6,
+      "id": "zai-org/GLM-5.2",
+      "name": "GLM-5.2",
+      "author": "zai-org",
+      "url": "https://huggingface.co/zai-org/GLM-5.2",
+      "parameters": 753329940480,
+      "parameterBillions": 753.33,
+      "trendingScore": 121,
+      "downloads": 2480368,
+      "likes": 4902,
+      "lastModified": "2026-07-02T08:08:14.000Z",
+      "planningGiB": {
+        "int4": 420.96,
+        "int8": 841.91,
+        "bf16": 1683.82
+      }
+    },
+    {
+      "rank": 7,
+      "id": "EschaLabs/Qwen3.6-35B-A3B-Escha-W2",
+      "name": "Qwen3.6-35B-A3B-Escha-W2",
+      "author": "EschaLabs",
+      "url": "https://huggingface.co/EschaLabs/Qwen3.6-35B-A3B-Escha-W2",
+      "parameters": 7300654928,
+      "parameterBillions": 7.3,
+      "trendingScore": 97,
+      "downloads": 3873,
+      "likes": 237,
+      "lastModified": "2026-08-06T15:51:28.000Z",
+      "planningGiB": {
+        "int4": 4.08,
+        "int8": 8.16,
+        "bf16": 16.32
+      }
+    },
+    {
+      "rank": 8,
+      "id": "deepseek-ai/DeepSeek-V4-Flash",
+      "name": "DeepSeek-V4-Flash",
+      "author": "deepseek-ai",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash",
+      "parameters": 290944616402,
+      "parameterBillions": 290.94,
+      "trendingScore": 84,
+      "downloads": 2523963,
+      "likes": 2065,
+      "lastModified": "2026-06-22T12:12:13.000Z",
+      "planningGiB": {
+        "int4": 162.58,
+        "int8": 325.16,
+        "bf16": 650.31
+      }
+    },
+    {
+      "rank": 9,
+      "id": "Akahsizrr/fuse-1-Lite",
+      "name": "fuse-1-Lite",
+      "author": "Akahsizrr",
+      "url": "https://huggingface.co/Akahsizrr/fuse-1-Lite",
+      "parameters": 5719063552,
+      "parameterBillions": 5.72,
+      "trendingScore": 81,
+      "downloads": 309,
+      "likes": 81,
+      "lastModified": "2026-08-05T16:04:21.000Z",
+      "planningGiB": {
+        "int4": 3.2,
+        "int8": 6.39,
+        "bf16": 12.78
+      }
+    },
+    {
+      "rank": 10,
+      "id": "meta-llama/Llama-3.1-8B-Instruct",
+      "name": "Llama-3.1-8B-Instruct",
+      "author": "meta-llama",
+      "url": "https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct",
+      "parameters": 8030261248,
+      "parameterBillions": 8.03,
+      "trendingScore": 77,
+      "downloads": 7512450,
+      "likes": 6551,
+      "lastModified": "2024-09-25T17:00:57.000Z",
+      "planningGiB": {
+        "int4": 4.49,
+        "int8": 8.97,
+        "bf16": 17.95
+      }
+    },
+    {
+      "rank": 11,
+      "id": "badtheorylabs/BTL-4",
+      "name": "BTL-4",
+      "author": "badtheorylabs",
+      "url": "https://huggingface.co/badtheorylabs/BTL-4",
+      "parameters": 35107181936,
+      "parameterBillions": 35.11,
+      "trendingScore": 74,
+      "downloads": 571,
+      "likes": 75,
+      "lastModified": "2026-08-07T06:49:57.000Z",
+      "planningGiB": {
+        "int4": 19.62,
+        "int8": 39.24,
+        "bf16": 78.47
+      }
+    },
+    {
+      "rank": 12,
+      "id": "Qwen/Qwen2.5-7B-Instruct",
+      "name": "Qwen2.5-7B-Instruct",
+      "author": "Qwen",
+      "url": "https://huggingface.co/Qwen/Qwen2.5-7B-Instruct",
+      "parameters": 7615616512,
+      "parameterBillions": 7.62,
+      "trendingScore": 70,
+      "downloads": 11335607,
+      "likes": 1532,
+      "lastModified": "2025-01-12T02:10:10.000Z",
+      "planningGiB": {
+        "int4": 4.26,
+        "int8": 8.51,
+        "bf16": 17.02
+      }
+    }
+  ]
+}

@@ -43,6 +43,8 @@ ResearchAudio publishes evidence-led AI briefings for engineers and builders.
 
 ## Field guides
 
+- Trending Local LLM Hardware Index: https://tools.researchaudio.io/trending-local-llms/
+  A daily source-backed snapshot of twelve trending Hugging Face text-generation models with safetensors parameter counts, Hub signals, and transparent INT4, INT8, and BF16 weight-plus-headroom planning floors. The public JSON snapshot is at https://tools.researchaudio.io/data/trending-local-llms.json.
 - Local LLM GPU and Hardware Guide: https://tools.researchaudio.io/local-llm-gpu-guide/
   A comprehensive decision path for local LLM inference hardware covering weight floors, quantization, KV cache, context, concurrency, usable VRAM, GPU tiers, and exact released-model guides.
 - The Fable 5 Cost Playbook: https://tools.researchaudio.io/fable-playbook/
