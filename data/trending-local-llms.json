@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-12T09:34:52.881Z",
+  "generatedAt": "2026-08-13T09:35:48.950Z",
   "source": {
     "name": "Hugging Face Hub public models API",
     "url": "https://huggingface.co/models?pipeline_tag=text-generation&sort=trending",
@@ -34,9 +34,9 @@
       "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731",
       "parameters": 304180418494,
       "parameterBillions": 304.18,
-      "trendingScore": 615,
-      "downloads": 1048685,
-      "likes": 3188,
+      "trendingScore": 548,
+      "downloads": 1431587,
+      "likes": 3279,
       "lastModified": "2026-08-01T03:07:41.000Z",
       "planningGiB": {
         "int4": 169.97,
@@ -52,9 +52,9 @@
       "url": "https://huggingface.co/LiquidAI/LFM2.5-2.6B",
       "parameters": 2697198592,
       "parameterBillions": 2.7,
-      "trendingScore": 335,
-      "downloads": 93668,
-      "likes": 561,
+      "trendingScore": 271,
+      "downloads": 116640,
+      "likes": 594,
       "lastModified": "2026-08-07T10:30:38.000Z",
       "planningGiB": {
         "int4": 1.51,
@@ -64,15 +64,33 @@
     },
     {
       "rank": 3,
+      "id": "nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
+      "name": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
+      "author": "nvidia",
+      "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
+      "parameters": 17820210764,
+      "parameterBillions": 17.82,
+      "trendingScore": 213,
+      "downloads": 44859,
+      "likes": 218,
+      "lastModified": "2026-08-12T16:45:22.000Z",
+      "planningGiB": {
+        "int4": 9.96,
+        "int8": 19.92,
+        "bf16": 39.83
+      }
+    },
+    {
+      "rank": 4,
       "id": "deepgrove/maple-preview",
       "name": "maple-preview",
       "author": "deepgrove",
       "url": "https://huggingface.co/deepgrove/maple-preview",
       "parameters": 20214030336,
       "parameterBillions": 20.21,
-      "trendingScore": 252,
-      "downloads": 2049,
-      "likes": 337,
+      "trendingScore": 156,
+      "downloads": 3868,
+      "likes": 348,
       "lastModified": "2026-08-04T20:51:36.000Z",
       "planningGiB": {
         "int4": 11.3,
@@ -81,39 +99,21 @@
       }
     },
     {
-      "rank": 4,
+      "rank": 5,
       "id": "inclusionAI/Ling-3.0-flash",
       "name": "Ling-3.0-flash",
       "author": "inclusionAI",
       "url": "https://huggingface.co/inclusionAI/Ling-3.0-flash",
       "parameters": 127486405600,
       "parameterBillions": 127.49,
-      "trendingScore": 175,
-      "downloads": 6148,
-      "likes": 311,
+      "trendingScore": 141,
+      "downloads": 10052,
+      "likes": 321,
       "lastModified": "2026-08-06T15:09:42.000Z",
       "planningGiB": {
         "int4": 71.24,
         "int8": 142.48,
         "bf16": 284.95
-      }
-    },
-    {
-      "rank": 5,
-      "id": "nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
-      "name": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
-      "author": "nvidia",
-      "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
-      "parameters": 17820210764,
-      "parameterBillions": 17.82,
-      "trendingScore": 166,
-      "downloads": 19250,
-      "likes": 168,
-      "lastModified": "2026-08-11T23:01:59.000Z",
-      "planningGiB": {
-        "int4": 9.96,
-        "int8": 19.92,
-        "bf16": 39.83
       }
     },
     {
@@ -124,9 +124,9 @@
       "url": "https://huggingface.co/Akahsizrr/fuse-1-Lite",
       "parameters": 5719063552,
       "parameterBillions": 5.72,
-      "trendingScore": 109,
-      "downloads": 664,
-      "likes": 109,
+      "trendingScore": 94,
+      "downloads": 1668,
+      "likes": 114,
       "lastModified": "2026-08-09T12:31:00.000Z",
       "planningGiB": {
         "int4": 3.2,
@@ -136,15 +136,33 @@
     },
     {
       "rank": 7,
+      "id": "Motif-Technologies/Motif-3",
+      "name": "Motif-3",
+      "author": "Motif-Technologies",
+      "url": "https://huggingface.co/Motif-Technologies/Motif-3",
+      "parameters": 314841775750,
+      "parameterBillions": 314.84,
+      "trendingScore": 88,
+      "downloads": 808,
+      "likes": 89,
+      "lastModified": "2026-08-12T04:37:53.000Z",
+      "planningGiB": {
+        "int4": 175.93,
+        "int8": 351.86,
+        "bf16": 703.73
+      }
+    },
+    {
+      "rank": 8,
       "id": "zai-org/GLM-5.2",
       "name": "GLM-5.2",
       "author": "zai-org",
       "url": "https://huggingface.co/zai-org/GLM-5.2",
       "parameters": 753329940480,
       "parameterBillions": 753.33,
-      "trendingScore": 81,
-      "downloads": 2517575,
-      "likes": 4934,
+      "trendingScore": 66,
+      "downloads": 2662328,
+      "likes": 4944,
       "lastModified": "2026-07-02T08:08:14.000Z",
       "planningGiB": {
         "int4": 420.96,
@@ -153,39 +171,21 @@
       }
     },
     {
-      "rank": 8,
+      "rank": 9,
       "id": "badtheorylabs/BTL-4",
       "name": "BTL-4",
       "author": "badtheorylabs",
       "url": "https://huggingface.co/badtheorylabs/BTL-4",
       "parameters": 35107181936,
       "parameterBillions": 35.11,
-      "trendingScore": 78,
-      "downloads": 1981,
-      "likes": 79,
+      "trendingScore": 66,
+      "downloads": 5042,
+      "likes": 80,
       "lastModified": "2026-08-07T06:49:57.000Z",
       "planningGiB": {
         "int4": 19.62,
         "int8": 39.24,
         "bf16": 78.47
-      }
-    },
-    {
-      "rank": 9,
-      "id": "Motif-Technologies/Motif-3",
-      "name": "Motif-3",
-      "author": "Motif-Technologies",
-      "url": "https://huggingface.co/Motif-Technologies/Motif-3",
-      "parameters": 314841775750,
-      "parameterBillions": 314.84,
-      "trendingScore": 73,
-      "downloads": 0,
-      "likes": 74,
-      "lastModified": "2026-08-12T04:37:53.000Z",
-      "planningGiB": {
-        "int4": 175.93,
-        "int8": 351.86,
-        "bf16": 703.73
       }
     },
     {
@@ -196,9 +196,9 @@
       "url": "https://huggingface.co/Kwaipilot/KAT-Coder-V2.5-Dev",
       "parameters": 34660610688,
       "parameterBillions": 34.66,
-      "trendingScore": 68,
-      "downloads": 19635,
-      "likes": 564,
+      "trendingScore": 54,
+      "downloads": 21826,
+      "likes": 568,
       "lastModified": "2026-07-28T04:35:27.000Z",
       "planningGiB": {
         "int4": 19.37,
@@ -208,20 +208,20 @@
     },
     {
       "rank": 11,
-      "id": "deepseek-ai/DeepSeek-V4-Flash",
-      "name": "DeepSeek-V4-Flash",
-      "author": "deepseek-ai",
-      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash",
-      "parameters": 290944616402,
-      "parameterBillions": 290.94,
-      "trendingScore": 51,
-      "downloads": 2283943,
-      "likes": 2083,
-      "lastModified": "2026-06-22T12:12:13.000Z",
+      "id": "huihui-ai/Huihui-CyberStrike-OffSec-35B-abliterated",
+      "name": "Huihui-CyberStrike-OffSec-35B-abliterated",
+      "author": "huihui-ai",
+      "url": "https://huggingface.co/huihui-ai/Huihui-CyberStrike-OffSec-35B-abliterated",
+      "parameters": 35951822704,
+      "parameterBillions": 35.95,
+      "trendingScore": 52,
+      "downloads": 819,
+      "likes": 54,
+      "lastModified": "2026-08-11T04:01:42.000Z",
       "planningGiB": {
-        "int4": 162.58,
-        "int8": 325.16,
-        "bf16": 650.31
+        "int4": 20.09,
+        "int8": 40.18,
+        "bf16": 80.36
       }
     },
     {
@@ -232,10 +232,10 @@
       "url": "https://huggingface.co/webAI-Official/TwIL-LM3",
       "parameters": 3075098624,
       "parameterBillions": 3.08,
-      "trendingScore": 44,
-      "downloads": 289,
-      "likes": 44,
-      "lastModified": "2026-08-10T20:53:22.000Z",
+      "trendingScore": 49,
+      "downloads": 4299,
+      "likes": 49,
+      "lastModified": "2026-08-12T21:22:50.000Z",
       "planningGiB": {
         "int4": 1.72,
         "int8": 3.44,
