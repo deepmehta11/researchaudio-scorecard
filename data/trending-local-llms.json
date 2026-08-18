@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-17T09:04:10.126Z",
+  "generatedAt": "2026-08-18T08:57:41.209Z",
   "source": {
     "name": "Hugging Face Hub public models API",
     "url": "https://huggingface.co/models?pipeline_tag=text-generation&sort=trending",
@@ -34,9 +34,9 @@
       "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813",
       "parameters": 1650497936906,
       "parameterBillions": 1650.5,
-      "trendingScore": 517,
+      "trendingScore": 536,
       "downloads": 25006,
-      "likes": 552,
+      "likes": 578,
       "lastModified": "2026-08-13T16:28:28.000Z",
       "planningGiB": {
         "int4": 922.29,
@@ -52,9 +52,9 @@
       "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731",
       "parameters": 304180418494,
       "parameterBillions": 304.18,
-      "trendingScore": 391,
+      "trendingScore": 313,
       "downloads": 1978298,
-      "likes": 3478,
+      "likes": 3508,
       "lastModified": "2026-08-01T03:07:41.000Z",
       "planningGiB": {
         "int4": 169.97,
@@ -70,10 +70,10 @@
       "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
       "parameters": 17820210764,
       "parameterBillions": 17.82,
-      "trendingScore": 271,
+      "trendingScore": 287,
       "downloads": 231271,
-      "likes": 297,
-      "lastModified": "2026-08-13T18:36:59.000Z",
+      "likes": 314,
+      "lastModified": "2026-08-17T17:49:30.000Z",
       "planningGiB": {
         "int4": 9.96,
         "int8": 19.92,
@@ -82,38 +82,38 @@
     },
     {
       "rank": 4,
+      "id": "inclusionAI/Ling-3.0-tiny",
+      "name": "Ling-3.0-tiny",
+      "author": "inclusionAI",
+      "url": "https://huggingface.co/inclusionAI/Ling-3.0-tiny",
+      "parameters": 7893392800,
+      "parameterBillions": 7.89,
+      "trendingScore": 202,
+      "downloads": 6266,
+      "likes": 311,
+      "lastModified": "2026-08-18T01:33:44.000Z",
+      "planningGiB": {
+        "int4": 4.41,
+        "int8": 8.82,
+        "bf16": 17.64
+      }
+    },
+    {
+      "rank": 5,
       "id": "LiquidAI/LFM2.5-2.6B",
       "name": "LFM2.5-2.6B",
       "author": "LiquidAI",
       "url": "https://huggingface.co/LiquidAI/LFM2.5-2.6B",
       "parameters": 2697198592,
       "parameterBillions": 2.7,
-      "trendingScore": 166,
+      "trendingScore": 135,
       "downloads": 147270,
-      "likes": 649,
+      "likes": 656,
       "lastModified": "2026-08-07T10:30:38.000Z",
       "planningGiB": {
         "int4": 1.51,
         "int8": 3.01,
         "bf16": 6.03
-      }
-    },
-    {
-      "rank": 5,
-      "id": "Motif-Technologies/Motif-3",
-      "name": "Motif-3",
-      "author": "Motif-Technologies",
-      "url": "https://huggingface.co/Motif-Technologies/Motif-3",
-      "parameters": 314841775750,
-      "parameterBillions": 314.84,
-      "trendingScore": 111,
-      "downloads": 2483,
-      "likes": 112,
-      "lastModified": "2026-08-14T03:47:46.000Z",
-      "planningGiB": {
-        "int4": 175.93,
-        "int8": 351.86,
-        "bf16": 703.73
       }
     },
     {
@@ -124,9 +124,9 @@
       "url": "https://huggingface.co/empero-ai/Qwen3.8-9B",
       "parameters": 9653104368,
       "parameterBillions": 9.65,
-      "trendingScore": 73,
+      "trendingScore": 113,
       "downloads": 540,
-      "likes": 74,
+      "likes": 116,
       "lastModified": "2026-08-15T23:48:40.000Z",
       "planningGiB": {
         "int4": 5.39,
@@ -136,87 +136,15 @@
     },
     {
       "rank": 7,
-      "id": "deepgrove/maple-preview",
-      "name": "maple-preview",
-      "author": "deepgrove",
-      "url": "https://huggingface.co/deepgrove/maple-preview",
-      "parameters": 20214030336,
-      "parameterBillions": 20.21,
-      "trendingScore": 67,
-      "downloads": 6470,
-      "likes": 366,
-      "lastModified": "2026-08-04T20:51:36.000Z",
-      "planningGiB": {
-        "int4": 11.3,
-        "int8": 22.59,
-        "bf16": 45.18
-      }
-    },
-    {
-      "rank": 8,
-      "id": "huihui-ai/Huihui-CyberStrike-OffSec-35B-abliterated",
-      "name": "Huihui-CyberStrike-OffSec-35B-abliterated",
-      "author": "huihui-ai",
-      "url": "https://huggingface.co/huihui-ai/Huihui-CyberStrike-OffSec-35B-abliterated",
-      "parameters": 35951822704,
-      "parameterBillions": 35.95,
-      "trendingScore": 65,
-      "downloads": 1803,
-      "likes": 68,
-      "lastModified": "2026-08-11T04:01:42.000Z",
-      "planningGiB": {
-        "int4": 20.09,
-        "int8": 40.18,
-        "bf16": 80.36
-      }
-    },
-    {
-      "rank": 9,
-      "id": "webAI-Official/TwIL-LM3",
-      "name": "TwIL-LM3",
-      "author": "webAI-Official",
-      "url": "https://huggingface.co/webAI-Official/TwIL-LM3",
-      "parameters": 3075098624,
-      "parameterBillions": 3.08,
-      "trendingScore": 63,
-      "downloads": 60424,
-      "likes": 66,
-      "lastModified": "2026-08-13T18:52:38.000Z",
-      "planningGiB": {
-        "int4": 1.72,
-        "int8": 3.44,
-        "bf16": 6.87
-      }
-    },
-    {
-      "rank": 10,
-      "id": "inclusionAI/Ling-3.0-flash",
-      "name": "Ling-3.0-flash",
-      "author": "inclusionAI",
-      "url": "https://huggingface.co/inclusionAI/Ling-3.0-flash",
-      "parameters": 127486405600,
-      "parameterBillions": 127.49,
-      "trendingScore": 61,
-      "downloads": 13167,
-      "likes": 340,
-      "lastModified": "2026-08-06T15:09:42.000Z",
-      "planningGiB": {
-        "int4": 71.24,
-        "int8": 142.48,
-        "bf16": 284.95
-      }
-    },
-    {
-      "rank": 11,
       "id": "zai-org/GLM-5.2",
       "name": "GLM-5.2",
       "author": "zai-org",
       "url": "https://huggingface.co/zai-org/GLM-5.2",
       "parameters": 753329940480,
       "parameterBillions": 753.33,
-      "trendingScore": 57,
+      "trendingScore": 62,
       "downloads": 2714976,
-      "likes": 4986,
+      "likes": 4998,
       "lastModified": "2026-07-02T08:08:14.000Z",
       "planningGiB": {
         "int4": 420.96,
@@ -225,21 +153,93 @@
       }
     },
     {
-      "rank": 12,
+      "rank": 8,
       "id": "Youssofal/Qwen3.8-27B-MTPLX-Optimized-Speed",
       "name": "Qwen3.8-27B-MTPLX-Optimized-Speed",
       "author": "Youssofal",
       "url": "https://huggingface.co/Youssofal/Qwen3.8-27B-MTPLX-Optimized-Speed",
       "parameters": 6086364400,
       "parameterBillions": 6.09,
-      "trendingScore": 53,
+      "trendingScore": 60,
       "downloads": 13622,
-      "likes": 56,
+      "likes": 63,
       "lastModified": "2026-08-15T22:47:07.000Z",
       "planningGiB": {
         "int4": 3.4,
         "int8": 6.8,
         "bf16": 13.6
+      }
+    },
+    {
+      "rank": 9,
+      "id": "Motif-Technologies/Motif-3",
+      "name": "Motif-3",
+      "author": "Motif-Technologies",
+      "url": "https://huggingface.co/Motif-Technologies/Motif-3",
+      "parameters": 314841775750,
+      "parameterBillions": 314.84,
+      "trendingScore": 59,
+      "downloads": 2483,
+      "likes": 116,
+      "lastModified": "2026-08-14T03:47:46.000Z",
+      "planningGiB": {
+        "int4": 175.93,
+        "int8": 351.86,
+        "bf16": 703.73
+      }
+    },
+    {
+      "rank": 10,
+      "id": "deepseek-ai/DeepSeek-V4-Pro",
+      "name": "DeepSeek-V4-Pro",
+      "author": "deepseek-ai",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro",
+      "parameters": 1598839674782,
+      "parameterBillions": 1598.84,
+      "trendingScore": 52,
+      "downloads": 1233608,
+      "likes": 5457,
+      "lastModified": "2026-06-22T12:12:50.000Z",
+      "planningGiB": {
+        "int4": 893.42,
+        "int8": 1786.84,
+        "bf16": 3573.69
+      }
+    },
+    {
+      "rank": 11,
+      "id": "inclusionAI/Ling-3.0-flash",
+      "name": "Ling-3.0-flash",
+      "author": "inclusionAI",
+      "url": "https://huggingface.co/inclusionAI/Ling-3.0-flash",
+      "parameters": 127486405600,
+      "parameterBillions": 127.49,
+      "trendingScore": 50,
+      "downloads": 13167,
+      "likes": 348,
+      "lastModified": "2026-08-18T06:26:39.000Z",
+      "planningGiB": {
+        "int4": 71.24,
+        "int8": 142.48,
+        "bf16": 284.95
+      }
+    },
+    {
+      "rank": 12,
+      "id": "deepgrove/maple-preview",
+      "name": "maple-preview",
+      "author": "deepgrove",
+      "url": "https://huggingface.co/deepgrove/maple-preview",
+      "parameters": 20214030336,
+      "parameterBillions": 20.21,
+      "trendingScore": 46,
+      "downloads": 6470,
+      "likes": 367,
+      "lastModified": "2026-08-04T20:51:36.000Z",
+      "planningGiB": {
+        "int4": 11.3,
+        "int8": 22.59,
+        "bf16": 45.18
       }
     }
   ]
