@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-21T09:02:11.545Z",
+  "generatedAt": "2026-08-22T08:52:15.587Z",
   "source": {
     "name": "Hugging Face Hub public models API",
     "url": "https://huggingface.co/models?pipeline_tag=text-generation&sort=trending",
@@ -34,10 +34,10 @@
       "url": "https://huggingface.co/OBLITERATUS/Qwen3.8-27B-OBLITERATED",
       "parameters": 27781427952,
       "parameterBillions": 27.78,
-      "trendingScore": 316,
+      "trendingScore": 434,
       "downloads": 123956,
-      "likes": 342,
-      "lastModified": "2026-08-21T00:35:23.000Z",
+      "likes": 473,
+      "lastModified": "2026-08-22T08:24:46.000Z",
       "planningGiB": {
         "int4": 15.52,
         "int8": 31.05,
@@ -46,33 +46,15 @@
     },
     {
       "rank": 2,
-      "id": "deepseek-ai/DeepSeek-V4-Pro-0813",
-      "name": "DeepSeek-V4-Pro-0813",
-      "author": "deepseek-ai",
-      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813",
-      "parameters": 1650497936906,
-      "parameterBillions": 1650.5,
-      "trendingScore": 261,
-      "downloads": 49601,
-      "likes": 689,
-      "lastModified": "2026-08-13T16:28:28.000Z",
-      "planningGiB": {
-        "int4": 922.29,
-        "int8": 1844.58,
-        "bf16": 3689.15
-      }
-    },
-    {
-      "rank": 3,
       "id": "ornith-ai/Ornith-1.5-35B-A3B",
       "name": "Ornith-1.5-35B-A3B",
       "author": "ornith-ai",
       "url": "https://huggingface.co/ornith-ai/Ornith-1.5-35B-A3B",
       "parameters": 35951822704,
       "parameterBillions": 35.95,
-      "trendingScore": 244,
+      "trendingScore": 296,
       "downloads": 9165,
-      "likes": 247,
+      "likes": 301,
       "lastModified": "2026-08-20T02:22:28.000Z",
       "planningGiB": {
         "int4": 20.09,
@@ -81,39 +63,57 @@
       }
     },
     {
-      "rank": 4,
-      "id": "deepseek-ai/DeepSeek-V4-Flash-0731",
-      "name": "DeepSeek-V4-Flash-0731",
+      "rank": 3,
+      "id": "deepseek-ai/DeepSeek-V4-Pro-0813",
+      "name": "DeepSeek-V4-Pro-0813",
       "author": "deepseek-ai",
-      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731",
-      "parameters": 304180418494,
-      "parameterBillions": 304.18,
-      "trendingScore": 178,
-      "downloads": 2833064,
-      "likes": 3584,
-      "lastModified": "2026-08-01T03:07:41.000Z",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813",
+      "parameters": 1650497936906,
+      "parameterBillions": 1650.5,
+      "trendingScore": 207,
+      "downloads": 54566,
+      "likes": 710,
+      "lastModified": "2026-08-13T16:28:28.000Z",
       "planningGiB": {
-        "int4": 169.97,
-        "int8": 339.95,
-        "bf16": 679.9
+        "int4": 922.29,
+        "int8": 1844.58,
+        "bf16": 3689.15
       }
     },
     {
-      "rank": 5,
+      "rank": 4,
       "id": "z-lab/Qwen3.8-27B-DFlash2",
       "name": "Qwen3.8-27B-DFlash2",
       "author": "z-lab",
       "url": "https://huggingface.co/z-lab/Qwen3.8-27B-DFlash2",
       "parameters": 1924404480,
       "parameterBillions": 1.92,
-      "trendingScore": 156,
-      "downloads": 21092,
-      "likes": 158,
+      "trendingScore": 181,
+      "downloads": 29705,
+      "likes": 183,
       "lastModified": "2026-08-19T02:52:37.000Z",
       "planningGiB": {
         "int4": 1.08,
         "int8": 2.15,
         "bf16": 4.3
+      }
+    },
+    {
+      "rank": 5,
+      "id": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "name": "DeepSeek-V4-Flash-0731",
+      "author": "deepseek-ai",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731",
+      "parameters": 304180418494,
+      "parameterBillions": 304.18,
+      "trendingScore": 175,
+      "downloads": 2976281,
+      "likes": 3617,
+      "lastModified": "2026-08-01T03:07:41.000Z",
+      "planningGiB": {
+        "int4": 169.97,
+        "int8": 339.95,
+        "bf16": 679.9
       }
     },
     {
@@ -124,9 +124,9 @@
       "url": "https://huggingface.co/empero-ai/Qwen3.8-9B-Distill",
       "parameters": 9653104368,
       "parameterBillions": 9.65,
-      "trendingScore": 148,
-      "downloads": 7925,
-      "likes": 153,
+      "trendingScore": 153,
+      "downloads": 9260,
+      "likes": 158,
       "lastModified": "2026-08-15T23:48:40.000Z",
       "planningGiB": {
         "int4": 5.39,
@@ -136,38 +136,38 @@
     },
     {
       "rank": 7,
-      "id": "incoai/Qwen3.8-27B-DFlash2",
-      "name": "Qwen3.8-27B-DFlash2",
-      "author": "incoai",
-      "url": "https://huggingface.co/incoai/Qwen3.8-27B-DFlash2",
-      "parameters": 1924404480,
-      "parameterBillions": 1.92,
-      "trendingScore": 135,
-      "downloads": 37056,
-      "likes": 137,
-      "lastModified": "2026-08-19T02:52:32.000Z",
-      "planningGiB": {
-        "int4": 1.08,
-        "int8": 2.15,
-        "bf16": 4.3
-      }
-    },
-    {
-      "rank": 8,
       "id": "ornith-ai/Ornith-1.5-9B",
       "name": "Ornith-1.5-9B",
       "author": "ornith-ai",
       "url": "https://huggingface.co/ornith-ai/Ornith-1.5-9B",
       "parameters": 9409813744,
       "parameterBillions": 9.41,
-      "trendingScore": 133,
+      "trendingScore": 149,
       "downloads": 10304,
-      "likes": 137,
+      "likes": 154,
       "lastModified": "2026-08-20T02:21:44.000Z",
       "planningGiB": {
         "int4": 5.26,
         "int8": 10.52,
         "bf16": 21.03
+      }
+    },
+    {
+      "rank": 8,
+      "id": "incoai/Qwen3.8-27B-DFlash2",
+      "name": "Qwen3.8-27B-DFlash2",
+      "author": "incoai",
+      "url": "https://huggingface.co/incoai/Qwen3.8-27B-DFlash2",
+      "parameters": 1924404480,
+      "parameterBillions": 1.92,
+      "trendingScore": 145,
+      "downloads": 37056,
+      "likes": 147,
+      "lastModified": "2026-08-19T02:52:32.000Z",
+      "planningGiB": {
+        "int4": 1.08,
+        "int8": 2.15,
+        "bf16": 4.3
       }
     },
     {
@@ -178,9 +178,9 @@
       "url": "https://huggingface.co/inclusionAI/Ling-3.0-tiny",
       "parameters": 7893392800,
       "parameterBillions": 7.89,
-      "trendingScore": 105,
-      "downloads": 13635,
-      "likes": 342,
+      "trendingScore": 89,
+      "downloads": 14075,
+      "likes": 346,
       "lastModified": "2026-08-19T10:53:14.000Z",
       "planningGiB": {
         "int4": 4.41,
@@ -190,15 +190,33 @@
     },
     {
       "rank": 10,
+      "id": "ornith-ai/Ornith-1.5-397B",
+      "name": "Ornith-1.5-397B",
+      "author": "ornith-ai",
+      "url": "https://huggingface.co/ornith-ai/Ornith-1.5-397B",
+      "parameters": 396802360816,
+      "parameterBillions": 396.8,
+      "trendingScore": 68,
+      "downloads": 672,
+      "likes": 68,
+      "lastModified": "2026-08-20T02:23:15.000Z",
+      "planningGiB": {
+        "int4": 221.73,
+        "int8": 443.46,
+        "bf16": 886.92
+      }
+    },
+    {
+      "rank": 11,
       "id": "nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
       "name": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
       "author": "nvidia",
       "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
       "parameters": 17820210764,
       "parameterBillions": 17.82,
-      "trendingScore": 80,
-      "downloads": 470122,
-      "likes": 340,
+      "trendingScore": 65,
+      "downloads": 534772,
+      "likes": 344,
       "lastModified": "2026-08-17T17:49:30.000Z",
       "planningGiB": {
         "int4": 9.96,
@@ -207,39 +225,21 @@
       }
     },
     {
-      "rank": 11,
+      "rank": 12,
       "id": "Youssofal/Qwen3.8-27B-MTPLX-Optimized-Speed",
       "name": "Qwen3.8-27B-MTPLX-Optimized-Speed",
       "author": "Youssofal",
       "url": "https://huggingface.co/Youssofal/Qwen3.8-27B-MTPLX-Optimized-Speed",
       "parameters": 6086364400,
       "parameterBillions": 6.09,
-      "trendingScore": 74,
-      "downloads": 34130,
-      "likes": 80,
+      "trendingScore": 49,
+      "downloads": 37398,
+      "likes": 82,
       "lastModified": "2026-08-20T06:24:45.000Z",
       "planningGiB": {
         "int4": 3.4,
         "int8": 6.8,
         "bf16": 13.6
-      }
-    },
-    {
-      "rank": 12,
-      "id": "ornith-ai/Ornith-1.5-397B",
-      "name": "Ornith-1.5-397B",
-      "author": "ornith-ai",
-      "url": "https://huggingface.co/ornith-ai/Ornith-1.5-397B",
-      "parameters": 396802360816,
-      "parameterBillions": 396.8,
-      "trendingScore": 64,
-      "downloads": 672,
-      "likes": 64,
-      "lastModified": "2026-08-20T02:23:15.000Z",
-      "planningGiB": {
-        "int4": 221.73,
-        "int8": 443.46,
-        "bf16": 886.92
       }
     }
   ]
