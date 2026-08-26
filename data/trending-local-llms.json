@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-25T09:03:19.318Z",
+  "generatedAt": "2026-08-26T09:06:07.498Z",
   "source": {
     "name": "Hugging Face Hub public models API",
     "url": "https://huggingface.co/models?pipeline_tag=text-generation&sort=trending",
@@ -34,9 +34,9 @@
       "url": "https://huggingface.co/OBLITERATUS/Qwen3.8-27B-OBLITERATED",
       "parameters": 27781427952,
       "parameterBillions": 27.78,
-      "trendingScore": 628,
-      "downloads": 312627,
-      "likes": 709,
+      "trendingScore": 677,
+      "downloads": 389747,
+      "likes": 770,
       "lastModified": "2026-08-24T17:47:52.000Z",
       "planningGiB": {
         "int4": 15.52,
@@ -52,9 +52,9 @@
       "url": "https://huggingface.co/ornith-ai/Ornith-1.5-35B-A3B",
       "parameters": 35951822704,
       "parameterBillions": 35.95,
-      "trendingScore": 396,
-      "downloads": 60294,
-      "likes": 407,
+      "trendingScore": 420,
+      "downloads": 70158,
+      "likes": 431,
       "lastModified": "2026-08-23T03:17:39.000Z",
       "planningGiB": {
         "int4": 20.09,
@@ -64,33 +64,15 @@
     },
     {
       "rank": 3,
-      "id": "z-lab/Qwen3.8-27B-DFlash2",
-      "name": "Qwen3.8-27B-DFlash2",
-      "author": "z-lab",
-      "url": "https://huggingface.co/z-lab/Qwen3.8-27B-DFlash2",
-      "parameters": 1924404480,
-      "parameterBillions": 1.92,
-      "trendingScore": 216,
-      "downloads": 50763,
-      "likes": 220,
-      "lastModified": "2026-08-19T02:52:37.000Z",
-      "planningGiB": {
-        "int4": 1.08,
-        "int8": 2.15,
-        "bf16": 4.3
-      }
-    },
-    {
-      "rank": 4,
       "id": "ornith-ai/Ornith-1.5-9B",
       "name": "Ornith-1.5-9B",
       "author": "ornith-ai",
       "url": "https://huggingface.co/ornith-ai/Ornith-1.5-9B",
       "parameters": 9653104368,
       "parameterBillions": 9.65,
-      "trendingScore": 197,
-      "downloads": 83192,
-      "likes": 205,
+      "trendingScore": 210,
+      "downloads": 98323,
+      "likes": 219,
       "lastModified": "2026-08-23T06:24:01.000Z",
       "planningGiB": {
         "int4": 5.39,
@@ -99,17 +81,17 @@
       }
     },
     {
-      "rank": 5,
-      "id": "incoai/Qwen3.8-27B-DFlash2",
+      "rank": 4,
+      "id": "z-lab/Qwen3.8-27B-DFlash2",
       "name": "Qwen3.8-27B-DFlash2",
-      "author": "incoai",
-      "url": "https://huggingface.co/incoai/Qwen3.8-27B-DFlash2",
+      "author": "z-lab",
+      "url": "https://huggingface.co/z-lab/Qwen3.8-27B-DFlash2",
       "parameters": 1924404480,
       "parameterBillions": 1.92,
-      "trendingScore": 171,
-      "downloads": 85034,
-      "likes": 173,
-      "lastModified": "2026-08-19T02:52:32.000Z",
+      "trendingScore": 157,
+      "downloads": 64984,
+      "likes": 229,
+      "lastModified": "2026-08-19T02:52:37.000Z",
       "planningGiB": {
         "int4": 1.08,
         "int8": 2.15,
@@ -117,21 +99,39 @@
       }
     },
     {
-      "rank": 6,
+      "rank": 5,
       "id": "deepseek-ai/DeepSeek-V4-Flash-0731",
       "name": "DeepSeek-V4-Flash-0731",
       "author": "deepseek-ai",
       "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731",
       "parameters": 304180418494,
       "parameterBillions": 304.18,
-      "trendingScore": 157,
-      "downloads": 3274129,
-      "likes": 3693,
+      "trendingScore": 155,
+      "downloads": 3528373,
+      "likes": 3724,
       "lastModified": "2026-08-01T03:07:41.000Z",
       "planningGiB": {
         "int4": 169.97,
         "int8": 339.95,
         "bf16": 679.9
+      }
+    },
+    {
+      "rank": 6,
+      "id": "incoai/Qwen3.8-27B-DFlash2",
+      "name": "Qwen3.8-27B-DFlash2",
+      "author": "incoai",
+      "url": "https://huggingface.co/incoai/Qwen3.8-27B-DFlash2",
+      "parameters": 1924404480,
+      "parameterBillions": 1.92,
+      "trendingScore": 124,
+      "downloads": 105786,
+      "likes": 181,
+      "lastModified": "2026-08-19T02:52:32.000Z",
+      "planningGiB": {
+        "int4": 1.08,
+        "int8": 2.15,
+        "bf16": 4.3
       }
     },
     {
@@ -142,9 +142,9 @@
       "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813",
       "parameters": 1650497936906,
       "parameterBillions": 1650.5,
-      "trendingScore": 134,
-      "downloads": 63058,
-      "likes": 749,
+      "trendingScore": 120,
+      "downloads": 74707,
+      "likes": 760,
       "lastModified": "2026-08-13T16:28:28.000Z",
       "planningGiB": {
         "int4": 922.29,
@@ -160,9 +160,9 @@
       "url": "https://huggingface.co/ornith-ai/Ornith-1.5-397B",
       "parameters": 403397928944,
       "parameterBillions": 403.4,
-      "trendingScore": 77,
-      "downloads": 34916,
-      "likes": 77,
+      "trendingScore": 79,
+      "downloads": 53447,
+      "likes": 80,
       "lastModified": "2026-08-23T06:21:27.000Z",
       "planningGiB": {
         "int4": 225.42,
@@ -172,33 +172,51 @@
     },
     {
       "rank": 9,
-      "id": "empero-ai/Qwen3.8-9B-Distill",
-      "name": "Qwen3.8-9B-Distill",
-      "author": "empero-ai",
-      "url": "https://huggingface.co/empero-ai/Qwen3.8-9B-Distill",
-      "parameters": 9653104368,
-      "parameterBillions": 9.65,
-      "trendingScore": 54,
-      "downloads": 11858,
-      "likes": 175,
-      "lastModified": "2026-08-15T23:48:40.000Z",
+      "id": "apodex/Apodex-1.1-mini",
+      "name": "Apodex-1.1-mini",
+      "author": "apodex",
+      "url": "https://huggingface.co/apodex/Apodex-1.1-mini",
+      "parameters": 35951822704,
+      "parameterBillions": 35.95,
+      "trendingScore": 65,
+      "downloads": 484,
+      "likes": 69,
+      "lastModified": "2026-08-26T06:25:32.000Z",
       "planningGiB": {
-        "int4": 5.39,
-        "int8": 10.79,
-        "bf16": 21.58
+        "int4": 20.09,
+        "int8": 40.18,
+        "bf16": 80.36
       }
     },
     {
       "rank": 10,
+      "id": "ibm-granite/granite-4.2-30b",
+      "name": "granite-4.2-30b",
+      "author": "ibm-granite",
+      "url": "https://huggingface.co/ibm-granite/granite-4.2-30b",
+      "parameters": 29276770304,
+      "parameterBillions": 29.28,
+      "trendingScore": 42,
+      "downloads": 287,
+      "likes": 42,
+      "lastModified": "2026-08-25T17:17:32.000Z",
+      "planningGiB": {
+        "int4": 16.36,
+        "int8": 32.72,
+        "bf16": 65.44
+      }
+    },
+    {
+      "rank": 11,
       "id": "inclusionAI/Ling-3.0-tiny",
       "name": "Ling-3.0-tiny",
       "author": "inclusionAI",
       "url": "https://huggingface.co/inclusionAI/Ling-3.0-tiny",
       "parameters": 7893392800,
       "parameterBillions": 7.89,
-      "trendingScore": 51,
-      "downloads": 15171,
-      "likes": 362,
+      "trendingScore": 42,
+      "downloads": 16397,
+      "likes": 367,
       "lastModified": "2026-08-19T10:53:14.000Z",
       "planningGiB": {
         "int4": 4.41,
@@ -207,39 +225,21 @@
       }
     },
     {
-      "rank": 11,
-      "id": "apodex/Apodex-1.1-mini",
-      "name": "Apodex-1.1-mini",
-      "author": "apodex",
-      "url": "https://huggingface.co/apodex/Apodex-1.1-mini",
-      "parameters": 35951822704,
-      "parameterBillions": 35.95,
-      "trendingScore": 49,
-      "downloads": 0,
-      "likes": 53,
-      "lastModified": "2026-08-25T02:47:04.000Z",
-      "planningGiB": {
-        "int4": 20.09,
-        "int8": 40.18,
-        "bf16": 80.36
-      }
-    },
-    {
       "rank": 12,
-      "id": "zai-org/GLM-5.2",
-      "name": "GLM-5.2",
-      "author": "zai-org",
-      "url": "https://huggingface.co/zai-org/GLM-5.2",
-      "parameters": 753329940480,
-      "parameterBillions": 753.33,
+      "id": "empero-ai/Qwen3.8-9B-Distill",
+      "name": "Qwen3.8-9B-Distill",
+      "author": "empero-ai",
+      "url": "https://huggingface.co/empero-ai/Qwen3.8-9B-Distill",
+      "parameters": 9653104368,
+      "parameterBillions": 9.65,
       "trendingScore": 40,
-      "downloads": 2420481,
-      "likes": 5048,
-      "lastModified": "2026-07-02T08:08:14.000Z",
+      "downloads": 13761,
+      "likes": 176,
+      "lastModified": "2026-08-15T23:48:40.000Z",
       "planningGiB": {
-        "int4": 420.96,
-        "int8": 841.91,
-        "bf16": 1683.82
+        "int4": 5.39,
+        "int8": 10.79,
+        "bf16": 21.58
       }
     }
   ]
