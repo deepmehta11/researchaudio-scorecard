@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-27T19:08:45.600Z",
+  "generatedAt": "2026-08-28T20:14:11.578Z",
   "source": {
     "name": "Hugging Face Hub public models API",
     "url": "https://huggingface.co/models?pipeline_tag=text-generation&sort=trending",
@@ -34,9 +34,9 @@
       "url": "https://huggingface.co/zai-org/GLM-5.3-Flash",
       "parameters": 321323031390,
       "parameterBillions": 321.32,
-      "trendingScore": 1234,
+      "trendingScore": 1426,
       "downloads": 34,
-      "likes": 1276,
+      "likes": 1484,
       "lastModified": "2026-08-27T10:33:43.000Z",
       "planningGiB": {
         "int4": 179.55,
@@ -46,15 +46,33 @@
     },
     {
       "rank": 2,
+      "id": "zai-org/GLM-5.3",
+      "name": "GLM-5.3",
+      "author": "zai-org",
+      "url": "https://huggingface.co/zai-org/GLM-5.3",
+      "parameters": 753329940480,
+      "parameterBillions": 753.33,
+      "trendingScore": 1026,
+      "downloads": 0,
+      "likes": 1056,
+      "lastModified": "2026-08-28T15:22:14.000Z",
+      "planningGiB": {
+        "int4": 420.96,
+        "int8": 841.91,
+        "bf16": 1683.82
+      }
+    },
+    {
+      "rank": 3,
       "id": "OBLITERATUS/Qwen3.8-27B-OBLITERATED",
       "name": "Qwen3.8-27B-OBLITERATED",
       "author": "OBLITERATUS",
       "url": "https://huggingface.co/OBLITERATUS/Qwen3.8-27B-OBLITERATED",
       "parameters": 27781427952,
       "parameterBillions": 27.78,
-      "trendingScore": 533,
+      "trendingScore": 372,
       "downloads": 509270,
-      "likes": 839,
+      "likes": 874,
       "lastModified": "2026-08-24T17:47:52.000Z",
       "planningGiB": {
         "int4": 15.52,
@@ -63,16 +81,34 @@
       }
     },
     {
-      "rank": 3,
+      "rank": 4,
+      "id": "tencent/Hy4-preview",
+      "name": "Hy4-preview",
+      "author": "tencent",
+      "url": "https://huggingface.co/tencent/Hy4-preview",
+      "parameters": 779960992733,
+      "parameterBillions": 779.96,
+      "trendingScore": 226,
+      "downloads": 0,
+      "likes": 226,
+      "lastModified": "2026-08-28T14:58:32.000Z",
+      "planningGiB": {
+        "int4": 435.84,
+        "int8": 871.67,
+        "bf16": 1743.35
+      }
+    },
+    {
+      "rank": 5,
       "id": "ornith-ai/Ornith-1.5-35B-A3B",
       "name": "Ornith-1.5-35B-A3B",
       "author": "ornith-ai",
       "url": "https://huggingface.co/ornith-ai/Ornith-1.5-35B-A3B",
       "parameters": 35951822704,
       "parameterBillions": 35.95,
-      "trendingScore": 253,
+      "trendingScore": 192,
       "downloads": 88102,
-      "likes": 464,
+      "likes": 479,
       "lastModified": "2026-08-23T03:17:39.000Z",
       "planningGiB": {
         "int4": 20.09,
@@ -81,16 +117,16 @@
       }
     },
     {
-      "rank": 4,
+      "rank": 6,
       "id": "deepseek-ai/DeepSeek-V4-Flash-0731",
       "name": "DeepSeek-V4-Flash-0731",
       "author": "deepseek-ai",
       "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731",
       "parameters": 304180418494,
       "parameterBillions": 304.18,
-      "trendingScore": 149,
+      "trendingScore": 142,
       "downloads": 3959575,
-      "likes": 3758,
+      "likes": 3785,
       "lastModified": "2026-08-01T03:07:41.000Z",
       "planningGiB": {
         "int4": 169.97,
@@ -99,52 +135,34 @@
       }
     },
     {
-      "rank": 5,
-      "id": "ornith-ai/Ornith-1.5-9B",
-      "name": "Ornith-1.5-9B",
-      "author": "ornith-ai",
-      "url": "https://huggingface.co/ornith-ai/Ornith-1.5-9B",
-      "parameters": 9653104368,
-      "parameterBillions": 9.65,
-      "trendingScore": 113,
-      "downloads": 130731,
-      "likes": 239,
-      "lastModified": "2026-08-23T06:24:01.000Z",
-      "planningGiB": {
-        "int4": 5.39,
-        "int8": 10.79,
-        "bf16": 21.58
-      }
-    },
-    {
-      "rank": 6,
-      "id": "z-lab/Qwen3.8-27B-DFlash2",
-      "name": "Qwen3.8-27B-DFlash2",
-      "author": "z-lab",
-      "url": "https://huggingface.co/z-lab/Qwen3.8-27B-DFlash2",
-      "parameters": 1924404480,
-      "parameterBillions": 1.92,
-      "trendingScore": 89,
-      "downloads": 94401,
-      "likes": 240,
-      "lastModified": "2026-08-19T02:52:37.000Z",
-      "planningGiB": {
-        "int4": 1.08,
-        "int8": 2.15,
-        "bf16": 4.3
-      }
-    },
-    {
       "rank": 7,
+      "id": "pipecat-ai/phonellm-alpha-1",
+      "name": "phonellm-alpha-1",
+      "author": "pipecat-ai",
+      "url": "https://huggingface.co/pipecat-ai/phonellm-alpha-1",
+      "parameters": 31577937344,
+      "parameterBillions": 31.58,
+      "trendingScore": 107,
+      "downloads": 64,
+      "likes": 107,
+      "lastModified": "2026-08-27T17:19:05.000Z",
+      "planningGiB": {
+        "int4": 17.65,
+        "int8": 35.29,
+        "bf16": 70.58
+      }
+    },
+    {
+      "rank": 8,
       "id": "apodex/Apodex-1.1-mini",
       "name": "Apodex-1.1-mini",
       "author": "apodex",
       "url": "https://huggingface.co/apodex/Apodex-1.1-mini",
       "parameters": 35951822704,
       "parameterBillions": 35.95,
-      "trendingScore": 84,
+      "trendingScore": 94,
       "downloads": 1306,
-      "likes": 88,
+      "likes": 98,
       "lastModified": "2026-08-26T06:25:32.000Z",
       "planningGiB": {
         "int4": 20.09,
@@ -153,16 +171,34 @@
       }
     },
     {
-      "rank": 8,
+      "rank": 9,
+      "id": "ornith-ai/Ornith-1.5-9B",
+      "name": "Ornith-1.5-9B",
+      "author": "ornith-ai",
+      "url": "https://huggingface.co/ornith-ai/Ornith-1.5-9B",
+      "parameters": 9653104368,
+      "parameterBillions": 9.65,
+      "trendingScore": 92,
+      "downloads": 130731,
+      "likes": 245,
+      "lastModified": "2026-08-23T06:24:01.000Z",
+      "planningGiB": {
+        "int4": 5.39,
+        "int8": 10.79,
+        "bf16": 21.58
+      }
+    },
+    {
+      "rank": 10,
       "id": "ibm-granite/granite-4.2-30b",
       "name": "granite-4.2-30b",
       "author": "ibm-granite",
       "url": "https://huggingface.co/ibm-granite/granite-4.2-30b",
       "parameters": 29276770304,
       "parameterBillions": 29.28,
-      "trendingScore": 79,
+      "trendingScore": 84,
       "downloads": 1791,
-      "likes": 79,
+      "likes": 84,
       "lastModified": "2026-08-25T17:17:32.000Z",
       "planningGiB": {
         "int4": 16.36,
@@ -171,75 +207,39 @@
       }
     },
     {
-      "rank": 9,
-      "id": "deepseek-ai/DeepSeek-V4-Pro-0813",
-      "name": "DeepSeek-V4-Pro-0813",
-      "author": "deepseek-ai",
-      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813",
-      "parameters": 1650497936906,
-      "parameterBillions": 1650.5,
-      "trendingScore": 72,
-      "downloads": 90822,
-      "likes": 768,
-      "lastModified": "2026-08-13T16:28:28.000Z",
-      "planningGiB": {
-        "int4": 922.29,
-        "int8": 1844.58,
-        "bf16": 3689.15
-      }
-    },
-    {
-      "rank": 10,
-      "id": "incoai/Qwen3.8-27B-DFlash2",
-      "name": "Qwen3.8-27B-DFlash2",
-      "author": "incoai",
-      "url": "https://huggingface.co/incoai/Qwen3.8-27B-DFlash2",
-      "parameters": 1924404480,
-      "parameterBillions": 1.92,
-      "trendingScore": 64,
-      "downloads": 131722,
-      "likes": 187,
-      "lastModified": "2026-08-19T02:52:32.000Z",
-      "planningGiB": {
-        "int4": 1.08,
-        "int8": 2.15,
-        "bf16": 4.3
-      }
-    },
-    {
       "rank": 11,
-      "id": "ibm-granite/granite-4.2-8b",
-      "name": "granite-4.2-8b",
-      "author": "ibm-granite",
-      "url": "https://huggingface.co/ibm-granite/granite-4.2-8b",
-      "parameters": 8791592960,
-      "parameterBillions": 8.79,
-      "trendingScore": 46,
-      "downloads": 2604,
-      "likes": 46,
-      "lastModified": "2026-08-25T17:17:24.000Z",
+      "id": "incoai/GLM-5.3-Flash-DFlash2",
+      "name": "GLM-5.3-Flash-DFlash2",
+      "author": "incoai",
+      "url": "https://huggingface.co/incoai/GLM-5.3-Flash-DFlash2",
+      "parameters": 1171080448,
+      "parameterBillions": 1.17,
+      "trendingScore": 75,
+      "downloads": 0,
+      "likes": 75,
+      "lastModified": "2026-08-27T23:02:24.000Z",
       "planningGiB": {
-        "int4": 4.91,
-        "int8": 9.83,
-        "bf16": 19.65
+        "int4": 0.65,
+        "int8": 1.31,
+        "bf16": 2.62
       }
     },
     {
       "rank": 12,
-      "id": "ibm-granite/granite-4.2-3b",
-      "name": "granite-4.2-3b",
-      "author": "ibm-granite",
-      "url": "https://huggingface.co/ibm-granite/granite-4.2-3b",
-      "parameters": 3659737600,
-      "parameterBillions": 3.66,
-      "trendingScore": 45,
-      "downloads": 3069,
-      "likes": 45,
-      "lastModified": "2026-08-25T17:17:13.000Z",
+      "id": "z-lab/Qwen3.8-27B-DFlash2",
+      "name": "Qwen3.8-27B-DFlash2",
+      "author": "z-lab",
+      "url": "https://huggingface.co/z-lab/Qwen3.8-27B-DFlash2",
+      "parameters": 1924404480,
+      "parameterBillions": 1.92,
+      "trendingScore": 74,
+      "downloads": 94401,
+      "likes": 244,
+      "lastModified": "2026-08-19T02:52:37.000Z",
       "planningGiB": {
-        "int4": 2.05,
-        "int8": 4.09,
-        "bf16": 8.18
+        "int4": 1.08,
+        "int8": 2.15,
+        "bf16": 4.3
       }
     }
   ]
