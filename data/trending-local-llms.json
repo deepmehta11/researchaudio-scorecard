@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-06T12:11:33.227Z",
+  "generatedAt": "2026-09-07T14:18:32.213Z",
   "source": {
     "name": "Hugging Face Hub public models API",
     "url": "https://huggingface.co/models?pipeline_tag=text-generation&sort=trending",
@@ -34,9 +34,9 @@
       "url": "https://huggingface.co/XHToken/Spark-X2.5-4B",
       "parameters": 4112079360,
       "parameterBillions": 4.11,
-      "trendingScore": 478,
-      "downloads": 5477,
-      "likes": 574,
+      "trendingScore": 558,
+      "downloads": 7216,
+      "likes": 665,
       "lastModified": "2026-09-03T05:45:12.000Z",
       "planningGiB": {
         "int4": 2.3,
@@ -52,9 +52,9 @@
       "url": "https://huggingface.co/zai-org/GLM-5.3",
       "parameters": 753329940480,
       "parameterBillions": 753.33,
-      "trendingScore": 315,
-      "downloads": 410074,
-      "likes": 1727,
+      "trendingScore": 254,
+      "downloads": 442064,
+      "likes": 1745,
       "lastModified": "2026-09-04T06:41:23.000Z",
       "planningGiB": {
         "int4": 420.96,
@@ -70,9 +70,9 @@
       "url": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
       "parameters": 37444792020,
       "parameterBillions": 37.44,
-      "trendingScore": 178,
-      "downloads": 1723,
-      "likes": 183,
+      "trendingScore": 188,
+      "downloads": 2226,
+      "likes": 193,
       "lastModified": "2026-09-03T13:08:17.000Z",
       "planningGiB": {
         "int4": 20.92,
@@ -82,38 +82,38 @@
     },
     {
       "rank": 4,
-      "id": "tencent/Hy4-preview",
-      "name": "Hy4-preview",
-      "author": "tencent",
-      "url": "https://huggingface.co/tencent/Hy4-preview",
-      "parameters": 779960992733,
-      "parameterBillions": 779.96,
-      "trendingScore": 138,
-      "downloads": 6441,
-      "likes": 443,
-      "lastModified": "2026-08-28T14:58:32.000Z",
-      "planningGiB": {
-        "int4": 435.84,
-        "int8": 871.67,
-        "bf16": 1743.35
-      }
-    },
-    {
-      "rank": 5,
       "id": "OBLITERATUS/Qwen3.8-27B-OBLITERATED",
       "name": "Qwen3.8-27B-OBLITERATED",
       "author": "OBLITERATUS",
       "url": "https://huggingface.co/OBLITERATUS/Qwen3.8-27B-OBLITERATED",
       "parameters": 27781427952,
       "parameterBillions": 27.78,
-      "trendingScore": 132,
-      "downloads": 995160,
-      "likes": 1101,
+      "trendingScore": 122,
+      "downloads": 1024582,
+      "likes": 1117,
       "lastModified": "2026-08-24T17:47:52.000Z",
       "planningGiB": {
         "int4": 15.52,
         "int8": 31.05,
         "bf16": 62.1
+      }
+    },
+    {
+      "rank": 5,
+      "id": "tencent/Hy4-preview",
+      "name": "Hy4-preview",
+      "author": "tencent",
+      "url": "https://huggingface.co/tencent/Hy4-preview",
+      "parameters": 779960992733,
+      "parameterBillions": 779.96,
+      "trendingScore": 106,
+      "downloads": 6705,
+      "likes": 449,
+      "lastModified": "2026-08-28T14:58:32.000Z",
+      "planningGiB": {
+        "int4": 435.84,
+        "int8": 871.67,
+        "bf16": 1743.35
       }
     },
     {
@@ -124,9 +124,9 @@
       "url": "https://huggingface.co/XHToken/Spark-X2.5-1.7B",
       "parameters": 1707657216,
       "parameterBillions": 1.71,
-      "trendingScore": 88,
-      "downloads": 2439,
-      "likes": 94,
+      "trendingScore": 91,
+      "downloads": 2660,
+      "likes": 99,
       "lastModified": "2026-09-03T05:59:04.000Z",
       "planningGiB": {
         "int4": 0.95,
@@ -142,9 +142,9 @@
       "url": "https://huggingface.co/IFM/K2-Horizon-7B",
       "parameters": 8999178240,
       "parameterBillions": 9,
-      "trendingScore": 76,
-      "downloads": 1656,
-      "likes": 78,
+      "trendingScore": 81,
+      "downloads": 2087,
+      "likes": 83,
       "lastModified": "2026-09-03T16:45:29.000Z",
       "planningGiB": {
         "int4": 5.03,
@@ -154,33 +154,15 @@
     },
     {
       "rank": 8,
-      "id": "pipecat-ai/phonellm-alpha-1",
-      "name": "phonellm-alpha-1",
-      "author": "pipecat-ai",
-      "url": "https://huggingface.co/pipecat-ai/phonellm-alpha-1",
-      "parameters": 31577937344,
-      "parameterBillions": 31.58,
-      "trendingScore": 74,
-      "downloads": 25586,
-      "likes": 214,
-      "lastModified": "2026-08-30T20:41:34.000Z",
-      "planningGiB": {
-        "int4": 17.65,
-        "int8": 35.29,
-        "bf16": 70.58
-      }
-    },
-    {
-      "rank": 9,
       "id": "inclusionAI/Ling-3.0-flash-Fin",
       "name": "Ling-3.0-flash-Fin",
       "author": "inclusionAI",
       "url": "https://huggingface.co/inclusionAI/Ling-3.0-flash-Fin",
       "parameters": 127486405600,
       "parameterBillions": 127.49,
-      "trendingScore": 59,
-      "downloads": 390,
-      "likes": 60,
+      "trendingScore": 67,
+      "downloads": 460,
+      "likes": 68,
       "lastModified": "2026-09-03T15:20:48.000Z",
       "planningGiB": {
         "int4": 71.24,
@@ -189,39 +171,57 @@
       }
     },
     {
-      "rank": 10,
-      "id": "deepseek-ai/DeepSeek-V4-Flash-0731",
-      "name": "DeepSeek-V4-Flash-0731",
-      "author": "deepseek-ai",
-      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731",
-      "parameters": 304180418494,
-      "parameterBillions": 304.18,
-      "trendingScore": 57,
-      "downloads": 4486631,
-      "likes": 3888,
-      "lastModified": "2026-08-01T03:07:41.000Z",
-      "planningGiB": {
-        "int4": 169.97,
-        "int8": 339.95,
-        "bf16": 679.9
-      }
-    },
-    {
-      "rank": 11,
+      "rank": 9,
       "id": "IFM/K2-Horizon-375B-A23B",
       "name": "K2-Horizon-375B-A23B",
       "author": "IFM",
       "url": "https://huggingface.co/IFM/K2-Horizon-375B-A23B",
       "parameters": 379167159168,
       "parameterBillions": 379.17,
-      "trendingScore": 55,
-      "downloads": 1205,
-      "likes": 57,
+      "trendingScore": 59,
+      "downloads": 1388,
+      "likes": 61,
       "lastModified": "2026-09-04T00:41:57.000Z",
       "planningGiB": {
         "int4": 211.88,
         "int8": 423.75,
         "bf16": 847.5
+      }
+    },
+    {
+      "rank": 10,
+      "id": "openbmb/MiniCPM5-2B",
+      "name": "MiniCPM5-2B",
+      "author": "openbmb",
+      "url": "https://huggingface.co/openbmb/MiniCPM5-2B",
+      "parameters": 2516756480,
+      "parameterBillions": 2.52,
+      "trendingScore": 53,
+      "downloads": 13,
+      "likes": 59,
+      "lastModified": "2026-09-07T07:20:24.000Z",
+      "planningGiB": {
+        "int4": 1.41,
+        "int8": 2.81,
+        "bf16": 5.63
+      }
+    },
+    {
+      "rank": 11,
+      "id": "pipecat-ai/phonellm-alpha-1",
+      "name": "phonellm-alpha-1",
+      "author": "pipecat-ai",
+      "url": "https://huggingface.co/pipecat-ai/phonellm-alpha-1",
+      "parameters": 31577937344,
+      "parameterBillions": 31.58,
+      "trendingScore": 51,
+      "downloads": 28322,
+      "likes": 214,
+      "lastModified": "2026-08-30T20:41:34.000Z",
+      "planningGiB": {
+        "int4": 17.65,
+        "int8": 35.29,
+        "bf16": 70.58
       }
     },
     {
@@ -233,7 +233,7 @@
       "parameters": 7669052656,
       "parameterBillions": 7.67,
       "trendingScore": 49,
-      "downloads": 1762,
+      "downloads": 1908,
       "likes": 50,
       "lastModified": "2026-08-25T23:07:55.000Z",
       "planningGiB": {
