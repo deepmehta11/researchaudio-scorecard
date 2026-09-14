@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-13T13:21:06.760Z",
+  "generatedAt": "2026-09-14T15:04:40.940Z",
   "source": {
     "name": "Hugging Face Hub public models API",
     "url": "https://huggingface.co/models?pipeline_tag=text-generation&sort=trending",
@@ -28,38 +28,38 @@
   "models": [
     {
       "rank": 1,
-      "id": "openbmb/MiniCPM5-2B",
-      "name": "MiniCPM5-2B",
-      "author": "openbmb",
-      "url": "https://huggingface.co/openbmb/MiniCPM5-2B",
-      "parameters": 2516756480,
-      "parameterBillions": 2.52,
-      "trendingScore": 1095,
-      "downloads": 150110,
-      "likes": 1297,
-      "lastModified": "2026-09-12T07:20:14.000Z",
-      "planningGiB": {
-        "int4": 1.41,
-        "int8": 2.81,
-        "bf16": 5.63
-      }
-    },
-    {
-      "rank": 2,
       "id": "Edge0/Edge0-35B-A3B-preview",
       "name": "Edge0-35B-A3B-preview",
       "author": "Edge0",
       "url": "https://huggingface.co/Edge0/Edge0-35B-A3B-preview",
       "parameters": 34660610688,
       "parameterBillions": 34.66,
-      "trendingScore": 673,
-      "downloads": 3552,
-      "likes": 695,
-      "lastModified": "2026-09-10T03:21:18.000Z",
+      "trendingScore": 1536,
+      "downloads": 8109,
+      "likes": 1618,
+      "lastModified": "2026-09-14T04:08:09.000Z",
       "planningGiB": {
         "int4": 19.37,
         "int8": 38.74,
         "bf16": 77.47
+      }
+    },
+    {
+      "rank": 2,
+      "id": "openbmb/MiniCPM5-2B",
+      "name": "MiniCPM5-2B",
+      "author": "openbmb",
+      "url": "https://huggingface.co/openbmb/MiniCPM5-2B",
+      "parameters": 2516756480,
+      "parameterBillions": 2.52,
+      "trendingScore": 1105,
+      "downloads": 206774,
+      "likes": 1377,
+      "lastModified": "2026-09-12T07:20:14.000Z",
+      "planningGiB": {
+        "int4": 1.41,
+        "int8": 2.81,
+        "bf16": 5.63
       }
     },
     {
@@ -70,9 +70,9 @@
       "url": "https://huggingface.co/nex-agi/Nex-N2.5-mini",
       "parameters": 35107181936,
       "parameterBillions": 35.11,
-      "trendingScore": 593,
-      "downloads": 3970,
-      "likes": 750,
+      "trendingScore": 615,
+      "downloads": 4543,
+      "likes": 776,
       "lastModified": "2026-09-08T16:17:10.000Z",
       "planningGiB": {
         "int4": 19.62,
@@ -82,33 +82,15 @@
     },
     {
       "rank": 4,
-      "id": "XHToken/Spark-X2.5-4B",
-      "name": "Spark-X2.5-4B",
-      "author": "XHToken",
-      "url": "https://huggingface.co/XHToken/Spark-X2.5-4B",
-      "parameters": 4112079360,
-      "parameterBillions": 4.11,
-      "trendingScore": 497,
-      "downloads": 21336,
-      "likes": 1149,
-      "lastModified": "2026-09-03T05:45:12.000Z",
-      "planningGiB": {
-        "int4": 2.3,
-        "int8": 4.6,
-        "bf16": 9.19
-      }
-    },
-    {
-      "rank": 5,
       "id": "nex-agi/Nex-N2.5-Pro",
       "name": "Nex-N2.5-Pro",
       "author": "nex-agi",
       "url": "https://huggingface.co/nex-agi/Nex-N2.5-Pro",
       "parameters": 396802360816,
       "parameterBillions": 396.8,
-      "trendingScore": 475,
-      "downloads": 30289,
-      "likes": 619,
+      "trendingScore": 482,
+      "downloads": 30489,
+      "likes": 630,
       "lastModified": "2026-09-11T03:37:15.000Z",
       "planningGiB": {
         "int4": 221.73,
@@ -117,16 +99,52 @@
       }
     },
     {
+      "rank": 5,
+      "id": "XHToken/Spark-X2.5-4B",
+      "name": "Spark-X2.5-4B",
+      "author": "XHToken",
+      "url": "https://huggingface.co/XHToken/Spark-X2.5-4B",
+      "parameters": 4112079360,
+      "parameterBillions": 4.11,
+      "trendingScore": 432,
+      "downloads": 24084,
+      "likes": 1167,
+      "lastModified": "2026-09-14T02:58:09.000Z",
+      "planningGiB": {
+        "int4": 2.3,
+        "int8": 4.6,
+        "bf16": 9.19
+      }
+    },
+    {
       "rank": 6,
+      "id": "meta-llama/Llama-3.1-8B-Instruct",
+      "name": "Llama-3.1-8B-Instruct",
+      "author": "meta-llama",
+      "url": "https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct",
+      "parameters": 8030261248,
+      "parameterBillions": 8.03,
+      "trendingScore": 178,
+      "downloads": 5620539,
+      "likes": 7595,
+      "lastModified": "2024-09-25T17:00:57.000Z",
+      "planningGiB": {
+        "int4": 4.49,
+        "int8": 8.97,
+        "bf16": 17.95
+      }
+    },
+    {
+      "rank": 7,
       "id": "TokenRhythm/NeoHorse-1-4B",
       "name": "NeoHorse-1-4B",
       "author": "TokenRhythm",
       "url": "https://huggingface.co/TokenRhythm/NeoHorse-1-4B",
       "parameters": 4205751296,
       "parameterBillions": 4.21,
-      "trendingScore": 117,
-      "downloads": 7979,
-      "likes": 1703,
+      "trendingScore": 176.5,
+      "downloads": 9520,
+      "likes": 1783,
       "lastModified": "2026-09-10T07:47:12.000Z",
       "planningGiB": {
         "int4": 2.35,
@@ -135,7 +153,25 @@
       }
     },
     {
-      "rank": 7,
+      "rank": 8,
+      "id": "deepseek-ai/DeepSeek-R1",
+      "name": "DeepSeek-R1",
+      "author": "deepseek-ai",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-R1",
+      "parameters": 684489845504,
+      "parameterBillions": 684.49,
+      "trendingScore": 119,
+      "downloads": 661679,
+      "likes": 14231,
+      "lastModified": "2025-03-27T04:01:59.000Z",
+      "planningGiB": {
+        "int4": 382.49,
+        "int8": 764.98,
+        "bf16": 1529.95
+      }
+    },
+    {
+      "rank": 9,
       "id": "IFM/K2-Horizon-MoVA-36B-A4B",
       "name": "K2-Horizon-MoVA-36B-A4B",
       "author": "IFM",
@@ -143,8 +179,8 @@
       "parameters": 37444792020,
       "parameterBillions": 37.44,
       "trendingScore": 109,
-      "downloads": 5996,
-      "likes": 299,
+      "downloads": 6216,
+      "likes": 308,
       "lastModified": "2026-09-12T04:00:56.000Z",
       "planningGiB": {
         "int4": 20.92,
@@ -153,16 +189,16 @@
       }
     },
     {
-      "rank": 8,
+      "rank": 10,
       "id": "thesysdev/OUI-1",
       "name": "OUI-1",
       "author": "thesysdev",
       "url": "https://huggingface.co/thesysdev/OUI-1",
       "parameters": 25823778864,
       "parameterBillions": 25.82,
-      "trendingScore": 94,
-      "downloads": 1447,
-      "likes": 94,
+      "trendingScore": 106,
+      "downloads": 1669,
+      "likes": 106,
       "lastModified": "2026-09-11T06:49:16.000Z",
       "planningGiB": {
         "int4": 14.43,
@@ -171,16 +207,16 @@
       }
     },
     {
-      "rank": 9,
+      "rank": 11,
       "id": "nvidia/Qwen3.8-27B-NVFP4",
       "name": "Qwen3.8-27B-NVFP4",
       "author": "nvidia",
       "url": "https://huggingface.co/nvidia/Qwen3.8-27B-NVFP4",
       "parameters": 18164649200,
       "parameterBillions": 18.16,
-      "trendingScore": 81,
-      "downloads": 31014,
-      "likes": 82,
+      "trendingScore": 87,
+      "downloads": 38173,
+      "likes": 89,
       "lastModified": "2026-09-09T07:22:48.000Z",
       "planningGiB": {
         "int4": 10.15,
@@ -189,57 +225,21 @@
       }
     },
     {
-      "rank": 10,
+      "rank": 12,
       "id": "zai-org/GLM-5.3",
       "name": "GLM-5.3",
       "author": "zai-org",
       "url": "https://huggingface.co/zai-org/GLM-5.3",
       "parameters": 753329940480,
       "parameterBillions": 753.33,
-      "trendingScore": 77,
-      "downloads": 668988,
-      "likes": 1820,
+      "trendingScore": 73,
+      "downloads": 712553,
+      "likes": 1829,
       "lastModified": "2026-09-04T06:41:23.000Z",
       "planningGiB": {
         "int4": 420.96,
         "int8": 841.91,
         "bf16": 1683.82
-      }
-    },
-    {
-      "rank": 11,
-      "id": "medismera/Qwen3.8-27B-OBLITERATED-Mythos-Class-Agentic",
-      "name": "Qwen3.8-27B-OBLITERATED-Mythos-Class-Agentic",
-      "author": "medismera",
-      "url": "https://huggingface.co/medismera/Qwen3.8-27B-OBLITERATED-Mythos-Class-Agentic",
-      "parameters": 27781427952,
-      "parameterBillions": 27.78,
-      "trendingScore": 60,
-      "downloads": 3109,
-      "likes": 67,
-      "lastModified": "2026-09-07T18:23:54.000Z",
-      "planningGiB": {
-        "int4": 15.52,
-        "int8": 31.05,
-        "bf16": 62.1
-      }
-    },
-    {
-      "rank": 12,
-      "id": "OBLITERATUS/Qwen3.8-27B-OBLITERATED",
-      "name": "Qwen3.8-27B-OBLITERATED",
-      "author": "OBLITERATUS",
-      "url": "https://huggingface.co/OBLITERATUS/Qwen3.8-27B-OBLITERATED",
-      "parameters": 27781427952,
-      "parameterBillions": 27.78,
-      "trendingScore": 59,
-      "downloads": 1220339,
-      "likes": 1181,
-      "lastModified": "2026-08-24T17:47:52.000Z",
-      "planningGiB": {
-        "int4": 15.52,
-        "int8": 31.05,
-        "bf16": 62.1
       }
     }
   ]
