@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-22T13:28:22.139Z",
+  "generatedAt": "2026-09-23T13:42:45.182Z",
   "source": {
     "name": "Hugging Face Hub public models API",
     "url": "https://huggingface.co/models?pipeline_tag=text-generation&sort=trending",
@@ -34,9 +34,9 @@
       "url": "https://huggingface.co/XingChen-AGI/Xing4.0-29B-A4B",
       "parameters": 31215031088,
       "parameterBillions": 31.22,
-      "trendingScore": 1155,
-      "downloads": 30627,
-      "likes": 1256,
+      "trendingScore": 1344,
+      "downloads": 39009,
+      "likes": 1446,
       "lastModified": "2026-09-18T09:49:55.000Z",
       "planningGiB": {
         "int4": 17.44,
@@ -52,10 +52,10 @@
       "url": "https://huggingface.co/Altworld/Hemmingway-1",
       "parameters": 26895998464,
       "parameterBillions": 26.9,
-      "trendingScore": 446,
-      "downloads": 2745,
-      "likes": 452,
-      "lastModified": "2026-09-22T10:35:23.000Z",
+      "trendingScore": 525,
+      "downloads": 3787,
+      "likes": 538,
+      "lastModified": "2026-09-22T16:48:00.000Z",
       "planningGiB": {
         "int4": 15.03,
         "int8": 30.06,
@@ -68,16 +68,16 @@
       "name": "MiMo-V2.6-Pro-RL",
       "author": "XiaomiMiMo",
       "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL",
-      "parameters": 524121348864,
-      "parameterBillions": 524.12,
-      "trendingScore": 326,
-      "downloads": 985,
-      "likes": 331,
+      "parameters": 1024216603392,
+      "parameterBillions": 1024.22,
+      "trendingScore": 423,
+      "downloads": 4070,
+      "likes": 431,
       "lastModified": "2026-09-22T03:52:00.000Z",
       "planningGiB": {
-        "int4": 292.88,
-        "int8": 585.75,
-        "bf16": 1171.5
+        "int4": 572.33,
+        "int8": 1144.65,
+        "bf16": 2289.3
       }
     },
     {
@@ -86,16 +86,16 @@
       "name": "MiMo-V2.6-Flash-RL",
       "author": "XiaomiMiMo",
       "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Flash-RL",
-      "parameters": 159358725504,
-      "parameterBillions": 159.36,
-      "trendingScore": 317,
-      "downloads": 2641,
-      "likes": 321,
+      "parameters": 310756322688,
+      "parameterBillions": 310.76,
+      "trendingScore": 404,
+      "downloads": 13243,
+      "likes": 409,
       "lastModified": "2026-09-22T03:52:25.000Z",
       "planningGiB": {
-        "int4": 89.05,
-        "int8": 178.1,
-        "bf16": 356.19
+        "int4": 173.65,
+        "int8": 347.3,
+        "bf16": 694.59
       }
     },
     {
@@ -106,9 +106,9 @@
       "url": "https://huggingface.co/yandex/AliceAI-Foundation-80B-A3B-Base",
       "parameters": 81286433408,
       "parameterBillions": 81.29,
-      "trendingScore": 239,
-      "downloads": 1516,
-      "likes": 252,
+      "trendingScore": 272,
+      "downloads": 2254,
+      "likes": 286,
       "lastModified": "2026-09-22T11:12:04.000Z",
       "planningGiB": {
         "int4": 45.42,
@@ -118,24 +118,6 @@
     },
     {
       "rank": 6,
-      "id": "openbmb/MiniCPM5-2B",
-      "name": "MiniCPM5-2B",
-      "author": "openbmb",
-      "url": "https://huggingface.co/openbmb/MiniCPM5-2B",
-      "parameters": 2516756480,
-      "parameterBillions": 2.52,
-      "trendingScore": 210,
-      "downloads": 508950,
-      "likes": 1652,
-      "lastModified": "2026-09-12T07:20:14.000Z",
-      "planningGiB": {
-        "int4": 1.41,
-        "int8": 2.81,
-        "bf16": 5.63
-      }
-    },
-    {
-      "rank": 7,
       "id": "TokenRhythm/NeoHorse-1-9B",
       "name": "NeoHorse-1-9B",
       "author": "TokenRhythm",
@@ -143,8 +125,8 @@
       "parameters": 8953803264,
       "parameterBillions": 8.95,
       "trendingScore": 191,
-      "downloads": 12574,
-      "likes": 996,
+      "downloads": 13009,
+      "likes": 1011,
       "lastModified": "2026-09-10T07:47:47.000Z",
       "planningGiB": {
         "int4": 5,
@@ -153,21 +135,39 @@
       }
     },
     {
-      "rank": 8,
-      "id": "audnai/penclaw-GLM-5.3-abliterated",
-      "name": "penclaw-GLM-5.3-abliterated",
-      "author": "audnai",
-      "url": "https://huggingface.co/audnai/penclaw-GLM-5.3-abliterated",
-      "parameters": 753329940480,
-      "parameterBillions": 753.33,
-      "trendingScore": 152,
-      "downloads": 745,
-      "likes": 177,
-      "lastModified": "2026-09-02T22:22:22.000Z",
+      "rank": 7,
+      "id": "openbmb/MiniCPM5-2B",
+      "name": "MiniCPM5-2B",
+      "author": "openbmb",
+      "url": "https://huggingface.co/openbmb/MiniCPM5-2B",
+      "parameters": 2516756480,
+      "parameterBillions": 2.52,
+      "trendingScore": 163,
+      "downloads": 564365,
+      "likes": 1669,
+      "lastModified": "2026-09-12T07:20:14.000Z",
       "planningGiB": {
-        "int4": 420.96,
-        "int8": 841.91,
-        "bf16": 1683.82
+        "int4": 1.41,
+        "int8": 2.81,
+        "bf16": 5.63
+      }
+    },
+    {
+      "rank": 8,
+      "id": "AikidoSec/altar-1",
+      "name": "altar-1",
+      "author": "AikidoSec",
+      "url": "https://huggingface.co/AikidoSec/altar-1",
+      "parameters": 500825296352,
+      "parameterBillions": 500.83,
+      "trendingScore": 142,
+      "downloads": 951,
+      "likes": 154,
+      "lastModified": "2026-09-20T12:21:04.000Z",
+      "planningGiB": {
+        "int4": 279.86,
+        "int8": 559.72,
+        "bf16": 1119.43
       }
     },
     {
@@ -178,9 +178,9 @@
       "url": "https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct",
       "parameters": 8030261248,
       "parameterBillions": 8.03,
-      "trendingScore": 120,
-      "downloads": 6107231,
-      "likes": 7811,
+      "trendingScore": 105,
+      "downloads": 6225344,
+      "likes": 7831,
       "lastModified": "2024-09-25T17:00:57.000Z",
       "planningGiB": {
         "int4": 4.49,
@@ -196,9 +196,9 @@
       "url": "https://huggingface.co/XHToken/Spark-X2.5-4B",
       "parameters": 4112079360,
       "parameterBillions": 4.11,
-      "trendingScore": 114,
-      "downloads": 32538,
-      "likes": 1305,
+      "trendingScore": 88,
+      "downloads": 33324,
+      "likes": 1312,
       "lastModified": "2026-09-15T03:09:56.000Z",
       "planningGiB": {
         "int4": 2.3,
@@ -208,38 +208,38 @@
     },
     {
       "rank": 11,
-      "id": "AikidoSec/altar-1",
-      "name": "altar-1",
-      "author": "AikidoSec",
-      "url": "https://huggingface.co/AikidoSec/altar-1",
-      "parameters": 500825296352,
-      "parameterBillions": 500.83,
-      "trendingScore": 114,
-      "downloads": 739,
-      "likes": 123,
-      "lastModified": "2026-09-20T12:21:04.000Z",
+      "id": "audnai/penclaw-GLM-5.3-abliterated",
+      "name": "penclaw-GLM-5.3-abliterated",
+      "author": "audnai",
+      "url": "https://huggingface.co/audnai/penclaw-GLM-5.3-abliterated",
+      "parameters": 753329940480,
+      "parameterBillions": 753.33,
+      "trendingScore": 66,
+      "downloads": 859,
+      "likes": 178,
+      "lastModified": "2026-09-02T22:22:22.000Z",
       "planningGiB": {
-        "int4": 279.86,
-        "int8": 559.72,
-        "bf16": 1119.43
+        "int4": 420.96,
+        "int8": 841.91,
+        "bf16": 1683.82
       }
     },
     {
       "rank": 12,
-      "id": "Edge0/Edge0-35B-A3B-preview",
-      "name": "Edge0-35B-A3B-preview",
-      "author": "Edge0",
-      "url": "https://huggingface.co/Edge0/Edge0-35B-A3B-preview",
-      "parameters": 34660610688,
-      "parameterBillions": 34.66,
-      "trendingScore": 75.7,
-      "downloads": 78399,
-      "likes": 3554,
-      "lastModified": "2026-09-17T04:37:15.000Z",
+      "id": "OBLITERATUS/Qwen3.8-27B-OBLITERATED",
+      "name": "Qwen3.8-27B-OBLITERATED",
+      "author": "OBLITERATUS",
+      "url": "https://huggingface.co/OBLITERATUS/Qwen3.8-27B-OBLITERATED",
+      "parameters": 27781427952,
+      "parameterBillions": 27.78,
+      "trendingScore": 57,
+      "downloads": 1080770,
+      "likes": 1302,
+      "lastModified": "2026-08-24T17:47:52.000Z",
       "planningGiB": {
-        "int4": 19.37,
-        "int8": 38.74,
-        "bf16": 77.47
+        "int4": 15.52,
+        "int8": 31.05,
+        "bf16": 62.1
       }
     }
   ]
