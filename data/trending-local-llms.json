@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-27T14:04:50.562Z",
+  "generatedAt": "2026-09-28T16:49:00.682Z",
   "source": {
     "name": "Hugging Face Hub public models API",
     "url": "https://huggingface.co/models?pipeline_tag=text-generation&sort=trending",
@@ -34,9 +34,9 @@
       "url": "https://huggingface.co/XingChen-AGI/Xing4.0-29B-A4B",
       "parameters": 31215031088,
       "parameterBillions": 31.22,
-      "trendingScore": 966,
-      "downloads": 45028,
-      "likes": 1774,
+      "trendingScore": 731,
+      "downloads": 45834,
+      "likes": 1797,
       "lastModified": "2026-09-18T09:49:55.000Z",
       "planningGiB": {
         "int4": 17.44,
@@ -46,33 +46,15 @@
     },
     {
       "rank": 2,
-      "id": "Altworld/Hemmingway-1",
-      "name": "Hemmingway-1",
-      "author": "Altworld",
-      "url": "https://huggingface.co/Altworld/Hemmingway-1",
-      "parameters": 26895998464,
-      "parameterBillions": 26.9,
-      "trendingScore": 706,
-      "downloads": 5904,
-      "likes": 724,
-      "lastModified": "2026-09-22T16:48:00.000Z",
-      "planningGiB": {
-        "int4": 15.03,
-        "int8": 30.06,
-        "bf16": 60.12
-      }
-    },
-    {
-      "rank": 3,
       "id": "XiaomiMiMo/MiMo-V2.6-Pro-RL",
       "name": "MiMo-V2.6-Pro-RL",
       "author": "XiaomiMiMo",
       "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL",
       "parameters": 1024216603392,
       "parameterBillions": 1024.22,
-      "trendingScore": 530,
-      "downloads": 75079,
-      "likes": 542,
+      "trendingScore": 562,
+      "downloads": 76518,
+      "likes": 576,
       "lastModified": "2026-09-22T03:52:00.000Z",
       "planningGiB": {
         "int4": 572.33,
@@ -81,21 +63,39 @@
       }
     },
     {
-      "rank": 4,
+      "rank": 3,
       "id": "XiaomiMiMo/MiMo-V2.6-Flash-RL",
       "name": "MiMo-V2.6-Flash-RL",
       "author": "XiaomiMiMo",
       "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Flash-RL",
       "parameters": 310756322688,
       "parameterBillions": 310.76,
-      "trendingScore": 482,
-      "downloads": 25661,
-      "likes": 487,
+      "trendingScore": 501,
+      "downloads": 28842,
+      "likes": 508,
       "lastModified": "2026-09-22T03:52:25.000Z",
       "planningGiB": {
         "int4": 173.65,
         "int8": 347.3,
         "bf16": 694.59
+      }
+    },
+    {
+      "rank": 4,
+      "id": "Altworld/Hemmingway-1",
+      "name": "Hemmingway-1",
+      "author": "Altworld",
+      "url": "https://huggingface.co/Altworld/Hemmingway-1",
+      "parameters": 26895998464,
+      "parameterBillions": 26.9,
+      "trendingScore": 448,
+      "downloads": 7478,
+      "likes": 759,
+      "lastModified": "2026-09-22T16:48:00.000Z",
+      "planningGiB": {
+        "int4": 15.03,
+        "int8": 30.06,
+        "bf16": 60.12
       }
     },
     {
@@ -106,9 +106,9 @@
       "url": "https://huggingface.co/yandex/AliceAI-Foundation-80B-A3B-Base",
       "parameters": 81286433408,
       "parameterBillions": 81.29,
-      "trendingScore": 264,
-      "downloads": 3456,
-      "likes": 340,
+      "trendingScore": 213,
+      "downloads": 3650,
+      "likes": 354,
       "lastModified": "2026-09-22T11:12:04.000Z",
       "planningGiB": {
         "int4": 45.42,
@@ -118,38 +118,38 @@
     },
     {
       "rank": 6,
-      "id": "AikidoSec/altar-1",
-      "name": "altar-1",
-      "author": "AikidoSec",
-      "url": "https://huggingface.co/AikidoSec/altar-1",
-      "parameters": 500825296352,
-      "parameterBillions": 500.83,
-      "trendingScore": 165,
-      "downloads": 1623,
-      "likes": 180,
-      "lastModified": "2026-09-20T12:21:04.000Z",
-      "planningGiB": {
-        "int4": 279.86,
-        "int8": 559.72,
-        "bf16": 1119.43
-      }
-    },
-    {
-      "rank": 7,
       "id": "orcarouter/OrcaSAQ-2-27B",
       "name": "OrcaSAQ-2-27B",
       "author": "orcarouter",
       "url": "https://huggingface.co/orcarouter/OrcaSAQ-2-27B",
       "parameters": 6770790400,
       "parameterBillions": 6.77,
-      "trendingScore": 162,
-      "downloads": 1330,
-      "likes": 163,
+      "trendingScore": 182,
+      "downloads": 1663,
+      "likes": 183,
       "lastModified": "2026-09-24T15:18:13.000Z",
       "planningGiB": {
         "int4": 3.78,
         "int8": 7.57,
         "bf16": 15.13
+      }
+    },
+    {
+      "rank": 7,
+      "id": "AikidoSec/altar-1",
+      "name": "altar-1",
+      "author": "AikidoSec",
+      "url": "https://huggingface.co/AikidoSec/altar-1",
+      "parameters": 500825296352,
+      "parameterBillions": 500.83,
+      "trendingScore": 173,
+      "downloads": 1764,
+      "likes": 195,
+      "lastModified": "2026-09-20T12:21:04.000Z",
+      "planningGiB": {
+        "int4": 279.86,
+        "int8": 559.72,
+        "bf16": 1119.43
       }
     },
     {
@@ -160,10 +160,10 @@
       "url": "https://huggingface.co/paradigma-inc/limite-1b-violetto",
       "parameters": 1035253888,
       "parameterBillions": 1.04,
-      "trendingScore": 76,
-      "downloads": 2878,
-      "likes": 77,
-      "lastModified": "2026-09-22T13:13:28.000Z",
+      "trendingScore": 85,
+      "downloads": 4542,
+      "likes": 87,
+      "lastModified": "2026-09-28T10:25:51.000Z",
       "planningGiB": {
         "int4": 0.58,
         "int8": 1.16,
@@ -172,38 +172,38 @@
     },
     {
       "rank": 9,
-      "id": "openbmb/MiniCPM5-2B",
-      "name": "MiniCPM5-2B",
-      "author": "openbmb",
-      "url": "https://huggingface.co/openbmb/MiniCPM5-2B",
-      "parameters": 2516756480,
-      "parameterBillions": 2.52,
-      "trendingScore": 73,
-      "downloads": 767352,
-      "likes": 1692,
-      "lastModified": "2026-09-12T07:20:14.000Z",
-      "planningGiB": {
-        "int4": 1.41,
-        "int8": 2.81,
-        "bf16": 5.63
-      }
-    },
-    {
-      "rank": 10,
       "id": "meta-llama/Llama-3.1-8B-Instruct",
       "name": "Llama-3.1-8B-Instruct",
       "author": "meta-llama",
       "url": "https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct",
       "parameters": 8030261248,
       "parameterBillions": 8.03,
-      "trendingScore": 60,
-      "downloads": 6107664,
-      "likes": 7975,
+      "trendingScore": 55,
+      "downloads": 6079804,
+      "likes": 8002,
       "lastModified": "2024-09-25T17:00:57.000Z",
       "planningGiB": {
         "int4": 4.49,
         "int8": 8.97,
         "bf16": 17.95
+      }
+    },
+    {
+      "rank": 10,
+      "id": "openbmb/MiniCPM5-2B",
+      "name": "MiniCPM5-2B",
+      "author": "openbmb",
+      "url": "https://huggingface.co/openbmb/MiniCPM5-2B",
+      "parameters": 2516756480,
+      "parameterBillions": 2.52,
+      "trendingScore": 54,
+      "downloads": 814813,
+      "likes": 1694,
+      "lastModified": "2026-09-12T07:20:14.000Z",
+      "planningGiB": {
+        "int4": 1.41,
+        "int8": 2.81,
+        "bf16": 5.63
       }
     },
     {
@@ -214,9 +214,9 @@
       "url": "https://huggingface.co/juspay/xor",
       "parameters": 35107181936,
       "parameterBillions": 35.11,
-      "trendingScore": 46,
-      "downloads": 1673,
-      "likes": 46,
+      "trendingScore": 47,
+      "downloads": 2231,
+      "likes": 47,
       "lastModified": "2026-09-27T10:51:29.000Z",
       "planningGiB": {
         "int4": 19.62,
@@ -226,20 +226,20 @@
     },
     {
       "rank": 12,
-      "id": "XHToken/Spark-X2.5-4B",
-      "name": "Spark-X2.5-4B",
-      "author": "XHToken",
-      "url": "https://huggingface.co/XHToken/Spark-X2.5-4B",
-      "parameters": 4112079360,
-      "parameterBillions": 4.11,
+      "id": "zai-org/GLM-5.3",
+      "name": "GLM-5.3",
+      "author": "zai-org",
+      "url": "https://huggingface.co/zai-org/GLM-5.3",
+      "parameters": 753329940480,
+      "parameterBillions": 753.33,
       "trendingScore": 44,
-      "downloads": 36814,
-      "likes": 1333,
-      "lastModified": "2026-09-15T03:09:56.000Z",
+      "downloads": 1358295,
+      "likes": 1946,
+      "lastModified": "2026-09-04T06:41:23.000Z",
       "planningGiB": {
-        "int4": 2.3,
-        "int8": 4.6,
-        "bf16": 9.19
+        "int4": 420.96,
+        "int8": 841.91,
+        "bf16": 1683.82
       }
     }
   ]
