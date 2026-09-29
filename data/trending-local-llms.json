@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-28T16:49:00.682Z",
+  "generatedAt": "2026-09-29T14:53:19.940Z",
   "source": {
     "name": "Hugging Face Hub public models API",
     "url": "https://huggingface.co/models?pipeline_tag=text-generation&sort=trending",
@@ -34,9 +34,9 @@
       "url": "https://huggingface.co/XingChen-AGI/Xing4.0-29B-A4B",
       "parameters": 31215031088,
       "parameterBillions": 31.22,
-      "trendingScore": 731,
-      "downloads": 45834,
-      "likes": 1797,
+      "trendingScore": 520,
+      "downloads": 46557,
+      "likes": 1806,
       "lastModified": "2026-09-18T09:49:55.000Z",
       "planningGiB": {
         "int4": 17.44,
@@ -46,51 +46,15 @@
     },
     {
       "rank": 2,
-      "id": "XiaomiMiMo/MiMo-V2.6-Pro-RL",
-      "name": "MiMo-V2.6-Pro-RL",
-      "author": "XiaomiMiMo",
-      "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL",
-      "parameters": 1024216603392,
-      "parameterBillions": 1024.22,
-      "trendingScore": 562,
-      "downloads": 76518,
-      "likes": 576,
-      "lastModified": "2026-09-22T03:52:00.000Z",
-      "planningGiB": {
-        "int4": 572.33,
-        "int8": 1144.65,
-        "bf16": 2289.3
-      }
-    },
-    {
-      "rank": 3,
-      "id": "XiaomiMiMo/MiMo-V2.6-Flash-RL",
-      "name": "MiMo-V2.6-Flash-RL",
-      "author": "XiaomiMiMo",
-      "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Flash-RL",
-      "parameters": 310756322688,
-      "parameterBillions": 310.76,
-      "trendingScore": 501,
-      "downloads": 28842,
-      "likes": 508,
-      "lastModified": "2026-09-22T03:52:25.000Z",
-      "planningGiB": {
-        "int4": 173.65,
-        "int8": 347.3,
-        "bf16": 694.59
-      }
-    },
-    {
-      "rank": 4,
       "id": "Altworld/Hemmingway-1",
       "name": "Hemmingway-1",
       "author": "Altworld",
       "url": "https://huggingface.co/Altworld/Hemmingway-1",
       "parameters": 26895998464,
       "parameterBillions": 26.9,
-      "trendingScore": 448,
-      "downloads": 7478,
-      "likes": 759,
+      "trendingScore": 300,
+      "downloads": 7880,
+      "likes": 769,
       "lastModified": "2026-09-22T16:48:00.000Z",
       "planningGiB": {
         "int4": 15.03,
@@ -99,39 +63,75 @@
       }
     },
     {
-      "rank": 5,
-      "id": "yandex/AliceAI-Foundation-80B-A3B-Base",
-      "name": "AliceAI-Foundation-80B-A3B-Base",
-      "author": "yandex",
-      "url": "https://huggingface.co/yandex/AliceAI-Foundation-80B-A3B-Base",
-      "parameters": 81286433408,
-      "parameterBillions": 81.29,
-      "trendingScore": 213,
-      "downloads": 3650,
-      "likes": 354,
-      "lastModified": "2026-09-22T11:12:04.000Z",
+      "rank": 3,
+      "id": "XiaomiMiMo/MiMo-V2.6-Pro-RL",
+      "name": "MiMo-V2.6-Pro-RL",
+      "author": "XiaomiMiMo",
+      "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL",
+      "parameters": 1024216603392,
+      "parameterBillions": 1024.22,
+      "trendingScore": 240,
+      "downloads": 78135,
+      "likes": 595,
+      "lastModified": "2026-09-22T03:52:00.000Z",
       "planningGiB": {
-        "int4": 45.42,
-        "int8": 90.84,
-        "bf16": 181.69
+        "int4": 572.33,
+        "int8": 1144.65,
+        "bf16": 2289.3
       }
     },
     {
-      "rank": 6,
+      "rank": 4,
       "id": "orcarouter/OrcaSAQ-2-27B",
       "name": "OrcaSAQ-2-27B",
       "author": "orcarouter",
       "url": "https://huggingface.co/orcarouter/OrcaSAQ-2-27B",
       "parameters": 6770790400,
       "parameterBillions": 6.77,
-      "trendingScore": 182,
-      "downloads": 1663,
-      "likes": 183,
+      "trendingScore": 204,
+      "downloads": 2143,
+      "likes": 205,
       "lastModified": "2026-09-24T15:18:13.000Z",
       "planningGiB": {
         "int4": 3.78,
         "int8": 7.57,
         "bf16": 15.13
+      }
+    },
+    {
+      "rank": 5,
+      "id": "XiaomiMiMo/MiMo-V2.6-Flash-RL",
+      "name": "MiMo-V2.6-Flash-RL",
+      "author": "XiaomiMiMo",
+      "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Flash-RL",
+      "parameters": 310756322688,
+      "parameterBillions": 310.76,
+      "trendingScore": 180,
+      "downloads": 39625,
+      "likes": 517,
+      "lastModified": "2026-09-22T03:52:25.000Z",
+      "planningGiB": {
+        "int4": 173.65,
+        "int8": 347.3,
+        "bf16": 694.59
+      }
+    },
+    {
+      "rank": 6,
+      "id": "yandex/AliceAI-Foundation-80B-A3B-Base",
+      "name": "AliceAI-Foundation-80B-A3B-Base",
+      "author": "yandex",
+      "url": "https://huggingface.co/yandex/AliceAI-Foundation-80B-A3B-Base",
+      "parameters": 81286433408,
+      "parameterBillions": 81.29,
+      "trendingScore": 88,
+      "downloads": 3876,
+      "likes": 358,
+      "lastModified": "2026-09-22T11:12:04.000Z",
+      "planningGiB": {
+        "int4": 45.42,
+        "int8": 90.84,
+        "bf16": 181.69
       }
     },
     {
@@ -142,9 +142,9 @@
       "url": "https://huggingface.co/AikidoSec/altar-1",
       "parameters": 500825296352,
       "parameterBillions": 500.83,
-      "trendingScore": 173,
-      "downloads": 1764,
-      "likes": 195,
+      "trendingScore": 62,
+      "downloads": 1930,
+      "likes": 197,
       "lastModified": "2026-09-20T12:21:04.000Z",
       "planningGiB": {
         "int4": 279.86,
@@ -154,33 +154,15 @@
     },
     {
       "rank": 8,
-      "id": "paradigma-inc/limite-1b-violetto",
-      "name": "limite-1b-violetto",
-      "author": "paradigma-inc",
-      "url": "https://huggingface.co/paradigma-inc/limite-1b-violetto",
-      "parameters": 1035253888,
-      "parameterBillions": 1.04,
-      "trendingScore": 85,
-      "downloads": 4542,
-      "likes": 87,
-      "lastModified": "2026-09-28T10:25:51.000Z",
-      "planningGiB": {
-        "int4": 0.58,
-        "int8": 1.16,
-        "bf16": 2.31
-      }
-    },
-    {
-      "rank": 9,
       "id": "meta-llama/Llama-3.1-8B-Instruct",
       "name": "Llama-3.1-8B-Instruct",
       "author": "meta-llama",
       "url": "https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct",
       "parameters": 8030261248,
       "parameterBillions": 8.03,
-      "trendingScore": 55,
-      "downloads": 6079804,
-      "likes": 8002,
+      "trendingScore": 52,
+      "downloads": 6135791,
+      "likes": 8043,
       "lastModified": "2024-09-25T17:00:57.000Z",
       "planningGiB": {
         "int4": 4.49,
@@ -189,35 +171,17 @@
       }
     },
     {
-      "rank": 10,
-      "id": "openbmb/MiniCPM5-2B",
-      "name": "MiniCPM5-2B",
-      "author": "openbmb",
-      "url": "https://huggingface.co/openbmb/MiniCPM5-2B",
-      "parameters": 2516756480,
-      "parameterBillions": 2.52,
-      "trendingScore": 54,
-      "downloads": 814813,
-      "likes": 1694,
-      "lastModified": "2026-09-12T07:20:14.000Z",
-      "planningGiB": {
-        "int4": 1.41,
-        "int8": 2.81,
-        "bf16": 5.63
-      }
-    },
-    {
-      "rank": 11,
+      "rank": 9,
       "id": "juspay/xor",
       "name": "xor",
       "author": "juspay",
       "url": "https://huggingface.co/juspay/xor",
       "parameters": 35107181936,
       "parameterBillions": 35.11,
-      "trendingScore": 47,
-      "downloads": 2231,
-      "likes": 47,
-      "lastModified": "2026-09-27T10:51:29.000Z",
+      "trendingScore": 49,
+      "downloads": 2346,
+      "likes": 49,
+      "lastModified": "2026-09-28T11:43:39.000Z",
       "planningGiB": {
         "int4": 19.62,
         "int8": 39.24,
@@ -225,7 +189,7 @@
       }
     },
     {
-      "rank": 12,
+      "rank": 10,
       "id": "zai-org/GLM-5.3",
       "name": "GLM-5.3",
       "author": "zai-org",
@@ -233,13 +197,49 @@
       "parameters": 753329940480,
       "parameterBillions": 753.33,
       "trendingScore": 44,
-      "downloads": 1358295,
-      "likes": 1946,
+      "downloads": 1363500,
+      "likes": 1959,
       "lastModified": "2026-09-04T06:41:23.000Z",
       "planningGiB": {
         "int4": 420.96,
         "int8": 841.91,
         "bf16": 1683.82
+      }
+    },
+    {
+      "rank": 11,
+      "id": "openbmb/MiniCPM5-2B",
+      "name": "MiniCPM5-2B",
+      "author": "openbmb",
+      "url": "https://huggingface.co/openbmb/MiniCPM5-2B",
+      "parameters": 2516756480,
+      "parameterBillions": 2.52,
+      "trendingScore": 44,
+      "downloads": 853574,
+      "likes": 1700,
+      "lastModified": "2026-09-29T06:12:33.000Z",
+      "planningGiB": {
+        "int4": 1.41,
+        "int8": 2.81,
+        "bf16": 5.63
+      }
+    },
+    {
+      "rank": 12,
+      "id": "paradigma-inc/limite-1b-violetto",
+      "name": "limite-1b-violetto",
+      "author": "paradigma-inc",
+      "url": "https://huggingface.co/paradigma-inc/limite-1b-violetto",
+      "parameters": 1035253888,
+      "parameterBillions": 1.04,
+      "trendingScore": 44,
+      "downloads": 5164,
+      "likes": 92,
+      "lastModified": "2026-09-29T09:16:31.000Z",
+      "planningGiB": {
+        "int4": 0.58,
+        "int8": 1.16,
+        "bf16": 2.31
       }
     }
   ]
