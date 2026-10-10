@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-09T15:21:47.755Z",
+  "generatedAt": "2026-10-10T14:31:21.910Z",
   "source": {
     "name": "Hugging Face Hub public models API",
     "url": "https://huggingface.co/models?pipeline_tag=text-generation&sort=trending",
@@ -28,38 +28,38 @@
   "models": [
     {
       "rank": 1,
-      "id": "Aleph-Alpha/Kolibri-1",
-      "name": "Kolibri-1",
-      "author": "Aleph-Alpha",
-      "url": "https://huggingface.co/Aleph-Alpha/Kolibri-1",
-      "parameters": 78103074560,
-      "parameterBillions": 78.1,
-      "trendingScore": 767,
-      "downloads": 8474,
-      "likes": 831,
-      "lastModified": "2026-10-03T08:43:53.000Z",
-      "planningGiB": {
-        "int4": 43.64,
-        "int8": 87.29,
-        "bf16": 174.57
-      }
-    },
-    {
-      "rank": 2,
       "id": "jialinyyzz/humanizer",
       "name": "humanizer",
       "author": "jialinyyzz",
       "url": "https://huggingface.co/jialinyyzz/humanizer",
       "parameters": 11959730224,
       "parameterBillions": 11.96,
-      "trendingScore": 662,
-      "downloads": 29470,
-      "likes": 705,
+      "trendingScore": 833,
+      "downloads": 33664,
+      "likes": 897,
       "lastModified": "2026-10-08T20:13:31.000Z",
       "planningGiB": {
         "int4": 6.68,
         "int8": 13.37,
         "bf16": 26.73
+      }
+    },
+    {
+      "rank": 2,
+      "id": "Aleph-Alpha/Kolibri-1",
+      "name": "Kolibri-1",
+      "author": "Aleph-Alpha",
+      "url": "https://huggingface.co/Aleph-Alpha/Kolibri-1",
+      "parameters": 78103074560,
+      "parameterBillions": 78.1,
+      "trendingScore": 689,
+      "downloads": 10496,
+      "likes": 854,
+      "lastModified": "2026-10-03T08:43:53.000Z",
+      "planningGiB": {
+        "int4": 43.64,
+        "int8": 87.29,
+        "bf16": 174.57
       }
     },
     {
@@ -70,9 +70,9 @@
       "url": "https://huggingface.co/Infatoshi/GLM-5.3-UNCENSORED-EXL3-3.0bpw",
       "parameters": 146311635584,
       "parameterBillions": 146.31,
-      "trendingScore": 182,
-      "downloads": 2277,
-      "likes": 305,
+      "trendingScore": 112,
+      "downloads": 2509,
+      "likes": 318,
       "lastModified": "2026-10-01T10:01:17.000Z",
       "planningGiB": {
         "int4": 81.76,
@@ -82,51 +82,33 @@
     },
     {
       "rank": 4,
-      "id": "audnai/penclaw-GLM-5.3-abliterated",
-      "name": "penclaw-GLM-5.3-abliterated",
-      "author": "audnai",
-      "url": "https://huggingface.co/audnai/penclaw-GLM-5.3-abliterated",
-      "parameters": 753329940480,
-      "parameterBillions": 753.33,
-      "trendingScore": 92,
-      "downloads": 1878,
-      "likes": 365,
-      "lastModified": "2026-09-02T22:22:22.000Z",
+      "id": "JetBrains/Mellum2.1-12B-A2.5B-Thinking",
+      "name": "Mellum2.1-12B-A2.5B-Thinking",
+      "author": "JetBrains",
+      "url": "https://huggingface.co/JetBrains/Mellum2.1-12B-A2.5B-Thinking",
+      "parameters": 12149923072,
+      "parameterBillions": 12.15,
+      "trendingScore": 85,
+      "downloads": 583,
+      "likes": 86,
+      "lastModified": "2026-10-07T23:08:12.000Z",
       "planningGiB": {
-        "int4": 420.96,
-        "int8": 841.91,
-        "bf16": 1683.82
+        "int4": 6.79,
+        "int8": 13.58,
+        "bf16": 27.16
       }
     },
     {
       "rank": 5,
-      "id": "meta-llama/Llama-3.1-8B-Instruct",
-      "name": "Llama-3.1-8B-Instruct",
-      "author": "meta-llama",
-      "url": "https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct",
-      "parameters": 8030261248,
-      "parameterBillions": 8.03,
-      "trendingScore": 74,
-      "downloads": 6065265,
-      "likes": 8309,
-      "lastModified": "2024-09-25T17:00:57.000Z",
-      "planningGiB": {
-        "int4": 4.49,
-        "int8": 8.97,
-        "bf16": 17.95
-      }
-    },
-    {
-      "rank": 6,
       "id": "zai-org/GLM-5.3",
       "name": "GLM-5.3",
       "author": "zai-org",
       "url": "https://huggingface.co/zai-org/GLM-5.3",
       "parameters": 753329940480,
       "parameterBillions": 753.33,
-      "trendingScore": 74,
-      "downloads": 1648104,
-      "likes": 2148,
+      "trendingScore": 81,
+      "downloads": 1670161,
+      "likes": 2164,
       "lastModified": "2026-09-04T06:41:23.000Z",
       "planningGiB": {
         "int4": 420.96,
@@ -135,21 +117,39 @@
       }
     },
     {
-      "rank": 7,
-      "id": "JetBrains/Mellum2.1-12B-A2.5B-Thinking",
-      "name": "Mellum2.1-12B-A2.5B-Thinking",
-      "author": "JetBrains",
-      "url": "https://huggingface.co/JetBrains/Mellum2.1-12B-A2.5B-Thinking",
-      "parameters": 12149923072,
-      "parameterBillions": 12.15,
-      "trendingScore": 65,
-      "downloads": 198,
-      "likes": 66,
-      "lastModified": "2026-10-07T23:08:12.000Z",
+      "rank": 6,
+      "id": "audnai/penclaw-GLM-5.3-abliterated",
+      "name": "penclaw-GLM-5.3-abliterated",
+      "author": "audnai",
+      "url": "https://huggingface.co/audnai/penclaw-GLM-5.3-abliterated",
+      "parameters": 753329940480,
+      "parameterBillions": 753.33,
+      "trendingScore": 77,
+      "downloads": 1902,
+      "likes": 378,
+      "lastModified": "2026-09-02T22:22:22.000Z",
       "planningGiB": {
-        "int4": 6.79,
-        "int8": 13.58,
-        "bf16": 27.16
+        "int4": 420.96,
+        "int8": 841.91,
+        "bf16": 1683.82
+      }
+    },
+    {
+      "rank": 7,
+      "id": "meta-llama/Llama-3.1-8B-Instruct",
+      "name": "Llama-3.1-8B-Instruct",
+      "author": "meta-llama",
+      "url": "https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct",
+      "parameters": 8030261248,
+      "parameterBillions": 8.03,
+      "trendingScore": 70,
+      "downloads": 6015326,
+      "likes": 8321,
+      "lastModified": "2024-09-25T17:00:57.000Z",
+      "planningGiB": {
+        "int4": 4.49,
+        "int8": 8.97,
+        "bf16": 17.95
       }
     },
     {
@@ -160,9 +160,9 @@
       "url": "https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct",
       "parameters": 8030261248,
       "parameterBillions": 8.03,
-      "trendingScore": 51,
-      "downloads": 814610,
-      "likes": 5277,
+      "trendingScore": 53,
+      "downloads": 777632,
+      "likes": 5292,
       "lastModified": "2025-06-18T23:49:51.000Z",
       "planningGiB": {
         "int4": 4.49,
@@ -172,38 +172,38 @@
     },
     {
       "rank": 9,
-      "id": "XiaomiMiMo/MiMo-V2.6-Pro-RL",
-      "name": "MiMo-V2.6-Pro-RL",
-      "author": "XiaomiMiMo",
-      "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL",
-      "parameters": 1024216603392,
-      "parameterBillions": 1024.22,
-      "trendingScore": 42,
-      "downloads": 94175,
-      "likes": 678,
-      "lastModified": "2026-10-09T06:30:24.000Z",
-      "planningGiB": {
-        "int4": 572.33,
-        "int8": 1144.65,
-        "bf16": 2289.3
-      }
-    },
-    {
-      "rank": 10,
       "id": "bytkim/Qwen3.8-27B-pi",
       "name": "Qwen3.8-27B-pi",
       "author": "bytkim",
       "url": "https://huggingface.co/bytkim/Qwen3.8-27B-pi",
       "parameters": 27781427952,
       "parameterBillions": 27.78,
-      "trendingScore": 42,
-      "downloads": 1826,
-      "likes": 64,
+      "trendingScore": 43,
+      "downloads": 1939,
+      "likes": 67,
       "lastModified": "2026-09-30T21:02:37.000Z",
       "planningGiB": {
         "int4": 15.52,
         "int8": 31.05,
         "bf16": 62.1
+      }
+    },
+    {
+      "rank": 10,
+      "id": "XiaomiMiMo/MiMo-V2.6-Pro-RL",
+      "name": "MiMo-V2.6-Pro-RL",
+      "author": "XiaomiMiMo",
+      "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL",
+      "parameters": 1024216603392,
+      "parameterBillions": 1024.22,
+      "trendingScore": 41,
+      "downloads": 95178,
+      "likes": 688,
+      "lastModified": "2026-10-09T06:30:24.000Z",
+      "planningGiB": {
+        "int4": 572.33,
+        "int8": 1144.65,
+        "bf16": 2289.3
       }
     },
     {
@@ -214,9 +214,9 @@
       "url": "https://huggingface.co/vcruz305/CYBER-FROST-3.8-EXL3-SAGE-3.87bpw",
       "parameters": 32843734528,
       "parameterBillions": 32.84,
-      "trendingScore": 39,
-      "downloads": 1320,
-      "likes": 45,
+      "trendingScore": 32,
+      "downloads": 1393,
+      "likes": 46,
       "lastModified": "2026-10-05T17:37:59.000Z",
       "planningGiB": {
         "int4": 18.35,
@@ -226,20 +226,20 @@
     },
     {
       "rank": 12,
-      "id": "IFM/K2-Type-0.9B",
-      "name": "K2-Type-0.9B",
-      "author": "IFM",
-      "url": "https://huggingface.co/IFM/K2-Type-0.9B",
-      "parameters": 1078285824,
-      "parameterBillions": 1.08,
-      "trendingScore": 32,
-      "downloads": 1678,
-      "likes": 32,
-      "lastModified": "2026-10-02T19:30:37.000Z",
+      "id": "XHToken/Spark-X2.5-4B",
+      "name": "Spark-X2.5-4B",
+      "author": "XHToken",
+      "url": "https://huggingface.co/XHToken/Spark-X2.5-4B",
+      "parameters": 4112079360,
+      "parameterBillions": 4.11,
+      "trendingScore": 27,
+      "downloads": 28829,
+      "likes": 1396,
+      "lastModified": "2026-09-15T03:09:56.000Z",
       "planningGiB": {
-        "int4": 0.6,
-        "int8": 1.21,
-        "bf16": 2.41
+        "int4": 2.3,
+        "int8": 4.6,
+        "bf16": 9.19
       }
     }
   ]
