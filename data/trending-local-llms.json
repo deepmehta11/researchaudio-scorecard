@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-27T14:39:29.472Z",
+  "generatedAt": "2026-10-28T15:12:34.340Z",
   "source": {
     "name": "Hugging Face Hub public models API",
     "url": "https://huggingface.co/models?pipeline_tag=text-generation&sort=trending",
@@ -34,9 +34,9 @@
       "url": "https://huggingface.co/RecursiveSI/flint",
       "parameters": 39785287456,
       "parameterBillions": 39.79,
-      "trendingScore": 910,
-      "downloads": 10574,
-      "likes": 950,
+      "trendingScore": 979,
+      "downloads": 14047,
+      "likes": 1132,
       "lastModified": "2026-10-21T14:24:03.000Z",
       "planningGiB": {
         "int4": 22.23,
@@ -52,10 +52,10 @@
       "url": "https://huggingface.co/Nanbeige/Nanbeige4.3-33B",
       "parameters": 33118977024,
       "parameterBillions": 33.12,
-      "trendingScore": 632,
-      "downloads": 4785,
-      "likes": 639,
-      "lastModified": "2026-10-25T11:11:17.000Z",
+      "trendingScore": 692,
+      "downloads": 7412,
+      "likes": 701,
+      "lastModified": "2026-10-28T01:59:01.000Z",
       "planningGiB": {
         "int4": 18.51,
         "int8": 37.01,
@@ -70,9 +70,9 @@
       "url": "https://huggingface.co/XHToken/Spark-X2.6-4B",
       "parameters": 4112079360,
       "parameterBillions": 4.11,
-      "trendingScore": 608,
-      "downloads": 6191,
-      "likes": 748,
+      "trendingScore": 549,
+      "downloads": 8222,
+      "likes": 834,
       "lastModified": "2026-10-27T12:55:34.000Z",
       "planningGiB": {
         "int4": 2.3,
@@ -82,15 +82,33 @@
     },
     {
       "rank": 4,
+      "id": "LiquidAI/LFM3-1.7B",
+      "name": "LFM3-1.7B",
+      "author": "LiquidAI",
+      "url": "https://huggingface.co/LiquidAI/LFM3-1.7B",
+      "parameters": 1728801536,
+      "parameterBillions": 1.73,
+      "trendingScore": 306,
+      "downloads": 8892,
+      "likes": 307,
+      "lastModified": "2026-10-27T05:58:29.000Z",
+      "planningGiB": {
+        "int4": 0.97,
+        "int8": 1.93,
+        "bf16": 3.86
+      }
+    },
+    {
+      "rank": 5,
       "id": "InternScience/Sage-A1.5",
       "name": "Sage-A1.5",
       "author": "InternScience",
       "url": "https://huggingface.co/InternScience/Sage-A1.5",
       "parameters": 35951822704,
       "parameterBillions": 35.95,
-      "trendingScore": 315,
-      "downloads": 6613,
-      "likes": 325,
+      "trendingScore": 246,
+      "downloads": 8218,
+      "likes": 352,
       "lastModified": "2026-10-22T14:08:48.000Z",
       "planningGiB": {
         "int4": 20.09,
@@ -99,17 +117,17 @@
       }
     },
     {
-      "rank": 5,
+      "rank": 6,
       "id": "HuggingFaceBio/Carbon-X",
       "name": "Carbon-X",
       "author": "HuggingFaceBio",
       "url": "https://huggingface.co/HuggingFaceBio/Carbon-X",
       "parameters": 14822046720,
       "parameterBillions": 14.82,
-      "trendingScore": 206,
-      "downloads": 1595,
-      "likes": 215,
-      "lastModified": "2026-10-23T15:23:00.000Z",
+      "trendingScore": 228,
+      "downloads": 2305,
+      "likes": 239,
+      "lastModified": "2026-10-28T11:41:11.000Z",
       "planningGiB": {
         "int4": 8.28,
         "int8": 16.56,
@@ -117,39 +135,21 @@
       }
     },
     {
-      "rank": 6,
+      "rank": 7,
       "id": "KRAFTON/Raon-1-mini-preview",
       "name": "Raon-1-mini-preview",
       "author": "KRAFTON",
       "url": "https://huggingface.co/KRAFTON/Raon-1-mini-preview",
       "parameters": 28783218402,
       "parameterBillions": 28.78,
-      "trendingScore": 188,
-      "downloads": 2208,
-      "likes": 204,
+      "trendingScore": 137,
+      "downloads": 2804,
+      "likes": 222,
       "lastModified": "2026-10-27T08:07:23.000Z",
       "planningGiB": {
         "int4": 16.08,
         "int8": 32.17,
         "bf16": 64.34
-      }
-    },
-    {
-      "rank": 7,
-      "id": "ornith-ai/Ornith-1.5-122B",
-      "name": "Ornith-1.5-122B",
-      "author": "ornith-ai",
-      "url": "https://huggingface.co/ornith-ai/Ornith-1.5-122B",
-      "parameters": 125086497008,
-      "parameterBillions": 125.09,
-      "trendingScore": 184,
-      "downloads": 76295,
-      "likes": 194,
-      "lastModified": "2026-10-21T08:29:30.000Z",
-      "planningGiB": {
-        "int4": 69.9,
-        "int8": 139.8,
-        "bf16": 279.59
       }
     },
     {
@@ -160,9 +160,9 @@
       "url": "https://huggingface.co/jialinyyzz/humanizer",
       "parameters": 11959730224,
       "parameterBillions": 11.96,
-      "trendingScore": 135,
-      "downloads": 174633,
-      "likes": 2181,
+      "trendingScore": 114,
+      "downloads": 195233,
+      "likes": 2189,
       "lastModified": "2026-10-15T02:09:56.000Z",
       "planningGiB": {
         "int4": 6.68,
@@ -178,9 +178,9 @@
       "url": "https://huggingface.co/MemTensor/MemT-1.0-Nano",
       "parameters": 35111542048,
       "parameterBillions": 35.11,
-      "trendingScore": 92,
-      "downloads": 41485,
-      "likes": 147,
+      "trendingScore": 87,
+      "downloads": 55126,
+      "likes": 155,
       "lastModified": "2026-10-20T05:49:52.000Z",
       "planningGiB": {
         "int4": 19.62,
@@ -190,34 +190,16 @@
     },
     {
       "rank": 10,
-      "id": "meta-llama/Meta-Llama-3-8B-Instruct",
-      "name": "Meta-Llama-3-8B-Instruct",
-      "author": "meta-llama",
-      "url": "https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct",
-      "parameters": 8030261248,
-      "parameterBillions": 8.03,
-      "trendingScore": 83,
-      "downloads": 343037,
-      "likes": 5591,
-      "lastModified": "2025-06-18T23:49:51.000Z",
-      "planningGiB": {
-        "int4": 4.49,
-        "int8": 8.97,
-        "bf16": 17.95
-      }
-    },
-    {
-      "rank": 11,
       "id": "reflection/Beam-1.0-501B-A23B",
       "name": "Beam-1.0-501B-A23B",
       "author": "reflection",
       "url": "https://huggingface.co/reflection/Beam-1.0-501B-A23B",
       "parameters": 501267612352,
       "parameterBillions": 501.27,
-      "trendingScore": 81,
-      "downloads": 6610,
-      "likes": 272,
-      "lastModified": "2026-10-21T23:26:37.000Z",
+      "trendingScore": 77,
+      "downloads": 7231,
+      "likes": 284,
+      "lastModified": "2026-10-27T20:35:55.000Z",
       "planningGiB": {
         "int4": 280.11,
         "int8": 560.21,
@@ -225,21 +207,39 @@
       }
     },
     {
-      "rank": 12,
-      "id": "tencent/Hy-Memory-30B-A3B",
-      "name": "Hy-Memory-30B-A3B",
-      "author": "tencent",
-      "url": "https://huggingface.co/tencent/Hy-Memory-30B-A3B",
-      "parameters": 30064725888,
-      "parameterBillions": 30.06,
-      "trendingScore": 80,
-      "downloads": 4878,
-      "likes": 316,
-      "lastModified": "2026-10-16T08:12:51.000Z",
+      "rank": 11,
+      "id": "Diffuspace/Clover-35B-A3B-Preview",
+      "name": "Clover-35B-A3B-Preview",
+      "author": "Diffuspace",
+      "url": "https://huggingface.co/Diffuspace/Clover-35B-A3B-Preview",
+      "parameters": 34661350848,
+      "parameterBillions": 34.66,
+      "trendingScore": 73,
+      "downloads": 105,
+      "likes": 74,
+      "lastModified": "2026-10-28T03:07:54.000Z",
       "planningGiB": {
-        "int4": 16.8,
-        "int8": 33.6,
-        "bf16": 67.2
+        "int4": 19.37,
+        "int8": 38.74,
+        "bf16": 77.47
+      }
+    },
+    {
+      "rank": 12,
+      "id": "inclusionAI/Ling-3.1-flash-1019",
+      "name": "Ling-3.1-flash-1019",
+      "author": "inclusionAI",
+      "url": "https://huggingface.co/inclusionAI/Ling-3.1-flash-1019",
+      "parameters": 572120680768,
+      "parameterBillions": 572.12,
+      "trendingScore": 72,
+      "downloads": 548,
+      "likes": 72,
+      "lastModified": "2026-10-27T10:46:00.000Z",
+      "planningGiB": {
+        "int4": 319.7,
+        "int8": 639.39,
+        "bf16": 1278.79
       }
     }
   ]
