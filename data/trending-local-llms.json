@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-04T16:24:46.944Z",
+  "generatedAt": "2026-11-05T16:33:09.131Z",
   "source": {
     "name": "Hugging Face Hub public models API",
     "url": "https://huggingface.co/models?pipeline_tag=text-generation&sort=trending",
@@ -34,9 +34,9 @@
       "url": "https://huggingface.co/LiquidAI/LFM3-1.7B",
       "parameters": 1728801536,
       "parameterBillions": 1.73,
-      "trendingScore": 615,
-      "downloads": 54959,
-      "likes": 1465,
+      "trendingScore": 265.5,
+      "downloads": 60681,
+      "likes": 1504,
       "lastModified": "2026-11-03T18:08:34.000Z",
       "planningGiB": {
         "int4": 0.97,
@@ -52,9 +52,9 @@
       "url": "https://huggingface.co/OBLITERATUS/DeepSeek-V4.1-Flash-1017-obliterated",
       "parameters": 754638836864,
       "parameterBillions": 754.64,
-      "trendingScore": 212,
-      "downloads": 1979,
-      "likes": 245,
+      "trendingScore": 219,
+      "downloads": 2296,
+      "likes": 256,
       "lastModified": "2026-10-30T10:34:55.000Z",
       "planningGiB": {
         "int4": 421.69,
@@ -64,33 +64,69 @@
     },
     {
       "rank": 3,
-      "id": "Nanbeige/Nanbeige4.3-33B",
-      "name": "Nanbeige4.3-33B",
-      "author": "Nanbeige",
-      "url": "https://huggingface.co/Nanbeige/Nanbeige4.3-33B",
-      "parameters": 33118977024,
-      "parameterBillions": 33.12,
-      "trendingScore": 209,
-      "downloads": 18657,
-      "likes": 1039,
-      "lastModified": "2026-10-28T01:59:01.000Z",
+      "id": "ccore/Qwen3.5-4B-GLB-3D-Coder",
+      "name": "Qwen3.5-4B-GLB-3D-Coder",
+      "author": "ccore",
+      "url": "https://huggingface.co/ccore/Qwen3.5-4B-GLB-3D-Coder",
+      "parameters": 4539265536,
+      "parameterBillions": 4.54,
+      "trendingScore": 145,
+      "downloads": 12206,
+      "likes": 166,
+      "lastModified": "2026-11-05T16:25:22.000Z",
       "planningGiB": {
-        "int4": 18.51,
-        "int8": 37.01,
-        "bf16": 74.03
+        "int4": 2.54,
+        "int8": 5.07,
+        "bf16": 10.15
       }
     },
     {
       "rank": 4,
+      "id": "baidu/ERNIE-5.5-Flash-Base",
+      "name": "ERNIE-5.5-Flash-Base",
+      "author": "baidu",
+      "url": "https://huggingface.co/baidu/ERNIE-5.5-Flash-Base",
+      "parameters": 286245697882,
+      "parameterBillions": 286.25,
+      "trendingScore": 115,
+      "downloads": 13,
+      "likes": 170,
+      "lastModified": "2026-11-05T06:33:30.000Z",
+      "planningGiB": {
+        "int4": 159.95,
+        "int8": 319.9,
+        "bf16": 639.81
+      }
+    },
+    {
+      "rank": 5,
+      "id": "webAI-Official/TwIL-8B",
+      "name": "TwIL-8B",
+      "author": "webAI-Official",
+      "url": "https://huggingface.co/webAI-Official/TwIL-8B",
+      "parameters": 8791592960,
+      "parameterBillions": 8.79,
+      "trendingScore": 104,
+      "downloads": 3563,
+      "likes": 106,
+      "lastModified": "2026-11-04T17:56:03.000Z",
+      "planningGiB": {
+        "int4": 4.91,
+        "int8": 9.83,
+        "bf16": 19.65
+      }
+    },
+    {
+      "rank": 6,
       "id": "Diffuspace/Clover-35B-A3B-Preview",
       "name": "Clover-35B-A3B-Preview",
       "author": "Diffuspace",
       "url": "https://huggingface.co/Diffuspace/Clover-35B-A3B-Preview",
       "parameters": 34661350848,
       "parameterBillions": 34.66,
-      "trendingScore": 149,
-      "downloads": 3341,
-      "likes": 241,
+      "trendingScore": 101,
+      "downloads": 3572,
+      "likes": 244,
       "lastModified": "2026-10-28T03:07:54.000Z",
       "planningGiB": {
         "int4": 19.37,
@@ -99,16 +135,16 @@
       }
     },
     {
-      "rank": 5,
+      "rank": 7,
       "id": "RecursiveSI/flint",
       "name": "flint",
       "author": "RecursiveSI",
       "url": "https://huggingface.co/RecursiveSI/flint",
       "parameters": 39785287456,
       "parameterBillions": 39.79,
-      "trendingScore": 129,
-      "downloads": 35511,
-      "likes": 1340,
+      "trendingScore": 92,
+      "downloads": 38357,
+      "likes": 1350,
       "lastModified": "2026-10-21T14:24:03.000Z",
       "planningGiB": {
         "int4": 22.23,
@@ -117,16 +153,16 @@
       }
     },
     {
-      "rank": 6,
+      "rank": 8,
       "id": "divagr1925/Qwen3.5-4B-Qwenputer",
       "name": "Qwen3.5-4B-Qwenputer",
       "author": "divagr1925",
       "url": "https://huggingface.co/divagr1925/Qwen3.5-4B-Qwenputer",
       "parameters": 9357602496,
       "parameterBillions": 9.36,
-      "trendingScore": 128,
-      "downloads": 1421,
-      "likes": 161,
+      "trendingScore": 88,
+      "downloads": 1603,
+      "likes": 171,
       "lastModified": "2026-10-23T09:14:39.000Z",
       "planningGiB": {
         "int4": 5.23,
@@ -135,16 +171,34 @@
       }
     },
     {
-      "rank": 7,
+      "rank": 9,
+      "id": "Nanbeige/Nanbeige4.3-33B",
+      "name": "Nanbeige4.3-33B",
+      "author": "Nanbeige",
+      "url": "https://huggingface.co/Nanbeige/Nanbeige4.3-33B",
+      "parameters": 33118977024,
+      "parameterBillions": 33.12,
+      "trendingScore": 86,
+      "downloads": 19178,
+      "likes": 1048,
+      "lastModified": "2026-10-28T01:59:01.000Z",
+      "planningGiB": {
+        "int4": 18.51,
+        "int8": 37.01,
+        "bf16": 74.03
+      }
+    },
+    {
+      "rank": 10,
       "id": "XHToken/Spark-X2.6-4B",
       "name": "Spark-X2.6-4B",
       "author": "XHToken",
       "url": "https://huggingface.co/XHToken/Spark-X2.6-4B",
       "parameters": 4112079360,
       "parameterBillions": 4.11,
-      "trendingScore": 107,
-      "downloads": 19588,
-      "likes": 1002,
+      "trendingScore": 82,
+      "downloads": 20270,
+      "likes": 1009,
       "lastModified": "2026-11-01T13:51:41.000Z",
       "planningGiB": {
         "int4": 2.3,
@@ -153,16 +207,16 @@
       }
     },
     {
-      "rank": 8,
+      "rank": 11,
       "id": "deep-principle/Hydrogen-1.0",
       "name": "Hydrogen-1.0",
       "author": "deep-principle",
       "url": "https://huggingface.co/deep-principle/Hydrogen-1.0",
       "parameters": 753329940480,
       "parameterBillions": 753.33,
-      "trendingScore": 105,
-      "downloads": 11798,
-      "likes": 227,
+      "trendingScore": 61.5,
+      "downloads": 19960,
+      "likes": 245,
       "lastModified": "2026-11-02T09:00:24.000Z",
       "planningGiB": {
         "int4": 420.96,
@@ -171,75 +225,21 @@
       }
     },
     {
-      "rank": 9,
-      "id": "meta-llama/Llama-3.1-8B-Instruct",
-      "name": "Llama-3.1-8B-Instruct",
-      "author": "meta-llama",
-      "url": "https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct",
-      "parameters": 8030261248,
-      "parameterBillions": 8.03,
-      "trendingScore": 56,
-      "downloads": 4441991,
-      "likes": 8787,
-      "lastModified": "2024-09-25T17:00:57.000Z",
-      "planningGiB": {
-        "int4": 4.49,
-        "int8": 8.97,
-        "bf16": 17.95
-      }
-    },
-    {
-      "rank": 10,
-      "id": "LiquidAI/LFM3-1.7B-Base",
-      "name": "LFM3-1.7B-Base",
-      "author": "LiquidAI",
-      "url": "https://huggingface.co/LiquidAI/LFM3-1.7B-Base",
-      "parameters": 1728801536,
-      "parameterBillions": 1.73,
-      "trendingScore": 56,
-      "downloads": 6413,
-      "likes": 144,
-      "lastModified": "2026-11-03T07:40:24.000Z",
-      "planningGiB": {
-        "int4": 0.97,
-        "int8": 1.93,
-        "bf16": 3.86
-      }
-    },
-    {
-      "rank": 11,
+      "rank": 12,
       "id": "meta-llama/Meta-Llama-3-8B-Instruct",
       "name": "Meta-Llama-3-8B-Instruct",
       "author": "meta-llama",
       "url": "https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct",
       "parameters": 8030261248,
       "parameterBillions": 8.03,
-      "trendingScore": 50,
-      "downloads": 326923,
-      "likes": 5718,
+      "trendingScore": 53,
+      "downloads": 348997,
+      "likes": 5745,
       "lastModified": "2025-06-18T23:49:51.000Z",
       "planningGiB": {
         "int4": 4.49,
         "int8": 8.97,
         "bf16": 17.95
-      }
-    },
-    {
-      "rank": 12,
-      "id": "jialinyyzz/humanizer",
-      "name": "humanizer",
-      "author": "jialinyyzz",
-      "url": "https://huggingface.co/jialinyyzz/humanizer",
-      "parameters": 11959730224,
-      "parameterBillions": 11.96,
-      "trendingScore": 49,
-      "downloads": 315399,
-      "likes": 2246,
-      "lastModified": "2026-10-15T02:09:56.000Z",
-      "planningGiB": {
-        "int4": 6.68,
-        "int8": 13.37,
-        "bf16": 26.73
       }
     }
   ]
