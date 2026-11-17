@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-16T18:40:50.448Z",
+  "generatedAt": "2026-11-17T17:40:41.611Z",
   "source": {
     "name": "Hugging Face Hub public models API",
     "url": "https://huggingface.co/models?pipeline_tag=text-generation&sort=trending",
@@ -28,20 +28,20 @@
   "models": [
     {
       "rank": 1,
-      "id": "xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
-      "name": "DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
-      "author": "xtools-at",
-      "url": "https://huggingface.co/xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
-      "parameters": 9409813744,
-      "parameterBillions": 9.41,
-      "trendingScore": 2995.2999999999997,
-      "downloads": 29567,
-      "likes": 8189,
-      "lastModified": "2026-11-12T20:59:57.000Z",
+      "id": "maxwell-model/Maxwell-V1-Flash",
+      "name": "Maxwell-V1-Flash",
+      "author": "maxwell-model",
+      "url": "https://huggingface.co/maxwell-model/Maxwell-V1-Flash",
+      "parameters": 36810559422,
+      "parameterBillions": 36.81,
+      "trendingScore": 136,
+      "downloads": 287,
+      "likes": 138,
+      "lastModified": "2026-11-14T03:50:21.000Z",
       "planningGiB": {
-        "int4": 5.26,
-        "int8": 10.52,
-        "bf16": 21.03
+        "int4": 20.57,
+        "int8": 41.14,
+        "bf16": 82.28
       }
     },
     {
@@ -52,9 +52,9 @@
       "url": "https://huggingface.co/NousResearch/Arete-27B",
       "parameters": 27356728560,
       "parameterBillions": 27.36,
-      "trendingScore": 271,
-      "downloads": 9187,
-      "likes": 636,
+      "trendingScore": 93.5,
+      "downloads": 10670,
+      "likes": 679,
       "lastModified": "2026-11-06T21:04:27.000Z",
       "planningGiB": {
         "int4": 15.29,
@@ -64,106 +64,34 @@
     },
     {
       "rank": 3,
-      "id": "meta-llama/Meta-Llama-3-8B-Instruct",
-      "name": "Meta-Llama-3-8B-Instruct",
-      "author": "meta-llama",
-      "url": "https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct",
-      "parameters": 8030261248,
-      "parameterBillions": 8.03,
-      "trendingScore": 113,
-      "downloads": 425523,
-      "likes": 6103,
-      "lastModified": "2025-06-18T23:49:51.000Z",
+      "id": "xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
+      "name": "DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
+      "author": "xtools-at",
+      "url": "https://huggingface.co/xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
+      "parameters": 9409813744,
+      "parameterBillions": 9.41,
+      "trendingScore": 78,
+      "downloads": 32356,
+      "likes": 9435,
+      "lastModified": "2026-11-12T20:59:57.000Z",
       "planningGiB": {
-        "int4": 4.49,
-        "int8": 8.97,
-        "bf16": 17.95
+        "int4": 5.26,
+        "int8": 10.52,
+        "bf16": 21.03
       }
     },
     {
       "rank": 4,
-      "id": "LiquidAI/LFM3-1.7B",
-      "name": "LFM3-1.7B",
-      "author": "LiquidAI",
-      "url": "https://huggingface.co/LiquidAI/LFM3-1.7B",
-      "parameters": 1728801536,
-      "parameterBillions": 1.73,
-      "trendingScore": 102,
-      "downloads": 106961,
-      "likes": 1839,
-      "lastModified": "2026-11-09T17:57:55.000Z",
-      "planningGiB": {
-        "int4": 0.97,
-        "int8": 1.93,
-        "bf16": 3.86
-      }
-    },
-    {
-      "rank": 5,
-      "id": "KRAFTON/Raon-1-nano",
-      "name": "Raon-1-nano",
-      "author": "KRAFTON",
-      "url": "https://huggingface.co/KRAFTON/Raon-1-nano",
-      "parameters": 3529911376,
-      "parameterBillions": 3.53,
-      "trendingScore": 99,
-      "downloads": 1510,
-      "likes": 122,
-      "lastModified": "2026-11-16T09:50:25.000Z",
-      "planningGiB": {
-        "int4": 1.97,
-        "int8": 3.94,
-        "bf16": 7.89
-      }
-    },
-    {
-      "rank": 6,
-      "id": "MiniMaxAI/MiniMax-H3-Image-PE",
-      "name": "MiniMax-H3-Image-PE",
-      "author": "MiniMaxAI",
-      "url": "https://huggingface.co/MiniMaxAI/MiniMax-H3-Image-PE",
-      "parameters": 27356728560,
-      "parameterBillions": 27.36,
-      "trendingScore": 79,
-      "downloads": 2730,
-      "likes": 91,
-      "lastModified": "2026-11-10T15:16:06.000Z",
-      "planningGiB": {
-        "int4": 15.29,
-        "int8": 30.57,
-        "bf16": 61.15
-      }
-    },
-    {
-      "rank": 7,
-      "id": "tencent/Qwen3.8-27B-DSpine-b16",
-      "name": "Qwen3.8-27B-DSpine-b16",
-      "author": "tencent",
-      "url": "https://huggingface.co/tencent/Qwen3.8-27B-DSpine-b16",
-      "parameters": 2025912064,
-      "parameterBillions": 2.03,
-      "trendingScore": 67,
-      "downloads": 5984,
-      "likes": 286,
-      "lastModified": "2026-11-14T13:34:07.000Z",
-      "planningGiB": {
-        "int4": 1.13,
-        "int8": 2.26,
-        "bf16": 4.53
-      }
-    },
-    {
-      "rank": 8,
       "id": "xtools-at/DeepSeek-V4-Pro-Qwen3.5-4B-UNCENSORED-heretic",
       "name": "DeepSeek-V4-Pro-Qwen3.5-4B-UNCENSORED-heretic",
       "author": "xtools-at",
       "url": "https://huggingface.co/xtools-at/DeepSeek-V4-Pro-Qwen3.5-4B-UNCENSORED-heretic",
       "parameters": 4539265536,
       "parameterBillions": 4.54,
-      "trendingScore": 65.8,
-      "downloads": 19109,
-      "likes": 156,
-      "lastModified": "2026-11-12T21:00:42.000Z",
+      "trendingScore": 75.6,
+      "downloads": 21167,
+      "likes": 211,
+      "lastModified": "2026-11-17T10:24:27.000Z",
       "planningGiB": {
         "int4": 2.54,
         "int8": 5.07,
@@ -171,16 +99,16 @@
       }
     },
     {
-      "rank": 9,
+      "rank": 5,
       "id": "MoonMath-ai/DeepSeek-V4.1-Flash-1017-uncensored",
       "name": "DeepSeek-V4.1-Flash-1017-uncensored",
       "author": "MoonMath-ai",
       "url": "https://huggingface.co/MoonMath-ai/DeepSeek-V4.1-Flash-1017-uncensored",
       "parameters": 763205315794,
       "parameterBillions": 763.21,
-      "trendingScore": 65.8,
-      "downloads": 1444,
-      "likes": 104,
+      "trendingScore": 70.69999999999999,
+      "downloads": 1683,
+      "likes": 143,
       "lastModified": "2026-11-09T10:26:05.000Z",
       "planningGiB": {
         "int4": 426.47,
@@ -189,57 +117,129 @@
       }
     },
     {
-      "rank": 10,
-      "id": "webAI-Official/TwIL-8B",
-      "name": "TwIL-8B",
-      "author": "webAI-Official",
-      "url": "https://huggingface.co/webAI-Official/TwIL-8B",
-      "parameters": 8791592960,
-      "parameterBillions": 8.79,
-      "trendingScore": 65,
-      "downloads": 61393,
-      "likes": 422,
-      "lastModified": "2026-11-08T09:57:35.000Z",
-      "planningGiB": {
-        "int4": 4.91,
-        "int8": 9.83,
-        "bf16": 19.65
-      }
-    },
-    {
-      "rank": 11,
-      "id": "ccore/Qwen3.5-4B-GLB-3D-Coder",
-      "name": "Qwen3.5-4B-GLB-3D-Coder",
-      "author": "ccore",
-      "url": "https://huggingface.co/ccore/Qwen3.5-4B-GLB-3D-Coder",
-      "parameters": 4539265536,
-      "parameterBillions": 4.54,
-      "trendingScore": 64.5,
-      "downloads": 59137,
-      "likes": 443,
-      "lastModified": "2026-11-06T00:47:29.000Z",
-      "planningGiB": {
-        "int4": 2.54,
-        "int8": 5.07,
-        "bf16": 10.15
-      }
-    },
-    {
-      "rank": 12,
+      "rank": 6,
       "id": "meta-llama/Llama-3.1-8B-Instruct",
       "name": "Llama-3.1-8B-Instruct",
       "author": "meta-llama",
       "url": "https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct",
       "parameters": 8030261248,
       "parameterBillions": 8.03,
-      "trendingScore": 56,
-      "downloads": 4208415,
-      "likes": 8958,
+      "trendingScore": 62,
+      "downloads": 4201151,
+      "likes": 8989,
       "lastModified": "2024-09-25T17:00:57.000Z",
       "planningGiB": {
         "int4": 4.49,
         "int8": 8.97,
         "bf16": 17.95
+      }
+    },
+    {
+      "rank": 7,
+      "id": "zai-org/GLM-5.3",
+      "name": "GLM-5.3",
+      "author": "zai-org",
+      "url": "https://huggingface.co/zai-org/GLM-5.3",
+      "parameters": 753329940480,
+      "parameterBillions": 753.33,
+      "trendingScore": 54,
+      "downloads": 1720630,
+      "likes": 2471,
+      "lastModified": "2026-10-14T12:22:48.000Z",
+      "planningGiB": {
+        "int4": 420.96,
+        "int8": 841.91,
+        "bf16": 1683.82
+      }
+    },
+    {
+      "rank": 8,
+      "id": "meta-llama/Meta-Llama-3-8B-Instruct",
+      "name": "Meta-Llama-3-8B-Instruct",
+      "author": "meta-llama",
+      "url": "https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct",
+      "parameters": 8030261248,
+      "parameterBillions": 8.03,
+      "trendingScore": 50.5,
+      "downloads": 426936,
+      "likes": 6162,
+      "lastModified": "2025-06-18T23:49:51.000Z",
+      "planningGiB": {
+        "int4": 4.49,
+        "int8": 8.97,
+        "bf16": 17.95
+      }
+    },
+    {
+      "rank": 9,
+      "id": "KRAFTON/Raon-1-nano",
+      "name": "Raon-1-nano",
+      "author": "KRAFTON",
+      "url": "https://huggingface.co/KRAFTON/Raon-1-nano",
+      "parameters": 3529911376,
+      "parameterBillions": 3.53,
+      "trendingScore": 50.5,
+      "downloads": 1884,
+      "likes": 151,
+      "lastModified": "2026-11-17T14:03:31.000Z",
+      "planningGiB": {
+        "int4": 1.97,
+        "int8": 3.94,
+        "bf16": 7.89
+      }
+    },
+    {
+      "rank": 10,
+      "id": "LiquidAI/LFM3-1.7B",
+      "name": "LFM3-1.7B",
+      "author": "LiquidAI",
+      "url": "https://huggingface.co/LiquidAI/LFM3-1.7B",
+      "parameters": 1728801536,
+      "parameterBillions": 1.73,
+      "trendingScore": 49,
+      "downloads": 109972,
+      "likes": 1903,
+      "lastModified": "2026-11-09T17:57:55.000Z",
+      "planningGiB": {
+        "int4": 0.97,
+        "int8": 1.93,
+        "bf16": 3.86
+      }
+    },
+    {
+      "rank": 11,
+      "id": "MiniMaxAI/MiniMax-H3-Image-PE",
+      "name": "MiniMax-H3-Image-PE",
+      "author": "MiniMaxAI",
+      "url": "https://huggingface.co/MiniMaxAI/MiniMax-H3-Image-PE",
+      "parameters": 27356728560,
+      "parameterBillions": 27.36,
+      "trendingScore": 35,
+      "downloads": 3181,
+      "likes": 124,
+      "lastModified": "2026-11-10T15:16:06.000Z",
+      "planningGiB": {
+        "int4": 15.29,
+        "int8": 30.57,
+        "bf16": 61.15
+      }
+    },
+    {
+      "rank": 12,
+      "id": "whittleOrg/Whittle-Next-27B-A3B",
+      "name": "Whittle-Next-27B-A3B",
+      "author": "whittleOrg",
+      "url": "https://huggingface.co/whittleOrg/Whittle-Next-27B-A3B",
+      "parameters": 27568288915,
+      "parameterBillions": 27.57,
+      "trendingScore": 34,
+      "downloads": 1171,
+      "likes": 64,
+      "lastModified": "2026-10-14T05:47:59.000Z",
+      "planningGiB": {
+        "int4": 15.4,
+        "int8": 30.81,
+        "bf16": 61.62
       }
     }
   ]
