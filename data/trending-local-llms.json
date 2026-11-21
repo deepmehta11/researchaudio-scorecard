@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-20T17:01:12.494Z",
+  "generatedAt": "2026-11-21T16:13:14.183Z",
   "source": {
     "name": "Hugging Face Hub public models API",
     "url": "https://huggingface.co/models?pipeline_tag=text-generation&sort=trending",
@@ -34,9 +34,9 @@
       "url": "https://huggingface.co/maxwell-model/Maxwell-V1-Flash",
       "parameters": 36810559422,
       "parameterBillions": 36.81,
-      "trendingScore": 107,
-      "downloads": 2453,
-      "likes": 315,
+      "trendingScore": 217,
+      "downloads": 2959,
+      "likes": 308,
       "lastModified": "2026-11-14T03:50:21.000Z",
       "planningGiB": {
         "int4": 20.57,
@@ -46,20 +46,20 @@
     },
     {
       "rank": 2,
-      "id": "OVHaiLLM/Olala-v1.0-mini-7A1B",
-      "name": "Olala-v1.0-mini-7A1B",
-      "author": "OVHaiLLM",
-      "url": "https://huggingface.co/OVHaiLLM/Olala-v1.0-mini-7A1B",
-      "parameters": 6773124144,
-      "parameterBillions": 6.77,
-      "trendingScore": 72,
-      "downloads": 1021,
-      "likes": 101,
-      "lastModified": "2026-11-19T10:13:13.000Z",
+      "id": "microsoft/Aion-1.0-Instruct-2.3B",
+      "name": "Aion-1.0-Instruct-2.3B",
+      "author": "microsoft",
+      "url": "https://huggingface.co/microsoft/Aion-1.0-Instruct-2.3B",
+      "parameters": 2288831488,
+      "parameterBillions": 2.29,
+      "trendingScore": 93,
+      "downloads": 3099,
+      "likes": 119,
+      "lastModified": "2026-11-18T22:31:44.000Z",
       "planningGiB": {
-        "int4": 3.78,
-        "int8": 7.57,
-        "bf16": 15.14
+        "int4": 1.28,
+        "int8": 2.56,
+        "bf16": 5.12
       }
     },
     {
@@ -70,9 +70,9 @@
       "url": "https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct",
       "parameters": 8030261248,
       "parameterBillions": 8.03,
-      "trendingScore": 52,
-      "downloads": 430110,
-      "likes": 6411,
+      "trendingScore": 51.5,
+      "downloads": 431474,
+      "likes": 6380,
       "lastModified": "2025-06-18T23:49:51.000Z",
       "planningGiB": {
         "int4": 4.49,
@@ -82,105 +82,15 @@
     },
     {
       "rank": 4,
-      "id": "xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
-      "name": "DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
-      "author": "xtools-at",
-      "url": "https://huggingface.co/xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
-      "parameters": 9409813744,
-      "parameterBillions": 9.41,
-      "trendingScore": 48.5,
-      "downloads": 41020,
-      "likes": 9685,
-      "lastModified": "2026-11-12T20:59:57.000Z",
-      "planningGiB": {
-        "int4": 5.26,
-        "int8": 10.52,
-        "bf16": 21.03
-      }
-    },
-    {
-      "rank": 5,
-      "id": "NousResearch/Arete-27B",
-      "name": "Arete-27B",
-      "author": "NousResearch",
-      "url": "https://huggingface.co/NousResearch/Arete-27B",
-      "parameters": 27356728560,
-      "parameterBillions": 27.36,
-      "trendingScore": 47.5,
-      "downloads": 15046,
-      "likes": 845,
-      "lastModified": "2026-11-06T21:04:27.000Z",
-      "planningGiB": {
-        "int4": 15.29,
-        "int8": 30.57,
-        "bf16": 61.15
-      }
-    },
-    {
-      "rank": 6,
-      "id": "LiquidAI/LFM3-1.7B",
-      "name": "LFM3-1.7B",
-      "author": "LiquidAI",
-      "url": "https://huggingface.co/LiquidAI/LFM3-1.7B",
-      "parameters": 1728801536,
-      "parameterBillions": 1.73,
-      "trendingScore": 38,
-      "downloads": 128421,
-      "likes": 2038,
-      "lastModified": "2026-11-09T17:57:55.000Z",
-      "planningGiB": {
-        "int4": 0.97,
-        "int8": 1.93,
-        "bf16": 3.86
-      }
-    },
-    {
-      "rank": 7,
-      "id": "nvidia/Qwen3.5-4B-Qwen3.8-27B-Draft",
-      "name": "Qwen3.5-4B-Qwen3.8-27B-Draft",
-      "author": "nvidia",
-      "url": "https://huggingface.co/nvidia/Qwen3.5-4B-Qwen3.8-27B-Draft",
-      "parameters": 4205751296,
-      "parameterBillions": 4.21,
-      "trendingScore": 38,
-      "downloads": 1116,
-      "likes": 165,
-      "lastModified": "2026-11-17T15:52:50.000Z",
-      "planningGiB": {
-        "int4": 2.35,
-        "int8": 4.7,
-        "bf16": 9.4
-      }
-    },
-    {
-      "rank": 8,
-      "id": "microsoft/Aion-1.0-Instruct-2.3B",
-      "name": "Aion-1.0-Instruct-2.3B",
-      "author": "microsoft",
-      "url": "https://huggingface.co/microsoft/Aion-1.0-Instruct-2.3B",
-      "parameters": 2288831488,
-      "parameterBillions": 2.29,
-      "trendingScore": 38,
-      "downloads": 1578,
-      "likes": 109,
-      "lastModified": "2026-11-18T22:31:44.000Z",
-      "planningGiB": {
-        "int4": 1.28,
-        "int8": 2.56,
-        "bf16": 5.12
-      }
-    },
-    {
-      "rank": 9,
       "id": "nvidia/Qwen3.8-27B-NVFP4-QAD",
       "name": "Qwen3.8-27B-NVFP4-QAD",
       "author": "nvidia",
       "url": "https://huggingface.co/nvidia/Qwen3.8-27B-NVFP4-QAD",
       "parameters": 27728983792,
       "parameterBillions": 27.73,
-      "trendingScore": 35,
-      "downloads": 515,
-      "likes": 37,
+      "trendingScore": 47,
+      "downloads": 1351,
+      "likes": 66,
       "lastModified": "2026-11-20T09:19:45.000Z",
       "planningGiB": {
         "int4": 15.49,
@@ -189,57 +99,147 @@
       }
     },
     {
+      "rank": 5,
+      "id": "OVHaiLLM/Olala-v1.0-mini-7A1B",
+      "name": "Olala-v1.0-mini-7A1B",
+      "author": "OVHaiLLM",
+      "url": "https://huggingface.co/OVHaiLLM/Olala-v1.0-mini-7A1B",
+      "parameters": 6773124144,
+      "parameterBillions": 6.77,
+      "trendingScore": 45.5,
+      "downloads": 1517,
+      "likes": 135,
+      "lastModified": "2026-11-21T08:43:38.000Z",
+      "planningGiB": {
+        "int4": 3.78,
+        "int8": 7.57,
+        "bf16": 15.14
+      }
+    },
+    {
+      "rank": 6,
+      "id": "nvidia/Qwen3.5-4B-Qwen3.8-27B-Draft",
+      "name": "Qwen3.5-4B-Qwen3.8-27B-Draft",
+      "author": "nvidia",
+      "url": "https://huggingface.co/nvidia/Qwen3.5-4B-Qwen3.8-27B-Draft",
+      "parameters": 4205751296,
+      "parameterBillions": 4.21,
+      "trendingScore": 40.5,
+      "downloads": 1354,
+      "likes": 134,
+      "lastModified": "2026-11-17T15:52:50.000Z",
+      "planningGiB": {
+        "int4": 2.35,
+        "int8": 4.7,
+        "bf16": 9.4
+      }
+    },
+    {
+      "rank": 7,
+      "id": "xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
+      "name": "DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
+      "author": "xtools-at",
+      "url": "https://huggingface.co/xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
+      "parameters": 9409813744,
+      "parameterBillions": 9.41,
+      "trendingScore": 40.1,
+      "downloads": 42676,
+      "likes": 6594,
+      "lastModified": "2026-11-12T20:59:57.000Z",
+      "planningGiB": {
+        "int4": 5.26,
+        "int8": 10.52,
+        "bf16": 21.03
+      }
+    },
+    {
+      "rank": 8,
+      "id": "LiquidAI/LFM3-1.7B",
+      "name": "LFM3-1.7B",
+      "author": "LiquidAI",
+      "url": "https://huggingface.co/LiquidAI/LFM3-1.7B",
+      "parameters": 1728801536,
+      "parameterBillions": 1.73,
+      "trendingScore": 40,
+      "downloads": 135129,
+      "likes": 1833,
+      "lastModified": "2026-11-09T17:57:55.000Z",
+      "planningGiB": {
+        "int4": 0.97,
+        "int8": 1.93,
+        "bf16": 3.86
+      }
+    },
+    {
+      "rank": 9,
+      "id": "whittleOrg/Whittle-Next-27B-A3B",
+      "name": "Whittle-Next-27B-A3B",
+      "author": "whittleOrg",
+      "url": "https://huggingface.co/whittleOrg/Whittle-Next-27B-A3B",
+      "parameters": 27568288915,
+      "parameterBillions": 27.57,
+      "trendingScore": 39,
+      "downloads": 1576,
+      "likes": 73,
+      "lastModified": "2026-10-14T05:47:59.000Z",
+      "planningGiB": {
+        "int4": 15.4,
+        "int8": 30.81,
+        "bf16": 61.62
+      }
+    },
+    {
       "rank": 10,
+      "id": "NousResearch/Arete-27B",
+      "name": "Arete-27B",
+      "author": "NousResearch",
+      "url": "https://huggingface.co/NousResearch/Arete-27B",
+      "parameters": 27356728560,
+      "parameterBillions": 27.36,
+      "trendingScore": 35.5,
+      "downloads": 16445,
+      "likes": 760,
+      "lastModified": "2026-11-06T21:04:27.000Z",
+      "planningGiB": {
+        "int4": 15.29,
+        "int8": 30.57,
+        "bf16": 61.15
+      }
+    },
+    {
+      "rank": 11,
+      "id": "RecursiveSI/flint",
+      "name": "flint",
+      "author": "RecursiveSI",
+      "url": "https://huggingface.co/RecursiveSI/flint",
+      "parameters": 39785287456,
+      "parameterBillions": 39.79,
+      "trendingScore": 31,
+      "downloads": 62399,
+      "likes": 1435,
+      "lastModified": "2026-10-21T14:24:03.000Z",
+      "planningGiB": {
+        "int4": 22.23,
+        "int8": 44.46,
+        "bf16": 88.93
+      }
+    },
+    {
+      "rank": 12,
       "id": "KRAFTON/Raon-1-nano",
       "name": "Raon-1-nano",
       "author": "KRAFTON",
       "url": "https://huggingface.co/KRAFTON/Raon-1-nano",
       "parameters": 3529911376,
       "parameterBillions": 3.53,
-      "trendingScore": 32,
-      "downloads": 2818,
-      "likes": 224,
+      "trendingScore": 31,
+      "downloads": 3026,
+      "likes": 217,
       "lastModified": "2026-11-17T14:03:31.000Z",
       "planningGiB": {
         "int4": 1.97,
         "int8": 3.94,
         "bf16": 7.89
-      }
-    },
-    {
-      "rank": 11,
-      "id": "open-athena/Marin-Mochi-535B-A23B",
-      "name": "Marin-Mochi-535B-A23B",
-      "author": "open-athena",
-      "url": "https://huggingface.co/open-athena/Marin-Mochi-535B-A23B",
-      "parameters": 535477106688,
-      "parameterBillions": 535.48,
-      "trendingScore": 32,
-      "downloads": 999,
-      "likes": 46,
-      "lastModified": "2026-11-17T23:45:08.000Z",
-      "planningGiB": {
-        "int4": 299.22,
-        "int8": 598.44,
-        "bf16": 1196.88
-      }
-    },
-    {
-      "rank": 12,
-      "id": "Apexintelligence-AI/Apex-35B-V1.0",
-      "name": "Apex-35B-V1.0",
-      "author": "Apexintelligence-AI",
-      "url": "https://huggingface.co/Apexintelligence-AI/Apex-35B-V1.0",
-      "parameters": 35951822704,
-      "parameterBillions": 35.95,
-      "trendingScore": 25,
-      "downloads": 2566,
-      "likes": 102,
-      "lastModified": "2026-10-29T20:35:43.000Z",
-      "planningGiB": {
-        "int4": 20.09,
-        "int8": 40.18,
-        "bf16": 80.36
       }
     }
   ]
